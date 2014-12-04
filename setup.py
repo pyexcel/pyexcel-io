@@ -21,7 +21,6 @@ setup(
     include_package_data=True,
     long_description=README_txt,
     zip_safe=False,
-    namespace_packages=['pyexcel'],
     tests_require=['nose'],
     classifiers=[
         'Development Status :: 3 - Alpha',
