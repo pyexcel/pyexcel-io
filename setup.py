@@ -10,11 +10,11 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('ordereddict')
 
 setup(
-    name='pyexcel.ioext',
+    name='pyexcel-io',
     author="C. W.",
     version='0.0.1',
     author_email="wangc_2011@hotmail.com",
-    url="https://github.com/chfw/pyexcel-filext",
+    url="https://github.com/chfw/pyexcel-io",
     description='A generic file extension for pyexcel',
     install_requires=dependencies,
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
