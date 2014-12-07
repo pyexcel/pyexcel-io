@@ -1,4 +1,9 @@
-from setuptools import setup, find_packages
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from ez_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, find_packages
 import sys
 
 with open("README.rst", 'r') as readme:
@@ -22,6 +27,7 @@ setup(
     long_description=README_txt,
     zip_safe=False,
     tests_require=['nose'],
+    license='General Publice License version 3',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: Office/Business',
