@@ -8,13 +8,15 @@
     :license: GPL v3
 """
 import sys
-from abc import abstractmethod
+from abc import abstractmethod, abstractproperty
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
 
+DEFAULT_SHEETNAME = 'pyexcel_sheet1'
 
+    
 class SheetReaderBase(object):
     """
     sheet
@@ -23,6 +25,10 @@ class SheetReaderBase(object):
     """
     def __init__(self, sheet):
         self.native_sheet = sheet
+
+    @abstractproperty
+    def name(self):
+        pass
 
     @abstractmethod
     def to_array(self):
@@ -120,7 +126,7 @@ class SheetWriter:
         if name:
             sheet_name = name
         else:
-            sheet_name = "pyexcel_sheet1"
+            sheet_name = DEFAULT_SHEETNAME
         self.native_book = native_book
         self.native_sheet = native_sheet
         self.set_sheet_name(sheet_name)
