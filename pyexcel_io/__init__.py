@@ -23,8 +23,9 @@ class SheetReaderBase(object):
 
     Currently only support first sheet in the file
     """
-    def __init__(self, sheet):
+    def __init__(self, sheet, **keywords):
         self.native_sheet = sheet
+        self.keywords = keywords
 
     @abstractproperty
     def name(self):
@@ -69,7 +70,14 @@ class SheetReader(SheetReaderBase):
         return array
 
 
-class BookReader(object):
+class BookReaderBase(object):
+    @abstractmethod
+    def sheets(self):
+        """Get sheets in a dictionary"""
+        pass
+
+
+class BookReader(BookReaderBase):
     """
     XLSBook reader
 
@@ -77,26 +85,28 @@ class BookReader(object):
     """
 
     def __init__(self, filename, file_content=None, **keywords):
+        self.load_from_memory_flag = False
         if file_content:
-            self.native_book = self.load_from_memory(file_content)
+            self.load_from_memory_flag = True
+            self.native_book = self.load_from_memory(file_content, **keywords)
         else:
-            self.native_book = self.load_from_file(filename)
+            self.native_book = self.load_from_file(filename, **keywords)
         self.mysheets = OrderedDict()
         for native_sheet in self.sheetIterator():
-            sheet = self.getSheet(native_sheet)
+            sheet = self.getSheet(native_sheet, **keywords)
             self.mysheets[sheet.name] = sheet.to_array()
 
     @abstractmethod
     def sheetIterator(self):
         pass
 
-    def getSheet(self, nativeSheet):
+    def getSheet(self, native_sheet, **keywords):
         """Return a context specific sheet from a native sheet
         """
-        return SheetReader(nativeSheet)
+        return SheetReader(native_sheet, **keywords)
 
     @abstractmethod
-    def load_from_memory(self, file_content):
+    def load_from_memory(self, file_content, **keywords):
         """Load content from memory
 
         :params stream file_content: the actual file content in memory
@@ -105,7 +115,7 @@ class BookReader(object):
         pass
 
     @abstractmethod
-    def load_from_file(self, filename):
+    def load_from_file(self, filename, **keywords):
         """Load content from a file
 
         :params str filename: an accessible file path
@@ -122,13 +132,14 @@ class SheetWriter:
     """
     xls, xlsx and xlsm sheet writer
     """
-    def __init__(self, native_book, native_sheet, name):
+    def __init__(self, native_book, native_sheet, name, **keywords):
         if name:
             sheet_name = name
         else:
             sheet_name = DEFAULT_SHEETNAME
         self.native_book = native_book
         self.native_sheet = native_sheet
+        self.keywords = keywords
         self.set_sheet_name(sheet_name)
 
     @abstractmethod
@@ -164,8 +175,9 @@ class BookWriter:
     """
     xls, xlsx and xlsm writer
     """
-    def __init__(self, file):
+    def __init__(self, file, **keywords):
         self.file = file
+        self.keywords = keywords
 
     @abstractmethod
     def create_sheet(self, name):
