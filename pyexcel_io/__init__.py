@@ -20,8 +20,6 @@ DEFAULT_SHEETNAME = 'pyexcel_sheet1'
 class SheetReaderBase(object):
     """
     sheet
-
-    Currently only support first sheet in the file
     """
     def __init__(self, sheet, **keywords):
         self.native_sheet = sheet
