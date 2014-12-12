@@ -1,14 +1,14 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader, BookReader,
-    SheetWriter, BookWriter
+    SheetWriter, BookWriter, NamedContent
 )
 from nose.tools import raises
 
 
-class NamedArray:
-    def __init__(self, name, array):
-        self.name = name
-        self.array = array
+#class NamedArray:
+#    def __init__(self, name, array):
+#        self.name = name
+#        self.array = array
 
 
 class ArrayReader(SheetReader):
@@ -19,21 +19,21 @@ class ArrayReader(SheetReader):
 
     def number_of_columns(self):
         SheetReader.number_of_columns(self)
-        return len(self.native_sheet.array[0])
+        return len(self.native_sheet.payload[0])
 
     def number_of_rows(self):
         SheetReader.number_of_rows(self)
-        return len(self.native_sheet.array)
+        return len(self.native_sheet.payload)
 
     def cell_value(self, row, column):
         SheetReader.cell_value(self, row, column)
-        return self.native_sheet.array[row][column]
+        return self.native_sheet.payload[row][column]
 
 
 class DictReader(BookReader):
     def sheetIterator(self):
         BookReader.sheetIterator(self)
-        return [NamedArray(name, self.native_book[name]) for name in self.native_book]
+        return [NamedContent(name, self.native_book[name]) for name in self.native_book]
 
     def getSheet(self, native_sheet):
         BookReader.getSheet(self, native_sheet)
@@ -53,7 +53,7 @@ class ArrayWriter(SheetWriter):
         self.native_sheet.name = name
 
     def write_row(self, array):
-        self.native_sheet.array.append(array)
+        self.native_sheet.payload.append(array)
 
 
 class DictWriter(BookWriter):
@@ -64,7 +64,7 @@ class DictWriter(BookWriter):
     def create_sheet(self, name):
         new_array = []
         self.dict[name] = new_array
-        return ArrayWriter(self.dict, NamedArray(name, new_array), name)
+        return ArrayWriter(self.dict, NamedContent(name, new_array), name)
 
     def close(self):
         BookWriter.close(self)
@@ -98,7 +98,7 @@ class TestSheetReader(AbstractnessBase):
             [1,2,3],
             [4,5,6]
         ]
-        areader = ArrayReader(NamedArray("Test", content))
+        areader = ArrayReader(NamedContent("Test", content))
         expected = areader.to_array()
         assert content == expected
 
@@ -130,7 +130,7 @@ class TestSheetWriter(AbstractnessBase):
         self.testclass = SheetWriter
 
     def test_writer(self):
-        native_sheet = NamedArray("test", [])
+        native_sheet = NamedContent("test", [])
         content = [
             [1,2],
             [3,4],
@@ -139,10 +139,10 @@ class TestSheetWriter(AbstractnessBase):
         writer = ArrayWriter(None, native_sheet, "test")
         writer.write_row(content[0])
         writer.write_array(content[1:])
-        assert native_sheet.array == content
+        assert native_sheet.payload == content
 
-    def test_writer(self):
-        native_sheet = NamedArray("test", [])
+    def test_writer2(self):
+        native_sheet = NamedContent("test", [])
         content = [
             [1,2],
             [3,4],
@@ -151,7 +151,7 @@ class TestSheetWriter(AbstractnessBase):
         writer = ArrayWriter(None, native_sheet, None)
         writer.write_row(content[0])
         writer.write_array(content[1:])
-        assert native_sheet.array == content
+        assert native_sheet.payload == content
         assert native_sheet.name == "pyexcel_sheet1"
 
 

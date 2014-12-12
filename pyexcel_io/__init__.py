@@ -16,6 +16,13 @@ else:
 
 DEFAULT_SHEETNAME = 'pyexcel_sheet1'
 
+
+class NamedContent:
+    """Helper class for content that does not have a name"""
+    def __init__(self, name, payload):
+        self.name = name
+        self.payload = payload
+
     
 class SheetReaderBase(object):
     """
@@ -84,14 +91,15 @@ class BookReader(BookReaderBase):
 
     def __init__(self, filename, file_content=None, **keywords):
         self.load_from_memory_flag = False
+        self.keywords = keywords
         if file_content:
             self.load_from_memory_flag = True
-            self.native_book = self.load_from_memory(file_content, **keywords)
+            self.native_book = self.load_from_memory(file_content)
         else:
-            self.native_book = self.load_from_file(filename, **keywords)
+            self.native_book = self.load_from_file(filename)
         self.mysheets = OrderedDict()
         for native_sheet in self.sheetIterator():
-            sheet = self.getSheet(native_sheet, **keywords)
+            sheet = self.getSheet(native_sheet)
             self.mysheets[sheet.name] = sheet.to_array()
 
     @abstractmethod
