@@ -5,8 +5,8 @@ pyexcel-io
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
     :target: http://travis-ci.org/chfw/pyexcel-io
 
-.. image:: https://codecov.io/github/chfw/pyexcel-io/coverage.png
-    :target: https://codecov.io/github/chfw/pyexcel-io
+.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=master 
+    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=master 
 
 
 **pyexcel-io** is a tiny interface library to unify the io extensions of `pyexcel <https://github.com/chfw/pyexcel>`__ . You may use it to write an extension for pyexcel to handle a specific file format: reading content from and writing content to.
