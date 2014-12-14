@@ -14,6 +14,21 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 else:
     from collections import OrderedDict
 
+def add_metaclass(metaclass):
+    """Class decorator for creating a class with a metaclass."""
+    def wrapper(cls):
+        orig_vars = cls.__dict__.copy()
+        slots = orig_vars.get('__slots__')
+        if slots is not None:
+            if isinstance(slots, str):
+                slots = [slots]
+            for slots_var in slots:
+                orig_vars.pop(slots_var)
+        orig_vars.pop('__dict__', None)
+        orig_vars.pop('__weakref__', None)
+        return metaclass(cls.__name__, cls.__bases__, orig_vars)
+    return wrapper
+        
 DEFAULT_SHEETNAME = 'pyexcel_sheet1'
 
 
@@ -23,13 +38,11 @@ class NamedContent:
         self.name = name
         self.payload = payload
 
-    
+@add_metaclass(ABCMeta)    
 class SheetReaderBase(object):
     """
     sheet
     """
-    __metaclass__ = ABCMeta
-
     def __init__(self, sheet, **keywords):
         self.native_sheet = sheet
         self.keywords = keywords
@@ -77,9 +90,8 @@ class SheetReader(SheetReaderBase):
             array.append(row)
         return array
 
-
+@add_metaclass(ABCMeta)
 class BookReaderBase(object):
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def sheets(self):
@@ -140,12 +152,11 @@ class BookReader(BookReaderBase):
         return self.mysheets
 
 
+@add_metaclass(ABCMeta)
 class SheetWriter(object):
     """
     xls, xlsx and xlsm sheet writer
     """
-    __metaclass__ = ABCMeta
-
     def __init__(self, native_book, native_sheet, name, **keywords):
         if name:
             sheet_name = name
@@ -185,12 +196,11 @@ class SheetWriter(object):
         pass
 
 
+@add_metaclass(ABCMeta)
 class BookWriter(object):
     """
     xls, xlsx and xlsm writer
     """
-    __metaclass__ = ABCMeta
-
     def __init__(self, file, **keywords):
         self.file = file
         self.keywords = keywords
