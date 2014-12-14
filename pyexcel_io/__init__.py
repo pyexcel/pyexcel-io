@@ -8,7 +8,7 @@
     :license: GPL v3
 """
 import sys
-from abc import abstractmethod, abstractproperty
+from abc import ABCMeta, abstractmethod, abstractproperty
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
@@ -28,6 +28,8 @@ class SheetReaderBase(object):
     """
     sheet
     """
+    __metaclass__ = ABCMeta
+
     def __init__(self, sheet, **keywords):
         self.native_sheet = sheet
         self.keywords = keywords
@@ -41,6 +43,7 @@ class SheetReaderBase(object):
         """2 dimentional repsentation of the content
         """
         pass
+
 
 class SheetReader(SheetReaderBase):
 
@@ -76,6 +79,8 @@ class SheetReader(SheetReaderBase):
 
 
 class BookReaderBase(object):
+    __metaclass__ = ABCMeta
+
     @abstractmethod
     def sheets(self):
         """Get sheets in a dictionary"""
@@ -106,10 +111,11 @@ class BookReader(BookReaderBase):
     def sheetIterator(self):
         pass
 
+    @abstractmethod
     def getSheet(self, native_sheet, **keywords):
         """Return a context specific sheet from a native sheet
         """
-        return SheetReader(native_sheet, **keywords)
+        pass
 
     @abstractmethod
     def load_from_memory(self, file_content, **keywords):
@@ -134,10 +140,12 @@ class BookReader(BookReaderBase):
         return self.mysheets
 
 
-class SheetWriter:
+class SheetWriter(object):
     """
     xls, xlsx and xlsm sheet writer
     """
+    __metaclass__ = ABCMeta
+
     def __init__(self, native_book, native_sheet, name, **keywords):
         if name:
             sheet_name = name
@@ -177,10 +185,12 @@ class SheetWriter:
         pass
 
 
-class BookWriter:
+class BookWriter(object):
     """
     xls, xlsx and xlsm writer
     """
+    __metaclass__ = ABCMeta
+
     def __init__(self, file, **keywords):
         self.file = file
         self.keywords = keywords

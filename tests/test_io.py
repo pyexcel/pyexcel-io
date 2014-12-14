@@ -1,14 +1,9 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader, BookReader,
-    SheetWriter, BookWriter, NamedContent
+    SheetWriter, BookWriter, NamedContent,
+    BookReaderBase
 )
 from nose.tools import raises
-
-
-#class NamedArray:
-#    def __init__(self, name, array):
-#        self.name = name
-#        self.array = array
 
 
 class ArrayReader(SheetReader):
@@ -70,28 +65,29 @@ class DictWriter(BookWriter):
         BookWriter.close(self)
 
 
-class AbstractnessBase:
-    """Test all abstract class that cannot be instantiated
-    """
+class TestSheetReaderBase:
+
     @raises(TypeError)
-    def test(self):
-        self.testclass()
-
-
-class TestSheetReaderBase(AbstractnessBase):
-    def setUp(self):
-        self.testclass = SheetReaderBase
+    def test_abstractness(self):
+        SheetReaderBase("test")
 
     def test_to_array(self):
+        name = "test"
         class B(SheetReaderBase):
+            @property
+            def name(self):
+                return self.native_sheet
             def to_array(self):
                 SheetReaderBase.to_array(self)
-        B("test").to_array()
+        B(name).to_array()
+        assert B(name).name == name
 
 
-class TestSheetReader(AbstractnessBase):
-    def setUp(self):
-        self.testclass = SheetReader
+class TestSheetReader:
+    
+    @raises(TypeError)
+    def test_abstractness(self):
+        SheetReader("test")
 
     def test_abstract_functions(self):
         content = [
@@ -103,9 +99,22 @@ class TestSheetReader(AbstractnessBase):
         assert content == expected
 
 
-class TestBookReader(AbstractnessBase):
+class TestBookReaderBase:
+    @raises(TypeError)
+    def test_abstractness(self):
+        BookReaderBase()
+
+    def test_sheets(self):
+        sample = {"a": 1}
+        class C(BookReaderBase):
+            def sheets(self):
+                return sample
+
+        assert C().sheets() == sample
+
+
+class TestBookReader:
     def setUp(self):
-        self.testclass = BookReader
         self.content = {
             "Sheet 1": [
                 [1,2,3],
@@ -116,6 +125,10 @@ class TestBookReader(AbstractnessBase):
             ]
         }
 
+    @raises(TypeError)
+    def test_abstractness(self):
+        BookReader("testfile")
+
     def test_load_from_file(self):
         reader = DictReader(self.content)
         assert self.content == reader.sheets()
@@ -125,9 +138,10 @@ class TestBookReader(AbstractnessBase):
         assert self.content == reader.sheets()      
 
 
-class TestSheetWriter(AbstractnessBase):
-    def setUp(self):
-        self.testclass = SheetWriter
+class TestSheetWriter:
+    @raises(TypeError)
+    def test_abstractness(self):
+        SheetWriter("te","st", "abstract")
 
     def test_writer(self):
         native_sheet = NamedContent("test", [])
@@ -155,9 +169,10 @@ class TestSheetWriter(AbstractnessBase):
         assert native_sheet.name == "pyexcel_sheet1"
 
 
-class TestBookWriter(AbstractnessBase):
-    def setUp(self):
-        self.testclass = BookWriter
+class TestBookWriter:
+    @raises(TypeError)
+    def test_book_writer_abstractness(self):
+        BookWriter("te")
 
     def test_book_writer(self):
         content = {
