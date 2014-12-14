@@ -108,6 +108,7 @@ class TestBookReaderBase:
         sample = {"a": 1}
         class C(BookReaderBase):
             def sheets(self):
+                BookReaderBase.sheets(self)
                 return sample
 
         assert C().sheets() == sample
@@ -143,6 +144,24 @@ class TestSheetWriter:
     def test_abstractness(self):
         SheetWriter("te","st", "abstract")
 
+    def test_inheritance(self):
+        class D(SheetWriter):
+            def set_sheet_name(self, name):
+                SheetWriter.set_sheet_name(self, name)
+                pass
+
+            def set_size(self, size):
+                SheetWriter.set_size(self, size)
+                pass
+
+            def write_row(self, row):
+                SheetWriter.write_row(self, row)
+                pass
+
+        D('t','e','s').set_sheet_name("test")
+        D('t','e','s').set_size(10)
+        D('t','e','s').write_row([11,11])
+
     def test_writer(self):
         native_sheet = NamedContent("test", [])
         content = [
@@ -173,6 +192,19 @@ class TestBookWriter:
     @raises(TypeError)
     def test_book_writer_abstractness(self):
         BookWriter("te")
+
+    def test_inheritance(self):
+        class E(BookWriter):
+            def create_sheet(self, name):
+                BookWriter.create_sheet(self, name)
+                pass
+
+            def close(self):
+                BookWriter.close(self)
+                pass
+
+        E("test").create_sheet("test")
+        E("test").close()
 
     def test_book_writer(self):
         content = {
