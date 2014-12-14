@@ -14,6 +14,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 else:
     from collections import OrderedDict
 
+
 def add_metaclass(metaclass):
     """Class decorator for creating a class with a metaclass."""
     def wrapper(cls):
@@ -28,7 +29,7 @@ def add_metaclass(metaclass):
         orig_vars.pop('__weakref__', None)
         return metaclass(cls.__name__, cls.__bases__, orig_vars)
     return wrapper
-        
+
 DEFAULT_SHEETNAME = 'pyexcel_sheet1'
 
 
@@ -38,7 +39,8 @@ class NamedContent:
         self.name = name
         self.payload = payload
 
-@add_metaclass(ABCMeta)    
+
+@add_metaclass(ABCMeta)
 class SheetReaderBase(object):
     """
     sheet
@@ -89,6 +91,7 @@ class SheetReader(SheetReaderBase):
                 row.append(self.cell_value(r, c))
             array.append(row)
         return array
+
 
 @add_metaclass(ABCMeta)
 class BookReaderBase(object):
