@@ -109,14 +109,19 @@ class BookReader(BookReaderBase):
     It reads xls, xlsm, xlsx work book
     """
 
-    def __init__(self, filename, file_content=None, **keywords):
+    def __init__(self, filename, file_content=None,
+                 load_sheet_with_name=None,
+                 load_sheet_at_index=None,
+                 **keywords):
         self.load_from_memory_flag = False
         self.keywords = keywords
+        self.sheet_name = load_sheet_with_name
+        self.sheet_index = load_sheet_at_index
         if file_content:
             self.load_from_memory_flag = True
-            self.native_book = self.load_from_memory(file_content)
+            self.native_book = self.load_from_memory(file_content, **keywords)
         else:
-            self.native_book = self.load_from_file(filename)
+            self.native_book = self.load_from_file(filename, **keywords)
         self.mysheets = OrderedDict()
         for native_sheet in self.sheetIterator():
             sheet = self.getSheet(native_sheet)
