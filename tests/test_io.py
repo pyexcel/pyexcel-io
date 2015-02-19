@@ -26,12 +26,12 @@ class ArrayReader(SheetReader):
 
 
 class DictReader(BookReader):
-    def sheetIterator(self):
-        BookReader.sheetIterator(self)
+    def sheet_iterator(self):
+        BookReader.sheet_iterator(self)
         return [NamedContent(name, self.native_book[name]) for name in self.native_book]
 
-    def getSheet(self, native_sheet):
-        BookReader.getSheet(self, native_sheet)
+    def get_sheet(self, native_sheet):
+        BookReader.get_sheet(self, native_sheet)
         return ArrayReader(native_sheet)
 
     def load_from_file(self, file_content):

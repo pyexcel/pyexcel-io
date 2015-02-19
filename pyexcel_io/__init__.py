@@ -123,16 +123,16 @@ class BookReader(BookReaderBase):
         else:
             self.native_book = self.load_from_file(filename, **keywords)
         self.mysheets = OrderedDict()
-        for native_sheet in self.sheetIterator():
-            sheet = self.getSheet(native_sheet)
+        for native_sheet in self.sheet_iterator():
+            sheet = self.get_sheet(native_sheet)
             self.mysheets[sheet.name] = sheet.to_array()
 
     @abstractmethod
-    def sheetIterator(self):
+    def sheet_iterator(self):
         pass
 
     @abstractmethod
-    def getSheet(self, native_sheet, **keywords):
+    def get_sheet(self, native_sheet, **keywords):
         """Return a context specific sheet from a native sheet
         """
         pass
