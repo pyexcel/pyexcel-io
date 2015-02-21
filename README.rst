@@ -28,6 +28,11 @@ or clone it and install it::
     $ cd pyexcel-io
     $ python setup.py install
 
+License
+===========
+
+New BSD License
+
 
 Dependencies
 ============

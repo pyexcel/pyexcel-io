@@ -2,10 +2,10 @@
     pyexcel.ext.io
     ~~~~~~~~~~~~~~~~~~~
 
-    The io interface to file extensions
+    The unified io interface to file format extensions
 
-    :copyright: (c) 2014 by C. W.
-    :license: GPL v3
+    :copyright: (c) 2014 by Onni Software Ltd.
+    :license: New BSD License, see LICENSE for more details
 """
 import sys
 from abc import ABCMeta, abstractmethod, abstractproperty
