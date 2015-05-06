@@ -22,7 +22,7 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-from ._compact import is_string, BytesIO, StringIO
+from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_03,
@@ -98,7 +98,11 @@ def resolve_missing_extensions(extension, available_list):
             message = MESSAGE_LOADING_FORMATTER % (extension, merged)
         raise NotImplementedError(message)
 
-def load_data(filename, sheet_name=None, sheet_index=None, **keywords):
+def load_data(filename,
+              file_type=None,
+              sheet_name=None,
+              sheet_index=None,
+              **keywords):
     """Load data from any supported excel formats
 
     Tests:
@@ -130,17 +134,23 @@ def load_data(filename, sheet_name=None, sheet_index=None, **keywords):
         book_class = READERS[filename]
         book = book_class(**keywords)
     else:
-        if isinstance(filename, tuple):
+        if file_type is not None:
             from_memory = True
-            extension = filename[0]
-            content = filename[1]
+            extension = file_type
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
             raise IOError(MESSAGE_ERROR_03)
         if extension in READERS:
             book_class = READERS[extension]
-            if from_memory: 
+            if from_memory:
+                if isstream(filename):
+                    content = filename
+                else:
+                    io = get_io(file_type)
+                    io.write(filename)
+                    io.seek(0)
+                    content = io
                 book = book_class(None, file_content=content,
                                   load_sheet_with_name=sheet_name,
                                   load_sheet_at_index=sheet_index,
@@ -153,13 +163,13 @@ def load_data(filename, sheet_name=None, sheet_index=None, **keywords):
         else:
             resolve_missing_extensions(extension, AVAILABLE_READERS)
             if from_memory:
-                raise NotImplementedError(MESSAGE_CANNOT_READ_STREAM_FORMATTER % filename[0])
+                raise NotImplementedError(MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
             else:
                 raise NotImplementedError(MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER% (extension, filename))
-    return book
+    return book.sheets()
 
 
-def get_writer(filename, **keywords):
+def get_writer(filename, file_type=None, **keywords):
     """Create a writer from any supported excel formats
 
     Tests:
@@ -192,23 +202,23 @@ def get_writer(filename, **keywords):
         writer_class = WRITERS[filename]
         writer = writer_class(filename, **keywords)
     else:
-        if isinstance(filename, tuple):
-            extension = filename[0]
-            to_memory = True
+        if file_type is not None:
+            if isstream(filename):
+                extension = file_type
+                to_memory = True
+            else:
+                raise IOError(MESSAGE_ERROR_03)
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
             raise IOError(MESSAGE_ERROR_03)
         if extension in WRITERS:
             writer_class = WRITERS[extension]
-            if to_memory:
-                writer = writer_class(filename[1], **keywords)
-            else:
-                writer = writer_class(filename, **keywords)
+            writer = writer_class(filename, **keywords)
         else:
             resolve_missing_extensions(extension, AVAILABLE_WRITERS)
             if to_memory:
-                raise NotImplementedError(MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % filename[0])
+                raise NotImplementedError(MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
             else:
                 raise NotImplementedError(MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension, filename))
     return writer
@@ -217,5 +227,16 @@ def get_writer(filename, **keywords):
 def get_io(file_type):
     if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV]:
         return StringIO()
-    else:
+    elif file_type in [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, FILE_FORMAT_ODS, FILE_FORMAT_XLS, FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]:
         return BytesIO()
+    else:
+        return None
+
+
+def store_data(afile, data, file_type=None, **keywords):
+    if is_string(type(afile)):
+        writer = get_writer(afile, **keywords)
+    else:
+        writer = get_writer(afile, file_type, **keywords)
+    writer.write(data)
+    writer.close()

@@ -87,13 +87,13 @@ class CSVFileReader(CSVSheetReader):
 class CSVinMemoryReader(CSVSheetReader):
     def get_file_handle(self):
         if PY2:
-            f = UTF8Recorder(StringIO(self.native_sheet.payload),
+            f = UTF8Recorder(self.native_sheet.payload,
                              self.encoding)
         else:
             if isinstance(self.native_sheet.payload, str):
-                f = StringIO(self.native_sheet.payload)
+                f = self.native_sheet.payload
             else:
-                f = StringIO(self.native_sheet.payload.decode(self.encoding))
+                f = self.native_sheet.payload.decode(self.encoding)
         return f
 
 

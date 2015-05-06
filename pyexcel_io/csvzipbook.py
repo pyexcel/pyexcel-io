@@ -38,8 +38,7 @@ class CSVZipBook(BookReader):
         self.native_book.close()
 
     def load_from_memory(self, file_content, **keywords):
-        io = BytesIO(file_content)
-        return zipfile.ZipFile(io, 'r')
+        return zipfile.ZipFile(file_content, 'r')
 
     def load_from_file(self, filename, **keywords):
         return zipfile.ZipFile(filename, 'r')
@@ -68,9 +67,12 @@ class CSVZipBook(BookReader):
 
     def get_sheet(self, native_sheet):
         return CSVinMemoryReader(
-            NamedContent(self._get_sheet_name(native_sheet),
-                         self.native_book.read(native_sheet)),
-            **self.keywords)
+            NamedContent(
+                self._get_sheet_name(native_sheet),
+                StringIO(self.native_book.read(native_sheet))
+            ),
+            **self.keywords
+        )
 
 
 class CSVZipSheetWriter(CSVSheetWriter):

@@ -25,6 +25,10 @@ if PY2:
     class Iterator(object):
         def next(self):
             return type(self).__next__(self)
+        
+    def isstream(instance):
+        return isinstance(instance, StringIO)
+
 else:
     from io import StringIO, BytesIO
     text_type = str
@@ -33,6 +37,8 @@ else:
             raise value.with_traceback(tb)
         raise value
     Iterator = object
+    def isstream(instance):
+        return isinstance(instance, StringIO) or isinstance(instance, BytesIO)
 
 
 def is_array_type(an_array, atype):
