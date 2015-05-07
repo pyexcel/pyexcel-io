@@ -10,7 +10,7 @@
 import csv
 import zipfile
 from .base import BookReader, BookWriter
-from ._compact import BytesIO, StringIO
+from ._compact import StringIO, PY2
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,
@@ -66,10 +66,19 @@ class CSVZipBook(BookReader):
         return filename[:name_len]
 
     def get_sheet(self, native_sheet):
+        content = self.native_book.read(native_sheet)
+        if PY2:
+            sheet = StringIO(content)
+        else:
+            if isinstance(content, str):
+                sheet = StringIO(content)
+            else:
+                sheet = StringIO(content.decode('utf-8'))
+            
         return CSVinMemoryReader(
             NamedContent(
                 self._get_sheet_name(native_sheet),
-                StringIO(self.native_book.read(native_sheet))
+                sheet
             ),
             **self.keywords
         )

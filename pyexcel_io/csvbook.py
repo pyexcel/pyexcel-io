@@ -90,10 +90,7 @@ class CSVinMemoryReader(CSVSheetReader):
             f = UTF8Recorder(self.native_sheet.payload,
                              self.encoding)
         else:
-            if isinstance(self.native_sheet.payload, str):
-                f = self.native_sheet.payload
-            else:
-                f = self.native_sheet.payload.decode(self.encoding)
+            f = self.native_sheet.payload
         return f
 
 
