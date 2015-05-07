@@ -1,1 +1,1 @@
-nosetests --with-cov
+nosetests --with-cov --cov pyexcel_io --cov tests
