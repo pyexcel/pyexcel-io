@@ -1,6 +1,6 @@
-==============
-pyexcel-io
-==============
+================================================================================
+pyexcel-io - Let you focus on data, instead of csv format and database io
+================================================================================
 
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
     :target: http://travis-ci.org/chfw/pyexcel-io
@@ -11,11 +11,25 @@ pyexcel-io
 .. image:: http://img.shields.io/gittip/chfw.svg
     :target: https://gratipay.com/chfw/
 
-**pyexcel-io** is a tiny interface library to unify the io extensions of `pyexcel <https://github.com/chfw/pyexcel>`__ . You may use it to write an extension for pyexcel to handle a specific file format: reading content from and writing content to.
+**pyexcel-io** is a tiny wrapper library to read and write the data in csv format,
+import the data into and export the data from database. If you need to manipulate
+the data, you might use its brother library
+`pyexcel <https://github.com/chfw/pyexcel>`__ .
+
+Meanwhile, if you would like to extend it, you may use it to write your own
+extension to handle a specific file format: reading content from and writing
+content to.
+
+
+Known constraints
+================================================================================
+
+Fonts, colors and charts are not supported. 
 
 
 Installation
-============
+================================================================================
+
 
 You can install it via pip::
 

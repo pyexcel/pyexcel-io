@@ -140,7 +140,7 @@ def load_data(filename,
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
-            raise IOError(MESSAGE_ERROR_03)
+            extension = FILE_FORMAT_CSV
         if extension in READERS:
             book_class = READERS[extension]
             if from_memory:
@@ -184,7 +184,7 @@ def get_writer(filename, file_type=None, **keywords):
         >>> sheet.save_to_memory("strange_type", "fake io")
         Traceback (most recent call last):
             ...
-        NotImplementedError: Cannot write content of file type strange_type to stream
+        IOError: cannot handle unknown content
         >>> sheet.save_as("test.ods")
         Traceback (most recent call last):
             ...
@@ -192,7 +192,7 @@ def get_writer(filename, file_type=None, **keywords):
         >>> sheet.save_to_memory("ods", "fake io")
         Traceback (most recent call last):
             ...
-        NotImplementedError: The plugin for file type ods is not installed. Please install pyexcel-ods or pyexcel-ods3
+        IOError: cannot handle unknown content
         
     """
     extension = None
@@ -211,7 +211,7 @@ def get_writer(filename, file_type=None, **keywords):
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
-            raise IOError(MESSAGE_ERROR_03)
+            extension = FILE_FORMAT_CSV
         if extension in WRITERS:
             writer_class = WRITERS[extension]
             writer = writer_class(filename, **keywords)
