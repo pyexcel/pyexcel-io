@@ -149,7 +149,7 @@ class TestWriteMultipleSheets:
         for key, value in self.sheets.items():
             file_name = self.test_file_formatter % (key, index)
             with open(file_name, 'r') as f:
-                content = f.read()
+                content = f.read().replace('\r', '')
                 assert content.strip('\n') == self.result_dict[key]
             index = index + 1
 
@@ -182,7 +182,7 @@ class TestWriter:
             w.write_row(row)
         w.close()
         with open(self.test_file, 'r') as f:
-            content = f.read()
+            content = f.read().replace('\r', '')
             assert content.strip('\n') == self.result
     
     def test_book_writer(self):
@@ -193,7 +193,9 @@ class TestWriter:
         w.close()
         b.close()
         with open(self.test_file, 'r') as f:
-            content = f.read()
+            content = f.read().replace('\r', '')
+            print content.strip('\n').split('\n')
+            print self.result.split('\n')
             assert content.strip('\n') == self.result
     
     def tearDown(self):
