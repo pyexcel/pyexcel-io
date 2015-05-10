@@ -1,5 +1,5 @@
 ================================================================================
-pyexcel-io - Let you focus on data, instead of csv format and database io
+pyexcel-io - Let you focus on data, instead of file formats
 ================================================================================
 
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
@@ -7,6 +7,9 @@ pyexcel-io - Let you focus on data, instead of csv format and database io
 
 .. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=master 
     :target: https://coveralls.io/r/chfw/pyexcel-io?branch=master 
+
+.. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
+    :target: http://pyexcel-io.readthedocs.org/en/latest/
 
 .. image:: http://img.shields.io/gittip/chfw.svg
     :target: https://gratipay.com/chfw/

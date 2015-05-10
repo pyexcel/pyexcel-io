@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-`pyexcel_io` - Let you focus on data, instead of file formats
+`pyexcel-io` - Let you focus on data, instead of file formats
 ================================================================================
 
 
@@ -11,13 +11,13 @@
 :Source code: http://github.com/chfw/pyexcel-io
 :Issues: http://github.com/chfw/pyexcel-io/issues
 :License: New BSD License
-:Version: |version|
+:Version: |version| unreleased yet
 :Generated: |today|
 
 Introduction
 --------------------------------------------------------------------------------
 
-**pyexcel_io** is a wrapper library that provides **one** application
+**pyexcel-io** is a wrapper library that provides **one** application
 programming interface to read and write data in different excel formats.
 This library makes information processing involving excel files a
 simple task. The data in excel files can be turned into an ordered dictionary
