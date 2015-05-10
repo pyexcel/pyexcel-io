@@ -141,6 +141,9 @@ def load_data(filename,
             extension = filename.split(".")[-1]
         else:
             extension = FILE_FORMAT_CSV
+            if not is_string(type(filename)):
+                # Not accepting non string file name
+                raise IOError(MESSAGE_ERROR_03)
         if extension in READERS:
             book_class = READERS[extension]
             if from_memory:
@@ -212,6 +215,9 @@ def get_writer(filename, file_type=None, **keywords):
             extension = filename.split(".")[-1]
         else:
             extension = FILE_FORMAT_CSV
+            if not is_string(type(filename)):
+                # Not accepting non string file name
+                raise IOError(MESSAGE_ERROR_03)
         if extension in WRITERS:
             writer_class = WRITERS[extension]
             writer = writer_class(filename, **keywords)
