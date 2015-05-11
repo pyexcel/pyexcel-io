@@ -1,11 +1,5 @@
-Working with CSV format
+Saving multiple sheets as CSV format
 ================================================================================
-
-As a standalone library
-------------------------
-
-Write to a csv file
-*********************
 
 .. testcode::
    :hide:
@@ -18,14 +12,19 @@ Write to a csv file
     >>> from pyexcel_io import OrderedDict
 
 
-Here's the sample code to write an array to a csv file ::
+Write to multiple sibling csv files
+**********************
 
-   >>> from pyexcel_io import save_data
-   >>> data = [[1, 2, 3], [4, 5, 6]]
-   >>> save_data("your_file.csv", data)
-   
+Here's the sample code to write a dictionary to multiple sibling csv files::
 
-Read from a csv file
+    >>> from pyexcel_io import save_data
+    >>> data = OrderedDict() # from collections import OrderedDict
+    >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
+    >>> data.update({"Sheet 2": [["row 1", "row 2", "row 3"]]})
+    >>> save_data("your_file.csv", data)
+
+
+Read from multiple sibling csv files
 **********************
 
 Here's the sample code::
@@ -34,7 +33,15 @@ Here's the sample code::
     >>> data = get_data("your_file.csv")
     >>> import json
     >>> print(json.dumps(data))
-    [["1", "2", "3"], ["4", "5", "6"]]
+    {"Sheet 1": [["1", "2", "3"], ["4", "5", "6"]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
+
+Here is what you would get::
+
+    >>> import glob
+    >>> list = glob.glob("your_file__*.csv")
+    >>> json.dumps(list)
+    '["your_file__Sheet 1__0.csv", "your_file__Sheet 2__1.csv"]'
+    
 
 Write a csv to memory
 **********************
@@ -42,9 +49,11 @@ Write a csv to memory
 Here's the sample code to write a dictionary as a csv into memory::
 
     >>> from pyexcel_io import save_data
-    >>> data = [[1, 2, 3], [4, 5, 6]]
+    >>> data = OrderedDict()
+    >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
+    >>> data.update({"Sheet 2": [[7, 8, 9], [10, 11, 12]]})
     >>> io = StringIO()
-    >>> save_data(io, data)
+    >>> save_data(io, data, 'csv')
     >>> # do something with the io
     >>> # In reality, you might give it to your http response
     >>> # object for downloading
@@ -60,33 +69,44 @@ Continue from previous example::
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
     >>> data = get_data(io)
     >>> print(json.dumps(data))
-    [["1", "2", "3"], ["4", "5", "6"]]
+    {"Sheet 1": [["1", "2", "3"], ["4", "5", "6"]], "Sheet 2": [["7", "8", "9"], ["10", "11", "12"]]}
 
 
 As a pyexcel plugin
 --------------------
 
-Reading from multiple csv file
-**************************************
+Import it in your file to enable this plugin::
+
+    from pyexcel.ext import io
+
+Please note only pyexcel version 0.0.4+ support this.
+
+Reading from multiple sibling csv files
+************************
 
 Here is the sample code::
 
     >>> import pyexcel as pe
-    >>> sheet = pe.get_sheet(file_name="your_file.csv")
-    >>> sheet
-    Sheet Name: your_file.csv
+    >>> from pyexcel.ext import io
+    >>> book = pe.get_book(file_name="your_file.csv")
+    >>> book
+    Sheet Name: Sheet 1
     +---+---+---+
     | 1 | 2 | 3 |
     +---+---+---+
     | 4 | 5 | 6 |
     +---+---+---+
+    Sheet Name: Sheet 2
+    +-------+-------+-------+
+    | row 1 | row 2 | row 3 |
+    +-------+-------+-------+
 
 Writing to multiple sibling csv files
 **********************
 
 Here is the sample code::
 
-    >>> sheet.save_as("another_file.csv")
+    >>> book.save_as("another_file.csv")
 
 
 Writing to a StringIO instance
@@ -95,7 +115,7 @@ Writing to a StringIO instance
 You need to pass a StringIO instance to Writer::
 
     >>> io = StringIO()
-    >>> sheet.save_to_memory("csv", io)
+    >>> book.save_to_memory("csv", io)
     >>> # then do something with io
     >>> # In reality, you might give it to your http response
     >>> # object for downloading
@@ -109,20 +129,26 @@ You got to wrap the binary content with stream to get csv working::
     >>> # This is just an illustration
     >>> # In reality, you might deal with csv file upload
     >>> # where you will read from requests.FILES['YOUR_CSV_FILE']
-    >>> memory_sheet = pe.get_book(file_type="csv", file_stream=io)
-    >>> memory_sheet
-    Sheet Name: csv
+    >>> memory_book = pe.get_book(file_type="csv", file_stream=io)
+    >>> memory_book
+    Sheet Name: Sheet 1
     +---+---+---+
     | 1 | 2 | 3 |
     +---+---+---+
     | 4 | 5 | 6 |
     +---+---+---+
-
+    Sheet Name: Sheet 2
+    +-------+-------+-------+
+    | row 1 | row 2 | row 3 |
+    +-------+-------+-------+
 
 
 .. testcode::
    :hide:
 
    >>> import os
-   >>> os.unlink("your_file.csv")
-
+   >>> os.unlink("your_file__Sheet 1__0.csv")
+   >>> os.unlink("your_file__Sheet 2__1.csv")
+   >>> os.unlink("another_file__Sheet 1__0.csv")
+   >>> os.unlink("another_file__Sheet 2__1.csv")
+   

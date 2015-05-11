@@ -140,10 +140,7 @@ def load_data(filename,
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
-            extension = FILE_FORMAT_CSV
-            if not is_string(type(filename)) and not isstream(filename):
-                # Not accepting non string file name
-                raise IOError(MESSAGE_ERROR_03)
+            raise IOError(MESSAGE_ERROR_03)
         if extension in READERS:
             book_class = READERS[extension]
             if from_memory:
@@ -214,10 +211,7 @@ def get_writer(filename, file_type=None, **keywords):
         elif is_string(type(filename)):
             extension = filename.split(".")[-1]
         else:
-            extension = FILE_FORMAT_CSV
-            if not is_string(type(filename)) and not isstream(filename):
-                # Not accepting non string file name
-                raise IOError(MESSAGE_ERROR_03)
+            raise IOError(MESSAGE_ERROR_03)
         if extension in WRITERS:
             writer_class = WRITERS[extension]
             writer = writer_class(filename, **keywords)
@@ -239,10 +233,31 @@ def get_io(file_type):
         return None
 
 
-def store_data(afile, data, file_type=None, **keywords):
-    if is_string(type(afile)):
-        writer = get_writer(afile, **keywords)
+def save_data(afile, data, file_type=None, **keywords):
+    to_store = data
+    if isinstance(data, list):
+        single_sheet_in_book = True
+        to_store = {"csv": data}
     else:
-        writer = get_writer(afile, file_type, **keywords)
-    writer.write(data)
+        single_sheet_in_book = False
+
+    if isstream(afile):
+        file_type = FILE_FORMAT_CSV
+
+    writer = get_writer(
+        afile,
+        file_type=file_type,
+        single_sheet_in_book=single_sheet_in_book,
+        **keywords)
+    writer.write(to_store)
     writer.close()
+
+
+def get_data(afile, file_type=None, **keywords):
+    if isstream(afile) and file_type is None:
+        file_type='csv'
+    data = load_data(afile, file_type=file_type, **keywords)
+    if len(list(data.keys())) == 1:
+        return list(data.values())[0]
+    else:
+        return data
