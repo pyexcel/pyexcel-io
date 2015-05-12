@@ -232,7 +232,15 @@ def get_io(file_type):
     else:
         return None
 
-
+def store_data(afile, data, file_type=None, **keywords):
+    writer = get_writer(
+        afile,
+        file_type=file_type,
+        **keywords)
+    writer.write(data)
+    writer.close()
+    
+        
 def save_data(afile, data, file_type=None, **keywords):
     to_store = data
     if isinstance(data, list):
@@ -244,13 +252,10 @@ def save_data(afile, data, file_type=None, **keywords):
     if isstream(afile):
         file_type = FILE_FORMAT_CSV
 
-    writer = get_writer(
-        afile,
-        file_type=file_type,
-        single_sheet_in_book=single_sheet_in_book,
-        **keywords)
-    writer.write(to_store)
-    writer.close()
+    store_data(afile, to_store,
+               file_type=file_type,
+               single_sheet_in_book=single_sheet_in_book,
+               **keywords)
 
 
 def get_data(afile, file_type=None, **keywords):
