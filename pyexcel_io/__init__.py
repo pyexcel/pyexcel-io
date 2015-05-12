@@ -16,7 +16,8 @@ from .base import(
     BookReader,
     SheetWriterBase,
     SheetWriter,
-    BookWriter
+    BookWriter,
+    from_query_sets
 )
 from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook

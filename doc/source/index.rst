@@ -99,6 +99,7 @@ Contents:
    :maxdepth: 2
 
    plaincsv
+   extendedcsv
    csvz
    sqlalchemy
    django

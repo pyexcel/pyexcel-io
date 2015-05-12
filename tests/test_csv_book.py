@@ -139,6 +139,7 @@ class TestWriteMultipleSheets:
         self.result_dict.update({"sheet3": self.result3})
 
     def test_multiple_sheet(self):
+        """Write csv book into multiple file"""
         b = CSVWriter("csv_multiple.csv")
         for key, value in self.sheets.items():
             w = b.create_sheet(key)
@@ -152,6 +153,24 @@ class TestWriteMultipleSheets:
                 content = f.read().replace('\r', '')
                 assert content.strip('\n') == self.result_dict[key]
             index = index + 1
+
+    #def test_multiple_sheet_into_memory(self):
+    #    """Write csv book into a single stream"""
+    #    io = get_io(self.file_type)
+    #    b = CSVWriter(io)
+    #    for key, value in self.sheets.items():
+    #        w = b.create_sheet(key)
+    #        w.write_array(value)
+    #        w.close()
+    #    b.close()
+    #    content = io.getvalue()    
+    #    index = 0
+    #    for key, value in self.content.split('---pyexcel---\r\n'):
+    #        file_name = self.test_file_formatter % (key, index)
+    #        with open(file_name, 'r') as f:
+    #            content = f.read().replace('\r', '')
+    #            assert content.strip('\n') == self.result_dict[key]
+    #        index = index + 1
 
     def tearDown(self):
         index = 0

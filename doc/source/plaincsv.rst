@@ -1,11 +1,8 @@
 Working with CSV format
 ================================================================================
 
-As a standalone library
-------------------------
-
 Write to a csv file
-*********************
+--------------------------------------------------------------------------------
 
 .. testcode::
    :hide:
@@ -26,7 +23,7 @@ Here's the sample code to write an array to a csv file ::
    
 
 Read from a csv file
-**********************
+--------------------------------------------------------------------------------
 
 Here's the sample code::
 
@@ -37,7 +34,7 @@ Here's the sample code::
     [["1", "2", "3"], ["4", "5", "6"]]
 
 Write a csv to memory
-**********************
+--------------------------------------------------------------------------------
 
 Here's the sample code to write a dictionary as a csv into memory::
 
@@ -51,7 +48,7 @@ Here's the sample code to write a dictionary as a csv into memory::
 
     
 Read from a csv from memory
-*****************************
+--------------------------------------------------------------------------------
 
 Continue from previous example::
 
@@ -64,10 +61,13 @@ Continue from previous example::
 
 
 As a pyexcel plugin
---------------------
+--------------------------------------------------------------------------------
+
+**pyexcel** builds on top of pyexcel-io and provides more data manipulation
+functions. The following sections show how to do the same via pyexcel apis.
 
 Reading from multiple csv file
-**************************************
+********************************************************************************
 
 Here is the sample code::
 
@@ -82,7 +82,7 @@ Here is the sample code::
     +---+---+---+
 
 Writing to multiple sibling csv files
-**********************
+*******************************************************************************
 
 Here is the sample code::
 
@@ -90,7 +90,7 @@ Here is the sample code::
 
 
 Writing to a StringIO instance
-================================
+********************************************************************************
 
 You need to pass a StringIO instance to Writer::
 
@@ -102,7 +102,7 @@ You need to pass a StringIO instance to Writer::
 
 
 Reading from a IO instance
-================================
+********************************************************************************
 
 You got to wrap the binary content with stream to get csv working::
 
@@ -125,4 +125,5 @@ You got to wrap the binary content with stream to get csv working::
 
    >>> import os
    >>> os.unlink("your_file.csv")
+   >>> os.unlink("another_file.csv")
 

@@ -13,7 +13,8 @@ Saving multiple sheets as CSV format
 
 
 Write to multiple sibling csv files
-**********************
+------------------------------------------------------------------------------
+
 
 Here's the sample code to write a dictionary to multiple sibling csv files::
 
@@ -25,7 +26,8 @@ Here's the sample code to write a dictionary to multiple sibling csv files::
 
 
 Read from multiple sibling csv files
-**********************
+--------------------------------------------------------------------------------
+
 
 Here's the sample code::
 
@@ -43,10 +45,11 @@ Here is what you would get::
     '["your_file__Sheet 1__0.csv", "your_file__Sheet 2__1.csv"]'
     
 
-Write a csv to memory
-**********************
+Write multiple sibling csv files  to memory
+--------------------------------------------------------------------------------
 
-Here's the sample code to write a dictionary as a csv into memory::
+Here's the sample code to write a dictionary of named two dimensional array
+into memory::
 
     >>> from pyexcel_io import save_data
     >>> data = OrderedDict()
@@ -59,8 +62,8 @@ Here's the sample code to write a dictionary as a csv into memory::
     >>> # object for downloading
 
     
-Read from a csv from memory
-*****************************
+Read multiple sibling csv files from memory
+--------------------------------------------------------------------------------
 
 Continue from previous example::
 
@@ -73,16 +76,11 @@ Continue from previous example::
 
 
 As a pyexcel plugin
---------------------
+------------------------------------------------------------------------------
 
-Import it in your file to enable this plugin::
-
-    from pyexcel.ext import io
-
-Please note only pyexcel version 0.0.4+ support this.
 
 Reading from multiple sibling csv files
-************************
+********************************************************************************
 
 Here is the sample code::
 
@@ -102,15 +100,15 @@ Here is the sample code::
     +-------+-------+-------+
 
 Writing to multiple sibling csv files
-**********************
+********************************************************************************
 
 Here is the sample code::
 
     >>> book.save_as("another_file.csv")
 
 
-Writing to a StringIO instance
-================================
+Writing multiple sibling csv files to a StringIO instance
+********************************************************************************
 
 You need to pass a StringIO instance to Writer::
 
@@ -121,8 +119,8 @@ You need to pass a StringIO instance to Writer::
     >>> # object for downloading
 
 
-Reading from a IO instance
-================================
+Reading multiple sibling csv files from a IO instance
+********************************************************************************
 
 You got to wrap the binary content with stream to get csv working::
 
