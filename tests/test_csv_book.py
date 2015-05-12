@@ -238,7 +238,7 @@ class TestMemoryWriter:
 
     def test_sheet_writer_to_memory(self):
         io = get_io(self.file_type)
-        w = CSVSheetWriter(io, None)
+        w = CSVSheetWriter(io, None, single_sheet_in_book=True)
         for row in self.data:
             w.write_row(row)
         w.close()
@@ -247,7 +247,7 @@ class TestMemoryWriter:
     
     def test_book_writer_to_memroy(self):
         io = get_io(self.file_type)
-        b = CSVWriter(io)
+        b = CSVWriter(io, single_sheet_in_book=True)
         w = b.create_sheet(None)
         for row in self.data:
             w.write_row(row)
