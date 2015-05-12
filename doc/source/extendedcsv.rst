@@ -39,7 +39,7 @@ Here is what you would get::
 
     >>> import glob
     >>> list = glob.glob("your_file__*.csv")
-    >>> json.dumps(list)
+    >>> json.dumps(sorted(list))
     '["your_file__Sheet 1__0.csv", "your_file__Sheet 2__1.csv"]'
     
 
