@@ -5,7 +5,7 @@ Suppose we have a pure sql database connection via sqlalchemy:
 
     >>> from sqlalchemy import create_engine
     >>> from sqlalchemy.ext.declarative import declarative_base
-    >>> from sqlalchemy import Column , Integer, String, Float, Date, ForeignKey, DateTime
+    >>> from sqlalchemy import Column , Integer, String, Float, Date
     >>> from sqlalchemy.orm import sessionmaker
     >>> engine=create_engine("sqlite:///tmp.db")
     >>> Base=declarative_base()
@@ -79,6 +79,7 @@ Before we start, let's clear off previous table:
 
 Now suppose we have these more complex tables:
 
+    >>> from sqlalchemy import ForeignKey, DateTime
     >>> from sqlalchemy.orm import relationship, backref
     >>> class Post(Base):
     ...     __tablename__ = 'post'
