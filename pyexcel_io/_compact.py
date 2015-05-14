@@ -21,7 +21,6 @@ if PY2:
     from StringIO import StringIO
     from StringIO import StringIO as BytesIO
     text_type = unicode
-    exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
     class Iterator(object):
         def next(self):
             return type(self).__next__(self)
@@ -32,18 +31,9 @@ if PY2:
 else:
     from io import StringIO, BytesIO
     text_type = str
-    def reraise(tp, value, tb=None):
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
     Iterator = object
     def isstream(instance):
         return isinstance(instance, StringIO) or isinstance(instance, BytesIO)
-
-
-def is_array_type(an_array, atype):
-    tmp = [i for i in an_array if not isinstance(i, atype)]
-    return len(tmp) == 0
 
 
 def is_string(atype):
