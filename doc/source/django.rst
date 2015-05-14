@@ -52,7 +52,7 @@ Write data to a django model
 
 Let's suppose we have a django model:
 
-    >>> from pyexcel_io import save_data, DB_DJANGO
+    >>> from pyexcel_io import save_data, DB_DJANGO, DEFAULT_SHEET_NAME
     >>> model = FakeDjangoModel()
 
 Suppose you have these data::
@@ -62,7 +62,7 @@ Suppose you have these data::
     ...     [1, 2, 3],
     ...     [4, 5, 6]
     ... ]
-    >>> save_data(DB_DJANGO, data[1:], models={"csv": [model, data[0], None, None]})
+    >>> save_data(DB_DJANGO, data[1:], models={DEFAULT_SHEET_NAME: [model, data[0], None, None]})
     >>> model.objects.objs
     [{'Y': 2, 'X': 1, 'Z': 3}, {'Y': 5, 'X': 4, 'Z': 6}]
 

@@ -41,6 +41,7 @@ from .constants import (
     FILE_FORMAT_XLSM,
     DB_SQL,
     DB_DJANGO,
+    DEFAULT_SHEET_NAME
 )
 
 
@@ -246,7 +247,7 @@ def save_data(afile, data, file_type=None, **keywords):
     to_store = data
     if isinstance(data, list):
         single_sheet_in_book = True
-        to_store = {"csv": data}
+        to_store = {DEFAULT_SHEET_NAME: data}
     else:
         single_sheet_in_book = False
 

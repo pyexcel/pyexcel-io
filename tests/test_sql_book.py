@@ -3,7 +3,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column , Integer, String, Float, Date, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker
 import datetime
-from pyexcel_io import DB_SQL, get_data, save_data, from_query_sets
+from pyexcel_io import (
+    DB_SQL,
+    get_data,
+    save_data,
+    from_query_sets,
+    DEFAULT_SHEET_NAME
+)
 from sqlalchemy.orm import relationship, backref
 
 engine=create_engine("sqlite:///tmp.db")
@@ -103,7 +109,7 @@ class TestSingleWrite:
         save_data(DB_SQL,
                   self.data[1:],
                   session=mysession,
-                  tables={ 'csv': [Pyexcel,self.data[0], None, None]}
+                  tables={ DEFAULT_SHEET_NAME: [Pyexcel,self.data[0], None, None]}
               )
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)

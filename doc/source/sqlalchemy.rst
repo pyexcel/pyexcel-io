@@ -40,12 +40,12 @@ And suppose we have the following data structure to be saved:
 
 Here's the actual code to achieve it:
 
-    >>> from pyexcel_io import save_data, DB_SQL
+    >>> from pyexcel_io import save_data, DB_SQL, DEFAULT_SHEET_NAME
     >>> mysession = Session()
     >>> save_data(DB_SQL,
     ...      data[1:],
     ...      session=mysession,
-    ...      tables={ 'csv': [Pyexcel, data[0], None, None]}
+    ...      tables={ DEFAULT_SHEET_NAME: [Pyexcel, data[0], None, None] }
     ... )
 
 Now let's verify the data:

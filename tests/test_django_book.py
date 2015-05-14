@@ -1,4 +1,4 @@
-from pyexcel_io import get_data, save_data, DB_DJANGO, OrderedDict
+from pyexcel_io import get_data, save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
 from nose.tools import raises
 
 class Attributable:
@@ -55,7 +55,7 @@ class TestSheet:
         
     def test_sheet_save_to_django_model(self):
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, self.data[1:], models={"csv": [model, self.data[0], None, None]})
+        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
         assert model.objects.objs == self.result
 
     def test_sheet_save_to_django_model_3(self):
@@ -63,7 +63,7 @@ class TestSheet:
         def wrapper(row):
             row[0] = row[0] + 1
             return row
-        save_data(DB_DJANGO, self.data[1:], models={"csv": [model, self.data[0], None, wrapper]})
+        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, wrapper]})
         assert model.objects.objs == [
             {'Y': 2, 'X': 2, 'Z': 3},
             {'Y': 5, 'X': 5, 'Z': 6}
@@ -71,7 +71,7 @@ class TestSheet:
 
     def test_load_sheet_from_django_model(self):
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, self.data[1:], models={"csv": [model, self.data[0], None, None]})
+        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
         assert model.objects.objs == self.result
         model._meta.update(["X", "Y", "Z"])
         data = get_data(DB_DJANGO, models=[model])
@@ -85,7 +85,7 @@ class TestSheet:
         ]
         mapdict = ["X", "Y", "Z"]
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, data2[1:], models={"csv": [model, data2[0], mapdict, None]})
+        save_data(DB_DJANGO, data2[1:], models={DEFAULT_SHEET_NAME: [model, data2[0], mapdict, None]})
         assert model.objects.objs == self.result
 
     def test_mapping_dict(self):
@@ -100,7 +100,7 @@ class TestSheet:
             "B": "Y"
         }
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, data2[1:], models={"csv": [model, data2[0], mapdict, None]})
+        save_data(DB_DJANGO, data2[1:], models={DEFAULT_SHEET_NAME: [model, data2[0], mapdict, None]})
         assert model.objects.objs == self.result
 
 
