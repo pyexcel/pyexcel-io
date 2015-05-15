@@ -1,6 +1,9 @@
 import os
 from pyexcel_io import CSVZipBook, CSVZipWriter
 import zipfile
+import sys
+PY2 = sys.version_info[0] == 2
+
 
 class TestCSVZ:
     def setUp(self):
@@ -17,6 +20,8 @@ class TestCSVZ:
         zip = zipfile.ZipFile(self.file, 'r')
         assert zip.namelist() == [file_name]
         content = zip.read(file_name)
+        if not PY2:
+            content = content.decode('utf-8')
         assert content.replace('\r','').strip('\n') == "1,2,3"
 
     def test_reading(self):

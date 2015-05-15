@@ -8,7 +8,7 @@ Saving multiple sheets as CSV format
     >>> if sys.version_info[0] < 3:
     ...     from StringIO import StringIO
     ... else:
-    ...     from io import BytesIO as StringIO
+    ...     from io import StringIO
     >>> from pyexcel_io import OrderedDict
 
 
@@ -56,7 +56,7 @@ into memory::
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [[7, 8, 9], [10, 11, 12]]})
     >>> io = StringIO()
-    >>> save_data(io, data, 'csv')
+    >>> save_data(io, data)
     >>> # do something with the io
     >>> # In reality, you might give it to your http response
     >>> # object for downloading

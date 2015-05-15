@@ -213,8 +213,6 @@ class TestWriter:
         b.close()
         with open(self.test_file, 'r') as f:
             content = f.read().replace('\r', '')
-            print content.strip('\n').split('\n')
-            print self.result.split('\n')
             assert content.strip('\n') == self.result
     
     def tearDown(self):

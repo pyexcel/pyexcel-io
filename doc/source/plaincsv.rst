@@ -11,7 +11,7 @@ Write to a csv file
     >>> if sys.version_info[0] < 3:
     ...     from StringIO import StringIO
     ... else:
-    ...     from io import BytesIO as StringIO
+    ...     from io import StringIO
     >>> from pyexcel_io import OrderedDict
 
 

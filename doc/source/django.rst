@@ -63,8 +63,9 @@ Suppose you have these data::
     ...     [4, 5, 6]
     ... ]
     >>> save_data(DB_DJANGO, data[1:], models={DEFAULT_SHEET_NAME: [model, data[0], None, None]})
-    >>> model.objects.objs
-    [{'Y': 2, 'X': 1, 'Z': 3}, {'Y': 5, 'X': 4, 'Z': 6}]
+    >>> import pprint
+    >>> pprint.pprint(model.objects.objs)
+    [{'X': 1, 'Y': 2, 'Z': 3}, {'X': 4, 'Y': 5, 'Z': 6}]
 
 Read data from a django model
 --------------------------------------------------------------------------------
@@ -107,8 +108,8 @@ In order to store a dictionary data structure, you need to do some transformatio
     ...    "Sheet2": [model2, data['Sheet2'][0], None, None]
     ... }
     >>> save_data(DB_DJANGO, to_store, models=models)
-    >>> model1.objects.objs
-    [{'Y': 4, 'X': 1, 'Z': 7}, {'Y': 5, 'X': 2, 'Z': 8}, {'Y': 6, 'X': 3, 'Z': 9}]
+    >>> pprint.pprint(model1.objects.objs)
+    [{'X': 1, 'Y': 4, 'Z': 7}, {'X': 2, 'Y': 5, 'Z': 8}, {'X': 3, 'Y': 6, 'Z': 9}]
     >>> model2.objects.objs
     [{'A': 1, 'C': 7, 'B': 4}, {'A': 2, 'C': 8, 'B': 5}, {'A': 3, 'C': 9, 'B': 6}]
 
