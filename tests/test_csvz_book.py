@@ -1,6 +1,7 @@
 import os
 from pyexcel_io import CSVZipBook, CSVZipWriter, save_data, OrderedDict
 import zipfile
+from nose.tools import raises
 import sys
 PY2 = sys.version_info[0] == 2
 
@@ -77,6 +78,10 @@ class TestMultipleSheet:
             [u'4.0', u'5.0', u'6.0'],
             [u'7.0', u'8.0', u'9.0']
         ]
+        
+    @raises(ValueError)
+    def test_read_one_from_many_by_unknown_name(self):
+        CSVZipBook(self.file, load_sheet_with_name="Sheet X")
 
     def test_read_one_from_many_by_index(self):
         b = CSVZipBook(self.file, load_sheet_at_index=0)
@@ -86,6 +91,10 @@ class TestMultipleSheet:
             [u'4.0', u'5.0', u'6.0'],
             [u'7.0', u'8.0', u'9.0']
         ]
+
+    @raises(IndexError)
+    def test_read_one_from_many_by_unknown_index(self):
+        CSVZipBook(self.file, load_sheet_at_index=999)
 
     def tearDown(self):
         os.unlink(self.file)

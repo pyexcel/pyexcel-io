@@ -11,9 +11,12 @@ from pyexcel_io import (
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from sqlalchemy.orm import relationship, backref
+from nose.tools import raises
+
 
 engine=create_engine("sqlite:///tmp.db")
 Base=declarative_base()
+
 
 class Pyexcel(Base):
     __tablename__='pyexcel'
@@ -115,8 +118,69 @@ class TestSingleWrite:
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
         assert results == self.results
+        mysession.close()
+
+    def test_one_table_using_mapdict_as_array(self):
+        mysession = Session()
+        self.data = [
+            ["Birth Date", "Id", "Name", "Weight"],
+            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
+        ]
+        mapdict = ['birth', 'id', 'name', 'weight']
+
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], mapdict, None])
+        writer.write_array(self.data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(mapdict, query_sets)
+        assert results == self.results
+        mysession.close()
 
 
+    def test_one_table_using_mapdict_as_dict(self):
+        mysession = Session()
+        self.data = [
+            ["Birth Date", "Id", "Name", "Weight"],
+            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
+        ]
+        mapdict = {
+            "Birth Date":'birth',
+            "Id":'id',
+            "Name": 'name',
+            "Weight": 'weight'
+        }
+
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], mapdict, None])
+        writer.write_array(self.data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(['birth', 'id', 'name', 'weight'], query_sets)
+        assert results == self.results
+        mysession.close()
+
+    @raises(ValueError)
+    def test_invalid_parameters(self):
+        mysession = Session()
+        self.data = [
+            ["Birth Date", "Id", "Name", "Weight"],
+            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
+        ]
+        mapdict = {
+            "Birth Date":'birth',
+            "Id":'id',
+            "Name": 'name',
+            "Weight": 'weight'
+        }
+
+        SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], mapdict, None, None])
+
+        
 class TestMultipleRead:
     def setUp(self):
         Base.metadata.drop_all(engine)
@@ -165,3 +229,19 @@ class TestMultipleRead:
 
     def tearDown(self):
         self.session.close()
+
+
+class TestZeroRead:
+    def setUp(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+
+    def test_sql(self):
+        mysession=Session()
+        sheet = SQLTableReader(mysession, Pyexcel)
+        data = sheet.to_array()
+        content = []
+        # 'pyexcel'' here is the table name
+        assert data == content
+        mysession.close()
+            
