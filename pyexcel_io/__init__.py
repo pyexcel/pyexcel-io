@@ -1,5 +1,5 @@
 """
-    pyexcel.io
+    pyexcel_io
     ~~~~~~~~~~~~~~~~~~~
 
     Uniform interface for reading/writing different excel file formats

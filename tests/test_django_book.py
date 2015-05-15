@@ -1,5 +1,6 @@
-from pyexcel_io import get_data, save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
-from nose.tools import raises
+from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
+from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader, DjangoBookWriter
+
 
 class Attributable:
     def __init__(self, adict):
@@ -55,7 +56,9 @@ class TestSheet:
         
     def test_sheet_save_to_django_model(self):
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
+        writer = DjangoModelWriter([model, self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
         assert model.objects.objs == self.result
 
     def test_sheet_save_to_django_model_3(self):
@@ -63,7 +66,9 @@ class TestSheet:
         def wrapper(row):
             row[0] = row[0] + 1
             return row
-        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, wrapper]})
+        writer = DjangoModelWriter([model, self.data[0], None, wrapper])
+        writer.write_array(self.data[1:])
+        writer.close()
         assert model.objects.objs == [
             {'Y': 2, 'X': 2, 'Z': 3},
             {'Y': 5, 'X': 5, 'Z': 6}
@@ -74,7 +79,8 @@ class TestSheet:
         save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
         assert model.objects.objs == self.result
         model._meta.update(["X", "Y", "Z"])
-        data = get_data(DB_DJANGO, models=[model])
+        reader = DjangoModelReader(model)
+        data = reader.to_array()
         assert data == self.data
 
     def test_mapping_array(self):
@@ -85,7 +91,9 @@ class TestSheet:
         ]
         mapdict = ["X", "Y", "Z"]
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, data2[1:], models={DEFAULT_SHEET_NAME: [model, data2[0], mapdict, None]})
+        writer = DjangoModelWriter([model, data2[0], mapdict, None])
+        writer.write_array(data2[1:])
+        writer.close()
         assert model.objects.objs == self.result
 
     def test_mapping_dict(self):
@@ -100,7 +108,9 @@ class TestSheet:
             "B": "Y"
         }
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, data2[1:], models={DEFAULT_SHEET_NAME: [model, data2[0], mapdict, None]})
+        writer = DjangoModelWriter([model, data2[0], mapdict, None])
+        writer.write_array(data2[1:])
+        writer.close()
         assert model.objects.objs == self.result
 
 
@@ -119,10 +129,12 @@ class TestMultipleModels:
             "Sheet1": self.content['Sheet1'][1:],
             "Sheet2": self.content['Sheet2'][1:]
         }
-        save_data(DB_DJANGO, to_store, models={
+        writer = DjangoBookWriter(DB_DJANGO, {
             "Sheet1": [model1, self.content['Sheet1'][0], None, None],
             "Sheet2": [model2, self.content['Sheet2'][0], None, None]
         })
+        writer.write(to_store)
+        writer.close()
         assert model1.objects.objs == self.result1
         assert model2.objects.objs == self.result2
 
@@ -143,7 +155,6 @@ class TestMultipleModels:
         model2._meta.model_name = "Sheet2"
         model1._meta.update(["X", "Y", "Z"])
         model2._meta.update(["A", "B", "C"])
-        data = get_data(DB_DJANGO, models=[model1, model2])
+        reader = DjangoBookReader([model1, model2])
+        data = reader.sheets()
         assert data == self.content
-        
-

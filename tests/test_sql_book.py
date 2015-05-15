@@ -5,11 +5,11 @@ from sqlalchemy.orm import sessionmaker
 import datetime
 from pyexcel_io import (
     DB_SQL,
-    get_data,
-    save_data,
-    from_query_sets,
-    DEFAULT_SHEET_NAME
+    SQLBookReader,
+    SQLBookWriter,
+    from_query_sets
 )
+from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from sqlalchemy.orm import relationship, backref
 
 engine=create_engine("sqlite:///tmp.db")
@@ -79,12 +79,14 @@ class TestSingleRead:
 
     def test_sql(self):
         mysession=Session()
-        data = get_data(DB_SQL, session=mysession, tables=[Pyexcel])
+        sheet = SQLTableReader(mysession, Pyexcel)
+        data = sheet.to_array()
         content = [
             ['birth', 'id', 'name', 'weight'],
             ['2014-11-11', 0, 'Adam', 11.25],
             ['2014-11-12', 1, 'Smith', 12.25]
         ]
+        # 'pyexcel'' here is the table name
         assert data == content
         mysession.close()
             
@@ -106,15 +108,13 @@ class TestSingleWrite:
 
     def test_one_table(self):
         mysession = Session()
-        save_data(DB_SQL,
-                  self.data[1:],
-                  session=mysession,
-                  tables={ DEFAULT_SHEET_NAME: [Pyexcel,self.data[0], None, None]}
-              )
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
         assert results == self.results
-
 
 
 class TestMultipleRead:
@@ -151,10 +151,15 @@ class TestMultipleRead:
            "Category": data['Category'][1:],
            "Post": data['Post'][1:]
         }
-        save_data(DB_SQL, to_store, session=self.session, tables=tables)
+        writer = SQLBookWriter(DB_SQL,
+                               session=self.session,
+                               tables=tables)
+        writer.write(to_store)
+        writer.close()
 
     def test_read(self):
-        data = get_data(DB_SQL, session=self.session, tables=[Category, Post])
+        book = SQLBookReader(session=self.session, tables=[Category, Post])
+        data = book.sheets()
         import json
         assert json.dumps(data) == '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], "post": [["body", "category_id", "id", "pub_date", "title"], ["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], ["informal", 2, 2, "2015-01-20T23:28:30", "Title B"]]}'
 

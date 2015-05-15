@@ -1,5 +1,5 @@
 """
-    pyexcel.io.sqlbook
+    pyexcel_io.sqlbook
     ~~~~~~~~~~~~~~~~~~~
 
     The lower level handler for database import and export
