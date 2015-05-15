@@ -87,6 +87,24 @@ class TestReadMultipleSheets:
         sheets = b.sheets()
         assert sheets == self.sheets
 
+    def test_read_one_from_many_by_name(self):
+        b = CSVBook("csv_multiple.csv", load_sheet_with_name="sheet1")
+        sheets = b.sheets()
+        assert sheets["sheet1"] == self.sheets["sheet1"]
+
+    @raises(ValueError)
+    def test_read_one_from_many_by_non_existent_name(self):
+        CSVBook("csv_multiple.csv", load_sheet_with_name="notknown")
+
+    def test_read_one_from_many_by_index(self):
+        b = CSVBook("csv_multiple.csv", load_sheet_at_index=1)
+        sheets = b.sheets()
+        assert sheets["sheet2"] == self.sheets["sheet2"]
+
+    @raises(IndexError)
+    def test_read_one_from_many_by_wrong_index(self):
+        CSVBook("csv_multiple.csv", load_sheet_at_index=90)
+        
     def tearDown(self):
         index = 0
         for key, value in self.sheets.items():
@@ -253,3 +271,34 @@ class TestMemoryWriter:
         b.close()
         content = io.getvalue().replace('\r', '')
         assert content.strip('\n') == self.result
+
+
+def test_empty_arguments_to_csvbook():
+    book = CSVBook(None)
+    assert book.sheets() == {"csv":[]}
+
+
+class TestNonUniformCSV:
+    def setUp(self):
+        self.file_type = "csv"
+        self.test_file = "csv_book." + self.file_type
+        self.data = [
+            ["1"],
+            ["4", "5", "6"],
+            ["7"]
+        ]
+        with open(self.test_file, 'w') as f:
+            for row in self.data:
+                f.write(",".join(row) + "\n")
+
+    def test_sheet_file_reader(self):
+        r = CSVFileReader(NamedContent(self.file_type, self.test_file))
+        result = r.to_array()
+        assert result == [
+            ["1", "", ""],
+            ["4", "5", "6"],
+            ["7"]
+        ]
+
+    def tearDown(self):
+        os.unlink(self.test_file)

@@ -1,5 +1,5 @@
 import os
-from pyexcel_io import CSVZipBook, CSVZipWriter
+from pyexcel_io import CSVZipBook, CSVZipWriter, save_data, OrderedDict
 import zipfile
 import sys
 PY2 = sys.version_info[0] == 2
@@ -37,3 +37,56 @@ class TestCSVZ:
 
     def tearDown(self):
         os.unlink(self.file)
+
+
+class TestMultipleSheet:
+    def setUp(self):
+        self.content = OrderedDict()
+        self.content.update({
+            'Sheet 1': 
+                [
+                    [1.0, 2.0, 3.0], 
+                    [4.0, 5.0, 6.0], 
+                    [7.0, 8.0, 9.0]
+                ]
+        })
+        self.content.update({
+            'Sheet 2': 
+                [
+                    ['X', 'Y', 'Z'], 
+                    [1.0, 2.0, 3.0], 
+                    [4.0, 5.0, 6.0]
+                ]
+        })
+        self.content.update({
+            'Sheet 3': 
+                [
+                    ['O', 'P', 'Q'], 
+                    [3.0, 2.0, 1.0], 
+                    [4.0, 3.0, 2.0]
+                ] 
+        })
+        self.file="mybook.csvz"
+        save_data(self.file, self.content)
+
+    def test_read_one_from_many_by_name(self):
+        b = CSVZipBook(self.file, load_sheet_with_name="Sheet 1")
+        sheets = b.sheets()
+        assert sheets['Sheet 1'] == [
+            [u'1.0', u'2.0', u'3.0'],
+            [u'4.0', u'5.0', u'6.0'],
+            [u'7.0', u'8.0', u'9.0']
+        ]
+
+    def test_read_one_from_many_by_index(self):
+        b = CSVZipBook(self.file, load_sheet_at_index=0)
+        sheets = b.sheets()
+        assert sheets['Sheet 1'] == [
+            [u'1.0', u'2.0', u'3.0'],
+            [u'4.0', u'5.0', u'6.0'],
+            [u'7.0', u'8.0', u'9.0']
+        ]
+
+    def tearDown(self):
+        os.unlink(self.file)
+
