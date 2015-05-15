@@ -75,78 +75,10 @@ Continue from previous example::
     {"Sheet 1": [["1", "2", "3"], ["4", "5", "6"]], "Sheet 2": [["7", "8", "9"], ["10", "11", "12"]]}
 
 
-As a pyexcel plugin
-------------------------------------------------------------------------------
-
-
-Reading from multiple sibling csv files
-********************************************************************************
-
-Here is the sample code::
-
-    >>> import pyexcel as pe
-    >>> from pyexcel.ext import io
-    >>> book = pe.get_book(file_name="your_file.csv")
-    >>> book
-    Sheet Name: Sheet 1
-    +---+---+---+
-    | 1 | 2 | 3 |
-    +---+---+---+
-    | 4 | 5 | 6 |
-    +---+---+---+
-    Sheet Name: Sheet 2
-    +-------+-------+-------+
-    | row 1 | row 2 | row 3 |
-    +-------+-------+-------+
-
-Writing to multiple sibling csv files
-********************************************************************************
-
-Here is the sample code::
-
-    >>> book.save_as("another_file.csv")
-
-
-Writing multiple sibling csv files to a StringIO instance
-********************************************************************************
-
-You need to pass a StringIO instance to Writer::
-
-    >>> io = StringIO()
-    >>> book.save_to_memory("csv", io)
-    >>> # then do something with io
-    >>> # In reality, you might give it to your http response
-    >>> # object for downloading
-
-
-Reading multiple sibling csv files from a IO instance
-********************************************************************************
-
-You got to wrap the binary content with stream to get csv working::
-
-    >>> # This is just an illustration
-    >>> # In reality, you might deal with csv file upload
-    >>> # where you will read from requests.FILES['YOUR_CSV_FILE']
-    >>> memory_book = pe.get_book(file_type="csv", file_stream=io)
-    >>> memory_book
-    Sheet Name: Sheet 1
-    +---+---+---+
-    | 1 | 2 | 3 |
-    +---+---+---+
-    | 4 | 5 | 6 |
-    +---+---+---+
-    Sheet Name: Sheet 2
-    +-------+-------+-------+
-    | row 1 | row 2 | row 3 |
-    +-------+-------+-------+
-
-
 .. testcode::
    :hide:
 
    >>> import os
    >>> os.unlink("your_file__Sheet 1__0.csv")
    >>> os.unlink("your_file__Sheet 2__1.csv")
-   >>> os.unlink("another_file__Sheet 1__0.csv")
-   >>> os.unlink("another_file__Sheet 2__1.csv")
    

@@ -25,14 +25,6 @@ When a single sheet is to be saved, the resulting csvz file will be a zip file t
     ['pyexcel_sheet1.csv']
     >>> zip.close()
 
-.. note::
-
-   This is how you do it with pyexcel::
-   
-        >>> import pyexcel as pe
-        >>> data = [[1,2,3]]
-        >>> sheet = pe.Sheet(data)
-        >>> sheet.save_as("myfile.csvz")
 
 And it can be read out as well and can be saved in any other supported format.
 
@@ -42,17 +34,6 @@ And it can be read out as well and can be saved in any other supported format.
     >>> json.dumps(data)
     '[["1", "2", "3"]]'
     
-.. note::
-
-   This is how to do it with pyexcel::
-
-       >>> sheet2 = pe.get_sheet(file_name="myfile.csvz")
-       >>> sheet2
-       Sheet Name: pyexcel
-       +---+---+---+
-       | 1 | 2 | 3 |
-       +---+---+---+
-
 
 Multiple Sheet Book
 -------------------
@@ -91,17 +72,6 @@ When multiple sheets are to be saved as a book, the resulting csvz file will be 
     ['Sheet 1.csv', 'Sheet 2.csv', 'Sheet 3.csv']
     >>> zip.close()
 
-.. note::
-
-   This is how you do it with pyexcel:
-   
-       >>> book = pe.Book(content)
-       >>> book.save_as("mybook.csvz")
-       >>> import zipfile
-       >>> zip = zipfile.ZipFile("mybook.csvz", 'r')
-       >>> zip.namelist()
-       ['Sheet 1.csv', 'Sheet 2.csv', 'Sheet 3.csv']
-       >>> zip.close()
 
 The csvz book can be read back with two lines of code. And once it is read out, it can be saved in any other supported format.
 
@@ -109,39 +79,8 @@ The csvz book can be read back with two lines of code. And once it is read out, 
     >>> json.dumps(book2)
     '{"Sheet 1": [["1.0", "2.0", "3.0"], ["4.0", "5.0", "6.0"], ["7.0", "8.0", "9.0"]], "Sheet 2": [["X", "Y", "Z"], ["1.0", "2.0", "3.0"], ["4.0", "5.0", "6.0"]], "Sheet 3": [["O", "P", "Q"], ["3.0", "2.0", "1.0"], ["4.0", "3.0", "2.0"]]}'
 
-.. note::
 
-   This is how you do it with pyexcel
-
-    >>> book2 = pe.get_book(file_name="mybook.csvz")
-    >>> book2
-    Sheet Name: Sheet 1
-    +---+---+---+
-    | 1 | 2 | 3 |
-    +---+---+---+
-    | 4 | 5 | 6 |
-    +---+---+---+
-    | 7 | 8 | 9 |
-    +---+---+---+
-    Sheet Name: Sheet 2
-    +---+---+---+
-    | X | Y | Z |
-    +---+---+---+
-    | 1 | 2 | 3 |
-    +---+---+---+
-    | 4 | 5 | 6 |
-    +---+---+---+
-    Sheet Name: Sheet 3
-    +---+---+---+
-    | O | P | Q |
-    +---+---+---+
-    | 3 | 2 | 1 |
-    +---+---+---+
-    | 4 | 3 | 2 |
-    +---+---+---+
-
-
-Open csvz without pyexcel
+Open csvz without pyexcel-io
 ----------------------------
 
 All you need is a unzipping software. I would recommend 7zip which is open source and is available on all available OS platforms.
