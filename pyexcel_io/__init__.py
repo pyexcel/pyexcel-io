@@ -105,28 +105,7 @@ def load_data(filename,
               sheet_name=None,
               sheet_index=None,
               **keywords):
-    """Load data from any supported excel formats
-
-    Tests:
-
-        >>> import pyexcel as pe
-        >>> pe.load("test.strange_type")
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: Cannot read content of file type strange_type from file test.strange_type
-        >>> pe.load(("strange_type", "fake io"))
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: Cannot read content of file type strange_type from stream
-        >>> pe.load("test.ods")
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: The plugin for file type ods is not installed. Please install pyexcel-ods or pyexcel-ods3
-        >>> pe.load(("ods", "fake io"))
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: The plugin for file type ods is not installed. Please install pyexcel-ods or pyexcel-ods3
-    
+    """Load data from any supported excel formats    
     """
     extension = None
     book = None
@@ -172,30 +151,7 @@ def load_data(filename,
 
 
 def get_writer(filename, file_type=None, **keywords):
-    """Create a writer from any supported excel formats
-
-    Tests:
-
-        >>> import pyexcel as pe
-        >>> data = [[1,2]]
-        >>> sheet = pe.Sheet(data)
-        >>> sheet.save_as("test.strange_type")
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: Cannot write content of file type strange_type to file test.strange_type
-        >>> sheet.save_to_memory("strange_type", "fake io")
-        Traceback (most recent call last):
-            ...
-        IOError: cannot handle unknown content
-        >>> sheet.save_as("test.ods")
-        Traceback (most recent call last):
-            ...
-        NotImplementedError: The plugin for file type ods is not installed. Please install pyexcel-ods or pyexcel-ods3
-        >>> sheet.save_to_memory("ods", "fake io")
-        Traceback (most recent call last):
-            ...
-        IOError: cannot handle unknown content
-        
+    """Create a writer from any supported excel formats        
     """
     extension = None
     writer = None

@@ -110,8 +110,8 @@ In order to store a dictionary data structure, you need to do some transformatio
     >>> save_data(DB_DJANGO, to_store, models=models)
     >>> pprint.pprint(model1.objects.objs)
     [{'X': 1, 'Y': 4, 'Z': 7}, {'X': 2, 'Y': 5, 'Z': 8}, {'X': 3, 'Y': 6, 'Z': 9}]
-    >>> model2.objects.objs
-    [{'A': 1, 'C': 7, 'B': 4}, {'A': 2, 'C': 8, 'B': 5}, {'A': 3, 'C': 9, 'B': 6}]
+    >>> pprint.pprint(model2.objects.objs)
+    [{'A': 1, 'B': 4, 'C': 7}, {'A': 2, 'B': 5, 'C': 8}, {'A': 3, 'B': 6, 'C': 9}]
 
 .. testcode:
    :hide:
