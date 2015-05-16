@@ -12,6 +12,8 @@ from pyexcel_io import (
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
+import sys
+PY33 = (sys.version_info[0] == 3 and sys.version_info[1] == 3)
 
 
 engine=create_engine("sqlite:///tmp.db")
@@ -43,6 +45,8 @@ class Post(Base):
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
         self.category = category
+        if PY33:
+            self.category_id = category.id
 
     def __repr__(self):
         return '<Post %r>' % self.title

@@ -81,6 +81,8 @@ Now suppose we have these more complex tables:
 
     >>> from sqlalchemy import ForeignKey, DateTime
     >>> from sqlalchemy.orm import relationship, backref
+    >>> import sys
+    >>> PY33 = (sys.version_info[0] == 3 and sys.version_info[1] == 3)
     >>> class Post(Base):
     ...     __tablename__ = 'post'
     ...     id = Column(Integer, primary_key=True)
@@ -99,6 +101,8 @@ Now suppose we have these more complex tables:
     ...             pub_date = datetime.utcnow()
     ...         self.pub_date = pub_date
     ...         self.category = category
+    ...         if PY33:
+    ...             self.category_id = category.id
     ... 
     ...     def __repr__(self):
     ...         return '<Post %r>' % self.title
