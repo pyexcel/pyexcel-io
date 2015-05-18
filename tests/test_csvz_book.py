@@ -1,5 +1,5 @@
 import os
-from pyexcel_io import CSVZipBook, CSVZipWriter, save_data, OrderedDict
+from pyexcel_io import CSVZipBook, CSVZipWriter, save_data, OrderedDict, get_io
 import zipfile
 from nose.tools import raises
 import sys
@@ -35,11 +35,24 @@ class TestCSVZ:
         zipreader = CSVZipBook(self.file)
         data = zipreader.sheets()
         assert data['pyexcel_sheet1'] == [['1','2','3']]
-
+        
     def tearDown(self):
         os.unlink(self.file)
 
 
+def test_reading_from_memory():
+    data = [[1,2,3]]
+    io = get_io("csvz")
+    zipbook = CSVZipWriter(io)
+    sheet = zipbook.create_sheet(None)
+    sheet.write_array(data)
+    sheet.close()
+    zipbook.close()
+    zipreader = CSVZipBook(io)
+    data = zipreader.sheets()
+    assert data['pyexcel_sheet1'] == [['1','2','3']]
+
+        
 class TestMultipleSheet:
     def setUp(self):
         self.content = OrderedDict()

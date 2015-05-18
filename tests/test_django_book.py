@@ -11,7 +11,7 @@ class Attributable:
 
 class Objects:
     def __init__(self):
-        self.objs = None
+        self.objs = []
         
     def bulk_create(self, objs, batch_size):
         self.objs = objs
@@ -112,6 +112,12 @@ class TestSheet:
         writer.write_array(data2[1:])
         writer.close()
         assert model.objects.objs == self.result
+
+    def test_empty_model(self):
+        model = FakeDjangoModel()
+        reader = DjangoModelReader(model)
+        data = reader.to_array()
+        assert data == []
 
 
 class TestMultipleModels:

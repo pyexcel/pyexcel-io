@@ -1,7 +1,7 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader, BookReader,
     SheetWriter, BookWriter, NamedContent,
-    BookReaderBase
+    BookReaderBase, SheetWriterBase
 )
 from nose.tools import raises
 
@@ -138,7 +138,11 @@ class TestBookReader:
         reader = DictReader(None, self.content)
         assert self.content == reader.sheets()      
 
-
+class TestSheetWriterBase:
+    @raises(TypeError)
+    def test_abstractness(self):
+        SheetWriterBase("test")
+        
 class TestSheetWriter:
     @raises(TypeError)
     def test_abstractness(self):

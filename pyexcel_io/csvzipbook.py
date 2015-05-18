@@ -50,7 +50,7 @@ class CSVZipBook(BookReader):
                 raise ValueError("%s cannot be found" % self.sheet_name)
             else:
                 return rets
-        elif self.sheet_index:
+        elif self.sheet_index is not None:
             file_list = self.native_book.namelist()
             length = len(file_list)
             if self.sheet_index < length:
@@ -70,10 +70,7 @@ class CSVZipBook(BookReader):
         if PY2:
             sheet = StringIO(content)
         else:
-            if isinstance(content, str):
-                sheet = StringIO(content)
-            else:
-                sheet = StringIO(content.decode('utf-8'))
+            sheet = StringIO(content.decode('utf-8'))
             
         return CSVinMemoryReader(
             NamedContent(
