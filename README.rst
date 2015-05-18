@@ -14,15 +14,31 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: http://img.shields.io/gittip/chfw.svg
     :target: https://gratipay.com/chfw/
 
-**pyexcel-io** is a tiny wrapper library to read and write the data in csv format,
-import the data into and export the data from database. If you need to manipulate
-the data, you might use its brother library
-`pyexcel <https://github.com/chfw/pyexcel>`__ .
+**pyexcel-io** provides **one** application programming interface(API) to read
+and write the data in excel format, import the data into and export the data
+from database. It provides support for csv(z) format, django database and
+sqlalchemy supported databases. Its supported file formats are extended to cover
+"xls", "xlsx", "ods" by the following extensions:
 
-Meanwhile, if you would like to extend it, you may use it to write your own
-extension to handle a specific file format: reading content from and writing
-content to.
+================ ==================================
+Plugins          Supported file formats            
+================ ==================================
+`pyexcel-xls`_   xls, xlsx(r), xlsm(r)
+`pyexcel-xlsx`_  xlsx
+`pyexcel-ods`_   ods (python 2.6, 2.7 only)        
+`pyexcel-ods3`_  ods
+================ ==================================
 
+.. _pyexcel-xls: https://github.com/chfw/pyexcel-xls
+.. _pyexcel-xlsx: https://github.com/chfw/pyexcel-xlsx
+.. _pyexcel-ods: https://github.com/chfw/pyexcel-ods
+.. _pyexcel-ods3: https://github.com/chfw/pyexcel-ods3
+
+If you need to manipulate the data, you might do it yourself or use its brother
+library `pyexcel <https://github.com/chfw/pyexcel>`__ .
+
+If you would like to extend it, you may use it to write your own
+extension to handle a specific file format.
 
 Known constraints
 ================================================================================
@@ -44,6 +60,7 @@ or clone it and install it::
     $ git clone http://github.com/chfw/pyexcel-io.git
     $ cd pyexcel-io
     $ python setup.py install
+
 
 License
 ===========

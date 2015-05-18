@@ -17,12 +17,11 @@
 Introduction
 --------------------------------------------------------------------------------
 
-**pyexcel-io** is a wrapper library that provides **one** application
-programming interface to read and write data in different excel formats.
-This library makes information processing involving excel files a
-simple task. The data in excel files can be turned into an ordered dictionary
-with least code, vice versa. This library focuses on data processing using
-excel files as storage media hence fonts, colors and charts were not and
+**pyexcel-io** provides **one** application programming interface(API) to read
+and write data in different excel formats. It makes information processing
+involving excel files a simple task. The data in excel files can be turned into
+an ordered dictionary with least code. This library focuses on data processing
+using excel files as storage media hence fonts, colors and charts were not and
 will not be considered.
 
 It was created due to the lack of uniform programming interface to access data
@@ -35,9 +34,9 @@ application supports, the library takes up the challenge and promises to support
 all known excel formats.
 
 All great work have done by individual library developers. This library unites
-only the data access code. With that said, pyexcel also bring something new on
-the table: :ref:`"csvz" and "tsvz"<csvz>` format, new format names as of 2014.
-They are invented and supported by `pyexcel-io`_.
+only the data access API. With that said, **pyexcel-io** also bring something
+new on the table: :ref:`"csvz" and "tsvz"<csvz>` format, new format names
+as of 2014. They are invented and supported by `pyexcel-io`_.
 
 Getting the source
 --------------------------------------------------------------------------------
@@ -58,19 +57,21 @@ For individual excel file formats, please install them as you wish:
 .. _a-map-of-plugins-and-file-formats:
 .. table:: a map of plugins and supported excel file formats
 
-   ================ ============================================================ ============= ======================== =============================   
-   Plugin           Supported file formats                                       Dependencies  Python versions           Comments                       
-   ================ ============================================================ ============= ======================== =============================   
-   `pyexcel-io`_         csv, csvz [#f1]_, tsv, tsvz [#f2]_                                    2.6, 2.7, 3.3, 3.4, pypy                                
-   `xls`_           xls, xlsx(read only), xlsm(read only)                        xlrd, xlwt    2.6, 2.7, 3.3, 3.4, pypy supports reading xlsx as well
-   `xlsx`_          xlsx                                                         openpyxl      2.6, 2.7, 3.3, 3.4, pypy                                 
-   `ods3`_          ods                                                          ezodf, lxml   2.6, 2.7, 3.3, 3.4                                               
-   `ods`_           ods (python 2.6, 2.7)                                        odfpy         2.6, 2.7                                             
-   ================ ============================================================ ============= ======================== =============================
+   ============== ======================================= ============= ======================== =============================   
+   Package name   Supported file formats                  Dependencies  Python versions          Comments                       
+   ============== ======================================= ============= ======================== =============================   
+   `pyexcel-io`_  csv, csvz [#f1]_, tsv, tsvz [#f2]_                    2.6, 2.7, 3.3, 3.4, pypy                                
+   `xls`_         xls, xlsx(read only), xlsm(read only)   xlrd, xlwt    2.6, 2.7, 3.3, 3.4, pypy supports reading xlsx as well
+   `xlsx`_        xlsx                                    openpyxl      2.6, 2.7, 3.3, 3.4, pypy                                 
+   `ods3`_        ods                                     ezodf, lxml   2.6, 2.7, 3.3, 3.4                                               
+   `ods`_         ods (python 2.6, 2.7)                   odfpy         2.6, 2.7                                             
+   ============== ======================================= ============= ======================== =============================
 
 Please import them before you start to access the desired file formats::
 
     import pyexcel_plugin
+
+After that, you can start get and save data in the loaded format.
 
 .. table:: Plugin compatibility table
 
@@ -91,7 +92,6 @@ Please import them before you start to access the desired file formats::
 .. _xlsx: https://github.com/chfw/pyexcel-xlsx
 .. _ods: https://github.com/chfw/pyexcel-ods
 .. _ods3: https://github.com/chfw/pyexcel-ods3
-
 
 Contents:
 

@@ -91,12 +91,19 @@ def resolve_missing_extensions(extension, available_list):
             message = MESSAGE_LOADING_FORMATTER % (extension, merged)
         raise NotImplementedError(message)
 
+
 def load_data(filename,
               file_type=None,
               sheet_name=None,
               sheet_index=None,
               **keywords):
     """Load data from any supported excel formats    
+
+    :param filename: actual file name, a file stream or actual content
+    :param file_type: used only when filename is not a physial file name
+    :param sheet_name: the name of the sheet to be loaded
+    :param sheet_index: the index of the sheet to be loaded
+    :param keywords: any other parameters
     """
     extension = None
     book = None
@@ -143,6 +150,10 @@ def load_data(filename,
 
 def get_writer(filename, file_type=None, **keywords):
     """Create a writer from any supported excel formats        
+
+    :param filename: actual file name or a file stream
+    :param file_type: used only when filename is not a physial file name
+    :param keywords: any other parameters
     """
     extension = None
     writer = None
@@ -183,6 +194,13 @@ def get_io(file_type):
 
 
 def store_data(afile, data, file_type=None, **keywords):
+    """Non public function to store data to afile
+
+    :param filename: actual file name, a file stream or actual content
+    :param data: the data to be written
+    :param file_type: used only when filename is not a physial file name
+    :param keywords: any other parameters
+    """
     writer = get_writer(
         afile,
         file_type=file_type,
@@ -192,6 +210,13 @@ def store_data(afile, data, file_type=None, **keywords):
     
         
 def save_data(afile, data, file_type=None, **keywords):
+    """Public function to store data to afile
+
+    :param filename: actual file name, a file stream or actual content
+    :param data: the data to be saved
+    :param file_type: used only when filename is not a physial file name
+    :param keywords: any other parameters
+    """
     to_store = data
     if isinstance(data, list):
         single_sheet_in_book = True
@@ -209,6 +234,14 @@ def save_data(afile, data, file_type=None, **keywords):
 
 
 def get_data(afile, file_type=None, **keywords):
+    """get data from file
+
+    :param filename: actual file name, a file stream or actual content
+    :param sheet_name: the name of the sheet to be loaded
+    :param sheet_index: the index of the sheet to be loaded
+    :param file_type: used only when filename is not a physial file name
+    :param keywords: any other parameters
+    """
     if isstream(afile) and file_type is None:
         file_type='csv'
     data = load_data(afile, file_type=file_type, **keywords)
