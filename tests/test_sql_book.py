@@ -7,13 +7,12 @@ from pyexcel_io import (
     DB_SQL,
     SQLBookReader,
     SQLBookWriter,
-    from_query_sets
+    from_query_sets,
+    OrderedDict
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
-import sys
-PY33 = (sys.version_info[0] == 3 and sys.version_info[1] == 3)
 
 
 engine=create_engine("sqlite:///tmp.db")
@@ -45,8 +44,6 @@ class Post(Base):
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
         self.category = category
-        if PY33:
-            self.category_id = category.id
 
     def __repr__(self):
         return '<Post %r>' % self.title
@@ -215,10 +212,9 @@ class TestMultipleRead:
             "Category": [Category, data['Category'][0], None, category_init_func],
             "Post": [Post, data['Post'][0], None, post_init_func]
         }
-        to_store = {
-           "Category": data['Category'][1:],
-           "Post": data['Post'][1:]
-        }
+        to_store = OrderedDict()
+        to_store.update({"Category": data['Category'][1:]})
+        to_store.update({"Post": data['Post'][1:]})
         writer = SQLBookWriter(DB_SQL,
                                session=self.session,
                                tables=tables)

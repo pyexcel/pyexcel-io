@@ -82,7 +82,6 @@ Now suppose we have these more complex tables:
     >>> from sqlalchemy import ForeignKey, DateTime
     >>> from sqlalchemy.orm import relationship, backref
     >>> import sys
-    >>> PY33 = (sys.version_info[0] == 3 and sys.version_info[1] == 3)
     >>> class Post(Base):
     ...     __tablename__ = 'post'
     ...     id = Column(Integer, primary_key=True)
@@ -101,8 +100,6 @@ Now suppose we have these more complex tables:
     ...             pub_date = datetime.utcnow()
     ...         self.pub_date = pub_date
     ...         self.category = category
-    ...         if PY33:
-    ...             self.category_id = category.id
     ... 
     ...     def __repr__(self):
     ...         return '<Post %r>' % self.title
@@ -160,10 +157,10 @@ Here's the code to update both:
     ...     "Category": [Category, data['Category'][0], None, category_init_func],
     ...     "Post": [Post, data['Post'][0], None, post_init_func]
     ... }
-	>>> to_store = {
-	...    "Category": data['Category'][1:],
-	...    "Post": data['Post'][1:]
-	... }
+    >>> from pyexcel_io import OrderedDict
+    >>> to_store = OrderedDict()
+    >>> to_store.update({"Category": data['Category'][1:]})
+    >>> to_store.update({"Post": data['Post'][1:]})
     >>> save_data(DB_SQL, to_store, session=mysession, tables=tables)
 
 Let's verify what do we have in the database:
