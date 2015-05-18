@@ -27,17 +27,16 @@ def test_load_ods_data():
 
 @raises(NotImplementedError)
 def test_load_xls_data_from_memory():
-    if not PY2:
-        io = BytesIO()
-        load_data(io, file_type="xls")
-    else:
-        raise NotImplementedError("pass it")
+    io = BytesIO()
+    load_data(io, file_type="xls")
 
 @raises(IOError)
 def test_load_xlsm_data_from_memory():
-    io = StringIO()
-    get_writer(io, file_type="xlsm")
-
+    if not PY2:
+        io = StringIO()
+        get_writer(io, file_type="xlsm")
+    else:
+        raise IOError("pass it")
     
 @raises(NotImplementedError)
 def test_write_xlsx_data():
@@ -46,17 +45,16 @@ def test_write_xlsx_data():
 
 @raises(IOError)
 def test_writer_xlsm_data_from_memory():
-    io = StringIO()
-    get_writer(io, file_type="xlsm")
-
+    if not PY2:
+        io = StringIO()
+        get_writer(io, file_type="xlsm")
+    else:
+        raise IOError("pass it")
 
 @raises(NotImplementedError)
 def test_writer_xlsm_data_from_memory2():
-    if not PY2:
-        io = BytesIO()
-        get_writer(io, file_type="xlsm")
-    else:
-        raise NotImplementedError("pass it")
+    io = BytesIO()
+    get_writer(io, file_type="xlsm")
 
 
 def test_get_io():
