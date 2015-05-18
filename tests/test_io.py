@@ -31,7 +31,7 @@ def test_load_xls_data_from_memory():
         io = BytesIO()
         load_data(io, file_type="xls")
     else:
-        pass
+        raise NotImplementedError("pass it")
 
 @raises(IOError)
 def test_load_xlsm_data_from_memory():
@@ -46,17 +46,17 @@ def test_write_xlsx_data():
 
 @raises(IOError)
 def test_writer_xlsm_data_from_memory():
-    if not PY2:
-        io = StringIO()
-        get_writer(io, file_type="xlsm")
-    else:
-        pass
+    io = StringIO()
+    get_writer(io, file_type="xlsm")
 
 
 @raises(NotImplementedError)
 def test_writer_xlsm_data_from_memory2():
-    io = BytesIO()
-    get_writer(io, file_type="xlsm")
+    if not PY2:
+        io = BytesIO()
+        get_writer(io, file_type="xlsm")
+    else:
+        raise NotImplementedError("pass it")
 
 
 def test_get_io():
