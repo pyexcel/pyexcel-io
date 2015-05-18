@@ -71,9 +71,6 @@ class SQLTableWriter(SheetWriter):
             self.column_names = self.mapdict
             self.mapdict = None
 
-    def set_sheet_name(self, name):
-        pass
-
     def write_row(self, array):
         row = dict(zip(self.column_names, array))
         if self.initializer:

@@ -69,9 +69,6 @@ class DjangoModelWriter(SheetWriter):
 
         self.objs = []
 
-    def set_sheet_name(self, name):
-        pass
-        
     def write_row(self, array):
         self.objs.append(self.mymodel(**dict(zip(self.column_names, self.initializer(array)))))
 

@@ -79,15 +79,6 @@ AVAILABLE_WRITERS = {
     FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
 }
 
-def list_readers():
-    """list available readers"""
-    print(READERS.keys())
-
-
-def list_writers():
-    """list available writers"""
-    print(WRITERS.keys())
-
 
 def resolve_missing_extensions(extension, available_list):
     handler = available_list.get(extension)
@@ -189,6 +180,7 @@ def get_io(file_type):
         return BytesIO()
     else:
         return None
+
 
 def store_data(afile, data, file_type=None, **keywords):
     writer = get_writer(

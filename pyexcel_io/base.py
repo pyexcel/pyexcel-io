@@ -182,7 +182,7 @@ class SheetWriterBase(object):
         pass
     
 @add_metaclass(ABCMeta)
-class SheetWriter(object):
+class SheetWriter(SheetWriterBase):
     """
     xls, xlsx and xlsm sheet writer
     """
@@ -196,7 +196,6 @@ class SheetWriter(object):
         self.keywords = keywords
         self.set_sheet_name(sheet_name)
 
-    @abstractmethod
     def set_sheet_name(self, name):
         pass
 
