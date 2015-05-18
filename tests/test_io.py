@@ -1,4 +1,4 @@
-from pyexcel_io import load_data, StringIO, get_writer, get_io
+from pyexcel_io import load_data, StringIO, get_writer, get_io, BytesIO
 from nose.tools import raises
 
 
@@ -24,18 +24,29 @@ def test_load_ods_data():
 
 @raises(NotImplementedError)
 def test_load_xls_data_from_memory():
-    io = StringIO()
+    io = BytesIO()
     load_data(io, file_type="xls")
 
+@raises(IOError)
+def test_load_xlsm_data_from_memory():
+    io = StringIO()
+    get_writer(io, file_type="xlsm")
 
+    
 @raises(NotImplementedError)
 def test_write_xlsx_data():
     get_writer("test.xlsx")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_writer_xlsm_data_from_memory():
     io = StringIO()
+    get_writer(io, file_type="xlsm")
+
+
+@raises(NotImplementedError)
+def test_writer_xlsm_data_from_memory2():
+    io = BytesIO()
     get_writer(io, file_type="xlsm")
 
 

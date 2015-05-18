@@ -23,7 +23,7 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict, PY2
+from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_03,
@@ -44,6 +44,10 @@ from .constants import (
     DEFAULT_SHEET_NAME
 )
 
+
+BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
+                       FILE_FORMAT_ODS, FILE_FORMAT_XLS,
+                       FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
 
 # A list of registered readers
 READERS = {
@@ -124,7 +128,10 @@ def load_data(filename,
             book_class = READERS[extension]
             if from_memory:
                 if isstream(filename):
-                    content = filename
+                    if validate_io(file_type, filename):
+                        content = filename
+                    else:
+                        raise IOError(MESSAGE_ERROR_03)
                 else:
                     io = get_io(file_type)
                     io.write(filename)
@@ -166,6 +173,8 @@ def get_writer(filename, file_type=None, **keywords):
             if isstream(filename):
                 extension = file_type
                 to_memory = True
+                if not validate_io(file_type, filename):
+                    raise IOError(MESSAGE_ERROR_03)
             else:
                 raise IOError(MESSAGE_ERROR_03)
         elif is_string(type(filename)):
@@ -187,10 +196,19 @@ def get_writer(filename, file_type=None, **keywords):
 def get_io(file_type):
     if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV]:
         return StringIO()
-    elif file_type in [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, FILE_FORMAT_ODS, FILE_FORMAT_XLS, FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]:
+    elif file_type in BINARY_STREAM_TYPES:
         return BytesIO()
     else:
         return None
+
+
+def validate_io(file_type, io):
+    if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV]:
+        return isinstance(io, StringIO)
+    elif file_type in BINARY_STREAM_TYPES:
+        return isinstance(io, BytesIO)
+    else:
+        return False
 
 
 def store_data(afile, data, file_type=None, **keywords):
