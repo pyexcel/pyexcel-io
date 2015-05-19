@@ -91,7 +91,7 @@ After that, you can start get and save data in the loaded format.
 .. _ods3: https://github.com/chfw/pyexcel-ods3
 
 Contents:
-
+-------------------------------------------------
 .. toctree::
    :maxdepth: 2
 
@@ -100,6 +100,20 @@ Contents:
    csvz
    sqlalchemy
    django
+   extensions
+
+API
+--------------------------------------------------
+
+.. currentmodule:: pyexcel_io
+
+.. autosummary::
+   :toctree: api/
+   
+   get_data
+   save_data
+   get_io
+
 
 Indices and tables
 ==================

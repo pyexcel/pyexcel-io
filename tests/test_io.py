@@ -1,15 +1,26 @@
+import os
 import sys
-from pyexcel_io import load_data, StringIO, get_writer, get_io, BytesIO, BINARY_STREAM_TYPES, save_data, get_data
+from pyexcel_io import load_data, StringIO, get_writer, get_io, BytesIO
+from pyexcel_io import BINARY_STREAM_TYPES, save_data, get_data, is_string, validate_io
 from nose.tools import raises
 
 PY2 = sys.version_info[0] == 2
+
+@raises(IOError)
+def test_none_type_load_data():
+    load_data(None)
 
 
 @raises(IOError)
 def test_wrong_parameter_to_load_data():
     load_data(1)
 
+    
+@raises(IOError)
+def test_wrong_parameter_to_get_writer():
+    get_writer()
 
+    
 @raises(IOError)
 def test_wrong_parameter_to_get_writer():
     get_writer(1)
@@ -26,9 +37,9 @@ def test_load_ods_data():
 
 
 @raises(NotImplementedError)
-def test_load_xls_data_from_memory():
+def test_load_ods_data_from_memory():
     io = BytesIO()
-    load_data(io, file_type="xls")
+    load_data(io, file_type="ods")
 
 
 @raises(NotImplementedError)
@@ -43,10 +54,10 @@ def test_load_unknown_data_from_memory():
 
 
 @raises(IOError)
-def test_load_xlsm_data_from_memory():
+def test_load_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        get_writer(io, file_type="xlsm")
+        load_data(io, file_type="csvz")
     else:
         raise IOError("pass it")
 
@@ -62,10 +73,10 @@ def test_write_unknown_data():
 
 
 @raises(IOError)
-def test_writer_xlsm_data_from_memory():
+def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        get_writer(io, file_type="xlsm")
+        get_writer(io, file_type="csvz")
     else:
         raise IOError("pass it")
 
@@ -103,3 +114,25 @@ def test_text_file_content():
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
     assert result == data
+
+
+def test_conversion_from_bytes_to_text():
+    data = [['1','2','3']]
+    save_data("conversion.csv", data)
+    with open("conversion.csv", "rb") as f:
+        content = f.read()
+        result = get_data(content, 'csv')
+        assert result == data
+    os.unlink("conversion.csv")
+
+
+def test_is_string():
+    if PY2:
+        assert is_string(type(u'a')) == True
+    else:
+        assert is_string(type('a')) == True
+
+def test_validate_io():
+    assert validate_io("csd", StringIO()) == False
+
+

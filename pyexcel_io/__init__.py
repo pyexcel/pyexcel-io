@@ -207,8 +207,13 @@ def get_writer(filename, file_type=None, **keywords):
                 raise NotImplementedError(MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension, filename))
     return writer
 
-
+    
 def get_io(file_type):
+    """A utility function to help you generate a correct io stream
+
+    :param file_type: a supported file type
+    :returns: a appropriate io stream, None otherwise
+    """
     if file_type in TEXT_STREAM_TYPES:
         return StringIO()
     elif file_type in BINARY_STREAM_TYPES:
@@ -243,7 +248,9 @@ def store_data(afile, data, file_type=None, **keywords):
     
         
 def save_data(afile, data, file_type=None, **keywords):
-    """Public function to store data to afile
+    """Save data to an excel file source
+
+    Your data can be an array or an ordered dictionary
 
     :param filename: actual file name, a file stream or actual content
     :param data: the data to be saved
@@ -267,13 +274,14 @@ def save_data(afile, data, file_type=None, **keywords):
 
 
 def get_data(afile, file_type=None, **keywords):
-    """get data from file
+    """Get data from an excel file source
 
     :param filename: actual file name, a file stream or actual content
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
+    :returns: an array if it is a single sheet, an ordered dictionary otherwise
     """
     if isstream(afile) and file_type is None:
         file_type='csv'

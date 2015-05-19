@@ -76,6 +76,7 @@ class TestSheetReaderBase:
         class B(SheetReaderBase):
             @property
             def name(self):
+                SheetReaderBase.name(self)
                 return self.native_sheet
             def to_array(self):
                 SheetReaderBase.to_array(self)
@@ -173,7 +174,9 @@ class TestSheetWriter:
                 SheetWriter.write_row(self, row)
                 pass
 
-        D('t','e','s').write_row([11,11])
+        d = D('t','e','s')
+        d.write_row([11,11])
+        d.set_size(10)
 
     def test_writer(self):
         native_sheet = NamedContent("test", [])
