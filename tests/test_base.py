@@ -76,7 +76,6 @@ class TestSheetReaderBase:
         class B(SheetReaderBase):
             @property
             def name(self):
-                SheetReaderBase.name(self)
                 return self.native_sheet
             def to_array(self):
                 SheetReaderBase.to_array(self)

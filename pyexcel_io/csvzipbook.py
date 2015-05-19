@@ -7,16 +7,17 @@
     :copyright: (c) 2014-2015 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import os
 import csv
 import zipfile
 from .base import BookReader, BookWriter
-from ._compact import StringIO, PY2
+from ._compact import StringIO, PY2, is_string
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,
     CSVSheetWriter,
 )
-from .constants import DEFAULT_SHEET_NAME
+from .constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSV, FILE_FORMAT_TSV
 
 
 class CSVZipBook(BookReader):
@@ -108,9 +109,10 @@ class CSVZipWriter(BookWriter):
         BookWriter.__init__(self, filename, **keywords)
         self.myzip = zipfile.ZipFile(self.file, 'w')
         if 'dialect' in keywords:
-            self.file_extension = "tsv"
+            self.file_extension = FILE_FORMAT_TSV
         else:
-            self.file_extension = "csv"
+            self.file_extension = FILE_FORMAT_CSV
+
 
     def create_sheet(self, name):
         given_name = name
