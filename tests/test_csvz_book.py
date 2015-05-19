@@ -18,12 +18,13 @@ class TestCSVZ:
         sheet.write_array(data)
         sheet.close()
         zipbook.close()
-        with zipfile.ZipFile(self.file, 'r') as zip:
-            assert zip.namelist() == [file_name]
-            content = zip.read(file_name)
-            if not PY2:
-                content = content.decode('utf-8')
-            assert content.replace('\r','').strip('\n') == "1,2,3"
+        zip = zipfile.ZipFile(self.file, 'r')
+        assert zip.namelist() == [file_name]
+        content = zip.read(file_name)
+        if not PY2:
+            content = content.decode('utf-8')
+        assert content.replace('\r','').strip('\n') == "1,2,3"
+        zip.close()    
 
     def test_reading(self):
         data = [[1,2,3]]
