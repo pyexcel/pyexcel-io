@@ -23,9 +23,10 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict
+from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict, PY2
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
+    MESSAGE_ERROR_02,
     MESSAGE_ERROR_03,
     MESSAGE_CANNOT_WRITE_STREAM_FORMATTER,
     MESSAGE_CANNOT_READ_STREAM_FORMATTER,
@@ -116,6 +117,8 @@ def load_data(filename,
     book = None
     from_memory = False
     content = None
+    if filename is None:
+        raise IOError(MESSAGE_ERROR_02)
     if filename in READERS:
         book_class = READERS[filename]
         book = book_class(**keywords)
@@ -137,7 +140,14 @@ def load_data(filename,
                         raise IOError(MESSAGE_ERROR_03)
                 else:
                     io = get_io(file_type)
-                    io.write(filename)
+                    if not PY2:
+                        if isinstance(io, StringIO) and isinstance(filename, bytes):
+                            content = filename.decode('utf-8')
+                        else:
+                            content = filename
+                        io.write(content)
+                    else:
+                        io.write(filename)
                     io.seek(0)
                     content = io
                 book = book_class(None, file_content=content,
@@ -168,6 +178,8 @@ def get_writer(filename, file_type=None, **keywords):
     extension = None
     writer = None
     to_memory = False
+    if filename is None:
+        raise IOError(MESSAGE_ERROR_02)
     if filename in WRITERS:
         writer_class = WRITERS[filename]
         writer = writer_class(filename, **keywords)
