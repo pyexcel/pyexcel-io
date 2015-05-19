@@ -44,7 +44,10 @@ from .constants import (
     DEFAULT_SHEET_NAME
 )
 
+# Please also register here
+TEXT_STREAM_TYPES = [FILE_FORMAT_CSV, FILE_FORMAT_TSV]
 
+# Please also register here
 BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
                        FILE_FORMAT_ODS, FILE_FORMAT_XLS,
                        FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
@@ -194,7 +197,7 @@ def get_writer(filename, file_type=None, **keywords):
 
 
 def get_io(file_type):
-    if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV]:
+    if file_type in TEXT_STREAM_TYPES:
         return StringIO()
     elif file_type in BINARY_STREAM_TYPES:
         return BytesIO()
@@ -203,7 +206,7 @@ def get_io(file_type):
 
 
 def validate_io(file_type, io):
-    if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV]:
+    if file_type in TEXT_STREAM_TYPES:
         return isinstance(io, StringIO)
     elif file_type in BINARY_STREAM_TYPES:
         return isinstance(io, BytesIO)
@@ -242,7 +245,7 @@ def save_data(afile, data, file_type=None, **keywords):
     else:
         single_sheet_in_book = False
 
-    if isstream(afile):
+    if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
 
     store_data(afile, to_store,

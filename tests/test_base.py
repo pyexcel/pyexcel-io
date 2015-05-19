@@ -142,6 +142,25 @@ class TestSheetWriterBase:
     @raises(TypeError)
     def test_abstractness(self):
         SheetWriterBase("test")
+
+    def test_sheet_writer_base(self):
+        class D(SheetWriterBase):
+            def close(self):
+                SheetWriterBase.close(self)
+                pass
+
+            def set_size(self, size):
+                SheetWriterBase.set_size(self, size)
+                pass
+
+            def write_array(self, table):
+                SheetWriterBase.write_array(self, table)
+                pass
+
+        d = D()
+        d.set_size(10)
+        d.write_array([11,11])
+        d.close()            
         
 class TestSheetWriter:
     @raises(TypeError)
@@ -150,20 +169,10 @@ class TestSheetWriter:
 
     def test_inheritance(self):
         class D(SheetWriter):
-            def set_sheet_name(self, name):
-                SheetWriter.set_sheet_name(self, name)
-                pass
-
-            def set_size(self, size):
-                SheetWriter.set_size(self, size)
-                pass
-
             def write_row(self, row):
                 SheetWriter.write_row(self, row)
                 pass
 
-        D('t','e','s').set_sheet_name("test")
-        D('t','e','s').set_size(10)
         D('t','e','s').write_row([11,11])
 
     def test_writer(self):
