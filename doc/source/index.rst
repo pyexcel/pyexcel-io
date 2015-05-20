@@ -57,15 +57,15 @@ For individual excel file formats, please install them as you wish:
 .. _a-map-of-plugins-and-file-formats:
 .. table:: a map of plugins and supported excel file formats
 
-   ============== ======================================= ============= ======================== =============================   
-   Package name   Supported file formats                  Dependencies  Python versions          Comments                       
-   ============== ======================================= ============= ======================== =============================   
-   `pyexcel-io`_  csv, csvz [#f1]_, tsv, tsvz [#f2]_                    2.6, 2.7, 3.3, 3.4, pypy                                
-   `xls`_         xls, xlsx(read only), xlsm(read only)   xlrd, xlwt    2.6, 2.7, 3.3, 3.4, pypy supports reading xlsx as well
-   `xlsx`_        xlsx                                    openpyxl      2.6, 2.7, 3.3, 3.4, pypy                                 
-   `ods3`_        ods                                     ezodf, lxml   2.6, 2.7, 3.3, 3.4                                               
-   `ods`_         ods (python 2.6, 2.7)                   odfpy         2.6, 2.7                                             
-   ============== ======================================= ============= ======================== =============================
+   ============== ======================================= ============= ========================   
+   Package name   Supported file formats                  Dependencies  Python versions           
+   ============== ======================================= ============= ========================   
+   `pyexcel-io`_  csv, csvz [#f1]_, tsv, tsvz [#f2]_                    2.6, 2.7, 3.3, 3.4, pypy  
+   `xls`_         xls, xlsx(read only), xlsm(read only)   xlrd, xlwt    2.6, 2.7, 3.3, 3.4, pypy
+   `xlsx`_        xlsx                                    openpyxl      2.6, 2.7, 3.3, 3.4, pypy   
+   `ods3`_        ods                                     ezodf, lxml   2.6, 2.7, 3.3, 3.4                 
+   `ods`_         ods (python 2.6, 2.7)                   odfpy         2.6, 2.7                
+   ============== ======================================= ============= ========================
 
 Please import them before you start to access the desired file formats::
 
@@ -90,7 +90,7 @@ After that, you can start get and save data in the loaded format.
 .. _ods: https://github.com/chfw/pyexcel-ods
 .. _ods3: https://github.com/chfw/pyexcel-ods3
 
-Contents:
+Tutorial
 -------------------------------------------------
 .. toctree::
    :maxdepth: 2
@@ -102,6 +102,7 @@ Contents:
    django
    extensions
 
+
 API
 --------------------------------------------------
 
@@ -112,6 +113,12 @@ API
    
    get_data
    save_data
+
+Utility functions
+
+.. autosummary::
+   :toctree: api/
+   
    get_io
 
 

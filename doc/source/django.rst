@@ -47,6 +47,11 @@ used here to demonstate it::
     ...     def __call__(self, **keywords):
     ...         return keywords
 
+.. note::
+   You can visit
+   `django-excel documentation <http://django-excel.readthedocs.org/en/latest/>`_
+   if you would prefer a real django model to be used in tutorial.
+
 Write data to a django model
 --------------------------------------------------------------------------------
 

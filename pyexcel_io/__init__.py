@@ -53,7 +53,7 @@ BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
                        FILE_FORMAT_ODS, FILE_FORMAT_XLS,
                        FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
 
-# A list of registered readers
+#A list of registered readers
 READERS = {
     FILE_FORMAT_CSV: CSVBook,
     FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
