@@ -10,7 +10,7 @@
 from functools import partial
 from .base import(
     NamedContent,
-    SheetReaderBase,    
+    SheetReaderBase,
     SheetReader,
     BookReaderBase,
     BookReader,
@@ -53,7 +53,7 @@ BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
                        FILE_FORMAT_ODS, FILE_FORMAT_XLS,
                        FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
 
-#A list of registered readers
+# A list of registered readers
 READERS = {
     FILE_FORMAT_CSV: CSVBook,
     FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
@@ -105,7 +105,7 @@ def load_data(filename,
               sheet_name=None,
               sheet_index=None,
               **keywords):
-    """Load data from any supported excel formats    
+    """Load data from any supported excel formats
 
     :param filename: actual file name, a file stream or actual content
     :param file_type: used only when filename is not a physial file name
@@ -141,7 +141,7 @@ def load_data(filename,
                 else:
                     io = get_io(file_type)
                     if not PY2:
-                        if isinstance(io, StringIO) and isinstance(filename, bytes):
+                        if (isinstance(io, StringIO) and isinstance(filename, bytes)):
                             content = filename.decode('utf-8')
                         else:
                             content = filename
@@ -162,14 +162,17 @@ def load_data(filename,
         else:
             resolve_missing_extensions(extension, AVAILABLE_READERS)
             if from_memory:
-                raise NotImplementedError(MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
+                raise NotImplementedError(
+                    MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
             else:
-                raise NotImplementedError(MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER% (extension, filename))
+                raise NotImplementedError(
+                    MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
+                                                               filename))
     return book.sheets()
 
 
 def get_writer(filename, file_type=None, **keywords):
-    """Create a writer from any supported excel formats        
+    """Create a writer from any supported excel formats
 
     :param filename: actual file name or a file stream
     :param file_type: used only when filename is not a physial file name
@@ -202,12 +205,15 @@ def get_writer(filename, file_type=None, **keywords):
         else:
             resolve_missing_extensions(extension, AVAILABLE_WRITERS)
             if to_memory:
-                raise NotImplementedError(MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
+                raise NotImplementedError(
+                    MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
             else:
-                raise NotImplementedError(MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension, filename))
+                raise NotImplementedError(
+                    MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
+                                                                filename))
     return writer
 
-    
+
 def get_io(file_type):
     """A utility function to help you generate a correct io stream
 
@@ -245,8 +251,8 @@ def store_data(afile, data, file_type=None, **keywords):
         **keywords)
     writer.write(data)
     writer.close()
-    
-        
+
+
 def save_data(afile, data, file_type=None, **keywords):
     """Save data to an excel file source
 
@@ -284,7 +290,7 @@ def get_data(afile, file_type=None, **keywords):
     :returns: an array if it is a single sheet, an ordered dictionary otherwise
     """
     if isstream(afile) and file_type is None:
-        file_type='csv'
+        file_type = FILE_FORMAT_CSV
     data = load_data(afile, file_type=file_type, **keywords)
     if len(list(data.keys())) == 1:
         return list(data.values())[0]

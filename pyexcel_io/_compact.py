@@ -16,15 +16,16 @@ else:
     from collections import OrderedDict
 
 PY2 = sys.version_info[0] == 2
-    
+
 if PY2:
     from StringIO import StringIO
     from StringIO import StringIO as BytesIO
     text_type = unicode
+
     class Iterator(object):
         def next(self):
             return type(self).__next__(self)
-        
+
     def isstream(instance):
         return isinstance(instance, StringIO)
 
@@ -32,6 +33,7 @@ else:
     from io import StringIO, BytesIO
     text_type = str
     Iterator = object
+
     def isstream(instance):
         return isinstance(instance, StringIO) or isinstance(instance, BytesIO)
 

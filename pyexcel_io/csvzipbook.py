@@ -46,7 +46,9 @@ class CSVZipBook(BookReader):
 
     def sheet_iterator(self):
         if self.sheet_name:
-            rets = [sheet for sheet in self.native_book.namelist() if self._get_sheet_name(sheet) == self.sheet_name]
+            rets = [sheet for sheet
+                    in self.native_book.namelist()
+                    if self._get_sheet_name(sheet) == self.sheet_name]
             if len(rets) == 0:
                 raise ValueError("%s cannot be found" % self.sheet_name)
             else:
@@ -57,8 +59,9 @@ class CSVZipBook(BookReader):
             if self.sheet_index < length:
                 return [file_list[self.sheet_index]]
             else:
-                raise IndexError("Index %d of out bound %d" %(self.sheet_index,
-                                                              length))
+                raise IndexError(
+                    "Index %d of out bound %d" % (self.sheet_index,
+                                                  length))
         else:
             return self.native_book.namelist()
 
@@ -72,7 +75,7 @@ class CSVZipBook(BookReader):
             sheet = StringIO(content)
         else:
             sheet = StringIO(content.decode('utf-8'))
-            
+
         return CSVinMemoryReader(
             NamedContent(
                 self._get_sheet_name(native_sheet),
@@ -112,7 +115,6 @@ class CSVZipWriter(BookWriter):
             self.file_extension = FILE_FORMAT_TSV
         else:
             self.file_extension = FILE_FORMAT_CSV
-
 
     def create_sheet(self, name):
         given_name = name

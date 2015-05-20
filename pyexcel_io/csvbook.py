@@ -20,7 +20,15 @@ from .base import (
     BookWriter,
     NamedContent
 )
-from ._compact import is_string, StringIO, BytesIO, PY2, text_type, Iterator, isstream
+from ._compact import (
+    is_string,
+    StringIO,
+    BytesIO,
+    PY2,
+    text_type,
+    Iterator,
+    isstream
+)
 from .constants import DEFAULT_SEPARATOR, DEFAULT_SHEET_NAME
 
 
@@ -123,7 +131,8 @@ class CSVBook(BookReader):
                     lines = sheet.split('\r\n')
                     result = re.match(matcher, lines[0])
                     new_content = '\n'.join(lines[1:])
-                    new_sheet = NamedContent(result.group(1), StringIO(new_content))
+                    new_sheet = NamedContent(result.group(1),
+                                             StringIO(new_content))
                     named_contents.append(new_sheet)
             return named_contents
         else:
@@ -164,8 +173,9 @@ class CSVBook(BookReader):
                 if self.sheet_name is not None:
                     raise ValueError("%s cannot be found" % self.sheet_name)
                 elif self.sheet_index is not None:
-                    raise IndexError("Index %d of out bound %d." % (self.sheet_index,
-                                                                    len(filelist)))
+                    raise IndexError(
+                        "Index %d of out bound %d." % (self.sheet_index,
+                                                       len(filelist)))
             return ret
 
     def sheet_iterator(self):
@@ -237,7 +247,6 @@ class CSVSheetWriter(SheetWriter):
             self.f.close()
         elif not self.single_sheet_in_book:
             self.f.write("---pyexcel---\r\n")
-
 
 
 class CSVWriter(BookWriter):

@@ -15,7 +15,7 @@ from .base import (
     SheetWriter,
     from_query_sets
 )
-    
+
 
 class DjangoModelReader(SheetReaderBase):
     """Read from django model
@@ -32,7 +32,9 @@ class DjangoModelReader(SheetReaderBase):
         if len(objects) == 0:
             return []
         else:
-            column_names = sorted([field.attname for field in self.model._meta.concrete_fields])
+            column_names = sorted(
+                [field.attname
+                 for field in self.model._meta.concrete_fields])
             return from_query_sets(column_names, objects)
 
 
@@ -43,8 +45,8 @@ class DjangoBookReader(BookReaderBase):
         self.my_sheets = OrderedDict()
         for model in models:
             djangomodelreader = DjangoModelReader(model)
-            self.my_sheets[djangomodelreader.name]=djangomodelreader.to_array()
-            
+            self.my_sheets[djangomodelreader.name] = djangomodelreader.to_array()
+
     def sheets(self):
         return self.my_sheets
 
@@ -65,12 +67,14 @@ class DjangoModelWriter(SheetWriter):
             self.column_names = self.mapdict
             self.mapdict = None
         elif isinstance(self.mapdict, dict):
-            self.column_names = [self.mapdict[name] for name in self.column_names]
-
+            self.column_names = [self.mapdict[name]
+                                 for name in self.column_names]
         self.objs = []
 
     def write_row(self, array):
-        self.objs.append(self.mymodel(**dict(zip(self.column_names, self.initializer(array)))))
+        self.objs.append(self.mymodel(**dict(
+            zip(self.column_names, self.initializer(array))
+        )))
 
     def close(self):
         self.mymodel.objects.bulk_create(self.objs, batch_size=self.batch_size)

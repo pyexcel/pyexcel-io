@@ -36,7 +36,6 @@ class SQLTableReader(SheetReaderBase):
         else:
             column_names = sorted([column for column in objects[0].__dict__
                                    if column != '_sa_instance_state'])
-            
             return from_query_sets(column_names, objects)
 
 
@@ -47,7 +46,7 @@ class SQLBookReader(BookReaderBase):
         self.my_sheets = OrderedDict()
         for table in tables:
             sqltablereader = SQLTableReader(session, table)
-            self.my_sheets[sqltablereader.name]=sqltablereader.to_array()
+            self.my_sheets[sqltablereader.name] = sqltablereader.to_array()
             
     def sheets(self):
         return self.my_sheets

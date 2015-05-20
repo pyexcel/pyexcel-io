@@ -15,7 +15,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 else:
     from collections import OrderedDict
 from .constants import DEFAULT_SHEET_NAME
-    
+
 
 def add_metaclass(metaclass):
     """Class decorator for creating a class with a metaclass."""
@@ -180,7 +180,8 @@ class SheetWriterBase(object):
         This call actually save the file
         """
         pass
-    
+
+
 @add_metaclass(ABCMeta)
 class SheetWriter(SheetWriterBase):
     """
