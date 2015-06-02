@@ -72,7 +72,6 @@ class TestSheet:
         writer = DjangoModelWriter([model, data[0], None, None])
         writer.write_array(data[1:])
         writer.close()
-        print self.result
         assert model.objects.objs == self.result
 
     def test_sheet_save_to_django_model_3(self):
