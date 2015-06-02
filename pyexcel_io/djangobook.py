@@ -8,12 +8,14 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ._compact import OrderedDict
+from .constants import MESSAGE_EMPTY_ARRAY
 from .base import (
     BookReaderBase,
     SheetReaderBase,
     BookWriter,
     SheetWriter,
-    from_query_sets
+    from_query_sets,
+    is_empty_array
 )
 
 
@@ -72,9 +74,12 @@ class DjangoModelWriter(SheetWriter):
         self.objs = []
 
     def write_row(self, array):
-        self.objs.append(self.mymodel(**dict(
-            zip(self.column_names, self.initializer(array))
-        )))
+        if is_empty_array(array):
+            print(MESSAGE_EMPTY_ARRAY)
+        else:
+            self.objs.append(self.mymodel(**dict(
+                zip(self.column_names, self.initializer(array))
+            )))
 
     def close(self):
         self.mymodel.objects.bulk_create(self.objs, batch_size=self.batch_size)

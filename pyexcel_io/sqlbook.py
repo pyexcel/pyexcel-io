@@ -8,13 +8,17 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ._compact import OrderedDict
-from .constants import MESSAGE_INVALID_PARAMETERS
+from .constants import (
+    MESSAGE_INVALID_PARAMETERS,
+    MESSAGE_EMPTY_ARRAY
+)
 from .base import (
     BookReaderBase,
     SheetReaderBase,
     BookWriter,
     SheetWriter,
-    from_query_sets
+    from_query_sets,
+    is_empty_array
 )
 
 
@@ -47,11 +51,11 @@ class SQLBookReader(BookReaderBase):
         for table in tables:
             sqltablereader = SQLTableReader(session, table)
             self.my_sheets[sqltablereader.name] = sqltablereader.to_array()
-            
+
     def sheets(self):
         return self.my_sheets
 
-        
+
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
@@ -71,6 +75,12 @@ class SQLTableWriter(SheetWriter):
             self.mapdict = None
 
     def write_row(self, array):
+        if is_empty_array(array):
+            print(MESSAGE_EMPTY_ARRAY)
+        else:
+            self._write_row(array)
+
+    def _write_row(self, array):
         row = dict(zip(self.column_names, array))
         if self.initializer:
             o = self.initializer(row)

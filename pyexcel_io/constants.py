@@ -19,6 +19,7 @@ MESSAGE_CANNOT_READ_STREAM_FORMATTER = "Cannot read content of file type %s from
 MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER = "Cannot write content of file type %s to file %s"
 MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER = "Cannot read content of file type %s from file %s"
 MESSAGE_LOADING_FORMATTER = "The plugin for file type %s is not installed. Please install %s"
+MESSAGE_EMPTY_ARRAY = "One empty row is found"
 
 FILE_FORMAT_CSV = 'csv'
 FILE_FORMAT_TSV = 'tsv'

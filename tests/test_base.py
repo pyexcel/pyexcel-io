@@ -1,9 +1,17 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader, BookReader,
     SheetWriter, BookWriter, NamedContent,
-    BookReaderBase, SheetWriterBase
+    BookReaderBase, SheetWriterBase,
 )
+from pyexcel_io.base import is_empty_array
 from nose.tools import raises
+
+
+def test_is_empty_array():
+    a=["", "", "", ""]
+    assert is_empty_array(a) == True
+    b=[1, "", "", ""]
+    assert is_empty_array(b) == False
 
 
 class ArrayReader(SheetReader):

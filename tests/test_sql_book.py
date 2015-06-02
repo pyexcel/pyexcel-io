@@ -121,6 +121,23 @@ class TestSingleWrite:
         assert results == self.results
         mysession.close()
 
+    def test_one_table_with_empty_rows(self):
+        mysession = Session()
+        data = [
+            ['birth', 'id', 'name', 'weight'],
+            ['', '', ''],
+            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
+        ]
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,data[0], None, None])
+        writer.write_array(data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(data[0], query_sets)
+        assert results == self.results
+        mysession.close()
+
     def test_one_table_using_mapdict_as_array(self):
         mysession = Session()
         self.data = [

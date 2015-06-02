@@ -61,6 +61,20 @@ class TestSheet:
         writer.close()
         assert model.objects.objs == self.result
 
+    def test_sheet_save_to_django_model_with_empty_array(self):
+        model=FakeDjangoModel()
+        data  = [
+            ["X", "Y", "Z"],
+            ['', '', ''],
+            [1, 2, 3],
+            [4, 5, 6]
+        ]
+        writer = DjangoModelWriter([model, data[0], None, None])
+        writer.write_array(data[1:])
+        writer.close()
+        print self.result
+        assert model.objects.objs == self.result
+
     def test_sheet_save_to_django_model_3(self):
         model=FakeDjangoModel()
         def wrapper(row):

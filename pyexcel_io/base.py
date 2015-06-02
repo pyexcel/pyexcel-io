@@ -271,3 +271,7 @@ def from_query_sets(column_names, query_sets):
             new_array.append(value)
         array.append(new_array)
     return array
+
+
+def is_empty_array(array):
+    return len([x for x in array if x != '']) == 0
