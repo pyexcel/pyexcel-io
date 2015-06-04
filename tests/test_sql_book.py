@@ -22,7 +22,7 @@ Base=declarative_base()
 class Pyexcel(Base):
     __tablename__='pyexcel'
     id=Column(Integer, primary_key=True)
-    name=Column(String)
+    name=Column(String, unique=True)
     weight=Column(Float)
     birth=Column(Date)
 
@@ -136,6 +136,24 @@ class TestSingleWrite:
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(data[0], query_sets)
         assert results == self.results
+        mysession.close()
+
+    def test_one_table_with_empty_string_in_unique_field(self):
+        mysession = Session()
+        data = [
+            ['birth', 'id', 'name', 'weight'],
+            [datetime.date(2014, 11, 11), 0, '', 11.25],
+            [datetime.date(2014, 11, 12), 1, '', 12.25]
+        ]
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,data[0], None, None])
+        writer.write_array(data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(data[0], query_sets)
+        assert results == [['birth', 'id', 'name', 'weight'],
+                           ['2014-11-11', 0, None, 11.25],
+                           ['2014-11-12', 1, None, 12.25]]
         mysession.close()
 
     def test_one_table_using_mapdict_as_array(self):

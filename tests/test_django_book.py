@@ -2,6 +2,21 @@ from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
 from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader, DjangoBookWriter
 
 
+class Package:
+    def __init__(self, raiseException=False, **keywords):
+        self.keywords = keywords
+        self.raiseException = raiseException
+
+    def get_content(self):
+        return self.keywords
+
+    def save(self):
+        if self.raiseException:
+            raise Exception("test exception")
+        else:
+            pass
+
+
 class Attributable:
     def __init__(self, adict):
         self.mydict = adict
@@ -9,20 +24,23 @@ class Attributable:
     def __getattr__(self, field):
         return self.mydict[field]
 
+
 class Objects:
     def __init__(self):
         self.objs = []
         
     def bulk_create(self, objs, batch_size):
-        self.objs = objs
+        self.objs = [ o.get_content() for o in objs ]
         self.batch_size = batch_size
 
     def all(self):
         return [Attributable(o) for o in self.objs]
 
+
 class Field:
     def __init__(self, name):
         self.attname = name
+
 
 class Meta:
     def __init__(self):
@@ -33,13 +51,54 @@ class Meta:
         for f in data:
             self.concrete_fields.append(Field(f))
 
+
 class FakeDjangoModel:
     def __init__(self):
         self.objects = Objects()
         self._meta = Meta()
 
     def __call__(self, **keywords):
-        return keywords
+        return Package(**keywords)
+
+
+class ExceptionObjects(Objects):
+    def bulk_create(self, objs, batch_size):
+        raise Exception("faked exception")
+
+
+class FakeExceptionDjangoModel(FakeDjangoModel):
+    def __init__(self, raiseException=False):
+        self.objects = ExceptionObjects()
+        self._meta = Meta()
+        self.raiseException = raiseException
+
+    def __call__(self, **keywords):
+        return Package(raiseExcpetion=self.raiseException,
+                       **keywords)
+
+
+class TestException:
+    def setUp(self):
+        self.data  = [
+            ["X", "Y", "Z"],
+            [1, 2, 3],
+            [4, 5, 6]
+        ]
+        self.result = [
+            {'Y': 2, 'X': 1, 'Z': 3},
+            {'Y': 5, 'X': 4, 'Z': 6}
+        ]
+        
+    def test_sheet_save_to_django_model(self):
+        model=FakeExceptionDjangoModel()
+        writer = DjangoModelWriter([model, self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
+        # now raise excpetion
+        model=FakeExceptionDjangoModel(raiseException=True)
+        writer = DjangoModelWriter([model, self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
 
 
 class TestSheet:

@@ -275,3 +275,12 @@ def from_query_sets(column_names, query_sets):
 
 def is_empty_array(array):
     return len([x for x in array if x != '']) == 0
+
+
+def swap_empty_string_for_none(array):
+    def swap(x):
+        if x == '':
+            return None
+        else:
+            return x
+    return [swap(x) for x in array]

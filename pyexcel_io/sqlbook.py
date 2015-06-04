@@ -18,7 +18,8 @@ from .base import (
     BookWriter,
     SheetWriter,
     from_query_sets,
-    is_empty_array
+    is_empty_array,
+    swap_empty_string_for_none
 )
 
 
@@ -78,7 +79,8 @@ class SQLTableWriter(SheetWriter):
         if is_empty_array(array):
             print(MESSAGE_EMPTY_ARRAY)
         else:
-            self._write_row(array)
+            new_array = swap_empty_string_for_none(array)
+            self._write_row(new_array)
 
     def _write_row(self, array):
         row = dict(zip(self.column_names, array))

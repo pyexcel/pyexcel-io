@@ -8,14 +8,19 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ._compact import OrderedDict
-from .constants import MESSAGE_EMPTY_ARRAY
+from .constants import (
+    MESSAGE_EMPTY_ARRAY,
+    MESSAGE_DB_EXCEPTION,
+    MESSAGE_IGNORE_ROW
+)
 from .base import (
     BookReaderBase,
     SheetReaderBase,
     BookWriter,
     SheetWriter,
     from_query_sets,
-    is_empty_array
+    is_empty_array,
+    swap_empty_string_for_none
 )
 
 
@@ -77,12 +82,25 @@ class DjangoModelWriter(SheetWriter):
         if is_empty_array(array):
             print(MESSAGE_EMPTY_ARRAY)
         else:
+            new_array = swap_empty_string_for_none(array)
             self.objs.append(self.mymodel(**dict(
-                zip(self.column_names, self.initializer(array))
+                zip(self.column_names, self.initializer(new_array))
             )))
 
     def close(self):
-        self.mymodel.objects.bulk_create(self.objs, batch_size=self.batch_size)
+        try:
+            self.mymodel.objects.bulk_create(self.objs, batch_size=self.batch_size)
+        except Exception as e:
+            print(MESSAGE_DB_EXCEPTION)
+            print(e)
+            for object in self.objs:
+                try:
+                    object.save()
+                except Exception as e2:
+                    print(MESSAGE_IGNORE_ROW)
+                    print(e2)
+                    print(object)
+                    continue
 
 
 class DjangoBookWriter(BookWriter):
