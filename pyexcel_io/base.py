@@ -248,8 +248,9 @@ class BookWriter(object):
         keys = sheet_dicts.keys()
         for name in keys:
             sheet = self.create_sheet(name)
-            sheet.write_array(sheet_dicts[name])
-            sheet.close()
+            if sheet is not None:
+                sheet.write_array(sheet_dicts[name])
+                sheet.close()
 
     @abstractmethod
     def close(self):

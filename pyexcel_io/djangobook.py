@@ -112,8 +112,11 @@ class DjangoBookWriter(BookWriter):
         self.batch_size = batch_size
 
     def create_sheet(self, name):
-        model_params = self.models[name]
-        return DjangoModelWriter(model_params, batch_size=self.batch_size)
+        if name in self.models:
+            model_params = self.models[name]
+            return DjangoModelWriter(model_params, batch_size=self.batch_size)
+        else:
+            return None
 
     def close(self):
         pass
