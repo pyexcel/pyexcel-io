@@ -122,6 +122,7 @@ def load_data(filename,
     if filename in READERS:
         book_class = READERS[filename]
         book = book_class(**keywords)
+        book.set_type(filename)
     else:
         if file_type is not None:
             from_memory = True
@@ -159,6 +160,7 @@ def load_data(filename,
                                   load_sheet_with_name=sheet_name,
                                   load_sheet_at_index=sheet_index,
                                   **keywords)
+            book.set_type(extension)
         else:
             resolve_missing_extensions(extension, AVAILABLE_READERS)
             if from_memory:
@@ -186,6 +188,7 @@ def get_writer(filename, file_type=None, **keywords):
     if filename in WRITERS:
         writer_class = WRITERS[filename]
         writer = writer_class(filename, **keywords)
+        writer.set_type(filename)
     else:
         if file_type is not None:
             if isstream(filename):
@@ -202,6 +205,7 @@ def get_writer(filename, file_type=None, **keywords):
         if extension in WRITERS:
             writer_class = WRITERS[extension]
             writer = writer_class(filename, **keywords)
+            writer.set_type(extension)
         else:
             resolve_missing_extensions(extension, AVAILABLE_WRITERS)
             if to_memory:

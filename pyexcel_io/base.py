@@ -127,6 +127,9 @@ class BookReader(BookReaderBase):
             sheet = self.get_sheet(native_sheet)
             self.mysheets[sheet.name] = sheet.to_array()
 
+    def set_type(self, file_type):
+        self.file_type = file_type
+
     @abstractmethod
     def sheet_iterator(self):
         pass
@@ -238,6 +241,9 @@ class BookWriter(object):
     def create_sheet(self, name):
         """Get a native sheet out"""
         pass
+
+    def set_type(self, file_type):
+        self.file_type = file_type
 
     def write(self, sheet_dicts):
         """Write a dictionary to a multi-sheet file
