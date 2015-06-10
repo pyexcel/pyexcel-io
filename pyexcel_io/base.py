@@ -96,6 +96,9 @@ class SheetReader(SheetReaderBase):
 @add_metaclass(ABCMeta)
 class BookReaderBase(object):
 
+    def set_type(self, file_type):
+        self.file_type = file_type
+
     @abstractmethod
     def sheets(self):
         """Get sheets in a dictionary"""
@@ -126,9 +129,6 @@ class BookReader(BookReaderBase):
         for native_sheet in self.sheet_iterator():
             sheet = self.get_sheet(native_sheet)
             self.mysheets[sheet.name] = sheet.to_array()
-
-    def set_type(self, file_type):
-        self.file_type = file_type
 
     @abstractmethod
     def sheet_iterator(self):
