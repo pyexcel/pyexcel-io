@@ -73,7 +73,7 @@ class FakeExceptionDjangoModel(FakeDjangoModel):
         self.raiseException = raiseException
 
     def __call__(self, **keywords):
-        return Package(raiseExcpetion=self.raiseException,
+        return Package(raiseException=self.raiseException,
                        **keywords)
 
 
@@ -236,3 +236,19 @@ class TestMultipleModels:
         reader = DjangoBookReader([model1, model2])
         data = reader.sheets()
         assert data == self.content
+
+    def test_special_case_where_only_one_model_used(self):
+        model1=FakeDjangoModel()
+        to_store = {
+            "Sheet1": self.content['Sheet1'][1:],
+            "Sheet2": self.content['Sheet2'][1:]
+        }
+        save_data(DB_DJANGO, to_store, models={
+            "Sheet1": [model1, self.content['Sheet1'][0], None, None]
+        })
+        assert model1.objects.objs == self.result1
+        model1._meta.model_name = "Sheet1"
+        model1._meta.update(["X", "Y", "Z"])
+        reader = DjangoBookReader([model1])
+        data = reader.sheets()
+        assert data['Sheet1'] == self.content['Sheet1']
