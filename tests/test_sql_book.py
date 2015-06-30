@@ -215,6 +215,7 @@ class TestSingleWrite:
 
         SQLTableWriter(mysession,
                                 [Pyexcel,self.data[0], mapdict, None, None])
+        mysession.close()
 
         
 class TestMultipleRead:
@@ -280,3 +281,33 @@ class TestZeroRead:
         assert data == content
         mysession.close()
             
+
+class TestDisabledWrite:
+    def setUp(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+        self.data = [
+            ['birth', 'id', 'name', 'weight'],
+            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
+        ]
+        self.results = [
+            ['birth', 'id', 'name', 'weight'],
+            ['2014-11-11', 0, 'Adam', 11.25],
+            ['2014-11-12', 1, 'Smith', 12.25]
+        ]
+
+    def test_one_table(self):
+        mysession = Session()
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], None, None],
+                                auto_commit=False)
+        writer.write_array(self.data[1:])
+        writer.close()
+        mysession.close()
+        mysession2 = Session()
+        query_sets=mysession2.query(Pyexcel).all()
+        results = from_query_sets(self.data[0], query_sets)
+        assert len(query_sets) == 0
+        mysession2.close()
+
