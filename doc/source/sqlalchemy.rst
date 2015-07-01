@@ -7,7 +7,7 @@ Suppose we have a pure sql database connection via sqlalchemy:
     >>> from sqlalchemy.ext.declarative import declarative_base
     >>> from sqlalchemy import Column , Integer, String, Float, Date
     >>> from sqlalchemy.orm import sessionmaker
-    >>> engine=create_engine("sqlite:///tmp.db")
+    >>> engine=create_engine("sqlite:///sqlalchemy.db")
     >>> Base=declarative_base()
     >>> Session=sessionmaker(bind=engine)
 
@@ -24,12 +24,11 @@ Assume we have the following database table::
     ...     weight=Column(Float)
     ...     birth=Column(Date)
 
-Let's clear the database and create previous table in the database:
+Let's clear the database and create previous table in the database::
 
-    >>> Base.metadata.drop_all(engine)
     >>> Base.metadata.create_all(engine)
 
-And suppose we have the following data structure to be saved:
+And suppose we have the following data structure to be saved::
 
     >>> import datetime
     >>> data = [
@@ -191,4 +190,4 @@ Let's use previous data for reading and see if we could get them via
 
    >>> mysession.close()
    >>> import os
-   >>> os.unlink('tmp.db')
+   >>> os.unlink('sqlalchemy.db')

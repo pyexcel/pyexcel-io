@@ -60,12 +60,13 @@ class SQLBookReader(BookReaderBase):
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
-    def __init__(self, session, table_params, **keywords):
+    def __init__(self, session, table_params, auto_commit=True, **keywords):
         self.session = session
         self.table = None
         self.initializer = None
         self.mapdict = None
         self.column_names = None
+        self.auto_commit = auto_commit
         self.keywords = keywords
         if len(table_params) == 4:
             self.table, self.column_names, self.mapdict, self.initializer = table_params
@@ -98,7 +99,7 @@ class SQLTableWriter(SheetWriter):
         self.session.add(o)
 
     def close(self):
-        if 'auto_commit' in self.keywords and self.keywords['auto_commit'] == True:
+        if self.auto_commit:
             self.session.commit()
 
 
