@@ -17,7 +17,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 setup(
     name='pyexcel-io',
     author="C. W.",
-    version='0.0.5',
+    version='0.0.6',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-io",
     description='A python library to read and write structured data in csv, zipped csv format and to/from databases',

@@ -11,9 +11,6 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
     :target: http://pyexcel-io.readthedocs.org/en/latest/
 
-.. image:: http://img.shields.io/gittip/chfw.svg
-    :target: https://gratipay.com/chfw/
-
 **pyexcel-io** provides **one** application programming interface(API) to read
 and write the data in excel format, import the data into and export the data
 from database. It provides support for csv(z) format, django database and
@@ -25,8 +22,8 @@ Plugins          Supported file formats
 ================ ==================================
 `pyexcel-xls`_   xls, xlsx(r), xlsm(r)
 `pyexcel-xlsx`_  xlsx
-`pyexcel-ods`_   ods (python 2.6, 2.7 only)        
 `pyexcel-ods3`_  ods
+`pyexcel-ods`_   ods (python 2.6, 2.7 only)        
 ================ ==================================
 
 .. _pyexcel-xls: https://github.com/chfw/pyexcel-xls
