@@ -14,6 +14,7 @@ DEFAULT_SEPARATOR = '__'
 MESSAGE_INVALID_PARAMETERS = "Invalid parameters"
 MESSAGE_ERROR_02 = "No content, file name. Nothing is given"
 MESSAGE_ERROR_03 = "cannot handle unknown content"
+MESSAGE_WRONG_IO_INSTANCE = "Wrong io instance is passed for your file format."
 MESSAGE_CANNOT_WRITE_STREAM_FORMATTER = "Cannot write content of file type %s to stream"
 MESSAGE_CANNOT_READ_STREAM_FORMATTER = "Cannot read content of file type %s from stream"
 MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER = "Cannot write content of file type %s to file %s"

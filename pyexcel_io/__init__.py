@@ -28,6 +28,7 @@ from .constants import (
     MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_02,
     MESSAGE_ERROR_03,
+    MESSAGE_WRONG_IO_INSTANCE,
     MESSAGE_CANNOT_WRITE_STREAM_FORMATTER,
     MESSAGE_CANNOT_READ_STREAM_FORMATTER,
     MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER,
@@ -138,7 +139,7 @@ def load_data(filename,
                     if validate_io(file_type, filename):
                         content = filename
                     else:
-                        raise IOError(MESSAGE_ERROR_03)
+                        raise IOError(MESSAGE_WRONG_IO_INSTANCE)
                 else:
                     io = get_io(file_type)
                     if not PY2:
@@ -195,7 +196,7 @@ def get_writer(filename, file_type=None, **keywords):
                 extension = file_type
                 to_memory = True
                 if not validate_io(file_type, filename):
-                    raise IOError(MESSAGE_ERROR_03)
+                    raise IOError(MESSAGE_WRONG_IO_INSTANCE)
             else:
                 raise IOError(MESSAGE_ERROR_03)
         elif is_string(type(filename)):
