@@ -87,8 +87,13 @@ class SheetReader(SheetReaderBase):
         array = []
         for r in range(0, self.number_of_rows()):
             row = []
+            tmp_row = []
             for c in range(0, self.number_of_columns()):
-                row.append(self.cell_value(r, c))
+                cell_value = self.cell_value(r, c)
+                tmp_row.append(cell_value)
+                if cell_value is not None and cell_value != '':
+                    row += tmp_row
+                    tmp_row = []
             array.append(row)
         return array
 
