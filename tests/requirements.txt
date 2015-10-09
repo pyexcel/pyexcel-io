@@ -4,3 +4,4 @@ nose-cov
 python-coveralls
 coverage
 SQLAlchemy
+pyexcel-xls

@@ -295,7 +295,7 @@ class TestNonUniformCSV:
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))
         result = r.to_array()
         assert result == [
-            ["1", "", ""],
+            ["1"],
             ["4", "5", "6"],
             ["7"]
         ]

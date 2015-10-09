@@ -75,10 +75,6 @@ class CSVSheetReader(SheetReaderBase):
             elif longest_row_length < len(myrow):
                 longest_row_length = len(myrow)
             array.append(myrow)
-        if len(array) > 0:
-            if len(array[0]) < longest_row_length:
-                array[0] = (array[0] +
-                            [""] * (longest_row_length - len(array[0])))
         return array
 
 
