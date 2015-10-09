@@ -61,19 +61,17 @@ class CSVSheetReader(SheetReaderBase):
 
     def to_array(self):
         reader = csv.reader(self.get_file_handle(), **self.keywords)
-        longest_row_length = -1
         array = []
         for row in reader:
             myrow = []
+            tmp_row = []
             for element in row:
                 if PY2:
-                    myrow.append(element.decode(self.encoding))
-                else:
-                    myrow.append(element)
-            if longest_row_length == -1:
-                longest_row_length = len(myrow)
-            elif longest_row_length < len(myrow):
-                longest_row_length = len(myrow)
+                    element = element.decode(self.encoding)
+                tmp_row.append(element)
+                if element is not None and element != '':
+                    myrow += tmp_row
+                    tmp_row = []
             array.append(myrow)
         return array
 

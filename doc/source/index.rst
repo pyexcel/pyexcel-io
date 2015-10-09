@@ -57,15 +57,20 @@ For individual excel file formats, please install them as you wish:
 .. _a-map-of-plugins-and-file-formats:
 .. table:: a map of plugins and supported excel file formats
 
-   ============== ======================================= ============= ========================   
-   Package name   Supported file formats                  Dependencies  Python versions           
-   ============== ======================================= ============= ========================   
-   `pyexcel-io`_  csv, csvz [#f1]_, tsv, tsvz [#f2]_                    2.6, 2.7, 3.3, 3.4, pypy  
-   `xls`_         xls, xlsx(read only), xlsm(read only)   xlrd, xlwt    2.6, 2.7, 3.3, 3.4, pypy
-   `xlsx`_        xlsx                                    openpyxl      2.6, 2.7, 3.3, 3.4, pypy   
-   `ods3`_        ods                                     ezodf, lxml   2.6, 2.7, 3.3, 3.4                 
-   `ods`_         ods (python 2.6, 2.7)                   odfpy         2.6, 2.7                
-   ============== ======================================= ============= ========================
+   ============== ======================= ============= ==================   
+   Package name   Supported file formats  Dependencies  Python versions     
+   ============== ======================= ============= ==================   
+   `pyexcel-io`_  csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3, 
+                                                        3.4, pypy  
+                  tsvz [#f2]_
+   `xls`_         xls, xlsx(read only),   xlrd, xlwt    2.6, 2.7, 3.3,
+                                                        3.4, pypy
+                  xlsm(read only)
+   `xlsx`_        xlsx                    openpyxl      2.6, 2.7, 3.3,
+                                                        3.4, pypy   
+   `ods3`_        ods                     ezodf, lxml   2.6, 2.7, 3.3, 3.4
+   `ods`_         ods (python 2.6, 2.7)   odfpy         2.6, 2.7          
+   ============== ======================= ============= ==================
 
 Please import them before you start to access the desired file formats::
 
@@ -78,6 +83,8 @@ After that, you can start get and save data in the loaded format.
     ============= =========== ============ ============ ============
     `pyexcel-io`_ `xls`_      `xlsx`_      `ods`_       `ods3`_        
     ============= =========== ============ ============ ============
+    0.0.7         0.0.7       0.0.6        0.0.6+       0.0.8       
+    0.0.6         0.0.7       0.0.6        0.0.6+       0.0.8       
     0.0.5         0.0.7       0.0.6        0.0.6+       0.0.8       
     0.0.4         0.0.7       0.0.6        0.0.6        0.0.8       
     0.0.3         0.0.6       0.0.5        0.0.5        0.0.7       

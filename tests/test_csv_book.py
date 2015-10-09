@@ -284,8 +284,8 @@ class TestNonUniformCSV:
         self.test_file = "csv_book." + self.file_type
         self.data = [
             ["1"],
-            ["4", "5", "6"],
-            ["7"]
+            ["4", "5", "6", "", ""],
+            ["", "7"]
         ]
         with open(self.test_file, 'w') as f:
             for row in self.data:
@@ -297,7 +297,7 @@ class TestNonUniformCSV:
         assert result == [
             ["1"],
             ["4", "5", "6"],
-            ["7"]
+            ["", "7"]
         ]
 
     def tearDown(self):

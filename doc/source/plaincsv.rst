@@ -1,6 +1,19 @@
 Working with CSV format
 ================================================================================
 
+Please note that csv reader load data in a lazy manner. It ignores excessive
+trailing cells that has None value. For example, the following csv content::
+
+    1,2,,,,,
+    3,4,,,,,
+    5,,,,,,,
+
+would end up as::
+
+    1,2
+    3,4
+    5,
+
 Write to a csv file
 --------------------------------------------------------------------------------
 
