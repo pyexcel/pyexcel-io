@@ -35,7 +35,7 @@ class TestCSVZ:
         zipbook.close()
         zipreader = CSVZipBook(self.file)
         data = zipreader.sheets()
-        assert data['pyexcel_sheet1'] == [['1','2','3']]
+        assert list(data['pyexcel_sheet1']) == [['1','2','3']]
         
     def tearDown(self):
         os.unlink(self.file)
@@ -74,7 +74,7 @@ def test_reading_from_memory():
     zipbook.close()
     zipreader = CSVZipBook(io)
     data = zipreader.sheets()
-    assert data['pyexcel_sheet1'] == [['1','2','3']]
+    assert list(data['pyexcel_sheet1']) == [['1','2','3']]
 
         
 class TestMultipleSheet:
@@ -110,7 +110,7 @@ class TestMultipleSheet:
     def test_read_one_from_many_by_name(self):
         b = CSVZipBook(self.file, load_sheet_with_name="Sheet 1")
         sheets = b.sheets()
-        assert sheets['Sheet 1'] == [
+        assert list(sheets['Sheet 1']) == [
             [u'1.0', u'2.0', u'3.0'],
             [u'4.0', u'5.0', u'6.0'],
             [u'7.0', u'8.0', u'9.0']
@@ -123,7 +123,7 @@ class TestMultipleSheet:
     def test_read_one_from_many_by_index(self):
         b = CSVZipBook(self.file, load_sheet_at_index=0)
         sheets = b.sheets()
-        assert sheets['Sheet 1'] == [
+        assert list(sheets['Sheet 1']) == [
             [u'1.0', u'2.0', u'3.0'],
             [u'4.0', u'5.0', u'6.0'],
             [u'7.0', u'8.0', u'9.0']

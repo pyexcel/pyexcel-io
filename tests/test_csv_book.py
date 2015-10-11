@@ -31,7 +31,7 @@ class TestReaders:
 
     def test_sheet_file_reader(self):
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))
-        result = r.to_array()
+        result = list(r.to_array())
         assert result == self.data
 
     def test_sheet_memory_reader(self):
@@ -40,13 +40,13 @@ class TestReaders:
             io.write(f.read())
         io.seek(0)
         r = CSVinMemoryReader(NamedContent(self.file_type, io))
-        result = r.to_array()
+        result = list(r.to_array())
         assert result == self.data
 
     def test_book_reader(self):
         b = CSVBook(self.test_file)
         sheets = b.sheets()
-        assert sheets[self.test_file] == self.data
+        assert list(sheets[self.test_file]) == self.data
         
     def test_book_reader_from_memory_source(self):
         io = get_io(self.file_type)
@@ -55,7 +55,7 @@ class TestReaders:
         io.seek(0)
         b = CSVBook(None, io)
         sheets = b.sheets()
-        assert sheets['csv'] == self.data
+        assert list(sheets['csv']) == self.data
 
     def tearDown(self):
         os.unlink(self.test_file)
@@ -85,12 +85,14 @@ class TestReadMultipleSheets:
     def test_multiple_sheet(self):
         b = CSVBook("csv_multiple.csv")
         sheets = b.sheets()
+        for key in sheets:
+            sheets[key] = list(sheets[key])
         assert sheets == self.sheets
 
     def test_read_one_from_many_by_name(self):
         b = CSVBook("csv_multiple.csv", load_sheet_with_name="sheet1")
         sheets = b.sheets()
-        assert sheets["sheet1"] == self.sheets["sheet1"]
+        assert list(sheets["sheet1"]) == self.sheets["sheet1"]
 
     @raises(ValueError)
     def test_read_one_from_many_by_non_existent_name(self):
@@ -99,7 +101,7 @@ class TestReadMultipleSheets:
     def test_read_one_from_many_by_index(self):
         b = CSVBook("csv_multiple.csv", load_sheet_at_index=1)
         sheets = b.sheets()
-        assert sheets["sheet2"] == self.sheets["sheet2"]
+        assert list(sheets["sheet2"]) == self.sheets["sheet2"]
 
     @raises(IndexError)
     def test_read_one_from_many_by_wrong_index(self):
@@ -293,7 +295,7 @@ class TestNonUniformCSV:
 
     def test_sheet_file_reader(self):
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))
-        result = r.to_array()
+        result = list(r.to_array())
         assert result == [
             ["1"],
             ["4", "5", "6"],

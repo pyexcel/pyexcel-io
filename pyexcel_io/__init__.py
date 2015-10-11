@@ -284,7 +284,7 @@ def save_data(afile, data, file_type=None, **keywords):
                **keywords)
 
 
-def get_data(afile, file_type=None, **keywords):
+def get_data(afile, file_type=None, streaming=False, **keywords):
     """Get data from an excel file source
 
     :param filename: actual file name, a file stream or actual content
@@ -297,6 +297,9 @@ def get_data(afile, file_type=None, **keywords):
     if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
     data = load_data(afile, file_type=file_type, **keywords)
+    if streaming is False:
+        for key in data.keys():
+            data[key] = list(data[key])
     if len(list(data.keys())) == 1:
         return list(data.values())[0]
     else:

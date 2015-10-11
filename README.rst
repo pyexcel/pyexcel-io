@@ -37,6 +37,14 @@ library `pyexcel <https://github.com/chfw/pyexcel>`__ .
 If you would like to extend it, you may use it to write your own
 extension to handle a specific file format.
 
+Features under development
+================================================================================
+
+Yield the data reading until it is actually used. This action may potentially
+speed up file format transcoding and reduce the demand for run-time memory. This
+may enable web content stream too.
+
+
 Known constraints
 ================================================================================
 

@@ -61,7 +61,6 @@ class CSVSheetReader(SheetReaderBase):
 
     def to_array(self):
         reader = csv.reader(self.get_file_handle(), **self.keywords)
-        array = []
         for row in reader:
             myrow = []
             tmp_row = []
@@ -72,8 +71,7 @@ class CSVSheetReader(SheetReaderBase):
                 if element is not None and element != '':
                     myrow += tmp_row
                     tmp_row = []
-            array.append(myrow)
-        return array
+            yield myrow
 
 
 class CSVFileReader(CSVSheetReader):

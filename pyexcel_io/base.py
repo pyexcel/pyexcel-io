@@ -84,7 +84,6 @@ class SheetReader(SheetReaderBase):
         pass
 
     def to_array(self):
-        array = []
         for r in range(0, self.number_of_rows()):
             row = []
             tmp_row = []
@@ -94,8 +93,7 @@ class SheetReader(SheetReaderBase):
                 if cell_value is not None and cell_value != '':
                     row += tmp_row
                     tmp_row = []
-            array.append(row)
-        return array
+            yield row
 
 
 @add_metaclass(ABCMeta)

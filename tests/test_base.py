@@ -103,7 +103,7 @@ class TestSheetReader:
             [4,5,6]
         ]
         areader = ArrayReader(NamedContent("Test", content))
-        expected = areader.to_array()
+        expected = list(areader.to_array())
         assert content == expected
 
 
@@ -140,11 +140,17 @@ class TestBookReader:
 
     def test_load_from_file(self):
         reader = DictReader(self.content)
-        assert self.content == reader.sheets()
+        sheets = reader.sheets()
+        for key in sheets:
+            sheets[key] = list(sheets[key])
+        assert sheets == self.content
         
     def test_load_from_memory(self):
         reader = DictReader(None, self.content)
-        assert self.content == reader.sheets()      
+        sheets = reader.sheets()
+        for key in sheets:
+            sheets[key] = list(sheets[key])
+        assert sheets == self.content
 
 class TestSheetWriterBase:
     @raises(TypeError)
