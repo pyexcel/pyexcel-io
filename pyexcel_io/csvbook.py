@@ -237,7 +237,7 @@ class CSVSheetWriter(SheetWriter):
         """
         This call close the file handle
         """
-        if not isinstance(self.f, StringIO) and not isinstance(self.f, BytesIO):
+        if not (isinstance(self.f, StringIO) and isinstance(self.f, BytesIO)):
             self.f.close()
         elif not self.single_sheet_in_book:
             self.f.write("---pyexcel---\r\n")

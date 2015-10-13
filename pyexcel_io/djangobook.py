@@ -51,8 +51,8 @@ class DjangoBookReader(BookReaderBase):
     def __init__(self, models):
         self.my_sheets = OrderedDict()
         for model in models:
-            djangomodelreader = DjangoModelReader(model)
-            self.my_sheets[djangomodelreader.name] = djangomodelreader.to_array()
+            areader = DjangoModelReader(model)
+            self.my_sheets[areader.name] = areader.to_array()
 
     def sheets(self):
         return self.my_sheets
@@ -89,7 +89,8 @@ class DjangoModelWriter(SheetWriter):
 
     def close(self):
         try:
-            self.mymodel.objects.bulk_create(self.objs, batch_size=self.batch_size)
+            self.mymodel.objects.bulk_create(self.objs,
+                                             batch_size=self.batch_size)
         except Exception as e:
             print(MESSAGE_DB_EXCEPTION)
             print(e)
