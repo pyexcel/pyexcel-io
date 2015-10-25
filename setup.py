@@ -14,6 +14,11 @@ dependencies = []
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('ordereddict')
 
+extras = {
+    'xls': ['pyexcel-xls>=0.0.7'],
+    'xlsx': ['pyexcel-xlsx>=0.0.7'],
+}
+
 setup(
     name='pyexcel-io',
     author="C. W.",
@@ -22,6 +27,7 @@ setup(
     url="https://github.com/chfw/pyexcel-io",
     description='A python library to read and write structured data in csv, zipped csv format and to/from databases',
     install_requires=dependencies,
+    extras_require=extras,
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     include_package_data=True,
     long_description=README_txt,
