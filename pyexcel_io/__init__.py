@@ -258,7 +258,8 @@ def store_data(afile, data, file_type=None, **keywords):
     writer.close()
 
 
-def save_data(afile, data, file_type=None, **keywords):
+def save_data(afile, data, file_type=None, sheet_name=None,
+              **keywords):
     """Save data to an excel file source
 
     Your data can be an array or an ordered dictionary
@@ -271,7 +272,10 @@ def save_data(afile, data, file_type=None, **keywords):
     to_store = data
     if isinstance(data, list):
         single_sheet_in_book = True
-        to_store = {DEFAULT_SHEET_NAME: data}
+        if sheet_name is None:
+            to_store = {DEFAULT_SHEET_NAME: data}
+        else:
+            to_store = {sheet_name: data}
     else:
         single_sheet_in_book = False
 
