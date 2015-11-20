@@ -15,6 +15,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 else:
     from collections import OrderedDict
 from .constants import DEFAULT_SHEET_NAME
+from ._compact import PY2    
 
 
 def add_metaclass(metaclass):
@@ -314,7 +315,10 @@ def is_empty_array(array):
     """
     Check if an array is an array of '' or not
     """
-    return len(filter(lambda x: x != '', array)) == 0
+    if PY2:
+        return len(filter(lambda x: x != '', array)) == 0
+    else:
+        return len([filter(lambda x: x != '', array)]) == 0
 
 
 def swap_empty_string_for_none(array):
