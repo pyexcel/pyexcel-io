@@ -18,7 +18,9 @@ from .constants import DEFAULT_SHEET_NAME
 
 
 def add_metaclass(metaclass):
-    """Class decorator for creating a class with a metaclass."""
+    """
+    Class decorator for creating a class with a metaclass.
+    """
     def wrapper(cls):
         orig_vars = cls.__dict__.copy()
         slots = orig_vars.get('__slots__')
@@ -34,7 +36,10 @@ def add_metaclass(metaclass):
 
 
 class NamedContent:
-    """Helper class for content that does not have a name"""
+    """
+    Helper class for content that does not have a name
+    """
+
     def __init__(self, name, payload):
         self.name = name
         self.payload = payload
@@ -43,7 +48,7 @@ class NamedContent:
 @add_metaclass(ABCMeta)
 class SheetReaderBase(object):
     """
-    sheet
+    Generic sheet reader
     """
     def __init__(self, sheet, **keywords):
         self.native_sheet = sheet
@@ -61,6 +66,9 @@ class SheetReaderBase(object):
 
 
 class SheetReader(SheetReaderBase):
+    """
+    Standard sheet reader
+    """
 
     @abstractmethod
     def number_of_rows(self):
@@ -100,6 +108,9 @@ class SheetReader(SheetReaderBase):
 
 @add_metaclass(ABCMeta)
 class BookReaderBase(object):
+    """
+    Generic book reader
+    """
 
     def set_type(self, file_type):
         self.file_type = file_type
@@ -112,9 +123,7 @@ class BookReaderBase(object):
 
 class BookReader(BookReaderBase):
     """
-    XLSBook reader
-
-    It reads xls, xlsm, xlsx work book
+    Standard reader
     """
 
     def __init__(self, filename, file_content=None,
@@ -170,15 +179,21 @@ class BookReader(BookReaderBase):
 
 @add_metaclass(ABCMeta)
 class SheetWriterBase(object):
+    """
+    Generic sheet writer
+    """
+
     @abstractmethod
     def set_size(self, size):
-        """size of the content will be given
+        """
+        size of the content will be given
         """
         pass
 
     @abstractmethod
     def write_array(self, table):
-        """For standalone usage, write an array
+        """
+        For standalone usage, write an array
         """
         pass
 
@@ -193,8 +208,9 @@ class SheetWriterBase(object):
 @add_metaclass(ABCMeta)
 class SheetWriter(SheetWriterBase):
     """
-    xls, xlsx and xlsm sheet writer
+    Generic sheet writer
     """
+
     def __init__(self, native_book, native_sheet, name, **keywords):
         if name:
             sheet_name = name
@@ -206,10 +222,14 @@ class SheetWriter(SheetWriterBase):
         self.set_sheet_name(sheet_name)
 
     def set_sheet_name(self, name):
+        """
+        Set sheet name
+        """
         pass
 
     def set_size(self, size):
-        """size of the content will be given
+        """
+        size of the content will be given
         """
         pass
 
@@ -221,7 +241,8 @@ class SheetWriter(SheetWriterBase):
         pass
 
     def write_array(self, table):
-        """For standalone usage, write an array
+        """
+        For standalone usage, write an array
         """
         for r in table:
             self.write_row(r)
@@ -236,8 +257,9 @@ class SheetWriter(SheetWriterBase):
 @add_metaclass(ABCMeta)
 class BookWriter(object):
     """
-    xls, xlsx and xlsm writer
+    Generic book writer
     """
+
     def __init__(self, file, **keywords):
         self.file = file
         self.keywords = keywords
@@ -272,6 +294,9 @@ class BookWriter(object):
 
 
 def from_query_sets(column_names, query_sets):
+    """
+    Convert query sets into an array
+    """
     array = []
     array.append(column_names)
     for o in query_sets:
@@ -286,7 +311,10 @@ def from_query_sets(column_names, query_sets):
 
 
 def is_empty_array(array):
-    return len([x for x in array if x != '']) == 0
+    """
+    Check if an array is an array of '' or not
+    """
+    return len(filter(lambda x: x != '', array)) == 0
 
 
 def swap_empty_string_for_none(array):
