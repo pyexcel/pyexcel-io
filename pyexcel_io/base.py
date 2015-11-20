@@ -318,7 +318,7 @@ def is_empty_array(array):
     if PY2:
         return len(filter(lambda x: x != '', array)) == 0
     else:
-        return len([filter(lambda x: x != '', array)]) == 0
+        return len(list(filter(lambda x: x != '', array))) == 0
 
 
 def swap_empty_string_for_none(array):
