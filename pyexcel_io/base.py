@@ -245,6 +245,11 @@ class SheetWriter(SheetWriterBase):
         """
         For standalone usage, write an array
         """
+        rows = len(table)
+        if rows < 1:
+            return
+        columns = len(table[0])
+        self.set_size((rows, columns))
         for r in table:
             self.write_row(r)
 
