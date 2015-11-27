@@ -69,7 +69,8 @@ class SQLTableWriter(SheetWriter):
         self.auto_commit = auto_commit
         self.keywords = keywords
         if len(table_params) == 4:
-            self.table, self.column_names, self.mapdict, self.initializer = table_params
+            (self.table, self.column_names,
+             self.mapdict, self.initializer) = table_params
         else:
             raise ValueError(MESSAGE_INVALID_PARAMETERS)
 

@@ -273,7 +273,14 @@ def save_data(afile, data, file_type=None, **keywords):
         single_sheet_in_book = True
         to_store = {DEFAULT_SHEET_NAME: data}
     else:
-        single_sheet_in_book = False
+        if PY2:
+            keys = data.keys()
+        else:
+            keys = list(data.keys())
+        if len(keys) == 1:
+            single_sheet_in_book = True
+        else:
+            single_sheet_in_book = False
 
     if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
