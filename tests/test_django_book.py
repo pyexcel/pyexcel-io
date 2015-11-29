@@ -153,7 +153,7 @@ class TestSheet:
         model._meta.update(["X", "Y", "Z"])
         reader = DjangoModelReader(model)
         data = reader.to_array()
-        assert data == self.data
+        assert list(data) == self.data
 
     def test_mapping_array(self):
         data2 = [
@@ -235,6 +235,8 @@ class TestMultipleModels:
         model2._meta.update(["A", "B", "C"])
         reader = DjangoBookReader([model1, model2])
         data = reader.sheets()
+        for key in data.keys():
+            data[key] = list(data[key])
         assert data == self.content
 
     def test_special_case_where_only_one_model_used(self):
@@ -251,4 +253,4 @@ class TestMultipleModels:
         model1._meta.update(["X", "Y", "Z"])
         reader = DjangoBookReader([model1])
         data = reader.sheets()
-        assert data['Sheet1'] == self.content['Sheet1']
+        assert list(data['Sheet1']) == self.content['Sheet1']

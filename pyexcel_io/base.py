@@ -301,8 +301,7 @@ def from_query_sets(column_names, query_sets):
     """
     Convert query sets into an array
     """
-    array = []
-    array.append(column_names)
+    yield column_names
     for o in query_sets:
         new_array = []
         for column in column_names:
@@ -310,8 +309,7 @@ def from_query_sets(column_names, query_sets):
             if isinstance(value, (datetime.date, datetime.time)):
                 value = value.isoformat()
             new_array.append(value)
-        array.append(new_array)
-    return array
+        yield new_array
 
 
 def is_empty_array(array):

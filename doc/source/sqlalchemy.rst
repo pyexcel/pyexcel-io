@@ -53,7 +53,7 @@ Now let's verify the data:
     >>> query_sets=mysession.query(Pyexcel).all()
     >>> results = from_query_sets(data[0], query_sets)
     >>> import json
-    >>> json.dumps(results)
+    >>> json.dumps(list(results))
     '[["birth", "id", "name", "weight"], ["2014-11-11", 0, "Adam", 11.25], ["2014-11-12", 1, "Smith", 12.25]]'
 
 
@@ -65,7 +65,7 @@ Let's use previous data for reading and see if we could get them via
 
     >>> from pyexcel_io import get_data
     >>> data = get_data(DB_SQL, session=mysession, tables=[Pyexcel])
-    >>> json.dumps(results)
+    >>> json.dumps(list(data))
     '[["birth", "id", "name", "weight"], ["2014-11-11", 0, "Adam", 11.25], ["2014-11-12", 1, "Smith", 12.25]]'
 
 
@@ -167,11 +167,11 @@ Let's verify what do we have in the database:
     >>> query_sets = mysession.query(Category).all()
     >>> results = from_query_sets(data['Category'][0], query_sets)
     >>> import json
-    >>> json.dumps(results)
+    >>> json.dumps(list(results))
     '[["id", "name"], [1, "News"], [2, "Sports"]]'
     >>> query_sets = mysession.query(Post).all()
     >>> results = from_query_sets(["id", "title", "body", "pub_date"], query_sets)
-    >>> json.dumps(results)
+    >>> json.dumps(list(results))
     '[["id", "title", "body", "pub_date"], [1, "Title A", "formal", "2015-01-20T23:28:29"], [2, "Title B", "informal", "2015-01-20T23:28:30"]]'
 
 

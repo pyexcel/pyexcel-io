@@ -91,7 +91,7 @@ class TestSingleRead:
             ['2014-11-12', 1, 'Smith', 12.25]
         ]
         # 'pyexcel'' here is the table name
-        assert data == content
+        assert list(data) == content
         mysession.close()
             
         
@@ -118,7 +118,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         mysession.close()
 
     def test_one_table_with_empty_rows(self):
@@ -135,7 +135,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(data[0], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         mysession.close()
 
     def test_one_table_with_empty_string_in_unique_field(self):
@@ -151,9 +151,9 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(data[0], query_sets)
-        assert results == [['birth', 'id', 'name', 'weight'],
-                           ['2014-11-11', 0, None, 11.25],
-                           ['2014-11-12', 1, None, 12.25]]
+        assert list(results) == [['birth', 'id', 'name', 'weight'],
+                                 ['2014-11-11', 0, None, 11.25],
+                                 ['2014-11-12', 1, None, 12.25]]
         mysession.close()
 
     def test_one_table_using_mapdict_as_array(self):
@@ -171,7 +171,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(mapdict, query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         mysession.close()
 
 
@@ -195,7 +195,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(['birth', 'id', 'name', 'weight'], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         mysession.close()
 
     @raises(ValueError)
@@ -261,6 +261,8 @@ class TestMultipleRead:
         book = SQLBookReader(session=self.session, tables=[Category, Post])
         data = book.sheets()
         import json
+        for key in data.keys():
+            data[key] = list(data[key])
         assert json.dumps(data) == '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], "post": [["body", "category_id", "id", "pub_date", "title"], ["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], ["informal", 2, 2, "2015-01-20T23:28:30", "Title B"]]}'
 
     def tearDown(self):
