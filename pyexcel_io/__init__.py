@@ -23,7 +23,10 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-from ._compact import is_string, BytesIO, StringIO, isstream, OrderedDict, PY2
+from ._compact import (
+    is_string, BytesIO, StringIO,
+    isstream, OrderedDict, PY2,
+    is_generator)
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_02,
@@ -269,7 +272,7 @@ def save_data(afile, data, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     to_store = data
-    if isinstance(data, list):
+    if isinstance(data, list) or is_generator(data):
         single_sheet_in_book = True
         to_store = {DEFAULT_SHEET_NAME: data}
     else:

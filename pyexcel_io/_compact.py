@@ -7,6 +7,7 @@
     :copyright: (c) 2014-2015 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import types
 import sys
 
 
@@ -16,6 +17,11 @@ else:
     from collections import OrderedDict
 
 PY2 = sys.version_info[0] == 2
+
+
+def is_generator(struct):
+    return isinstance(struct, types.GeneratorType)
+
 
 if PY2:
     from StringIO import StringIO

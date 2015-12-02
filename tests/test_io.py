@@ -136,3 +136,19 @@ def test_validate_io():
     assert validate_io("csd", StringIO()) == False
 
 
+@raises(TypeError)
+def test_generator_is_obtained():
+    data = get_data(os.path.join("tests", "fixtures", "test.csv"), streaming=True)
+    len(data)
+
+
+def test_generator_can_be_written():
+    test_filename = "generator.csv"
+    test_fixture = os.path.join("tests", "fixtures", "test.csv")
+    data = get_data(test_fixture, streaming=True)
+    save_data(test_filename, data)
+    assert os.path.exists(test_filename)
+    data2 = get_data(test_filename)
+    expected = get_data(test_fixture)
+    assert data2 == expected
+    os.unlink(test_filename)

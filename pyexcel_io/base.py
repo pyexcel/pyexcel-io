@@ -15,7 +15,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 else:
     from collections import OrderedDict
 from .constants import DEFAULT_SHEET_NAME
-from ._compact import PY2    
+from ._compact import PY2, is_generator
 
 
 def add_metaclass(metaclass):
@@ -243,11 +243,12 @@ class SheetWriter(SheetWriterBase):
         """
         For standalone usage, write an array
         """
-        rows = len(table)
-        if rows < 1:
-            return
-        columns = len(table[0])
-        self.set_size((rows, columns))
+        if not is_generator(table):
+            rows = len(table)
+            if rows < 1:
+                return
+            columns = len(table[0])
+            self.set_size((rows, columns))
         for r in table:
             self.write_row(r)
 
