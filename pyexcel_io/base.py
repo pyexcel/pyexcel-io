@@ -247,7 +247,7 @@ class SheetWriter(SheetWriterBase):
             rows = len(table)
             if rows < 1:
                 return
-            columns = len(table[0])
+            columns = max(map(len, table))
             self.set_size((rows, columns))
         for r in table:
             self.write_row(r)
