@@ -5,8 +5,8 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
     :target: http://travis-ci.org/chfw/pyexcel-io
 
-.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=master 
-    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=master 
+.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=yielding
+    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=yielding
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
     :target: http://pyexcel-io.readthedocs.org/en/latest/

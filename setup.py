@@ -22,7 +22,7 @@ extras = {
 setup(
     name='pyexcel-io',
     author="C. W.",
-    version='0.0.9',
+    version='0.1.0',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-io",
     description='A python library to read and write structured data in csv, zipped csv format and to/from databases',
