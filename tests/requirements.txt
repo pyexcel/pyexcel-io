@@ -5,4 +5,4 @@ coverage
 SQLAlchemy
 pyexcel-xls>=0.0.7
 pyexcel>=0.1.7
-codcov
+codecov
