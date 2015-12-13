@@ -175,6 +175,20 @@ Let's verify what do we have in the database:
     '[["id", "title", "body", "pub_date"], [1, "Title A", "formal", "2015-01-20T23:28:29"], [2, "Title B", "informal", "2015-01-20T23:28:30"]]'
 
 
+Skipping existing record
+******************************
+
+When you import data into a database that has data already, you can skip existing record if
+:class:`pyexcel_io.PyexcelSQLSkipRowException` is raised. Example can be found here in `test 
+code <https://github.com/chfw/pyexcel-io/blob/master/tests/test_sql_book.py#L125>`_.
+
+Update existing record
+***************************
+
+When you import data into a database that has data already, you can update an existing record
+if you can query it from the database and set the data yourself and most importantly return it.
+You can find an example in `test skipping row  <https://github.com/chfw/pyexcel-io/blob/master/tests/test_sql_book.py#L162>`_
+
 Read data from multiple tables
 ----------------------------------------------------------------------------------
 
