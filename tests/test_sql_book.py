@@ -8,7 +8,8 @@ from pyexcel_io import (
     SQLBookReader,
     SQLBookWriter,
     from_query_sets,
-    OrderedDict
+    OrderedDict,
+    PyexcelSQLSkipRowException
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from sqlalchemy.orm import relationship, backref
@@ -115,6 +116,72 @@ class TestSingleWrite:
         writer = SQLTableWriter(mysession,
                                 [Pyexcel,self.data[0], None, None])
         writer.write_array(self.data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(self.data[0], query_sets)
+        assert results == self.results
+        mysession.close()
+
+    def test_update_existing_row(self):
+        mysession = Session()
+        # write existing data
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(self.data[0], query_sets)
+        assert results == self.results
+        # update data using custom initializer
+        update_data = [
+            ['birth', 'id', 'name', 'weight'],
+            [datetime.date(2014, 11, 11), 0, 'Adam_E', 12.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith_E', 11.25]
+        ]
+        updated_results = [
+            ['birth', 'id', 'name', 'weight'],
+            ['2014-11-11', 0, 'Adam_E', 12.25],
+            ['2014-11-12', 1, 'Smith_E', 11.25]
+        ]
+        def row_updater(row):
+            an_instance = mysession.query(Pyexcel).get(row['id'])
+            if an_instance is None:
+                an_instance = Pyexcel()
+            for name in row.keys():
+                setattr(an_instance, name, row[name])
+            return an_instance
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,update_data[0], None, row_updater])
+        writer.write_array(update_data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(self.data[0], query_sets)
+        assert results == updated_results
+        mysession.close()
+
+    def test_skipping_rows_if_data_exist(self):
+        mysession = Session()
+        # write existing data
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,self.data[0], None, None])
+        writer.write_array(self.data[1:])
+        writer.close()
+        query_sets=mysession.query(Pyexcel).all()
+        results = from_query_sets(self.data[0], query_sets)
+        assert results == self.results
+        # update data using custom initializer
+        update_data = [
+            ['birth', 'id', 'name', 'weight'],
+            [datetime.date(2014, 11, 11), 0, 'Adam_E', 12.25],
+            [datetime.date(2014, 11, 12), 1, 'Smith_E', 11.25]
+        ]
+        def row_updater(row):
+            an_instance = mysession.query(Pyexcel).get(row['id'])
+            if an_instance is not None:
+                raise PyexcelSQLSkipRowException()
+        writer = SQLTableWriter(mysession,
+                                [Pyexcel,update_data[0], None, row_updater])
+        writer.write_array(update_data[1:])
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
