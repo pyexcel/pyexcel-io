@@ -314,3 +314,36 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
         return list(data.values())[0]
     else:
         return data
+
+try:
+    from pyexcel_xls import XLS_WRITERS, XLS_READERS
+    WRITERS.update(XLS_WRITERS)
+    READERS.update(XLS_READERS)
+except ImportError:
+    pass
+
+try:
+    from pyexcel_xlsx import XLSX_WRITERS, XLSX_READERS
+    WRITERS.update(XLSX_WRITERS)
+    READERS.update(XLSX_READERS)
+except ImportError:
+    pass
+
+try:
+    from pyexcel_ods import ODS_WRITERS, ODS_READERS
+    WRITERS.update(ODS_WRITERS)
+    READERS.update(ODS_READERS)
+except ImportError:
+    pass
+
+try:
+    from pyexcel_text import ODS3_WRITERS, ODS3_READERS
+    WRITERS.update(ODS3_WRITERS)
+    READERS.update(ODS3_READERS)
+except ImportError:
+    pass
+try:
+    from pyexcel_text.writers import TEXT_WRITERS
+    WRITERS.update(TEXT_WRITERS)
+except ImportError:
+    pass
