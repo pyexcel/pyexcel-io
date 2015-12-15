@@ -21,7 +21,7 @@ from .base import(
 )
 from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
-from .sqlbook import SQLBookReader, SQLBookWriter
+from .sqlbook import SQLBookReader, SQLBookWriter, PyexcelSQLSkipRowException
 from .djangobook import DjangoBookReader, DjangoBookWriter
 from ._compact import (
     is_string, BytesIO, StringIO,

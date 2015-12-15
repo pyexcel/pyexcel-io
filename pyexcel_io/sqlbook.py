@@ -10,7 +10,8 @@
 from ._compact import OrderedDict
 from .constants import (
     MESSAGE_INVALID_PARAMETERS,
-    MESSAGE_EMPTY_ARRAY
+    MESSAGE_EMPTY_ARRAY,
+    MESSAGE_IGNORE_ROW
 )
 from .base import (
     BookReaderBase,
@@ -21,6 +22,14 @@ from .base import (
     is_empty_array,
     swap_empty_string_for_none
 )
+
+
+class PyexcelSQLSkipRowException(Exception):
+    """
+    Raised this exception to skipping a row
+    while data import
+    """
+    pass
 
 
 class SQLTableReader(SheetReaderBase):
@@ -83,21 +92,28 @@ class SQLTableWriter(SheetWriter):
             print(MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
-            self._write_row(new_array)
+            try:
+                self._write_row(new_array)
+            except PyexcelSQLSkipRowException:
+                print(MESSAGE_IGNORE_ROW)
+                print(new_array)
 
     def _write_row(self, array):
         row = dict(zip(self.column_names, array))
+        obj = None
         if self.initializer:
-            o = self.initializer(row)
-        else:
-            o = self.table()
+            # allow initinalizer to return None
+            # if skipping is needed
+            obj = self.initializer(row)
+        if obj is None:
+            obj = self.table()
             for name in self.column_names:
                 if self.mapdict is not None:
                     key = self.mapdict[name]
                 else:
                     key = name
-                setattr(o, key, row[name])
-        self.session.add(o)
+                setattr(obj, key, row[name])
+        self.session.add(obj)
 
     def close(self):
         if self.auto_commit:
