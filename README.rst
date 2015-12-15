@@ -5,8 +5,8 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
     :target: http://travis-ci.org/chfw/pyexcel-io
 
-.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=yielding
-    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=yielding
+.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=0.2.x
+    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=0.2.x
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
     :target: http://pyexcel-io.readthedocs.org/en/latest/
@@ -40,10 +40,9 @@ extension to handle a specific file format.
 Features under development
 ================================================================================
 
-Yield the data reading until it is actually used. This action may potentially
-speed up file format transcoding and reduce the demand for run-time memory. This
-may enable web content stream too.
-
+1. Code refactoring
+2. Automatic plugin discovery
+3. [[ your feature requests ]]
 
 Known constraints
 ================================================================================
