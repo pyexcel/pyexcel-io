@@ -5,8 +5,8 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://api.travis-ci.org/chfw/pyexcel-io.png
     :target: http://travis-ci.org/chfw/pyexcel-io
 
-.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=yielding
-    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=yielding
+.. image:: https://coveralls.io/repos/chfw/pyexcel-io/badge.png?branch=master
+    :target: https://coveralls.io/r/chfw/pyexcel-io?branch=master
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
     :target: http://pyexcel-io.readthedocs.org/en/latest/
@@ -37,7 +37,7 @@ library `pyexcel <https://github.com/chfw/pyexcel>`__ .
 If you would like to extend it, you may use it to write your own
 extension to handle a specific file format.
 
-Features under development
+Features to be released
 ================================================================================
 
 Yield the data reading until it is actually used. This action may potentially
