@@ -131,7 +131,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         # update data using custom initializer
         update_data = [
             ['birth', 'id', 'name', 'weight'],
@@ -156,7 +156,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
-        assert results == updated_results
+        assert list(results) == updated_results
         mysession.close()
 
     def test_skipping_rows_if_data_exist(self):
@@ -168,7 +168,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         # update data using custom initializer
         update_data = [
             ['birth', 'id', 'name', 'weight'],
@@ -185,7 +185,7 @@ class TestSingleWrite:
         writer.close()
         query_sets=mysession.query(Pyexcel).all()
         results = from_query_sets(self.data[0], query_sets)
-        assert results == self.results
+        assert list(results) == self.results
         mysession.close()
 
     def test_one_table_with_empty_rows(self):

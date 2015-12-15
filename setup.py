@@ -9,6 +9,9 @@ import sys
 with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
+with open("VERSION", "r") as version:
+    version_txt = version.read().rstrip()
+
 dependencies = []
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
@@ -22,7 +25,7 @@ extras = {
 setup(
     name='pyexcel-io',
     author="C. W.",
-    version='0.1.0',
+    version=version_txt,
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-io",
     description='A python library to read and write structured data in csv, zipped csv format and to/from databases',
