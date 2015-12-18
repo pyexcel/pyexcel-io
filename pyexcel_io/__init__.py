@@ -269,7 +269,9 @@ def save_data(afile, data, file_type=None, **keywords):
     :param filename: actual file name, a file stream or actual content
     :param data: the data to be saved
     :param file_type: used only when filename is not a physial file name
-    :param keywords: any other parameters
+    :param keywords: any other parameters that python csv module's
+                     `fmtparams <https://docs.python.org/release/3.1.5/
+                      library/csv.html#dialects-and-formatting-parameters>`_
     """
     to_store = data
     if isinstance(data, list) or is_generator(data):

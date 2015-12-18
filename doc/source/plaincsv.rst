@@ -33,7 +33,14 @@ Here's the sample code to write an array to a csv file ::
    >>> from pyexcel_io import save_data
    >>> data = [[1, 2, 3], [4, 5, 6]]
    >>> save_data("your_file.csv", data)
+
+Change line endings
+*************************
+
+By default, python csv module provides windows line ending '\r\n'. In order
+to change it, you can do:
    
+   >>> save_data("your_file.csv", data, lineterminator='\n')
 
 Read from a csv file
 --------------------------------------------------------------------------------
