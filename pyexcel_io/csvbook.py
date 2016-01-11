@@ -103,6 +103,9 @@ class CSVBook(BookReader):
     def __init__(self, filename, file_content=None,
                  load_sheet_with_name=None,
                  load_sheet_at_index=None, **keywords):
+        self.line_terminator = '\r\n'
+        if 'lineterminator' in keywords:
+            self.line_terminator = keywords['lineterminator']
         if filename is None and file_content is None:
             self.keywords = keywords
             self.mysheets = {"csv": []}
@@ -114,13 +117,14 @@ class CSVBook(BookReader):
 
     def load_from_memory(self, file_content, **keywords):
         content = file_content.getvalue()
-        if "---pyexcel---\r\n" in content:
-            sheets = content.split("---pyexcel---\r\n")
+        separator = "---pyexcel---%s" % self.line_terminator
+        if separator in content:
+            sheets = content.split(separator)
             named_contents = []
             matcher = "---pyexcel:(.*)---"
             for sheet in sheets:
                 if sheet != '':
-                    lines = sheet.split('\r\n')
+                    lines = sheet.split(self.line_terminator)
                     result = re.match(matcher, lines[0])
                     new_content = '\n'.join(lines[1:])
                     new_sheet = NamedContent(result.group(1),
@@ -191,10 +195,13 @@ class CSVSheetWriter(SheetWriter):
         self.encoding = encoding
         sheet_name = name
         self.single_sheet_in_book = single_sheet_in_book
+        self.line_terminator = '\r\n'
+        if 'lineterminator' in keywords:
+            self.line_terminator = keywords['lineterminator']
         if single_sheet_in_book:
             sheet_name = None
         elif isstream(filename):
-            filename.write("---pyexcel:%s---\r\n" % sheet_name)
+            filename.write("---pyexcel:%s---%s" % (sheet_name, self.line_terminator))
         self.sheet_index = sheet_index
         SheetWriter.__init__(self, filename,
                              sheet_name, sheet_name,
@@ -238,7 +245,7 @@ class CSVSheetWriter(SheetWriter):
         if not (isinstance(self.f, StringIO) or isinstance(self.f, BytesIO)):
             self.f.close()
         elif not self.single_sheet_in_book:
-            self.f.write("---pyexcel---\r\n")
+            self.f.write("---pyexcel---%s" % self.line_terminator)
 
 
 class CSVWriter(BookWriter):
