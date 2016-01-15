@@ -83,9 +83,13 @@ class DjangoModelWriter(SheetWriter):
             print(MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
-            self.objs.append(self.mymodel(**dict(
-                zip(self.column_names, self.initializer(new_array))
-            )))
+            model_to_be_created = self.initializer(new_array)
+            if model_to_be_created:
+                self.objs.append(self.mymodel(**dict(
+                    zip(self.column_names, model_to_be_created)
+                )))
+            # else
+                # skip the row
 
     def close(self):
         try:

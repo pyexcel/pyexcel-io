@@ -146,6 +146,20 @@ class TestSheet:
             {'Y': 5, 'X': 5, 'Z': 6}
         ]
 
+    def test_sheet_save_to_django_model_skip_me(self):
+        model=FakeDjangoModel()
+        def wrapper(row):
+            if row[0] == 4:
+                return None
+            else:
+                return row
+        writer = DjangoModelWriter([model, self.data[0], None, wrapper])
+        writer.write_array(self.data[1:])
+        writer.close()
+        assert model.objects.objs == [
+            {'Y': 2, 'X': 1, 'Z': 3}
+        ]
+
     def test_load_sheet_from_django_model(self):
         model=FakeDjangoModel()
         save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
