@@ -8,8 +8,8 @@
 
 
 :Author: C.W.
-:Source code: http://github.com/chfw/pyexcel-io
-:Issues: http://github.com/chfw/pyexcel-io/issues
+:Source code: http://github.com/pyexcel/pyexcel-io
+:Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
 :Version: |version|
 :Generated: |today|
@@ -43,7 +43,7 @@ Getting the source
 
 Source code is hosted in github. You can get it using git client::
 
-    $ git clone http://github.com/chfw/pyexcel-io.git
+    $ git clone http://github.com/pyexcel/pyexcel-io.git
 
 Installation
 --------------------------------------------------------------------------------
@@ -93,11 +93,11 @@ After that, you can start get and save data in the loaded format.
     0.0.1         0.0.2       0.0.1        0.0.3        0.0.4       
     ============= =========== ============ ============ ============
 
-.. _pyexcel-io: https://github.com/chfw/pyexcel-io
-.. _xls: https://github.com/chfw/pyexcel-xls
-.. _xlsx: https://github.com/chfw/pyexcel-xlsx
-.. _ods: https://github.com/chfw/pyexcel-ods
-.. _ods3: https://github.com/chfw/pyexcel-ods3
+.. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
+.. _xls: https://github.com/pyexcel/pyexcel-xls
+.. _xlsx: https://github.com/pyexcel/pyexcel-xlsx
+.. _ods: https://github.com/pyexcel/pyexcel-ods
+.. _ods3: https://github.com/pyexcel/pyexcel-ods3
 
 Tutorial
 -------------------------------------------------
