@@ -1,8 +1,8 @@
 nose
 rednose
 nose-cov
-python-coveralls
-coverage==3.7.1
+codecov
+coverage
 SQLAlchemy
 pyexcel-xls>=0.0.7
 pyexcel>=0.1.7
