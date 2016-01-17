@@ -80,24 +80,18 @@ After that, you can start get and save data in the loaded format.
 
 .. table:: Plugin compatibility table
 
-    ============= =========== ============ ============ ============
-    `pyexcel-io`_ `xls`_      `xlsx`_      `ods`_       `ods3`_        
-    ============= =========== ============ ============ ============
-    0.0.8         0.0.7       0.0.7        0.0.6+       0.0.8       
-    0.0.7         0.0.7       0.0.6        0.0.6+       0.0.8       
-    0.0.6         0.0.7       0.0.6        0.0.6+       0.0.8       
-    0.0.5         0.0.7       0.0.6        0.0.6+       0.0.8       
-    0.0.4         0.0.7       0.0.6        0.0.6        0.0.8       
-    0.0.3         0.0.6       0.0.5        0.0.5        0.0.7       
-    0.0.2         0.0.3-0.0.5 0.0.2-0.0.4  0.0.4        0.0.5-0.0.6 
-    0.0.1         0.0.2       0.0.1        0.0.3        0.0.4       
-    ============= =========== ============ ============ ============
+    ============= ======= ======== ======= ======== =========
+    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `text`_       
+    ============= ======= ======== ======= ========	=========
+    0.1.0         0.1.0   0.1.0    0.1.0   0.1.0	0.1.0
+    ============= ======= ======== ======= ========	=========
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
 .. _xlsx: https://github.com/pyexcel/pyexcel-xlsx
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
+.. _text: https://github.com/pyexcel/pyexcel-text
 
 Tutorial
 -------------------------------------------------

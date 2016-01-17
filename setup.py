@@ -18,8 +18,9 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('ordereddict')
 
 extras = {
-    'xls': ['pyexcel-xls>=0.0.7'],
-    'xlsx': ['pyexcel-xlsx>=0.0.7'],
+    'xls': ['pyexcel-xls>=0.1.0'],
+    'xlsx': ['pyexcel-xlsx>=0.1.0'],
+    'ods': ['pyexcel-ods3>=0.1.0']
 }
 
 setup(
@@ -49,6 +50,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: PyPy'
     ]
 )
