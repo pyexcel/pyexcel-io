@@ -17,6 +17,9 @@ extras = {
     'ods': ['pyexcel-ods3>=0.1.0'],
 }
 
+import sys
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    dependencies.append('ordereddict')
 
 setup(
     name='pyexcel-io',
@@ -55,6 +58,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: PyPy'
     ]
 )
