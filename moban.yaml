@@ -1,0 +1,13 @@
+overrides: "pyexcel.yaml"
+name: "pyexcel-io"
+nick_name: io
+version: 0.1.0
+extra_dependencies:
+  - xls:
+    - pyexcel-xls>=0.1.0
+  - xlsx:
+    - pyexcel-xlsx>=0.1.0
+  - ods:
+    - pyexcel-ods3>=0.1.0
+description: |
+  A python library to read and write structured data in csv, zipped csv format and to/from databases
