@@ -1,0 +1,13 @@
+configuration:
+  - configuration_dir: "commons/config"
+  - template_dir:
+    - "commons/templates"
+    - ".moban.d"
+  - configuration: pyexcel_io.yaml
+targets:
+  - "doc/source/conf.py": "docs/source/conf.py"
+  - setup.py: setup.py
+  - .travis.yml: travis.yml
+  - requirements.txt: requirements.txt
+  - LICENSE: LICENSE.jj2
+  - MANIFEST.in: MANIFEST.in.jj2
