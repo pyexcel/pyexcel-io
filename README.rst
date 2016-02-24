@@ -40,10 +40,9 @@ extension to handle a specific file format.
 Features to be released
 ================================================================================
 
-Yield the data reading until it is actually used. This action may potentially
-speed up file format transcoding and reduce the demand for run-time memory. This
-may enable web content stream too.
-
+1. Code refactoring
+2. Automatic plugin discovery
+3. [[ your feature requests ]]
 
 Known constraints
 ================================================================================
