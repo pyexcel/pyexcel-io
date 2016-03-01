@@ -48,31 +48,13 @@ from .constants import (
     DB_DJANGO,
     DEFAULT_SHEET_NAME
 )
-
-# Please also register here
-TEXT_STREAM_TYPES = [FILE_FORMAT_CSV, FILE_FORMAT_TSV]
-
-# Please also register here
-BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
-                       FILE_FORMAT_ODS, FILE_FORMAT_XLS,
-                       FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
-
-# A list of registered readers
-READERS = {
-    FILE_FORMAT_CSV: CSVBook,
-    FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
-    FILE_FORMAT_CSVZ: CSVZipBook,
-    FILE_FORMAT_TSVZ: partial(CSVZipBook, dialect="excel-tab"),
-    DB_SQL: SQLBookReader,
-    DB_DJANGO: DjangoBookReader
-}
-
-AVAILABLE_READERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_XLSM: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
-}
+from .book import (
+    ReaderFactory,
+    resolve_missing_extensions,
+    validate_io,
+    get_io,
+    BINARY_STREAM_TYPES
+)
 
 # A list of registered writers
 WRITERS = {
@@ -91,24 +73,58 @@ AVAILABLE_WRITERS = {
     FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
 }
 
-
-def resolve_missing_extensions(extension, available_list):
-    handler = available_list.get(extension)
-    message = ""
-    if handler:
-        if is_string(type(handler)):
-            message = MESSAGE_LOADING_FORMATTER % (extension, handler)
-        else:
-            merged = "%s or %s" % (handler[0], handler[1])
-            message = MESSAGE_LOADING_FORMATTER % (extension, merged)
-        raise NotImplementedError(message)
-
-
 def load_data(filename,
               file_type=None,
               sheet_name=None,
               sheet_index=None,
               **keywords):
+    file_name=None
+    file_stream=None
+    file_content=None
+    extension=None
+    from_memory=False
+    if filename is None:
+        raise IOError(MESSAGE_ERROR_02)
+    elif not is_string(type(filename)) and not isstream(filename):
+        raise IOError(MESSAGE_ERROR_02)
+    if file_type is not None:
+        from_memory = True
+        extension = file_type
+    else:
+        extension = filename.split(".")[-1]
+    if from_memory:
+        if isstream(filename):
+            file_stream = filename
+        else:
+            file_content = filename
+    else:
+        file_name = filename
+    try:
+        return load_data_new(
+            file_name=file_name,
+            file_content=file_content,
+            file_stream=file_stream,
+            file_type=extension,
+            sheet_name=sheet_name,
+            sheet_index=sheet_index,
+            **keywords
+        )
+    except NotImplementedError:
+        if from_memory:
+            raise NotImplementedError(
+                MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
+        else:
+            raise NotImplementedError(
+                MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
+                                                           filename))        
+
+def load_data_new(file_name=None,
+                  file_content=None,
+                  file_stream=None,
+                  file_type=None,
+                  sheet_name=None,
+                  sheet_index=None,
+                  **keywords):
     """Load data from any supported excel formats
 
     :param filename: actual file name, a file stream or actual content
@@ -117,64 +133,27 @@ def load_data(filename,
     :param sheet_index: the index of the sheet to be loaded
     :param keywords: any other parameters
     """
-    extension = None
-    book = None
-    from_memory = False
-    content = None
-    if filename is None:
+    result = {}
+    number_of_none_inputs = list(filter(lambda x: x is not None,
+                                        [file_name, file_content, file_stream]))
+    if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
-    if filename in READERS:
-        book_class = READERS[filename]
-        book = book_class(**keywords)
-        book.set_type(filename)
+    if file_type is None:
+        file_type = file_name.split(".")[-1]
+    reader = ReaderFactory.create_reader(file_type)
+    if file_name:
+        reader.open(file_name, **keywords)
+    elif file_content:
+        reader.open_content(file_content, **keywords)
+    elif file_stream:
+        reader.open_stream(file_stream, **keywords)
+    if sheet_name:
+        result = reader.read_sheet_by_name(sheet_name)
+    elif sheet_index:
+        result = reader.read_sheet_by_index(sheet_index)
     else:
-        if file_type is not None:
-            from_memory = True
-            extension = file_type
-        elif is_string(type(filename)):
-            extension = filename.split(".")[-1]
-        else:
-            raise IOError(MESSAGE_ERROR_03)
-        if extension in READERS:
-            book_class = READERS[extension]
-            if from_memory:
-                if isstream(filename):
-                    if validate_io(file_type, filename):
-                        content = filename
-                    else:
-                        raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-                else:
-                    io = get_io(file_type)
-                    if not PY2:
-                        if (isinstance(io, StringIO) and isinstance(filename, bytes)):
-                            content = filename.decode('utf-8')
-                        else:
-                            content = filename
-                        io.write(content)
-                    else:
-                        io.write(filename)
-                    io.seek(0)
-                    content = io
-                book = book_class(None, file_content=content,
-                                  load_sheet_with_name=sheet_name,
-                                  load_sheet_at_index=sheet_index,
-                                  **keywords)
-            else:
-                book = book_class(filename,
-                                  load_sheet_with_name=sheet_name,
-                                  load_sheet_at_index=sheet_index,
-                                  **keywords)
-            book.set_type(extension)
-        else:
-            resolve_missing_extensions(extension, AVAILABLE_READERS)
-            if from_memory:
-                raise NotImplementedError(
-                    MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
-            else:
-                raise NotImplementedError(
-                    MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
-                                                               filename))
-    return book.sheets()
+        result = reader.read_all()
+    return result
 
 
 def get_writer(filename, file_type=None, **keywords):
@@ -217,32 +196,10 @@ def get_writer(filename, file_type=None, **keywords):
                     MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
             else:
                 raise NotImplementedError(
-                    MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
-                                                                filename))
+                  MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
+                                                              filename))
     return writer
 
-
-def get_io(file_type):
-    """A utility function to help you generate a correct io stream
-
-    :param file_type: a supported file type
-    :returns: a appropriate io stream, None otherwise
-    """
-    if file_type in TEXT_STREAM_TYPES:
-        return StringIO()
-    elif file_type in BINARY_STREAM_TYPES:
-        return BytesIO()
-    else:
-        return None
-
-
-def validate_io(file_type, io):
-    if file_type in TEXT_STREAM_TYPES:
-        return isinstance(io, StringIO)
-    elif file_type in BINARY_STREAM_TYPES:
-        return isinstance(io, BytesIO)
-    else:
-        return False
 
 
 def store_data(afile, data, file_type=None, **keywords):
@@ -308,7 +265,13 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     """
     if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
-    data = load_data(afile, file_type=file_type, **keywords)
+    if isstream(afile):
+        data = load_data_new(file_stream=afile, file_type=file_type, **keywords)
+    else:
+        if afile is not None and file_type is not None:
+            data = load_data_new(file_content=afile, file_type=file_type, **keywords)
+        else:
+            data = load_data_new(file_name=afile, file_type=file_type, **keywords)
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])

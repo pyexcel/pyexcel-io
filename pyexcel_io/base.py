@@ -44,7 +44,7 @@ class NamedContent:
     def __init__(self, name, payload):
         self.name = name
         self.payload = payload
-
+        
 
 @add_metaclass(ABCMeta)
 class SheetReaderBase(object):
