@@ -1,5 +1,6 @@
 import os
-from pyexcel_io import CSVZipBook, CSVZipWriter, save_data, OrderedDict, get_io
+from pyexcel_io import save_data, OrderedDict, get_io
+from pyexcel_io.csvzipbook import CSVZipBook, CSVZipWriter
 import zipfile
 from nose.tools import raises
 import sys

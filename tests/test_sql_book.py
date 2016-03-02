@@ -5,13 +5,13 @@ from sqlalchemy.orm import sessionmaker
 import datetime
 from pyexcel_io import (
     DB_SQL,
-    SQLBookReader,
-    SQLBookWriter,
     from_query_sets,
-    OrderedDict,
-    PyexcelSQLSkipRowException
+    OrderedDict
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
+from pyexcel_io.sqlbook import SQLBookReader, SQLBookWriter
+from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
+
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 

@@ -7,7 +7,6 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from functools import partial
 from .base import(
     NamedContent,
     SheetReaderBase,
@@ -19,16 +18,11 @@ from .base import(
     BookWriter,
     from_query_sets
 )
-from .csvbook import CSVBook, CSVWriter
-from .csvzipbook import CSVZipWriter, CSVZipBook
-from .sqlbook import SQLBookReader, SQLBookWriter, PyexcelSQLSkipRowException
-from .djangobook import DjangoBookReader, DjangoBookWriter
 from ._compact import (
-    is_string, BytesIO, StringIO,
+    is_string, StringIO, BytesIO,
     isstream, OrderedDict, PY2,
     is_generator)
 from .constants import (
-    MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_02,
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE,
@@ -48,145 +42,9 @@ from .constants import (
     DB_DJANGO,
     DEFAULT_SHEET_NAME
 )
-from .book import (
-    ReaderFactory,
-    WriterFactory,
-    resolve_missing_extensions,
-    validate_io,
-    get_io,
-    BINARY_STREAM_TYPES
-)
-
-
-def load_data(filename,
-              file_type=None,
-              sheet_name=None,
-              sheet_index=None,
-              **keywords):
-    file_name=None
-    file_stream=None
-    file_content=None
-    extension=None
-    from_memory=False
-    if filename is None:
-        raise IOError(MESSAGE_ERROR_02)
-    elif not is_string(type(filename)) and not isstream(filename):
-        raise IOError(MESSAGE_ERROR_02)
-    if file_type is not None:
-        from_memory = True
-        extension = file_type
-    else:
-        extension = filename.split(".")[-1]
-    if from_memory:
-        if isstream(filename):
-            file_stream = filename
-        else:
-            file_content = filename
-    else:
-        file_name = filename
-    try:
-        return load_data_new(
-            file_name=file_name,
-            file_content=file_content,
-            file_stream=file_stream,
-            file_type=extension,
-            sheet_name=sheet_name,
-            sheet_index=sheet_index,
-            **keywords
-        )
-    except NotImplementedError:
-        if from_memory:
-            raise NotImplementedError(
-                MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
-        else:
-            raise NotImplementedError(
-                MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
-                                                           filename))        
-
-def load_data_new(file_name=None,
-                  file_content=None,
-                  file_stream=None,
-                  file_type=None,
-                  sheet_name=None,
-                  sheet_index=None,
-                  **keywords):
-    """Load data from any supported excel formats
-
-    :param filename: actual file name, a file stream or actual content
-    :param file_type: used only when filename is not a physial file name
-    :param sheet_name: the name of the sheet to be loaded
-    :param sheet_index: the index of the sheet to be loaded
-    :param keywords: any other parameters
-    """
-    result = {}
-    number_of_none_inputs = list(filter(lambda x: x is not None,
-                                        [file_name, file_content, file_stream]))
-    if len(number_of_none_inputs) != 1:
-        raise IOError(MESSAGE_ERROR_02)
-    if file_type is None:
-        file_type = file_name.split(".")[-1]
-    reader = ReaderFactory.create_reader(file_type)
-    if file_name:
-        reader.open(file_name, **keywords)
-    elif file_content:
-        reader.open_content(file_content, **keywords)
-    elif file_stream:
-        reader.open_stream(file_stream, **keywords)
-    if sheet_name:
-        result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index:
-        result = reader.read_sheet_by_index(sheet_index)
-    else:
-        result = reader.read_all()
-    return result
-
-
-def get_writer(filename, file_type=None, **keywords):
-    """Create a writer from any supported excel formats
-
-    :param filename: actual file name or a file stream
-    :param file_type: used only when filename is not a physial file name
-    :param keywords: any other parameters
-    """
-    extension = None
-    to_memory = False
-    file_name = None
-    file_stream = None
-    if filename is None:
-        raise IOError(MESSAGE_ERROR_02)
-    elif not is_string(type(filename)) and not isstream(filename):
-        raise IOError(MESSAGE_ERROR_02)
-    if isstream(filename):
-        to_memory = True
-        file_stream = filename
-    else:
-        file_name = filename
-    try:
-        return get_writer_new(file_name=file_name, file_stream=file_stream,
-                              file_type=file_type, **keywords)
-    except NotImplementedError:
-        if to_memory:
-            raise NotImplementedError(
-                MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
-        else:
-            raise NotImplementedError(
-                MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
-                                                            filename))
-
-def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords):
-    number_of_none_inputs = list(filter(lambda x: x is not None,
-                                        [file_name, file_stream]))
-    if len(number_of_none_inputs) != 1:
-        raise IOError(MESSAGE_ERROR_02)
-    if file_type is None:
-        file_type = file_name.split(".")[-1]
-        
-    writer = WriterFactory.create_writer(file_type)
-    if file_name:    
-        writer.open(file_name, **keywords)
-    else:
-        writer.open_stream(file_stream, **keywords)
-    return writer
+from .book import get_io, BINARY_STREAM_TYPES, validate_io
+from .deprecated import get_writer, load_data
+from .io import load_data_new
 
 
 def store_data(afile, data, file_type=None, **keywords):
