@@ -2,13 +2,8 @@ from functools import partial
 
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
-    MESSAGE_ERROR_02,
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE,
-    MESSAGE_CANNOT_WRITE_STREAM_FORMATTER,
-    MESSAGE_CANNOT_READ_STREAM_FORMATTER,
-    MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER,
-    MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER,
     FILE_FORMAT_CSV,
     FILE_FORMAT_TSV,
     FILE_FORMAT_CSVZ,
@@ -18,13 +13,12 @@ from .constants import (
     FILE_FORMAT_XLSX,
     FILE_FORMAT_XLSM,
     DB_SQL,
-    DB_DJANGO,
-    DEFAULT_SHEET_NAME
+    DB_DJANGO
 )
 
 from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
-from .sqlbook import SQLBookReader, SQLBookWriter, PyexcelSQLSkipRowException
+from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
 
 
@@ -54,8 +48,8 @@ AVAILABLE_WRITERS = {
 
 from ._compact import (
     is_string, BytesIO, StringIO,
-    isstream, OrderedDict, PY2,
-    is_generator)
+    isstream, PY2)
+
 
 def get_io(file_type):
     """A utility function to help you generate a correct io stream
@@ -77,7 +71,6 @@ def validate_io(file_type, io):
         return isinstance(io, BytesIO)
     else:
         return False
-
 
 
 def resolve_missing_extensions(extension, available_list):
@@ -103,7 +96,7 @@ class ReaderFactory(object):
         DB_SQL: SQLBookReader,
         DB_DJANGO: DjangoBookReader
     }
-    
+
     @staticmethod
     def add_factory(file_type, reader_class):
         ReaderFactory.factories[file_type] = reader_class
@@ -116,58 +109,7 @@ class ReaderFactory(object):
         else:
             resolve_missing_extensions(file_type, AVAILABLE_READERS)
 
-class WriterFactory(object):
-    factories = {
-        FILE_FORMAT_CSV: CSVWriter,
-        FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
-        FILE_FORMAT_CSVZ: CSVZipWriter,
-        FILE_FORMAT_TSVZ: partial(CSVZipWriter, dialect="excel-tab"),
-        DB_SQL: SQLBookWriter,
-        DB_DJANGO: DjangoBookWriter
-    }
-    @staticmethod
-    def add_factory(file_type, writer_class):
-        WriterFactory.factories[file_type] = writer_class
 
-    @staticmethod
-    def create_writer(file_type):
-        if file_type in WriterFactory.factories:
-            writer_class = WriterFactory.factories[file_type]
-            return Writer(file_type, writer_class)
-        else:
-            resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
-        
-
-class Writer(object):
-    def __init__(self, file_type, writer_class):
-        self.file_type = file_type
-        self.writer_class = writer_class
-        self.writer = None
-        self.file_alike_object = None
-
-    def open(self, file_name, **keywords):
-        self.file_alike_object = file_name
-        self.writing_keywords = keywords
-
-    def open_stream(self, file_stream, **keywords):
-        if isstream(file_stream):
-            if not validate_io(self.file_type, file_stream):
-                raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        else:
-            raise IOError(MESSAGE_ERROR_03)
-        self.open(file_stream, **keywords)
-
-    def write(self, data):
-        self.writer = self.writer_class(self.file_alike_object,
-                                        **self.writing_keywords)
-        self.writer.write(data)
-
-    def close(self):
-        if self.writer:
-            self.writer.close()
-
-
-        
 class Reader(object):
     def __init__(self, file_type, reader_class):
         self.reader_class = reader_class
@@ -230,3 +172,53 @@ class Reader(object):
                                        **self.opening_keywords)
         return reader.sheets()
 
+
+class WriterFactory(object):
+    factories = {
+        FILE_FORMAT_CSV: CSVWriter,
+        FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
+        FILE_FORMAT_CSVZ: CSVZipWriter,
+        FILE_FORMAT_TSVZ: partial(CSVZipWriter, dialect="excel-tab"),
+        DB_SQL: SQLBookWriter,
+        DB_DJANGO: DjangoBookWriter
+    }
+    @staticmethod
+    def add_factory(file_type, writer_class):
+        WriterFactory.factories[file_type] = writer_class
+
+    @staticmethod
+    def create_writer(file_type):
+        if file_type in WriterFactory.factories:
+            writer_class = WriterFactory.factories[file_type]
+            return Writer(file_type, writer_class)
+        else:
+            resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
+
+
+class Writer(object):
+    def __init__(self, file_type, writer_class):
+        self.file_type = file_type
+        self.writer_class = writer_class
+        self.writer = None
+        self.file_alike_object = None
+
+    def open(self, file_name, **keywords):
+        self.file_alike_object = file_name
+        self.writing_keywords = keywords
+
+    def open_stream(self, file_stream, **keywords):
+        if isstream(file_stream):
+            if not validate_io(self.file_type, file_stream):
+                raise IOError(MESSAGE_WRONG_IO_INSTANCE)
+        else:
+            raise IOError(MESSAGE_ERROR_03)
+        self.open(file_stream, **keywords)
+
+    def write(self, data):
+        self.writer = self.writer_class(self.file_alike_object,
+                                        **self.writing_keywords)
+        self.writer.write(data)
+
+    def close(self):
+        if self.writer:
+            self.writer.close()

@@ -47,9 +47,9 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
         raise IOError(MESSAGE_ERROR_02)
     if file_type is None:
         file_type = file_name.split(".")[-1]
-        
+
     writer = WriterFactory.create_writer(file_type)
-    if file_name:    
+    if file_name:
         writer.open(file_name, **keywords)
     else:
         writer.open_stream(file_stream, **keywords)

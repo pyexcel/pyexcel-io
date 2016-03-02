@@ -78,7 +78,7 @@ def load_data(filename,
         else:
             raise NotImplementedError(
                 MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
-                                                           filename))        
+                                                           filename))
 
 
 @DEPRECATED_GET_WRITER
