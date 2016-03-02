@@ -50,28 +50,13 @@ from .constants import (
 )
 from .book import (
     ReaderFactory,
+    WriterFactory,
     resolve_missing_extensions,
     validate_io,
     get_io,
     BINARY_STREAM_TYPES
 )
 
-# A list of registered writers
-WRITERS = {
-    FILE_FORMAT_CSV: CSVWriter,
-    FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
-    FILE_FORMAT_CSVZ: CSVZipWriter,
-    FILE_FORMAT_TSVZ: partial(CSVZipWriter, dialect="excel-tab"),
-    DB_SQL: SQLBookWriter,
-    DB_DJANGO: DjangoBookWriter
-}
-
-AVAILABLE_WRITERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: 'pyexcel-xlsx',
-    FILE_FORMAT_XLSM: 'pyexcel-xlsx',
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
-}
 
 def load_data(filename,
               file_type=None,
@@ -164,42 +149,44 @@ def get_writer(filename, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     extension = None
-    writer = None
     to_memory = False
+    file_name = None
+    file_stream = None
     if filename is None:
         raise IOError(MESSAGE_ERROR_02)
-    if filename in WRITERS:
-        writer_class = WRITERS[filename]
-        writer = writer_class(filename, **keywords)
-        writer.set_type(filename)
+    elif not is_string(type(filename)) and not isstream(filename):
+        raise IOError(MESSAGE_ERROR_02)
+    if isstream(filename):
+        to_memory = True
+        file_stream = filename
     else:
-        if file_type is not None:
-            if isstream(filename):
-                extension = file_type
-                to_memory = True
-                if not validate_io(file_type, filename):
-                    raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-            else:
-                raise IOError(MESSAGE_ERROR_03)
-        elif is_string(type(filename)):
-            extension = filename.split(".")[-1]
+        file_name = filename
+    try:
+        return get_writer_new(file_name=file_name, file_stream=file_stream,
+                              file_type=file_type, **keywords)
+    except NotImplementedError:
+        if to_memory:
+            raise NotImplementedError(
+                MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
         else:
-            raise IOError(MESSAGE_ERROR_03)
-        if extension in WRITERS:
-            writer_class = WRITERS[extension]
-            writer = writer_class(filename, **keywords)
-            writer.set_type(extension)
-        else:
-            resolve_missing_extensions(extension, AVAILABLE_WRITERS)
-            if to_memory:
-                raise NotImplementedError(
-                    MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
-            else:
-                raise NotImplementedError(
-                  MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
-                                                              filename))
-    return writer
+            raise NotImplementedError(
+                MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
+                                                            filename))
 
+def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords):
+    number_of_none_inputs = list(filter(lambda x: x is not None,
+                                        [file_name, file_stream]))
+    if len(number_of_none_inputs) != 1:
+        raise IOError(MESSAGE_ERROR_02)
+    if file_type is None:
+        file_type = file_name.split(".")[-1]
+        
+    writer = WriterFactory.create_writer(file_type)
+    if file_name:    
+        writer.open(file_name, **keywords)
+    else:
+        writer.open_stream(file_stream, **keywords)
+    return writer
 
 
 def store_data(afile, data, file_type=None, **keywords):
