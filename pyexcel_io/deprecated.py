@@ -2,7 +2,9 @@ from functools import partial
 from .book import (
     ReaderFactory,
     WriterFactory,
-    resolve_missing_extensions,
+    resolve_missing_extensions
+)
+from .newbase import(
     validate_io,
     get_io,
     BINARY_STREAM_TYPES

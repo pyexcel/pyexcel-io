@@ -20,15 +20,7 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-
-
-# Please also register here
-TEXT_STREAM_TYPES = [FILE_FORMAT_CSV, FILE_FORMAT_TSV]
-
-# Please also register here
-BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
-                       FILE_FORMAT_ODS, FILE_FORMAT_XLS,
-                       FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
+from .newbase import CSVBookReader, Reader, validate_io
 
 
 AVAILABLE_READERS = {
@@ -51,28 +43,6 @@ from ._compact import (
     isstream, PY2)
 
 
-def get_io(file_type):
-    """A utility function to help you generate a correct io stream
-
-    :param file_type: a supported file type
-    :returns: a appropriate io stream, None otherwise
-    """
-    if file_type in TEXT_STREAM_TYPES:
-        return StringIO()
-    elif file_type in BINARY_STREAM_TYPES:
-        return BytesIO()
-    else:
-        return None
-
-def validate_io(file_type, io):
-    if file_type in TEXT_STREAM_TYPES:
-        return isinstance(io, StringIO)
-    elif file_type in BINARY_STREAM_TYPES:
-        return isinstance(io, BytesIO)
-    else:
-        return False
-
-
 def resolve_missing_extensions(extension, available_list):
     handler = available_list.get(extension)
     message = ""
@@ -89,7 +59,7 @@ def resolve_missing_extensions(extension, available_list):
 
 class ReaderFactory(object):
     factories = {
-        FILE_FORMAT_CSV: CSVBook,
+        FILE_FORMAT_CSV: CSVBookReader,
         FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
         FILE_FORMAT_CSVZ: CSVZipBook,
         FILE_FORMAT_TSVZ: partial(CSVZipBook, dialect="excel-tab"),
@@ -105,72 +75,12 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            return Reader(file_type, reader_class)
+            if file_type == FILE_FORMAT_CSV:
+                return reader_class(file_type)
+            else:
+                return Reader(file_type, reader_class)
         else:
             resolve_missing_extensions(file_type, AVAILABLE_READERS)
-
-
-class Reader(object):
-    def __init__(self, file_type, reader_class):
-        self.reader_class = reader_class
-        self.file_type = file_type
-        self.reader = None
-        self.file_name = None
-        self.file_stream = None
-
-    def open(self, file_name, **keywords):
-        self.file_name = file_name
-        self.opening_keywords = keywords
-
-    def open_stream(self, file_stream, **keywords):
-        if validate_io(self.file_type, file_stream):
-            self.file_stream = file_stream
-            self.opening_keywords = keywords
-        else:
-            raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-
-    def open_content(self, file_content, **keywords):
-        io = get_io(self.file_type)
-        if not PY2:
-            if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
-                content = file_content.decode('utf-8')
-            else:
-                content = file_content
-            io.write(content)
-        else:
-            io.write(file_content)
-        io.seek(0)
-        self.open_stream(io, **keywords)
-
-    def read_sheet_by_name(self, sheet_name):
-        if self.file_name:
-            reader = self.reader_class(self.file_name,
-                                       load_sheet_with_name=sheet_name,
-                                       **self.opening_keywords)
-        else:
-            reader = self.reader_class(None,
-                                       file_content=self.file_stream,
-                                       load_sheet_with_name=sheet_name,
-                                       **self.opening_keywords)
-        return reader.sheets()
-    def read_sheet_by_index(self, sheet_index):
-        if self.file_name:
-            reader = self.reader_class(self.file_name,
-                                       load_sheet_at_index=sheet_index,
-                                       **self.opening_keywords)
-        else:
-            reader = self.reader_class(None, file_content=self.file_stream,
-                                       load_sheet_at_index=sheet_index,
-                                       **self.opening_keywords)
-        return reader.sheets()
-
-    def read_all(self):
-        if self.file_name:
-            reader = self.reader_class(self.file_name, **self.opening_keywords)
-        else:
-            reader = self.reader_class(None, file_content=self.file_stream,
-                                       **self.opening_keywords)
-        return reader.sheets()
 
 
 class WriterFactory(object):
