@@ -91,36 +91,31 @@ class Reader(object):
         self.open_stream(io, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
+        return self._read_with_parameters(load_sheet_with_name=sheet_name)
+
+    def read_sheet_by_index(self, sheet_index):
+        return self._read_with_parameters(load_sheet_at_index=sheet_index)
+
+    def read_all(self):
+        return self._read_with_parameters()
+
+    def _read_with_parameters(self, load_sheet_with_name=None, load_sheet_at_index=None):
         if self.file_name:
-            reader = self.reader_class(self.file_name,
-                                       load_sheet_with_name=sheet_name,
-                                       **self.opening_keywords)
+            if self.file_name in [DB_SQL, DB_DJANGO]:
+                reader = self.reader_class(**self.opening_keywords)
+            else:
+                reader = self.reader_class(
+                    self.file_name,
+                    load_sheet_with_name=load_sheet_with_name,
+                    load_sheet_at_index=load_sheet_at_index,
+                    **self.opening_keywords)
         else:
             reader = self.reader_class(None,
                                        file_content=self.file_stream,
-                                       load_sheet_with_name=sheet_name,
+                                       load_sheet_with_name=load_sheet_with_name,
+                                       load_sheet_at_index=load_sheet_at_index,
                                        **self.opening_keywords)
         return reader.sheets()
-    def read_sheet_by_index(self, sheet_index):
-        if self.file_name:
-            reader = self.reader_class(self.file_name,
-                                       load_sheet_at_index=sheet_index,
-                                       **self.opening_keywords)
-        else:
-            reader = self.reader_class(None, file_content=self.file_stream,
-                                       load_sheet_at_index=sheet_index,
-                                       **self.opening_keywords)
-        return reader.sheets()
-
-    def read_all(self):
-        if self.file_name:
-            reader = self.reader_class(self.file_name, **self.opening_keywords)
-        else:
-            reader = self.reader_class(None, file_content=self.file_stream,
-                                       **self.opening_keywords)
-        return reader.sheets()
-
-
 
 
 class NewBookReader(Reader):

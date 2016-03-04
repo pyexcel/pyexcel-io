@@ -4,20 +4,9 @@ Working with xls, xlsx, and ods formats
 Work with physical file
 -----------------------------------------------------------------------------
 
-Have you attempted to do the following::
+Here's what is needed::
 
     >>> from pyexcel_io import save_data
-    >>> data = [[1,2,3]]
-    >>> save_data("test.xls", data)
-    Traceback (most recent call last):
-        ...
-    NotImplementedError: The plugin for file type xls is not installed. Please install pyexcel-xls
-
-Yes, you are recommended to install individual plugins. Here is what is needed
-to do it successfuly::
-
-    >>> from pyexcel_io import save_data
-    >>> import pyexcel_xls
     >>> data = [[1,2,3]]
     >>> save_data("test.xls", data)
 

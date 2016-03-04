@@ -42,9 +42,11 @@ from .constants import (
     DB_DJANGO,
     DEFAULT_SHEET_NAME
 )
-from .newbase import get_io, BINARY_STREAM_TYPES, validate_io
-from .deprecated import get_writer, load_data
+from .newbase import BINARY_STREAM_TYPES, get_io, validate_io
+from .deprecated import load_data, get_writer
 from .io import load_data_new, get_writer_new
+from .book import ReaderFactory, WriterFactory
+
 
 
 def store_data(afile, data, file_type=None, **keywords):
@@ -130,3 +132,11 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
         return list(data.values())[0]
     else:
         return data
+
+
+try:
+    import pyexcel_xls
+    pyexcel_xls.extend_pyexcel(ReaderFactory, WriterFactory)
+except:
+    pass
+
