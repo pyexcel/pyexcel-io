@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 extras = {
-    'xls': ['pyexcel-xls>=0.1.0'],
+    'xls': ['pyexcel-xls>=0.2.0'],
     'xlsx': ['pyexcel-xlsx>=0.1.0'],
     'ods': ['pyexcel-ods3>=0.1.0'],
 }
@@ -24,7 +24,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 setup(
     name='pyexcel-io',
     author='C.W.',
-    version='0.1.0',
+    version='0.2.0',
     author_email='wangc_2011 (at) hotmail.com',
     url='https://github.com/pyexcel/pyexcel-io',
     description='A python library to read and write structured data in csv, zipped csv format and to/from databases',
