@@ -20,7 +20,7 @@ from .csvbook import CSVBook, CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
-from .newbase import CSVBookReader, Reader, validate_io
+from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
 
 
 AVAILABLE_READERS = {
@@ -85,7 +85,7 @@ class ReaderFactory(object):
 
 class WriterFactory(object):
     factories = {
-        FILE_FORMAT_CSV: CSVWriter,
+        FILE_FORMAT_CSV: CSVBookWriterNew,
         FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
         FILE_FORMAT_CSVZ: CSVZipWriter,
         FILE_FORMAT_TSVZ: partial(CSVZipWriter, dialect="excel-tab"),
@@ -100,35 +100,9 @@ class WriterFactory(object):
     def create_writer(file_type):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
-            return Writer(file_type, writer_class)
+            if file_type == FILE_FORMAT_CSV:
+                return writer_class(file_type)
+            else:
+                return Writer(file_type, writer_class)
         else:
             resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
-
-
-class Writer(object):
-    def __init__(self, file_type, writer_class):
-        self.file_type = file_type
-        self.writer_class = writer_class
-        self.writer = None
-        self.file_alike_object = None
-
-    def open(self, file_name, **keywords):
-        self.file_alike_object = file_name
-        self.writing_keywords = keywords
-
-    def open_stream(self, file_stream, **keywords):
-        if isstream(file_stream):
-            if not validate_io(self.file_type, file_stream):
-                raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        else:
-            raise IOError(MESSAGE_ERROR_03)
-        self.open(file_stream, **keywords)
-
-    def write(self, data):
-        self.writer = self.writer_class(self.file_alike_object,
-                                        **self.writing_keywords)
-        self.writer.write(data)
-
-    def close(self):
-        if self.writer:
-            self.writer.close()

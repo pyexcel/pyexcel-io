@@ -44,7 +44,7 @@ from .constants import (
 )
 from .newbase import get_io, BINARY_STREAM_TYPES, validate_io
 from .deprecated import get_writer, load_data
-from .io import load_data_new
+from .io import load_data_new, get_writer_new
 
 
 def store_data(afile, data, file_type=None, **keywords):
@@ -55,10 +55,16 @@ def store_data(afile, data, file_type=None, **keywords):
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
     """
-    writer = get_writer(
-        afile,
-        file_type=file_type,
-        **keywords)
+    if isstream(afile):
+        writer = get_writer_new(
+            file_stream=afile,
+            file_type=file_type,
+            **keywords)
+    else:
+        writer = get_writer_new(
+            file_name=afile,
+            file_type=file_type,
+            **keywords)
     writer.write(data)
     writer.close()
 

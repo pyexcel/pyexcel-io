@@ -20,7 +20,7 @@ from .constants import (
     DB_SQL,
     DB_DJANGO
 )
-from .csvbook import CSVinMemoryReader, CSVFileReader
+from .csvbook import CSVinMemoryReader, CSVFileReader, CSVSheetWriter
 
 from ._compact import (
     is_string, BytesIO, StringIO,
@@ -139,15 +139,15 @@ class NewBookReader(Reader):
         self.native_book = self.load_from_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
-        named_contents  = filter(lambda nc: nc.name == sheet_name, self.native_book)
+        named_contents  = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
         if len(named_contents) == 1:
-            return self.read_sheet(named_contents[0].payload)
+            return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
-            raise Exception()
+            raise ValueError("Cannot find sheet %s" % sheet_name)
 
     def read_sheet_by_index(self, sheet_index):
         sheet = self.native_book[sheet_index]
-        return self.read_sheet(sheet.payload)
+        return {sheet.name: self.read_sheet(sheet)}
 
     def read_all(self):
         result = OrderedDict()
@@ -185,6 +185,8 @@ class CSVBookReader(NewBookReader):
     def __init__(self, file_type):
         self.load_from_memory_flag = False
         self.line_terminator = '\r\n'
+        self.sheet_name = None
+        self.sheet_index = None
         NewBookReader.__init__(self, file_type)
 
     def load_from_stream(self, file_content, **keywords):
@@ -259,4 +261,65 @@ class CSVBookReader(NewBookReader):
         else:
             reader = CSVFileReader(native_sheet, **self.keywords)
         return reader.to_array()
+
+
+class Writer(object):
+    def __init__(self, file_type, writer_class):
+        self.file_type = file_type
+        self.writer_class = writer_class
+        self.writer = None
+        self.file_alike_object = None
+
+    def open(self, file_name, **keywords):
+        self.file_alike_object = file_name
+        self.writing_keywords = keywords
+
+    def open_stream(self, file_stream, **keywords):
+        if isstream(file_stream):
+            if not validate_io(self.file_type, file_stream):
+                raise IOError(MESSAGE_WRONG_IO_INSTANCE)
+        else:
+            raise IOError(MESSAGE_ERROR_03)
+        self.open(file_stream, **keywords)
+
+    def write(self, data):
+        self.writer = self.writer_class(self.file_alike_object,
+                                        **self.writing_keywords)
+        self.writer.write(data)
+
+    def close(self):
+        if self.writer:
+            self.writer.close()
+
+class NewWriter(Writer):
+    def __init__(self, file_type):
+        Writer.__init__(self, file_type, None)
+
+    def open(self, file_name, **keywords):
+        Writer.open(self, file_name, **keywords)
+
+    def write(self, incoming_dict):
+        for sheet_name in incoming_dict:
+            sheet = self.create_sheet(sheet_name)
+            if sheet:
+                sheet.write_array(incoming_dict[sheet_name])
+                sheet.close()
+
+    def close(self):
+        pass
+
+
+class CSVBookWriterNew(NewWriter):
+    def __init__(self, file_type):
+        NewWriter.__init__(self, file_type)
+        self.index = 0
+
+    def create_sheet(self, name):
+        writer = CSVSheetWriter(
+            self.file_alike_object,
+            name,
+            sheet_index=self.index,
+            **self.writing_keywords)
+        self.index = self.index + 1
+        return writer
 
