@@ -128,11 +128,11 @@ class NewBookReader(Reader):
 
     def open(self, file_name, **keywords):
         Reader.open(self, file_name, **keywords)
-        self.native_book = self.load_from_file(file_name, **keywords)
+        self.native_book = self.load_from_file(file_name)
 
     def open_stream(self, file_stream, **keywords):
         Reader.open_stream(self, file_stream, **keywords)
-        self.native_book = self.load_from_stream(file_stream, **keywords)
+        self.native_book = self.load_from_stream(file_stream)
 
     def read_sheet_by_name(self, sheet_name):
         named_contents  = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
@@ -159,7 +159,7 @@ class NewBookReader(Reader):
         pass
 
     @abstractmethod
-    def load_from_memory(self, file_content, **keywords):
+    def load_from_memory(self, file_content):
         """Load content from memory
 
         :params stream file_content: the actual file content in memory
@@ -168,7 +168,7 @@ class NewBookReader(Reader):
         pass
 
     @abstractmethod
-    def load_from_file(self, file_name, **keywords):
+    def load_from_file(self, file_name):
         """Load content from a file
 
         :params str filename: an accessible file path
@@ -185,10 +185,9 @@ class CSVBookReader(NewBookReader):
         self.sheet_index = None
         NewBookReader.__init__(self, file_type)
 
-    def load_from_stream(self, file_content, **keywords):
-        if 'lineterminator' in keywords:
-            self.line_terminator = keywords['lineterminator']
-        self.keywords = keywords
+    def load_from_stream(self, file_content):
+        if 'lineterminator' in self.keywords:
+            self.line_terminator = self.keywords['lineterminator']
         self.load_from_memory_flag = True
         content = file_content.getvalue()
         separator = "---pyexcel---%s" % self.line_terminator
@@ -209,10 +208,9 @@ class CSVBookReader(NewBookReader):
             file_content.seek(0)
             return [NamedContent('csv', file_content)]
 
-    def load_from_file(self, file_name, **keywords):
-        if 'lineterminator' in keywords:
-            self.line_terminator = keywords['lineterminator']
-        self.keywords = keywords
+    def load_from_file(self, file_name):
+        if 'lineterminator' in self.keywords:
+            self.line_terminator = self.keywords['lineterminator']
         names = file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (names[0],
                                        DEFAULT_SEPARATOR,
@@ -264,13 +262,13 @@ class CSVZipBookReader(NewBookReader):
         NewBookReader.__init__(self, file_type)
         self.zipfile = None
 
-    def load_from_stream(self, file_content, **keywords):
+    def load_from_stream(self, file_content):
         self.zipfile = zipfile.ZipFile(file_content, 'r')
         return [NamedContent(self._get_sheet_name(name), name)
                 for name in self.zipfile.namelist()]
 
-    def load_from_file(self, file_name, **keywords):
-        return self.load_from_stream(file_name, **keywords)
+    def load_from_file(self, file_name):
+        return self.load_from_stream(file_name)
 
     def read_sheet(self, native_sheet):
         content = self.zipfile.read(native_sheet.payload)
