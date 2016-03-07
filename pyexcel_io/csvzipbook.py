@@ -7,11 +7,10 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import os
 import csv
 import zipfile
 from .base import BookReader, BookWriter
-from ._compact import StringIO, PY2, is_string
+from ._compact import StringIO, PY2
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,

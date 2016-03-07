@@ -21,6 +21,7 @@ from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
 from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
+from .newbase import CSVZipBookReader
 
 
 AVAILABLE_READERS = {
@@ -61,7 +62,7 @@ class ReaderFactory(object):
     factories = {
         FILE_FORMAT_CSV: CSVBookReader,
         FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
-        FILE_FORMAT_CSVZ: CSVZipBook,
+        FILE_FORMAT_CSVZ: CSVZipBookReader,
         FILE_FORMAT_TSVZ: partial(CSVZipBook, dialect="excel-tab"),
         DB_SQL: SQLBookReader,
         DB_DJANGO: DjangoBookReader
@@ -75,7 +76,7 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type == FILE_FORMAT_CSV:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_CSVZ]:
                 return reader_class(file_type)
             else:
                 return Reader(file_type, reader_class)

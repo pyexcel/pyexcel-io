@@ -4,6 +4,7 @@ import glob
 from ._compact import OrderedDict, StringIO
 from abc import abstractmethod
 from .base import NamedContent
+import zipfile
 from .constants import (
     DEFAULT_SEPARATOR,
     MESSAGE_LOADING_FORMATTER,
@@ -68,12 +69,12 @@ class Reader(object):
 
     def open(self, file_name, **keywords):
         self.file_name = file_name
-        self.opening_keywords = keywords
+        self.keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
         if validate_io(self.file_type, file_stream):
             self.file_stream = file_stream
-            self.opening_keywords = keywords
+            self.keywords = keywords
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
 
@@ -102,19 +103,19 @@ class Reader(object):
     def _read_with_parameters(self, load_sheet_with_name=None, load_sheet_at_index=None):
         if self.file_name:
             if self.file_name in [DB_SQL, DB_DJANGO]:
-                reader = self.reader_class(**self.opening_keywords)
+                reader = self.reader_class(**self.keywords)
             else:
                 reader = self.reader_class(
                     self.file_name,
                     load_sheet_with_name=load_sheet_with_name,
                     load_sheet_at_index=load_sheet_at_index,
-                    **self.opening_keywords)
+                    **self.keywords)
         else:
             reader = self.reader_class(None,
                                        file_content=self.file_stream,
                                        load_sheet_with_name=load_sheet_with_name,
                                        load_sheet_at_index=load_sheet_at_index,
-                                       **self.opening_keywords)
+                                       **self.keywords)
         return reader.sheets()
 
 
@@ -152,7 +153,7 @@ class NewBookReader(Reader):
     
 
     @abstractmethod
-    def read_sheet(self, native_sheet, **keywords):
+    def read_sheet(self, native_sheet):
         """Return a context specific sheet from a native sheet
         """
         pass
@@ -167,7 +168,7 @@ class NewBookReader(Reader):
         pass
 
     @abstractmethod
-    def load_from_file(self, filename, **keywords):
+    def load_from_file(self, file_name, **keywords):
         """Load content from a file
 
         :params str filename: an accessible file path
@@ -208,19 +209,19 @@ class CSVBookReader(NewBookReader):
             file_content.seek(0)
             return [NamedContent('csv', file_content)]
 
-    def load_from_file(self, filename, **keywords):
+    def load_from_file(self, file_name, **keywords):
         if 'lineterminator' in keywords:
             self.line_terminator = keywords['lineterminator']
         self.keywords = keywords
-        names = filename.split('.')
+        names = file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (names[0],
                                        DEFAULT_SEPARATOR,
                                        DEFAULT_SEPARATOR,
                                        names[1])
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
-            file_parts = os.path.split(filename)
-            return [NamedContent(file_parts[-1], filename)]
+            file_parts = os.path.split(file_name)
+            return [NamedContent(file_parts[-1], file_name)]
         else:
             matcher = "%s%s(.*)%s(.*).%s" % (names[0],
                                              DEFAULT_SEPARATOR,
@@ -256,6 +257,39 @@ class CSVBookReader(NewBookReader):
         else:
             reader = CSVFileReader(native_sheet, **self.keywords)
         return reader.to_array()
+
+
+class CSVZipBookReader(NewBookReader):
+    def __init__(self, file_type):
+        NewBookReader.__init__(self, file_type)
+        self.zipfile = None
+
+    def load_from_stream(self, file_content, **keywords):
+        self.zipfile = zipfile.ZipFile(file_content, 'r')
+        return [NamedContent(self._get_sheet_name(name), name)
+                for name in self.zipfile.namelist()]
+
+    def load_from_file(self, file_name, **keywords):
+        return self.load_from_stream(file_name, **keywords)
+
+    def read_sheet(self, native_sheet):
+        content = self.zipfile.read(native_sheet.payload)
+        if PY2:
+            sheet = StringIO(content)
+        else:
+            sheet = StringIO(content.decode('utf-8'))
+
+        reader = CSVinMemoryReader(
+            NamedContent(
+                native_sheet.name,
+                sheet
+            )
+        )
+        return reader.to_array()
+
+    def _get_sheet_name(self, filename):
+        name_len = len(filename) - 4
+        return filename[:name_len]
 
 
 class Writer(object):
