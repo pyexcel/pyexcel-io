@@ -21,7 +21,7 @@ from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
 from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
-from .newbase import CSVZipBookReader
+from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader
 
 
 AVAILABLE_READERS = {
@@ -61,9 +61,9 @@ def resolve_missing_extensions(extension, available_list):
 class ReaderFactory(object):
     factories = {
         FILE_FORMAT_CSV: CSVBookReader,
-        FILE_FORMAT_TSV: partial(CSVBook, dialect="excel-tab"),
+        FILE_FORMAT_TSV: TSVBookReader,
         FILE_FORMAT_CSVZ: CSVZipBookReader,
-        FILE_FORMAT_TSVZ: partial(CSVZipBook, dialect="excel-tab"),
+        FILE_FORMAT_TSVZ: TSVZipBookReader,
         DB_SQL: SQLBookReader,
         DB_DJANGO: DjangoBookReader
     }
@@ -76,8 +76,8 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_CSVZ]:
-                return reader_class(file_type)
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ]:
+                return reader_class()
             else:
                 return Reader(file_type, reader_class)
         else:
@@ -102,7 +102,7 @@ class WriterFactory(object):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
             if file_type == FILE_FORMAT_CSV:
-                return writer_class(file_type)
+                return writer_class()
             else:
                 return Writer(file_type, writer_class)
         else:

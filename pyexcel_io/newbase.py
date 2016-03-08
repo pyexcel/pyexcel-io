@@ -7,6 +7,7 @@ from .base import NamedContent
 import zipfile
 from .constants import (
     DEFAULT_SEPARATOR,
+    DEFAULT_SHEET_NAME,
     MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE,
@@ -18,11 +19,12 @@ from .constants import (
     FILE_FORMAT_XLS,
     FILE_FORMAT_XLSX,
     FILE_FORMAT_XLSM,
+    KEYWORD_TSV_DIALECT,
     DB_SQL,
     DB_DJANGO
 )
 from .csvbook import CSVinMemoryReader, CSVFileReader, CSVSheetWriter
-
+from .csvzipbook import CSVZipSheetWriter
 from ._compact import (
     is_string, BytesIO, StringIO,
     isstream, PY2)
@@ -66,6 +68,7 @@ class Reader(object):
         self.reader = None
         self.file_name = None
         self.file_stream = None
+        self.keywords = None
 
     def open(self, file_name, **keywords):
         self.file_name = file_name
@@ -139,11 +142,16 @@ class NewBookReader(Reader):
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
+            self.close()
             raise ValueError("Cannot find sheet %s" % sheet_name)
 
     def read_sheet_by_index(self, sheet_index):
-        sheet = self.native_book[sheet_index]
-        return {sheet.name: self.read_sheet(sheet)}
+        try:
+            sheet = self.native_book[sheet_index]
+            return {sheet.name: self.read_sheet(sheet)}
+        except IndexError:
+            self.close()
+            raise
 
     def read_all(self):
         result = OrderedDict()
@@ -176,14 +184,17 @@ class NewBookReader(Reader):
         """
         pass
 
+    def close(self):
+        pass
+
 
 class CSVBookReader(NewBookReader):
-    def __init__(self, file_type):
+    def __init__(self):
         self.load_from_memory_flag = False
         self.line_terminator = '\r\n'
         self.sheet_name = None
         self.sheet_index = None
-        NewBookReader.__init__(self, file_type)
+        NewBookReader.__init__(self, FILE_FORMAT_CSV)
 
     def load_from_stream(self, file_content):
         if 'lineterminator' in self.keywords:
@@ -206,7 +217,7 @@ class CSVBookReader(NewBookReader):
             return named_contents
         else:
             file_content.seek(0)
-            return [NamedContent('csv', file_content)]
+            return [NamedContent(self.file_type, file_content)]
 
     def load_from_file(self, file_name):
         if 'lineterminator' in self.keywords:
@@ -257,15 +268,30 @@ class CSVBookReader(NewBookReader):
         return reader.to_array()
 
 
+class TSVBookReader(CSVBookReader):
+    def __init__(self):
+        CSVBookReader.__init__(self)
+        self.file_type = FILE_FORMAT_TSV
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookReader.open(self, file_name, **keywords)
+
+    def open_stream(self, file_content, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookReader.open_stream(self, file_content, **keywords)
+
+
 class CSVZipBookReader(NewBookReader):
-    def __init__(self, file_type):
-        NewBookReader.__init__(self, file_type)
+    def __init__(self):
+        NewBookReader.__init__(self, FILE_FORMAT_CSVZ)
         self.zipfile = None
 
     def load_from_stream(self, file_content):
         self.zipfile = zipfile.ZipFile(file_content, 'r')
-        return [NamedContent(self._get_sheet_name(name), name)
-                for name in self.zipfile.namelist()]
+        sheets = [NamedContent(self._get_sheet_name(name), name)
+                  for name in self.zipfile.namelist()]
+        return sheets
 
     def load_from_file(self, file_name):
         return self.load_from_stream(file_name)
@@ -286,8 +312,27 @@ class CSVZipBookReader(NewBookReader):
         return reader.to_array()
 
     def _get_sheet_name(self, filename):
-        name_len = len(filename) - 4
+        len_of_a_dot = 1
+        len_of_csv_word = 3
+        name_len = len(filename) - len_of_a_dot - len_of_csv_word
         return filename[:name_len]
+
+    def close(self):
+        self.zipfile.close()
+
+
+class TSVZipBookReader(CSVZipBookReader):
+    def __init__(self):
+        CSVZipBookReader.__init__(self)
+        self.file_type = FILE_FORMAT_TSVZ
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVZipBookReader.open(self, file_name, **keywords)
+
+    def open_stream(self, file_content, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVZipBookReader.open_stream(self, file_content, **keywords)
 
 
 class Writer(object):
@@ -299,7 +344,7 @@ class Writer(object):
 
     def open(self, file_name, **keywords):
         self.file_alike_object = file_name
-        self.writing_keywords = keywords
+        self.keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
         if isstream(file_stream):
@@ -311,12 +356,13 @@ class Writer(object):
 
     def write(self, data):
         self.writer = self.writer_class(self.file_alike_object,
-                                        **self.writing_keywords)
+                                        **self.keywords)
         self.writer.write(data)
 
     def close(self):
         if self.writer:
             self.writer.close()
+
 
 class NewWriter(Writer):
     def __init__(self, file_type):
@@ -327,18 +373,18 @@ class NewWriter(Writer):
 
     def write(self, incoming_dict):
         for sheet_name in incoming_dict:
-            sheet = self.create_sheet(sheet_name)
-            if sheet:
-                sheet.write_array(incoming_dict[sheet_name])
-                sheet.close()
+            sheet_writer = self.create_sheet(sheet_name)
+            if sheet_writer:
+                sheet_writer.write_array(incoming_dict[sheet_name])
+                sheet_writer.close()
 
     def close(self):
         pass
 
 
 class CSVBookWriterNew(NewWriter):
-    def __init__(self, file_type):
-        NewWriter.__init__(self, file_type)
+    def __init__(self):
+        NewWriter.__init__(self, FILE_FORMAT_CSV)
         self.index = 0
 
     def create_sheet(self, name):
@@ -346,7 +392,41 @@ class CSVBookWriterNew(NewWriter):
             self.file_alike_object,
             name,
             sheet_index=self.index,
-            **self.writing_keywords)
+            **self.keywords)
         self.index = self.index + 1
         return writer
 
+
+class CSVZipWriterNew(NewWriter):
+    def __init__(self):
+        NewWriter.__init__(self, FILE_FORMAT_CSVZ)
+        self.zipfile = None
+
+    def open(self, file_name, **keywords):
+        NewWriter.open(self, file_name, **keywords)
+        self.zipfile = zipfile.ZipFile(file_name, 'w')
+
+    def create_sheet(self, name):
+        given_name = name
+        if given_name is None:
+            given_name = DEFAULT_SHEET_NAME
+        writer = CSVZipSheetWriter(
+            self.zipfile,
+            given_name,
+            self.file_type[:3],
+            **self.keywords
+        )
+        return writer
+
+    def close(self):
+        self.zipfile.close()
+
+
+class TSVZipWriterNew(CSVZipWriterNew):
+    def __init__(self):
+        CSVZipWriterNew.__init__(self)
+        self.file_type = FILE_FORMAT_TSVZ
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVZipWriterNew.open(self, file_name, **keywords)

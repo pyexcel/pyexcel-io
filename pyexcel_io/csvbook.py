@@ -108,7 +108,7 @@ class CSVBook(BookReader):
             self.line_terminator = keywords['lineterminator']
         if filename is None and file_content is None:
             self.keywords = keywords
-            self.mysheets = {"csv": []}
+            self.mysheets = {'csv': []}
         else:
             BookReader.__init__(self, filename, file_content=file_content,
                                 load_sheet_with_name=load_sheet_with_name,
