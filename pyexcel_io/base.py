@@ -7,15 +7,10 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import sys
 import datetime
 from abc import ABCMeta, abstractmethod, abstractproperty
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
 from .constants import DEFAULT_SHEET_NAME
-from ._compact import PY2, is_generator
+from ._compact import PY2, is_generator, OrderedDict
 
 
 def add_metaclass(metaclass):

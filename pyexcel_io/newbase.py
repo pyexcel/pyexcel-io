@@ -307,7 +307,8 @@ class CSVZipBookReader(NewBookReader):
             NamedContent(
                 native_sheet.name,
                 sheet
-            )
+            ),
+            **self.keywords
         )
         return reader.to_array()
 

@@ -54,15 +54,27 @@ class TestTSVZ:
         zipbook.open(self.file)
         zipbook.write({None: data})
         zipbook.close()
-        self.zip = zipfile.ZipFile(self.file, 'r')
-        assert self.zip.namelist() == [file_name]
-        content = self.zip.read(file_name)
+        zip = zipfile.ZipFile(self.file, 'r')
+        assert zip.namelist() == [file_name]
+        content = zip.read(file_name)
         if not PY2:
             content = content.decode('utf-8')
         assert content.replace('\r','').strip('\n') == "1\t2\t3"
+        zip.close()
+
+    def test_reading(self):
+        data = [[1,2,3]]
+        zipbook = TSVZipWriterNew()
+        zipbook.open(self.file)
+        zipbook.write({None: data})
+        zipbook.close()
+        zipreader = TSVZipBookReader()
+        zipreader.open(self.file)
+        data = zipreader.read_all()
+        assert list(data['pyexcel_sheet1']) == [['1','2','3']]
+        zipreader.close()
 
     def tearDown(self):
-        self.zip.close()    
         os.unlink(self.file)
 
 
