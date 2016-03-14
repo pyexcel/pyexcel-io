@@ -1,5 +1,6 @@
 from .book import ReaderFactory, WriterFactory
 from .constants import MESSAGE_ERROR_02
+from ._compact import isstream
 
 
 def load_data_new(file_name=None,
@@ -45,12 +46,19 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
                                         [file_name, file_stream]))
     if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
+    file_type_given = True
     if file_type is None:
         file_type = file_name.split(".")[-1]
+        file_type_given = False
 
     writer = WriterFactory.create_writer(file_type)
     if file_name:
-        writer.open(file_name, **keywords)
-    else:
+        if file_type_given:
+            writer.open_content(file_name, file_type=file_type, **keywords)
+        else:
+            writer.open(file_name, **keywords)
+    elif file_stream:
         writer.open_stream(file_stream, **keywords)
+    else:
+        raise IOError("Wrong arguments")
     return writer

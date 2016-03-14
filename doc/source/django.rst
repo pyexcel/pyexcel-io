@@ -27,9 +27,11 @@ Working with django database
     ...         self.attname = name
     ... 
     >>> class Meta:
+    ...     instance = 0
     ...     def __init__(self):
-    ...         self.model_name = "test"
+    ...         self.model_name = "Sheet%d" % Meta.instance
     ...         self.concrete_fields = []
+    ...         Meta.instance = Meta.instance + 1
     ... 
     ...     def update(self, data):
     ...         for f in data:
@@ -58,6 +60,8 @@ Write data to a django model
 Let's suppose we have a django model:
 
     >>> from pyexcel_io import save_data, DB_DJANGO, DEFAULT_SHEET_NAME
+    >>> from pyexcel_io.newbase import DjangoModelImporter, DjangoModelExporter
+    >>> from pyexcel_io.newbase import DjangoModelImportAdapter, DjangoModelExportAdapter
     >>> model = FakeDjangoModel()
 
 Suppose you have these data::
@@ -67,7 +71,11 @@ Suppose you have these data::
     ...     [1, 2, 3],
     ...     [4, 5, 6]
     ... ]
-    >>> save_data(DB_DJANGO, data[1:], models={DEFAULT_SHEET_NAME: [model, data[0], None, None]})
+    >>> importer = DjangoModelImporter()
+    >>> adapter = DjangoModelImportAdapter(model)
+    >>> adapter.set_column_names(data[0])
+    >>> importer.append(adapter)
+    >>> save_data(importer, {adapter.get_name(): data[1:]}, file_type=DB_DJANGO)
     >>> import pprint
     >>> pprint.pprint(model.objects.objs)
     [{'X': 1, 'Y': 2, 'Z': 3}, {'X': 4, 'Y': 5, 'Z': 6}]
@@ -83,7 +91,10 @@ Read data from a django model
 Continue from previous example, you can read this back::
 
    >>> from pyexcel_io import get_data
-   >>> data = get_data(DB_DJANGO, models=[model])
+   >>> exporter = DjangoModelExporter()
+   >>> adapter = DjangoModelExportAdapter(model)
+   >>> exporter.append(adapter)
+   >>> data = get_data(exporter, file_type=DB_DJANGO)
    >>> data
    [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]
 
@@ -104,15 +115,18 @@ And want to save them to two django models:
 
 In order to store a dictionary data structure, you need to do some transformation::
 
+    >>> importer = DjangoModelImporter()
+    >>> adapter1 = DjangoModelImportAdapter(model1)
+    >>> adapter1.set_column_names(data['Sheet1'][0])
+    >>> adapter2 = DjangoModelImportAdapter(model2)
+    >>> adapter2.set_column_names(data['Sheet2'][0])
+    >>> importer.append(adapter1)
+    >>> importer.append(adapter2)
     >>> to_store = {
-    ...    "Sheet1": data['Sheet1'][1:],
-    ...    "Sheet2": data['Sheet2'][1:]
+    ...    adapter1.get_name(): data['Sheet1'][1:],
+    ...    adapter2.get_name(): data['Sheet2'][1:]
     ... }
-    >>> models = {
-    ...    "Sheet1": [model1, data['Sheet1'][0], None, None],
-    ...    "Sheet2": [model2, data['Sheet2'][0], None, None]
-    ... }
-    >>> save_data(DB_DJANGO, to_store, models=models)
+    >>> save_data(importer, to_store, file_type=DB_DJANGO)
     >>> pprint.pprint(model1.objects.objs)
     [{'X': 1, 'Y': 4, 'Z': 7}, {'X': 2, 'Y': 5, 'Z': 8}, {'X': 3, 'Y': 6, 'Z': 9}]
     >>> pprint.pprint(model2.objects.objs)
@@ -121,8 +135,6 @@ In order to store a dictionary data structure, you need to do some transformatio
 .. testcode:
    :hide:
 
-   >>> model1._meta.model_name = "Sheet1"
-   >>> model2._meta.model_name = "Sheet2"
    >>> model1._meta.update(["X", "Y", "Z"])
    >>> model2._meta.update(["A", "B", "C"])
    
@@ -131,6 +143,11 @@ Read content from multiple tables
 
 Here's what you need to do:
 
-    >>> data = get_data(DB_DJANGO, models=[model1, model2])
+    >>> exporter = DjangoModelExporter()
+    >>> adapter1 = DjangoModelExportAdapter(model1)
+    >>> adapter2 = DjangoModelExportAdapter(model2)
+    >>> exporter.append(adapter1)
+    >>> exporter.append(adapter2)
+    >>> data = get_data(exporter, file_type=DB_DJANGO)
     >>> data
     OrderedDict([('Sheet1', [['X', 'Y', 'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]), ('Sheet2', [['A', 'B', 'C'], [1, 4, 7], [2, 5, 8], [3, 6, 9]])])

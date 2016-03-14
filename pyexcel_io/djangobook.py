@@ -7,6 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from collections import namedtuple
 from ._compact import OrderedDict
 from .constants import (
     MESSAGE_EMPTY_ARRAY,
@@ -23,7 +24,7 @@ from .base import (
     swap_empty_string_for_none
 )
 
-
+    
 class DjangoModelReader(SheetReaderBase):
     """Read from django model
     """

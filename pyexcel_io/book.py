@@ -22,6 +22,8 @@ from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
 from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
 from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader
+from .newbase import DjangoBookReaderNew, TSVZipWriterNew, DjangoBookWriterNew
+from .newbase import CSVZipWriterNew
 
 
 AVAILABLE_READERS = {
@@ -65,7 +67,7 @@ class ReaderFactory(object):
         FILE_FORMAT_CSVZ: CSVZipBookReader,
         FILE_FORMAT_TSVZ: TSVZipBookReader,
         DB_SQL: SQLBookReader,
-        DB_DJANGO: DjangoBookReader
+        DB_DJANGO: DjangoBookReaderNew
     }
 
     @staticmethod
@@ -76,7 +78,7 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ]:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO]:
                 return reader_class()
             else:
                 return Reader(file_type, reader_class)
@@ -88,10 +90,10 @@ class WriterFactory(object):
     factories = {
         FILE_FORMAT_CSV: CSVBookWriterNew,
         FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
-        FILE_FORMAT_CSVZ: CSVZipWriter,
-        FILE_FORMAT_TSVZ: partial(CSVZipWriter, dialect="excel-tab"),
+        FILE_FORMAT_CSVZ: CSVZipWriterNew,
+        FILE_FORMAT_TSVZ: TSVZipWriterNew,
         DB_SQL: SQLBookWriter,
-        DB_DJANGO: DjangoBookWriter
+        DB_DJANGO: DjangoBookWriterNew
     }
     @staticmethod
     def add_factory(file_type, writer_class):
@@ -101,7 +103,7 @@ class WriterFactory(object):
     def create_writer(file_type):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
-            if file_type == FILE_FORMAT_CSV:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO]:
                 return writer_class()
             else:
                 return Writer(file_type, writer_class)

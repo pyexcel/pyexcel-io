@@ -1,5 +1,7 @@
 from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
 from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader, DjangoBookWriter
+from pyexcel_io.newbase import DjangoModelImporter, DjangoModelExporter
+from pyexcel_io.newbase import DjangoModelImportAdapter, DjangoModelExportAdapter
 
 
 class Package:
@@ -43,9 +45,11 @@ class Field:
 
 
 class Meta:
+    instance = 1
     def __init__(self):
-        self.model_name = "test"
+        self.model_name = "Sheet%d" % Meta.instance
         self.concrete_fields = []
+        Meta.instance = Meta.instance + 1
 
     def update(self, data):
         for f in data:
@@ -162,7 +166,11 @@ class TestSheet:
 
     def test_load_sheet_from_django_model(self):
         model=FakeDjangoModel()
-        save_data(DB_DJANGO, self.data[1:], models={DEFAULT_SHEET_NAME: [model, self.data[0], None, None]})
+        importer = DjangoModelImporter()
+        adapter = DjangoModelImportAdapter(model)
+        adapter.set_column_names(self.data[0])
+        importer.append(adapter)
+        save_data(importer, {adapter.get_name(): self.data[1:]}, file_type=DB_DJANGO)
         assert model.objects.objs == self.result
         model._meta.update(["X", "Y", "Z"])
         reader = DjangoModelReader(model)
@@ -233,14 +241,18 @@ class TestMultipleModels:
     def test_reading_from_more_models(self):
         model1=FakeDjangoModel()
         model2=FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter1 = DjangoModelImportAdapter(model1)
+        adapter1.set_column_names(self.content['Sheet1'][0])
+        adapter2 = DjangoModelImportAdapter(model2)
+        adapter2.set_column_names(self.content['Sheet2'][0])
+        importer.append(adapter1)
+        importer.append(adapter2)
         to_store = {
-            "Sheet1": self.content['Sheet1'][1:],
-            "Sheet2": self.content['Sheet2'][1:]
+           adapter1.get_name(): self.content['Sheet1'][1:],
+           adapter2.get_name(): self.content['Sheet2'][1:]
         }
-        save_data(DB_DJANGO, to_store, models={
-            "Sheet1": [model1, self.content['Sheet1'][0], None, None],
-            "Sheet2": [model2, self.content['Sheet2'][0], None, None]
-        })
+        save_data(importer, to_store, file_type=DB_DJANGO)
         assert model1.objects.objs == self.result1
         assert model2.objects.objs == self.result2
         model1._meta.model_name = "Sheet1"
@@ -255,13 +267,15 @@ class TestMultipleModels:
 
     def test_special_case_where_only_one_model_used(self):
         model1=FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter = DjangoModelImportAdapter(model1)
+        adapter.set_column_names(self.content['Sheet1'][0])
+        importer.append(adapter)
         to_store = {
-            "Sheet1": self.content['Sheet1'][1:],
+            adapter.get_name(): self.content['Sheet1'][1:],
             "Sheet2": self.content['Sheet2'][1:]
         }
-        save_data(DB_DJANGO, to_store, models={
-            "Sheet1": [model1, self.content['Sheet1'][0], None, None]
-        })
+        save_data(importer, to_store, file_type=DB_DJANGO)
         assert model1.objects.objs == self.result1
         model1._meta.model_name = "Sheet1"
         model1._meta.update(["X", "Y", "Z"])
