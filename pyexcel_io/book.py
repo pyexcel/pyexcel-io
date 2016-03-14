@@ -1,9 +1,5 @@
-from functools import partial
-
 from .constants import (
     MESSAGE_LOADING_FORMATTER,
-    MESSAGE_ERROR_03,
-    MESSAGE_WRONG_IO_INSTANCE,
     FILE_FORMAT_CSV,
     FILE_FORMAT_TSV,
     FILE_FORMAT_CSVZ,
@@ -16,7 +12,7 @@ from .constants import (
     DB_DJANGO
 )
 
-from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
+from .newbase import CSVBookReader, Reader, Writer, CSVBookWriterNew
 from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader, TSVWriterNew
 from .newbase import DjangoBookReaderNew, TSVZipWriterNew, DjangoBookWriterNew
 from .newbase import CSVZipWriterNew
@@ -38,9 +34,7 @@ AVAILABLE_WRITERS = {
 }
 
 
-from ._compact import (
-    is_string, BytesIO, StringIO,
-    isstream, PY2)
+from ._compact import is_string
 
 
 def resolve_missing_extensions(extension, available_list):

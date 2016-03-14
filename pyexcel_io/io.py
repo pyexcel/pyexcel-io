@@ -1,6 +1,5 @@
 from .book import ReaderFactory, WriterFactory
 from .constants import MESSAGE_ERROR_02
-from ._compact import isstream
 
 
 def load_data_new(file_name=None,

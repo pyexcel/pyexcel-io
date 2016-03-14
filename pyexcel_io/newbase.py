@@ -1,17 +1,15 @@
 import re
 import os
 import glob
-from ._compact import OrderedDict, StringIO
+from ._compact import OrderedDict, StringIO, BytesIO, isstream, PY2
 from abc import abstractmethod
-from .base import NamedContent, is_empty_array, swap_empty_string_for_none
+from .base import NamedContent
 import zipfile
 from .constants import (
     DEFAULT_SEPARATOR,
     DEFAULT_SHEET_NAME,
-    MESSAGE_LOADING_FORMATTER,
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE,
-    MESSAGE_EMPTY_ARRAY,
     FILE_FORMAT_CSV,
     FILE_FORMAT_TSV,
     FILE_FORMAT_CSVZ,
@@ -28,9 +26,6 @@ from .csvbook import CSVinMemoryReader, CSVFileReader, CSVSheetWriter
 from .csvzipbook import CSVZipSheetWriter
 from .djangobook import DjangoModelReader, DjangoModelWriter
 from .sqlbook import SQLTableReader, SQLTableWriter
-from ._compact import (
-    is_string, BytesIO, StringIO,
-    isstream, PY2)
 
 
 # Please also register here
