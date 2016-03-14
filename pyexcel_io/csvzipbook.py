@@ -34,34 +34,3 @@ class CSVZipSheetWriter(CSVSheetWriter):
         file_name = "%s.%s" % (self.native_sheet, self.file_extension)
         self.native_book.writestr(file_name, self.content.getvalue())
         self.content.close()
-
-
-class CSVZipWriter(BookWriter):
-    """
-    csv file writer
-
-    if there is multiple sheets for csv file, it simpily writes
-    multiple csv files
-    """
-    def __init__(self, filename, **keywords):
-        BookWriter.__init__(self, filename, **keywords)
-        self.myzip = zipfile.ZipFile(self.file, 'w')
-        if 'dialect' in keywords:
-            self.file_extension = FILE_FORMAT_TSV
-        else:
-            self.file_extension = FILE_FORMAT_CSV
-
-    def create_sheet(self, name):
-        given_name = name
-        if given_name is None:
-            given_name = DEFAULT_SHEET_NAME
-        return CSVZipSheetWriter(self.myzip,
-                                 given_name,
-                                 self.file_extension,
-                                 **self.keywords)
-
-    def close(self):
-        """
-        This call close the file handle
-        """
-        self.myzip.close()
