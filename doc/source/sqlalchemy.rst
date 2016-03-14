@@ -40,12 +40,13 @@ And suppose we have the following data structure to be saved::
 Here's the actual code to achieve it:
 
     >>> from pyexcel_io import save_data, DB_SQL, DEFAULT_SHEET_NAME
+    >>> from pyexcel_io.newbase import SQLTableImporter, SQLTableImportAdapter
     >>> mysession = Session()
-    >>> save_data(DB_SQL,
-    ...      data[1:],
-    ...      session=mysession,
-    ...      tables={ DEFAULT_SHEET_NAME: [Pyexcel, data[0], None, None] }
-    ... )
+    >>> importer = SQLTableImporter(mysession)
+    >>> adapter = SQLTableImportAdapter(Pyexcel)
+    >>> adapter.column_names = data[0]
+    >>> importer.append(adapter)
+    >>> save_data(importer, {adapter.get_name(): data[1:]}, file_type=DB_SQL)
 
 Now let's verify the data:
 
@@ -64,7 +65,11 @@ Let's use previous data for reading and see if we could get them via
 :meth:`~pyexcel_io.get_data` :
 
     >>> from pyexcel_io import get_data
-    >>> data = get_data(DB_SQL, session=mysession, tables=[Pyexcel])
+    >>> from pyexcel_io.newbase import SQLTableExporter, SQLTableExportAdapter
+    >>> exporter = SQLTableExporter(mysession)
+    >>> adapter = SQLTableExportAdapter(Pyexcel)
+    >>> exporter.append(adapter)
+    >>> data = get_data(exporter, file_type=DB_SQL)
     >>> json.dumps(list(data))
     '[["birth", "id", "name", "weight"], ["2014-11-11", 0, "Adam", 11.25], ["2014-11-12", 1, "Smith", 12.25]]'
 
@@ -157,10 +162,19 @@ Here's the code to update both:
     ...     "Post": [Post, data['Post'][0], None, post_init_func]
     ... }
     >>> from pyexcel_io import OrderedDict
+    >>> importer = SQLTableImporter(mysession)
+    >>> adapter1 = SQLTableImportAdapter(Category)
+    >>> adapter1.column_names = data['Category'][0]
+    >>> adapter1.row_initializer = category_init_func
+    >>> importer.append(adapter1)
+    >>> adapter2 = SQLTableImportAdapter(Post)
+    >>> adapter2.column_names = data['Post'][0]
+    >>> adapter2.row_initializer = post_init_func
+    >>> importer.append(adapter2)
     >>> to_store = OrderedDict()
-    >>> to_store.update({"Category": data['Category'][1:]})
-    >>> to_store.update({"Post": data['Post'][1:]})
-    >>> save_data(DB_SQL, to_store, session=mysession, tables=tables)
+    >>> to_store.update({adapter1.get_name(): data['Category'][1:]})
+    >>> to_store.update({adapter2.get_name(): data['Post'][1:]})
+    >>> save_data(importer, to_store, file_type=DB_SQL)
 
 Let's verify what do we have in the database:
 
@@ -195,7 +209,12 @@ Read data from multiple tables
 Let's use previous data for reading and see if we could get them via
 :meth:`~pyexcel_io.get_data` :
 
-    >>> data = get_data(DB_SQL, session=mysession, tables=[Category, Post])
+    >>> exporter = SQLTableExporter(mysession)
+    >>> adapter = SQLTableExportAdapter(Category)
+    >>> exporter.append(adapter)
+    >>> adapter = SQLTableExportAdapter(Post)
+    >>> exporter.append(adapter)
+    >>> data = get_data(exporter, file_type=DB_SQL)
     >>> json.dumps(data)
     '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], "post": [["body", "category_id", "id", "pub_date", "title"], ["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], ["informal", 2, 2, "2015-01-20T23:28:30", "Title B"]]}'
 

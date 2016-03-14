@@ -24,6 +24,7 @@ from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNe
 from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader
 from .newbase import DjangoBookReaderNew, TSVZipWriterNew, DjangoBookWriterNew
 from .newbase import CSVZipWriterNew
+from .newbase import SQLReader, SQLImporter
 
 
 AVAILABLE_READERS = {
@@ -66,7 +67,7 @@ class ReaderFactory(object):
         FILE_FORMAT_TSV: TSVBookReader,
         FILE_FORMAT_CSVZ: CSVZipBookReader,
         FILE_FORMAT_TSVZ: TSVZipBookReader,
-        DB_SQL: SQLBookReader,
+        DB_SQL: SQLReader,
         DB_DJANGO: DjangoBookReaderNew
     }
 
@@ -78,7 +79,7 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO]:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO, DB_SQL]:
                 return reader_class()
             else:
                 return Reader(file_type, reader_class)
@@ -92,7 +93,7 @@ class WriterFactory(object):
         FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
         FILE_FORMAT_CSVZ: CSVZipWriterNew,
         FILE_FORMAT_TSVZ: TSVZipWriterNew,
-        DB_SQL: SQLBookWriter,
+        DB_SQL: SQLImporter,
         DB_DJANGO: DjangoBookWriterNew
     }
     @staticmethod
@@ -103,7 +104,7 @@ class WriterFactory(object):
     def create_writer(file_type):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO]:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO, DB_SQL]:
                 return writer_class()
             else:
                 return Writer(file_type, writer_class)
