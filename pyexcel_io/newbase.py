@@ -405,6 +405,16 @@ class CSVBookWriterNew(NewWriter):
         return writer
 
 
+class TSVWriterNew(CSVBookWriterNew):
+    def __init__(self):
+        CSVBookWriterNew.__init__(self)
+        self.file_type = FILE_FORMAT_TSV
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookWriterNew.open(self, file_name, **keywords)
+
+
 class CSVZipWriterNew(NewWriter):
     def __init__(self):
         NewWriter.__init__(self, FILE_FORMAT_CSVZ)

@@ -16,12 +16,11 @@ from .constants import (
     DB_DJANGO
 )
 
-from .csvbook import CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
 from .newbase import CSVBookReader, Reader, validate_io, Writer, CSVBookWriterNew
-from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader
+from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader, TSVWriterNew
 from .newbase import DjangoBookReaderNew, TSVZipWriterNew, DjangoBookWriterNew
 from .newbase import CSVZipWriterNew
 from .newbase import SQLReader, SQLImporter
@@ -90,7 +89,7 @@ class ReaderFactory(object):
 class WriterFactory(object):
     factories = {
         FILE_FORMAT_CSV: CSVBookWriterNew,
-        FILE_FORMAT_TSV: partial(CSVWriter, dialect="excel-tab"),
+        FILE_FORMAT_TSV: TSVWriterNew,
         FILE_FORMAT_CSVZ: CSVZipWriterNew,
         FILE_FORMAT_TSVZ: TSVZipWriterNew,
         DB_SQL: SQLImporter,

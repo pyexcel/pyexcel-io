@@ -156,27 +156,3 @@ class CSVSheetWriter(SheetWriter):
             self.f.close()
         elif not self.single_sheet_in_book:
             self.f.write("---pyexcel---%s" % self.line_terminator)
-
-
-class CSVWriter(BookWriter):
-    """
-    csv file writer
-
-    if there is multiple sheets for csv file, it simpily writes
-    multiple csv files
-    """
-    def __init__(self, file, **keywords):
-        self.index = 0
-        BookWriter.__init__(self, file, **keywords)
-
-    def create_sheet(self, name):
-        self.index = self.index + 1
-        return CSVSheetWriter(self.file, name,
-                              sheet_index=(self.index-1),
-                              **self.keywords)
-
-    def close(self):
-        """
-        This call close the file handle
-        """
-        pass
