@@ -6,7 +6,6 @@ from pyexcel_io.csvbook import (
     CSVSheetReader,
     CSVFileReader,
     CSVinMemoryReader,
-    CSVBook,
     CSVSheetWriter,
     CSVWriter
 )
@@ -43,76 +42,8 @@ class TestReaders:
         result = list(r.to_array())
         assert result == self.data
 
-    def test_book_reader(self):
-        b = CSVBook(self.test_file)
-        sheets = b.sheets()
-        assert list(sheets[self.test_file]) == self.data
-        
-    def test_book_reader_from_memory_source(self):
-        io = get_io(self.file_type)
-        with open(self.test_file, 'r') as f:
-            io.write(f.read())
-        io.seek(0)
-        b = CSVBook(None, io)
-        sheets = b.sheets()
-        assert list(sheets['csv']) == self.data
-
     def tearDown(self):
         os.unlink(self.test_file)
-
-
-class TestReadMultipleSheets:
-    def setUp(self):
-        self.file_type = "csv"
-        self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
-        self.sheets = OrderedDict()
-        self.sheets.update({"sheet1": self.data})
-        self.sheets.update({"sheet2": self.data})
-        self.sheets.update({"sheet3": self.data})
-        index = 0
-        for key, value in self.sheets.items():
-            file_name = self.test_file_formatter % (key, index)
-            with open(file_name, 'w') as f:
-                for row in value:
-                    f.write(",".join(row) + "\n")
-            index = index + 1
-
-    def test_multiple_sheet(self):
-        b = CSVBook("csv_multiple.csv")
-        sheets = b.sheets()
-        for key in sheets:
-            sheets[key] = list(sheets[key])
-        assert sheets == self.sheets
-
-    def test_read_one_from_many_by_name(self):
-        b = CSVBook("csv_multiple.csv", load_sheet_with_name="sheet1")
-        sheets = b.sheets()
-        assert list(sheets["sheet1"]) == self.sheets["sheet1"]
-
-    @raises(ValueError)
-    def test_read_one_from_many_by_non_existent_name(self):
-        CSVBook("csv_multiple.csv", load_sheet_with_name="notknown")
-
-    def test_read_one_from_many_by_index(self):
-        b = CSVBook("csv_multiple.csv", load_sheet_at_index=1)
-        sheets = b.sheets()
-        assert list(sheets["sheet2"]) == self.sheets["sheet2"]
-
-    @raises(IndexError)
-    def test_read_one_from_many_by_wrong_index(self):
-        CSVBook("csv_multiple.csv", load_sheet_at_index=90)
-        
-    def tearDown(self):
-        index = 0
-        for key, value in self.sheets.items():
-            file_name = self.test_file_formatter % (key, index)
-            os.unlink(file_name)
-            index = index + 1
 
 
 class TestWriteMultipleSheets:
@@ -205,21 +136,6 @@ class TestWriteMultipleSheets:
             """)
         assert content == expected
 
-    def test_multiple_sheet_into_memory_2(self):
-        """Write csv book into a single stream"""
-        io = get_io(self.file_type)
-        b = CSVWriter(io, lineterminator='\n')
-        for key, value in self.sheets.items():
-            w = b.create_sheet(key)
-            w.write_array(value)
-            w.close()
-        b.close()
-        reader = CSVBook(None, file_content=io, lineterminator='\n')
-        sheets = reader.sheets()
-        for sheet in sheets:
-            sheets[sheet] = list(sheets[sheet])
-        assert sheets == self.sheets
-
     def delete_files(self):
         index = 0
         for key, value in self.sheets.items():
@@ -302,10 +218,6 @@ class TestMemoryWriter:
         content = io.getvalue().replace('\r', '')
         assert content.strip('\n') == self.result
 
-
-def test_empty_arguments_to_csvbook():
-    book = CSVBook(None)
-    assert book.sheets() == {"csv":[]}
 
 
 class TestNonUniformCSV:

@@ -16,7 +16,7 @@ from .constants import (
     DB_DJANGO
 )
 
-from .csvbook import CSVBook, CSVWriter
+from .csvbook import CSVWriter
 from .csvzipbook import CSVZipWriter, CSVZipBook
 from .sqlbook import SQLBookReader, SQLBookWriter
 from .djangobook import DjangoBookReader, DjangoBookWriter
