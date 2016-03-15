@@ -17,8 +17,8 @@ from .csvzipbook import CSVZipBookReader, TSVZipBookReader
 from .csvzipbook import CSVZipWriterNew, TSVZipWriterNew
 
 from .newbase import Reader, Writer
-from .newbase import DjangoBookReaderNew,  DjangoBookWriterNew
-from .newbase import SQLReader, SQLImporter
+from .djangobook import DjangoBookReaderNew,  DjangoBookWriterNew
+from .sqlbook import SQLReader, SQLImporter
 
 
 AVAILABLE_READERS = {

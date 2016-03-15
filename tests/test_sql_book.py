@@ -10,8 +10,8 @@ from pyexcel_io import (
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
-from pyexcel_io.newbase import SQLImporter, SQLTableImporter, SQLTableImportAdapter
-from pyexcel_io.newbase import SQLTableExporter, SQLTableExportAdapter, SQLReader
+from pyexcel_io.sqlbook import SQLImporter, SQLTableImporter, SQLTableImportAdapter
+from pyexcel_io.sqlbook import SQLTableExporter, SQLTableExportAdapter, SQLReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 

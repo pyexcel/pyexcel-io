@@ -40,7 +40,7 @@ And suppose we have the following data structure to be saved::
 Here's the actual code to achieve it:
 
     >>> from pyexcel_io import save_data, DB_SQL, DEFAULT_SHEET_NAME
-    >>> from pyexcel_io.newbase import SQLTableImporter, SQLTableImportAdapter
+    >>> from pyexcel_io.sqlbook import SQLTableImporter, SQLTableImportAdapter
     >>> mysession = Session()
     >>> importer = SQLTableImporter(mysession)
     >>> adapter = SQLTableImportAdapter(Pyexcel)
@@ -65,7 +65,7 @@ Let's use previous data for reading and see if we could get them via
 :meth:`~pyexcel_io.get_data` :
 
     >>> from pyexcel_io import get_data
-    >>> from pyexcel_io.newbase import SQLTableExporter, SQLTableExportAdapter
+    >>> from pyexcel_io.sqlbook import SQLTableExporter, SQLTableExportAdapter
     >>> exporter = SQLTableExporter(mysession)
     >>> adapter = SQLTableExportAdapter(Pyexcel)
     >>> exporter.append(adapter)

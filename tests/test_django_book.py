@@ -1,8 +1,8 @@
 from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
 from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter
-from pyexcel_io.newbase import DjangoModelImporter, DjangoModelExporter
-from pyexcel_io.newbase import DjangoModelImportAdapter, DjangoModelExportAdapter
-from pyexcel_io.newbase import DjangoBookWriterNew, DjangoBookReaderNew
+from pyexcel_io.djangobook import DjangoModelImporter, DjangoModelExporter
+from pyexcel_io.djangobook import DjangoModelImportAdapter, DjangoModelExportAdapter
+from pyexcel_io.djangobook import DjangoBookWriterNew, DjangoBookReaderNew
 
 class Package:
     def __init__(self, raiseException=False, **keywords):
