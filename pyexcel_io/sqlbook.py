@@ -118,19 +118,3 @@ class SQLTableWriter(SheetWriter):
     def close(self):
         if self.auto_commit:
             self.session.commit()
-
-
-class SQLBookWriter(BookWriter):
-    """Write to alist of tables
-    """
-    def __init__(self, file, session=None, tables=None, **keywords):
-        BookWriter.__init__(self, file, **keywords)
-        self.session = session
-        self.tables = tables
-
-    def create_sheet(self, name):
-        table_params = self.tables[name]
-        return SQLTableWriter(self.session, table_params, **self.keywords)
-
-    def close(self):
-        pass

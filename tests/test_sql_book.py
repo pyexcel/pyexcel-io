@@ -9,9 +9,9 @@ from pyexcel_io import (
     OrderedDict
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
-from pyexcel_io.sqlbook import SQLBookReader, SQLBookWriter
+from pyexcel_io.sqlbook import SQLBookReader
 from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
-
+from pyexcel_io.newbase import SQLImporter, SQLTableImporter, SQLTableImportAdapter
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 
@@ -311,16 +311,20 @@ class TestMultipleRead:
             c = self.session.query(Category).filter_by(name=row['category']).first()
             p = Post(row['title'], row['body'], c, row['pub_date'])
             return p
-        tables = {
-            "Category": [Category, data['Category'][0], None, category_init_func],
-            "Post": [Post, data['Post'][0], None, post_init_func]
-        }
+        importer = SQLTableImporter(self.session)
+        category_adapter = SQLTableImportAdapter(Category)
+        category_adapter.column_names = data['Category'][0]
+        category_adapter.row_initializer = category_init_func
+        importer.append(category_adapter)
+        post_adapter = SQLTableImportAdapter(Post)
+        post_adapter.column_names = data['Post'][0]
+        post_adapter.row_initializer = post_init_func
+        importer.append(post_adapter)
+        writer = SQLImporter()
+        writer.open_content(importer)
         to_store = OrderedDict()
-        to_store.update({"Category": data['Category'][1:]})
-        to_store.update({"Post": data['Post'][1:]})
-        writer = SQLBookWriter(DB_SQL,
-                               session=self.session,
-                               tables=tables)
+        to_store.update({category_adapter.get_name(): data['Category'][1:]})
+        to_store.update({post_adapter.get_name(): data['Post'][1:]})
         writer.write(to_store)
         writer.close()
 
