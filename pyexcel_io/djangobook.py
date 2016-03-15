@@ -46,19 +46,6 @@ class DjangoModelReader(SheetReaderBase):
             return from_query_sets(column_names, objects)
 
 
-class DjangoBookReader(BookReaderBase):
-    """Read from a list of django models
-    """
-    def __init__(self, models):
-        self.my_sheets = OrderedDict()
-        for model in models:
-            areader = DjangoModelReader(model)
-            self.my_sheets[areader.name] = areader.to_array()
-
-    def sheets(self):
-        return self.my_sheets
-
-
 class DjangoModelWriter(SheetWriter):
     def __init__(self, model, batch_size=None):
         self.batch_size = batch_size

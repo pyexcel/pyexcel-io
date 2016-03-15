@@ -1,8 +1,8 @@
 from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
-from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader
+from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter
 from pyexcel_io.newbase import DjangoModelImporter, DjangoModelExporter
 from pyexcel_io.newbase import DjangoModelImportAdapter, DjangoModelExportAdapter
-from pyexcel_io.newbase import DjangoBookWriterNew
+from pyexcel_io.newbase import DjangoBookWriterNew, DjangoBookReaderNew
 
 class Package:
     def __init__(self, raiseException=False, **keywords):
@@ -264,8 +264,14 @@ class TestMultipleModels:
         model2._meta.model_name = "Sheet2"
         model1._meta.update(["X", "Y", "Z"])
         model2._meta.update(["A", "B", "C"])
-        reader = DjangoBookReader([model1, model2])
-        data = reader.sheets()
+        exporter = DjangoModelExporter()
+        adapter1 = DjangoModelExportAdapter(model1)
+        adapter2 = DjangoModelExportAdapter(model2)
+        exporter.append(adapter1)
+        exporter.append(adapter2)
+        reader = DjangoBookReaderNew()
+        reader.open_content(exporter)
+        data = reader.read_all()
         for key in data.keys():
             data[key] = list(data[key])
         assert data == self.content
@@ -284,6 +290,10 @@ class TestMultipleModels:
         assert model1.objects.objs == self.result1
         model1._meta.model_name = "Sheet1"
         model1._meta.update(["X", "Y", "Z"])
-        reader = DjangoBookReader([model1])
-        data = reader.sheets()
+        exporter = DjangoModelExporter()
+        adapter = DjangoModelExportAdapter(model1)
+        exporter.append(adapter)
+        reader = DjangoBookReaderNew()
+        reader.open_content(exporter)
+        data = reader.read_all()
         assert list(data['Sheet1']) == self.content['Sheet1']
