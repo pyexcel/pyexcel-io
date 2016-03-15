@@ -16,7 +16,7 @@ from .csvbook import CSVBookReader, CSVBookWriterNew, TSVBookReader, TSVWriterNe
 from .csvzipbook import CSVZipBookReader, TSVZipBookReader
 from .csvzipbook import CSVZipWriterNew, TSVZipWriterNew
 
-from .newbase import Reader, Writer
+from .base import Reader, Writer
 from .djangobook import DjangoBookReaderNew,  DjangoBookWriterNew
 from .sqlbook import SQLReader, SQLImporter
 

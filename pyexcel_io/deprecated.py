@@ -1,29 +1,14 @@
 from functools import partial
-from .book import (
-    ReaderFactory,
-    WriterFactory,
-    resolve_missing_extensions
-)
-from .newbase import(
-    validate_io,
-    get_io,
-    BINARY_STREAM_TYPES
-)
 from .io import load_data_new, get_writer_new
 
 from .constants import (
     MESSAGE_ERROR_02,
-    MESSAGE_ERROR_03,
-    MESSAGE_WRONG_IO_INSTANCE,
     MESSAGE_CANNOT_WRITE_STREAM_FORMATTER,
     MESSAGE_CANNOT_READ_STREAM_FORMATTER,
     MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER,
     MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER,
 )
-from ._compact import (
-    is_string,
-    isstream, OrderedDict, PY2,
-    is_generator)
+from ._compact import is_string, isstream
 
 
 def deprecated(func, message="Deprecated!"):
@@ -32,9 +17,14 @@ def deprecated(func, message="Deprecated!"):
         return func(*arg, **keywords)
     return inner
 
-DEPRECATED_DATA_LOADER = partial(deprecated, message="Deprecated since 0.2.0! Please use get_data instead.")
 
-DEPRECATED_GET_WRITER = partial(deprecated, message="Deprecated since 0.2.0! Please use save_data.")
+DEPRECATED_DATA_LOADER = partial(
+    deprecated,
+    message="Deprecated since 0.2.0! Please use get_data instead.")
+
+DEPRECATED_GET_WRITER = partial(
+    deprecated,
+    message="Deprecated since 0.2.0! Please use save_data.")
 
 @DEPRECATED_DATA_LOADER
 def load_data(filename,
@@ -79,8 +69,8 @@ def load_data(filename,
                 MESSAGE_CANNOT_READ_STREAM_FORMATTER % extension)
         else:
             raise NotImplementedError(
-                MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (extension,
-                                                           filename))
+                MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER % (
+                    extension, filename))
 
 
 @DEPRECATED_GET_WRITER
@@ -113,5 +103,5 @@ def get_writer(filename, file_type=None, **keywords):
                 MESSAGE_CANNOT_WRITE_STREAM_FORMATTER % extension)
         else:
             raise NotImplementedError(
-                MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (extension,
-                                                            filename))
+                MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER % (
+                    extension, filename))

@@ -14,6 +14,8 @@ import codecs
 import glob
 from abc import abstractmethod
 from .base import (
+    NewBookReader,
+    NewWriter,
     SheetReaderBase,
     SheetWriter,
     NamedContent
@@ -34,7 +36,6 @@ from .constants import (
     FILE_FORMAT_TSV,
     KEYWORD_TSV_DIALECT
 )
-from .newbase import NewBookReader, NewWriter
 
 
 class UTF8Recorder(Iterator):

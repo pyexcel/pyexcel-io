@@ -9,8 +9,8 @@
 """
 import csv
 import zipfile
-from .newbase import NewBookReader, NewWriter
 from ._compact import StringIO, PY2
+from .base import NewBookReader, NewWriter
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,

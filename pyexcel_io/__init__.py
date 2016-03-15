@@ -42,7 +42,7 @@ from .constants import (
     DB_DJANGO,
     DEFAULT_SHEET_NAME
 )
-from .newbase import BINARY_STREAM_TYPES, get_io, validate_io
+from .base import BINARY_STREAM_TYPES, get_io, validate_io
 from .deprecated import load_data, get_writer
 from .io import load_data_new, get_writer_new
 from .book import ReaderFactory, WriterFactory

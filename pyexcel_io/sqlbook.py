@@ -15,13 +15,14 @@ from .constants import (
 )
 from .base import (
     NamedContent,
+    NewBookReader,
+    NewWriter,
     SheetReaderBase,
     SheetWriter,
     from_query_sets,
     is_empty_array,
     swap_empty_string_for_none
 )
-from .newbase import NewBookReader, NewWriter
 
 
 class PyexcelSQLSkipRowException(Exception):
