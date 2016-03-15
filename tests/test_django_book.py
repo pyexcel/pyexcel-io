@@ -1,8 +1,8 @@
 from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
-from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader, DjangoBookWriter
+from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter, DjangoBookReader
 from pyexcel_io.newbase import DjangoModelImporter, DjangoModelExporter
 from pyexcel_io.newbase import DjangoModelImportAdapter, DjangoModelExportAdapter
-
+from pyexcel_io.newbase import DjangoBookWriterNew
 
 class Package:
     def __init__(self, raiseException=False, **keywords):
@@ -225,14 +225,19 @@ class TestMultipleModels:
     def test_save_to_more_models(self):
         model1=FakeDjangoModel()
         model2=FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter1 = DjangoModelImportAdapter(model1)
+        adapter1.set_column_names(self.content['Sheet1'][0])
+        adapter2 = DjangoModelImportAdapter(model2)
+        adapter2.set_column_names(self.content['Sheet2'][0])
+        importer.append(adapter1)
+        importer.append(adapter2)
         to_store = {
-            "Sheet1": self.content['Sheet1'][1:],
-            "Sheet2": self.content['Sheet2'][1:]
+            adapter1.get_name(): self.content['Sheet1'][1:],
+            adapter2.get_name(): self.content['Sheet2'][1:]
         }
-        writer = DjangoBookWriter(DB_DJANGO, {
-            "Sheet1": [model1, self.content['Sheet1'][0], None, None],
-            "Sheet2": [model2, self.content['Sheet2'][0], None, None]
-        })
+        writer = DjangoBookWriterNew()
+        writer.open_content(importer)
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == self.result1

@@ -107,22 +107,3 @@ class DjangoModelWriter(SheetWriter):
                     print(e2)
                     print(object)
                     continue
-
-
-class DjangoBookWriter(BookWriter):
-    """Write to alist of tables
-    """
-    def __init__(self, file, models=None, batch_size=None, **keywords):
-        BookWriter.__init__(self, file, **keywords)
-        self.models = models
-        self.batch_size = batch_size
-
-    def create_sheet(self, name):
-        if name in self.models:
-            model_params = self.models[name]
-            return DjangoModelWriter(model_params, batch_size=self.batch_size)
-        else:
-            return None
-
-    def close(self):
-        pass
