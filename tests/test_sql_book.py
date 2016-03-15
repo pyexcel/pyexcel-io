@@ -9,9 +9,9 @@ from pyexcel_io import (
     OrderedDict
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
-from pyexcel_io.sqlbook import SQLBookReader
 from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
 from pyexcel_io.newbase import SQLImporter, SQLTableImporter, SQLTableImportAdapter
+from pyexcel_io.newbase import SQLTableExporter, SQLTableExportAdapter, SQLReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 
@@ -329,8 +329,14 @@ class TestMultipleRead:
         writer.close()
 
     def test_read(self):
-        book = SQLBookReader(session=self.session, tables=[Category, Post])
-        data = book.sheets()
+        exporter = SQLTableExporter(self.session)
+        category_adapter = SQLTableExportAdapter(Category)
+        exporter.append(category_adapter)
+        post_adapter = SQLTableExportAdapter(Post)
+        exporter.append(post_adapter)
+        book = SQLReader()
+        book.open_content(exporter)
+        data = book.read_all()
         import json
         for key in data.keys():
             data[key] = list(data[key])

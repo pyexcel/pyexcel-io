@@ -53,19 +53,6 @@ class SQLTableReader(SheetReaderBase):
             return from_query_sets(column_names, objects)
 
 
-class SQLBookReader(BookReaderBase):
-    """Read a list of tables
-    """
-    def __init__(self, session=None, tables=None):
-        self.my_sheets = OrderedDict()
-        for table in tables:
-            sqltablereader = SQLTableReader(session, table)
-            self.my_sheets[sqltablereader.name] = sqltablereader.to_array()
-
-    def sheets(self):
-        return self.my_sheets
-
-
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
