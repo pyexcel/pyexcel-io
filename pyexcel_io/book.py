@@ -12,10 +12,12 @@ from .constants import (
     DB_DJANGO
 )
 
-from .newbase import CSVBookReader, Reader, Writer, CSVBookWriterNew
-from .newbase import CSVZipBookReader, TSVBookReader, TSVZipBookReader, TSVWriterNew
-from .newbase import DjangoBookReaderNew, TSVZipWriterNew, DjangoBookWriterNew
-from .newbase import CSVZipWriterNew
+from .csvbook import CSVBookReader, CSVBookWriterNew, TSVBookReader, TSVWriterNew
+from .csvzipbook import CSVZipBookReader, TSVZipBookReader
+from .csvzipbook import CSVZipWriterNew, TSVZipWriterNew
+
+from .newbase import Reader, Writer
+from .newbase import DjangoBookReaderNew,  DjangoBookWriterNew
 from .newbase import SQLReader, SQLImporter
 
 

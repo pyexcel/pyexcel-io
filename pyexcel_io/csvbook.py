@@ -14,10 +14,8 @@ import codecs
 import glob
 from abc import abstractmethod
 from .base import (
-    BookReader,
     SheetReaderBase,
     SheetWriter,
-    BookWriter,
     NamedContent
 )
 from ._compact import (
@@ -29,7 +27,14 @@ from ._compact import (
     Iterator,
     isstream
 )
-from .constants import DEFAULT_SEPARATOR, DEFAULT_SHEET_NAME
+from .constants import (
+    DEFAULT_SEPARATOR,
+    DEFAULT_SHEET_NAME,
+    FILE_FORMAT_CSV,
+    FILE_FORMAT_TSV,
+    KEYWORD_TSV_DIALECT
+)
+from .newbase import NewBookReader, NewWriter
 
 
 class UTF8Recorder(Iterator):
@@ -156,3 +161,124 @@ class CSVSheetWriter(SheetWriter):
             self.f.close()
         elif not self.single_sheet_in_book:
             self.f.write("---pyexcel---%s" % self.line_terminator)
+
+
+class CSVBookReader(NewBookReader):
+    def __init__(self):
+        self.load_from_memory_flag = False
+        self.line_terminator = '\r\n'
+        self.sheet_name = None
+        self.sheet_index = None
+        NewBookReader.__init__(self, FILE_FORMAT_CSV)
+
+    def load_from_stream(self, file_content):
+        if 'lineterminator' in self.keywords:
+            self.line_terminator = self.keywords['lineterminator']
+        self.load_from_memory_flag = True
+        content = file_content.getvalue()
+        separator = "---pyexcel---%s" % self.line_terminator
+        if separator in content:
+            sheets = content.split(separator)
+            named_contents = []
+            matcher = "---pyexcel:(.*)---"
+            for sheet in sheets:
+                if sheet != '':
+                    lines = sheet.split(self.line_terminator)
+                    result = re.match(matcher, lines[0])
+                    new_content = '\n'.join(lines[1:])
+                    new_sheet = NamedContent(result.group(1),
+                                             StringIO(new_content))
+                    named_contents.append(new_sheet)
+            return named_contents
+        else:
+            file_content.seek(0)
+            return [NamedContent(self.file_type, file_content)]
+
+    def load_from_file(self, file_name):
+        if 'lineterminator' in self.keywords:
+            self.line_terminator = self.keywords['lineterminator']
+        names = file_name.split('.')
+        filepattern = "%s%s*%s*.%s" % (names[0],
+                                       DEFAULT_SEPARATOR,
+                                       DEFAULT_SEPARATOR,
+                                       names[1])
+        filelist = glob.glob(filepattern)
+        if len(filelist) == 0:
+            file_parts = os.path.split(file_name)
+            return [NamedContent(file_parts[-1], file_name)]
+        else:
+            matcher = "%s%s(.*)%s(.*).%s" % (names[0],
+                                             DEFAULT_SEPARATOR,
+                                             DEFAULT_SEPARATOR,
+                                             names[1])
+            tmp_file_list = []
+            for filen in filelist:
+                result = re.match(matcher, filen)
+                tmp_file_list.append((result.group(1), result.group(2), filen))
+            ret = []
+            for lsheetname, index, filen in sorted(tmp_file_list,
+                                                   key=lambda row: row[1]):
+                if self.sheet_name is not None:
+                    if self.sheet_name == lsheetname:
+                        ret.append(NamedContent(lsheetname, filen))
+                elif self.sheet_index is not None:
+                    if self.sheet_index == int(index):
+                        ret.append(NamedContent(lsheetname, filen))
+                else:
+                    ret.append(NamedContent(lsheetname, filen))
+            if len(ret) == 0:
+                if self.sheet_name is not None:
+                    raise ValueError("%s cannot be found" % self.sheet_name)
+                elif self.sheet_index is not None:
+                    raise IndexError(
+                        "Index %d of out bound %d." % (self.sheet_index,
+                                                       len(filelist)))
+            return ret
+
+    def read_sheet(self, native_sheet):
+        if self.load_from_memory_flag:
+            reader = CSVinMemoryReader(native_sheet, **self.keywords)
+        else:
+            reader = CSVFileReader(native_sheet, **self.keywords)
+        return reader.to_array()
+
+
+class TSVBookReader(CSVBookReader):
+    def __init__(self):
+        CSVBookReader.__init__(self)
+        self.file_type = FILE_FORMAT_TSV
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookReader.open(self, file_name, **keywords)
+
+    def open_stream(self, file_content, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookReader.open_stream(self, file_content, **keywords)
+
+
+class CSVBookWriterNew(NewWriter):
+    def __init__(self):
+        NewWriter.__init__(self, FILE_FORMAT_CSV)
+        self.index = 0
+
+    def create_sheet(self, name):
+        writer = CSVSheetWriter(
+            self.file_alike_object,
+            name,
+            sheet_index=self.index,
+            **self.keywords)
+        self.index = self.index + 1
+        return writer
+
+
+class TSVWriterNew(CSVBookWriterNew):
+    def __init__(self):
+        CSVBookWriterNew.__init__(self)
+        self.file_type = FILE_FORMAT_TSV
+
+    def open(self, file_name, **keywords):
+        keywords['dialect'] = KEYWORD_TSV_DIALECT
+        CSVBookWriterNew.open(self, file_name, **keywords)
+
+

@@ -1,8 +1,8 @@
 import os
 from textwrap import dedent
 from nose.tools import raises
-from pyexcel_io import NamedContent, get_io, OrderedDict
-from pyexcel_io.newbase import (
+from pyexcel_io import get_io, OrderedDict
+from pyexcel_io.csvbook import (
     CSVBookReader,
     CSVBookWriterNew,
     TSVBookReader
