@@ -14,8 +14,8 @@ And you can also get the data back::
 
     >>> from pyexcel_io import get_data
     >>> data = get_data("test.xls")
-    >>> data
-    OrderedDict([('pyexcel_sheet1', [[1.0, 2.0, 3.0]])])
+    >>> data['pyexcel_sheet1']
+    [[1.0, 2.0, 3.0]]
 
 
 Work with memory file
@@ -33,8 +33,8 @@ The difference is that you have mention file type if you use :meth:`pyexcel_io.s
 And you can also get the data back::
 
     >>> data = get_data(io, "xls") 
-    >>> data
-    OrderedDict([('pyexcel_sheet1', [[1.0, 2.0, 3.0]])])
+    >>> data['pyexcel_sheet1']
+    [[1.0, 2.0, 3.0]]
 
 The same applies to :meth:`pyexcel_io.get_data`.
 
