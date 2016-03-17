@@ -37,6 +37,7 @@ def load_data_new(file_name=None,
         result = reader.read_sheet_by_index(sheet_index)
     else:
         result = reader.read_all()
+    reader.close()
     return result
 
 

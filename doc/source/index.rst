@@ -82,9 +82,10 @@ After that, you can start get and save data in the loaded format.
 
     ============= ======= ======== ======= ======== =========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `text`_       
-    ============= ======= ======== ======= ========	=========
-    0.1.0         0.1.0   0.1.0    0.1.0   0.1.0	0.1.0
-    ============= ======= ======== ======= ========	=========
+    ============= ======= ======== ======= ======== =========
+    0.2.0         0.2.0   0.2.0    0.2.0   0.2.0    0.2.0
+    0.1.0         0.1.0   0.1.0    0.1.0   0.1.0    0.1.0
+    ============= ======= ======== ======= ======== =========
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
@@ -93,8 +94,14 @@ After that, you can start get and save data in the loaded format.
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _text: https://github.com/pyexcel/pyexcel-text
 
+Special note
+--------------------------------------------------------------------------------
+   migration_from_dot_1_to_dot_2
+
+
 Tutorial
--------------------------------------------------
+--------------------------------------------------------------------------------
+
 .. toctree::
    :maxdepth: 2
 

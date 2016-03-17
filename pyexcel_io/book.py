@@ -71,7 +71,7 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO, DB_SQL]:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO, DB_SQL, FILE_FORMAT_XLS]:
                 return reader_class()
             else:
                 return Reader(file_type, reader_class)
@@ -96,7 +96,7 @@ class WriterFactory(object):
     def create_writer(file_type):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO, DB_SQL]:
+            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO, DB_SQL, FILE_FORMAT_XLS]:
                 return writer_class()
             else:
                 return Writer(file_type, writer_class)

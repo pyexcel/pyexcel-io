@@ -1,5 +1,5 @@
 from pyexcel_io import (
-    SheetReaderBase, SheetReader, BookReader,
+    SheetReaderBase, SheetReader,
     SheetWriter, BookWriter, NamedContent,
     BookReaderBase, SheetWriterBase,
 )
@@ -31,24 +31,6 @@ class ArrayReader(SheetReader):
     def cell_value(self, row, column):
         SheetReader.cell_value(self, row, column)
         return self.native_sheet.payload[row][column]
-
-
-class DictReader(BookReader):
-    def sheet_iterator(self):
-        BookReader.sheet_iterator(self)
-        return [NamedContent(name, self.native_book[name]) for name in self.native_book]
-
-    def get_sheet(self, native_sheet):
-        BookReader.get_sheet(self, native_sheet)
-        return ArrayReader(native_sheet)
-
-    def load_from_file(self, file_content):
-        BookReader.load_from_file(self, file_content)
-        return file_content # just pass it
-
-    def load_from_memory(self, file_name):
-        BookReader.load_from_memory(self, file_name)
-        return file_name # just pass it
 
 
 class ArrayWriter(SheetWriter):
@@ -122,35 +104,6 @@ class TestBookReaderBase:
         assert C().sheets() == sample
 
 
-class TestBookReader:
-    def setUp(self):
-        self.content = {
-            "Sheet 1": [
-                [1,2,3],
-                [4,5,6]
-            ],
-            "Sheet 2": [
-                ['a', 'b', 'c']
-            ]
-        }
-
-    @raises(TypeError)
-    def test_abstractness(self):
-        BookReader("testfile")
-
-    def test_load_from_file(self):
-        reader = DictReader(self.content)
-        sheets = reader.sheets()
-        for key in sheets:
-            sheets[key] = list(sheets[key])
-        assert sheets == self.content
-        
-    def test_load_from_memory(self):
-        reader = DictReader(None, self.content)
-        sheets = reader.sheets()
-        for key in sheets:
-            sheets[key] = list(sheets[key])
-        assert sheets == self.content
 
 class TestSheetWriterBase:
     @raises(TypeError)

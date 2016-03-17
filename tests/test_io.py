@@ -105,7 +105,7 @@ def test_binary_file_content():
     io = get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
-    assert result == data
+    assert result['pyexcel_sheet1'] == data
 
 
 def test_text_file_content():
@@ -113,17 +113,18 @@ def test_text_file_content():
     io = get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
-    assert result == data
+    assert result['csv'] == data
 
 
 def test_conversion_from_bytes_to_text():
+    test_file = "conversion.csv"
     data = [['1','2','3']]
-    save_data("conversion.csv", data)
-    with open("conversion.csv", "rb") as f:
+    save_data(test_file, data)
+    with open(test_file, "rb") as f:
         content = f.read()
         result = get_data(content, 'csv')
-        assert result == data
-    os.unlink("conversion.csv")
+        assert result['csv'] == data
+    os.unlink(test_file)
 
 
 def test_is_string():
@@ -139,7 +140,7 @@ def test_validate_io():
 @raises(TypeError)
 def test_generator_is_obtained():
     data = get_data(os.path.join("tests", "fixtures", "test.csv"), streaming=True)
-    len(data)
+    len(data['test.csv'])
 
 
 def test_generator_can_be_written():
@@ -150,5 +151,5 @@ def test_generator_can_be_written():
     assert os.path.exists(test_filename)
     data2 = get_data(test_filename)
     expected = get_data(test_fixture)
-    assert data2 == expected
+    assert data2[test_filename] == expected['test.csv']
     os.unlink(test_filename)

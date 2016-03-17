@@ -32,7 +32,7 @@ And it can be read out as well and can be saved in any other supported format.
     >>> data = get_data("myfile.csvz")
     >>> import json
     >>> json.dumps(data)
-    '[["1", "2", "3"]]'
+    '{"pyexcel_sheet1": [["1", "2", "3"]]}'
     
 
 Multiple Sheet Book

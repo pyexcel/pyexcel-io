@@ -70,7 +70,7 @@ Let's use previous data for reading and see if we could get them via
     >>> adapter = SQLTableExportAdapter(Pyexcel)
     >>> exporter.append(adapter)
     >>> data = get_data(exporter, file_type=DB_SQL)
-    >>> json.dumps(list(data))
+    >>> json.dumps(list(data['pyexcel']))
     '[["birth", "id", "name", "weight"], ["2014-11-11", 0, "Adam", 11.25], ["2014-11-12", 1, "Smith", 12.25]]'
 
 

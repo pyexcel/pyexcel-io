@@ -96,7 +96,7 @@ Continue from previous example, you can read this back::
    >>> exporter.append(adapter)
    >>> data = get_data(exporter, file_type=DB_DJANGO)
    >>> data
-   [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]
+   OrderedDict([('Sheet0', [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]])])
 
 Write data into multiple models
 --------------------------------------------------------------------------------

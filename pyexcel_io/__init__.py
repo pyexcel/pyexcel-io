@@ -12,7 +12,6 @@ from .base import(
     SheetReaderBase,
     SheetReader,
     BookReaderBase,
-    BookReader,
     SheetWriterBase,
     SheetWriter,
     BookWriter,
@@ -134,7 +133,8 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
 try:
     import pyexcel_xls
     pyexcel_xls.extend_pyexcel(ReaderFactory, WriterFactory)
-except:
+except Exception as e:
+    print(e)
     pass
 
 
