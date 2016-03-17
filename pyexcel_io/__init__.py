@@ -128,15 +128,26 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])
-    if len(list(data.keys())) == 1:
-        return list(data.values())[0]
-    else:
-        return data
+    return data
 
 
 try:
     import pyexcel_xls
     pyexcel_xls.extend_pyexcel(ReaderFactory, WriterFactory)
+except:
+    pass
+
+
+try:
+    import pyexcel_xlsx
+    pyexcel_xlsx.extend_pyexcel(ReaderFactory, WriterFactory)
+except:
+    pass
+
+
+try:
+    import pyexcel_ods3
+    pyexcel_ods3.extend_pyexcel(ReaderFactory, WriterFactory)
 except:
     pass
 
