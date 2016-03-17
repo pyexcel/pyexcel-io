@@ -12,6 +12,7 @@ from .base import(
     SheetReaderBase,
     SheetReader,
     BookReaderBase,
+    BookReader,
     SheetWriterBase,
     SheetWriter,
     BookWriter,

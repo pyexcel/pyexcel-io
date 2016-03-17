@@ -140,6 +140,62 @@ class BookReaderBase(object):
         pass
 
 
+class BookReader(BookReaderBase):		
+    """		
+    Standard reader		
+    """		
+		
+    def __init__(self, filename, file_content=None,		
+                 load_sheet_with_name=None,		
+                 load_sheet_at_index=None,		
+                 **keywords):		
+        self.load_from_memory_flag = False		
+        self.keywords = keywords		
+        self.sheet_name = load_sheet_with_name		
+        self.sheet_index = load_sheet_at_index		
+        if file_content:		
+            self.load_from_memory_flag = True		
+            self.native_book = self.load_from_memory(file_content, **keywords)		
+        else:		
+            self.native_book = self.load_from_file(filename, **keywords)		
+        self.mysheets = OrderedDict()		
+        for native_sheet in self.sheet_iterator():		
+            sheet = self.get_sheet(native_sheet)		
+            self.mysheets[sheet.name] = sheet.to_array()		
+		
+    @abstractmethod		
+    def sheet_iterator(self):		
+        pass		
+		
+    @abstractmethod		
+    def get_sheet(self, native_sheet, **keywords):		
+        """Return a context specific sheet from a native sheet		
+        """		
+        pass		
+		
+    @abstractmethod		
+    def load_from_memory(self, file_content, **keywords):		
+        """Load content from memory		
+		
+        :params stream file_content: the actual file content in memory		
+        :returns: a book		
+        """		
+        pass		
+		
+    @abstractmethod		
+    def load_from_file(self, filename, **keywords):		
+        """Load content from a file		
+		
+        :params str filename: an accessible file path		
+        :returns: a book		
+        """		
+        pass		
+		
+    def sheets(self):		
+        """Get sheets in a dictionary"""		
+        return self.mysheets		
+		
+
 @add_metaclass(ABCMeta)
 class SheetWriterBase(object):
     """
@@ -378,6 +434,9 @@ class Reader(object):
                                        load_sheet_at_index=load_sheet_at_index,
                                        **self.keywords)
         return reader.sheets()
+
+    def close(self):
+        pass
 
 
 class NewBookReader(Reader):
