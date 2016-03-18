@@ -13,7 +13,7 @@ import pyexcel_io.sqlbook
 import pyexcel_io.djangobook
 from .base import ReaderFactory, WriterFactory
 from .io import load_data_new, get_writer_new
-from .base import SheetReader, SheetWriter
+from .base import SheetReader, SheetWriter, get_io
 
 from ._compact import isstream, is_generator, PY2
 from .constants import (
