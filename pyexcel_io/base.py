@@ -8,9 +8,9 @@
     :license: New BSD License, see LICENSE for more details
 """
 import datetime
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import ABCMeta, abstractmethod
 from ._compact import PY2, is_generator, OrderedDict, isstream
-from ._compact import StringIO, BytesIO
+from ._compact import StringIO, BytesIO, is_string
 from .constants import (
     DEFAULT_SHEET_NAME,
     MESSAGE_ERROR_03,
@@ -126,10 +126,10 @@ class SheetWriter(object):
             rows = len(table)
             if rows < 1:
                 return
-            columns = max(map(len, table))
+            columns = max([len(row) for row in table])
             self.set_size((rows, columns))
-        for r in table:
-            self.write_row(r)
+        for row in table:
+            self.write_row(row)
 
     def close(self):
         """
@@ -143,10 +143,10 @@ def from_query_sets(column_names, query_sets):
     Convert query sets into an array
     """
     yield column_names
-    for o in query_sets:
+    for row in query_sets:
         new_array = []
         for column in column_names:
-            value = getattr(o, column)
+            value = getattr(row, column)
             if isinstance(value, (datetime.date, datetime.time)):
                 value = value.isoformat()
             new_array.append(value)
@@ -158,9 +158,9 @@ def is_empty_array(array):
     Check if an array is an array of '' or not
     """
     if PY2:
-        return len(filter(lambda x: x != '', array)) == 0
+        return len(filter(lambda element: element != '', array)) == 0
     else:
-        return len(list(filter(lambda x: x != '', array))) == 0
+        return len(list(filter(lambda element: element != '', array))) == 0
 
 
 def swap_empty_string_for_none(array):
@@ -187,11 +187,11 @@ def get_io(file_type):
         return None
 
 
-def validate_io(file_type, io):
+def validate_io(file_type, stream):
     if file_type in TEXT_STREAM_TYPES:
-        return isinstance(io, StringIO)
+        return isinstance(stream, StringIO)
     elif file_type in BINARY_STREAM_TYPES:
-        return isinstance(io, BytesIO)
+        return isinstance(stream, BytesIO)
     else:
         return False
 
@@ -218,14 +218,14 @@ class Reader(object):
 
     def open_content(self, file_content, **keywords):
         io = get_io(self.file_type)
-        if not PY2:
+        if PY2:
+            io.write(file_content)
+        else:
             if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
                 content = file_content.decode('utf-8')
             else:
                 content = file_content
             io.write(content)
-        else:
-            io.write(file_content)
         io.seek(0)
         self.open_stream(io, **keywords)
 
@@ -276,7 +276,7 @@ class NewBookReader(Reader):
         self.native_book = self.load_from_stream(file_stream)
 
     def read_sheet_by_name(self, sheet_name):
-        named_contents  = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
+        named_contents = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
@@ -305,7 +305,7 @@ class NewBookReader(Reader):
         pass
 
     @abstractmethod
-    def load_from_memory(self, file_content):
+    def load_from_stream(self, file_content):
         """Load content from memory
 
         :params stream file_content: the actual file content in memory
@@ -372,6 +372,10 @@ class NewWriter(Writer):
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
 
+    @abstractmethod
+    def create_sheet(self, sheet_name):
+        pass
+
     def close(self):
         pass
 
@@ -390,8 +394,6 @@ AVAILABLE_WRITERS = {
     FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
 }
 
-
-from ._compact import is_string
 
 
 def resolve_missing_extensions(extension, available_list):
@@ -419,10 +421,7 @@ class ReaderFactory(object):
     def create_reader(file_type):
         if file_type in ReaderFactory.factories:
             reader_class = ReaderFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSV, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ, DB_DJANGO, DB_SQL, FILE_FORMAT_XLS]:
-                return reader_class()
-            else:
-                return Reader(file_type, reader_class)
+            return reader_class()
         else:
             resolve_missing_extensions(file_type, AVAILABLE_READERS)
 
@@ -437,9 +436,6 @@ class WriterFactory(object):
     def create_writer(file_type):
         if file_type in WriterFactory.factories:
             writer_class = WriterFactory.factories[file_type]
-            if file_type in [FILE_FORMAT_CSV, FILE_FORMAT_TSVZ, FILE_FORMAT_CSVZ, DB_DJANGO, DB_SQL, FILE_FORMAT_XLS]:
-                return writer_class()
-            else:
-                return Writer(file_type, writer_class)
+            return writer_class()
         else:
             resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
