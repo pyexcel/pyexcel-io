@@ -15,6 +15,8 @@ from .csvbook import (
     CSVinMemoryReader,
     NamedContent,
     CSVSheetWriter,
+    ReaderFactory,
+    WriterFactory
 )
 from .constants import (
     DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
@@ -126,3 +128,8 @@ class TSVZipBookWriter(CSVZipBookWriter):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVZipBookWriter.open(self, file_name, **keywords)
 
+
+ReaderFactory.add_factory(FILE_FORMAT_CSVZ, CSVZipBookReader)
+ReaderFactory.add_factory(FILE_FORMAT_TSVZ, TSVZipBookReader)
+WriterFactory.add_factory(FILE_FORMAT_CSVZ, CSVZipBookWriter)
+WriterFactory.add_factory(FILE_FORMAT_TSVZ, TSVZipBookWriter)

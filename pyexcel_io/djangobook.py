@@ -21,7 +21,9 @@ from .base import (
     SheetWriter,
     from_query_sets,
     is_empty_array,
-    swap_empty_string_for_none
+    swap_empty_string_for_none,
+    ReaderFactory,
+    WriterFactory
 )
 
     
@@ -227,3 +229,5 @@ class DjangoBookWriter(NewWriter):
     def close(self):
         pass
 
+ReaderFactory.add_factory(DB_DJANGO, DjangoBookReader)
+WriterFactory.add_factory(DB_DJANGO, DjangoBookWriter)

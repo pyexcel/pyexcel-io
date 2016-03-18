@@ -21,7 +21,9 @@ from .base import (
     SheetWriter,
     from_query_sets,
     is_empty_array,
-    swap_empty_string_for_none
+    swap_empty_string_for_none,
+    ReaderFactory,
+    WriterFactory
 )
 
 
@@ -189,3 +191,5 @@ class SQLBookWriter(NewWriter):
     def close(self):
         pass
 
+ReaderFactory.add_factory(DB_SQL, SQLBookReader)
+WriterFactory.add_factory(DB_SQL, SQLBookWriter)

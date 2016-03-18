@@ -18,7 +18,9 @@ from .base import (
     NewWriter,
     SheetReaderBase,
     SheetWriter,
-    NamedContent
+    NamedContent,
+    ReaderFactory,
+    WriterFactory
 )
 from ._compact import (
     is_string,
@@ -272,3 +274,9 @@ class TSVBookWriter(CSVBookWriter):
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVBookWriter.open(self, file_name, **keywords)
+
+
+ReaderFactory.add_factory(FILE_FORMAT_CSV, CSVBookReader)
+ReaderFactory.add_factory(FILE_FORMAT_TSV, TSVBookReader)
+WriterFactory.add_factory(FILE_FORMAT_CSV, CSVBookWriter)
+WriterFactory.add_factory(FILE_FORMAT_TSV, TSVBookWriter)

@@ -1,4 +1,4 @@
-from .book import ReaderFactory, WriterFactory
+from .base import ReaderFactory, WriterFactory
 
 
 from ._compact import isstream, is_generator, PY2

@@ -7,7 +7,11 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from .book import ReaderFactory, WriterFactory
+import pyexcel_io.csvbook
+import pyexcel_io.csvzipbook
+import pyexcel_io.sqlbook
+import pyexcel_io.djangobook
+from .base import ReaderFactory, WriterFactory
 from .io import load_data_new, get_writer_new
 from .base import SheetReader, SheetWriter
 
@@ -18,26 +22,29 @@ from .constants import (
 )
 
 
-def store_data(afile, data, file_type=None, **keywords):
-    """Non public function to store data to afile
+def get_data(afile, file_type=None, streaming=False, **keywords):
+    """Get data from an excel file source
 
     :param filename: actual file name, a file stream or actual content
-    :param data: the data to be written
+    :param sheet_name: the name of the sheet to be loaded
+    :param sheet_index: the index of the sheet to be loaded
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
+    :returns: an array if it is a single sheet, an ordered dictionary otherwise
     """
+    if isstream(afile) and file_type is None:
+        file_type = FILE_FORMAT_CSV
     if isstream(afile):
-        writer = get_writer_new(
-            file_stream=afile,
-            file_type=file_type,
-            **keywords)
+        data = load_data_new(file_stream=afile, file_type=file_type, **keywords)
     else:
-        writer = get_writer_new(
-            file_name=afile,
-            file_type=file_type,
-            **keywords)
-    writer.write(data)
-    writer.close()
+        if afile is not None and file_type is not None:
+            data = load_data_new(file_content=afile, file_type=file_type, **keywords)
+        else:
+            data = load_data_new(file_name=afile, file_type=file_type, **keywords)
+    if streaming is False:
+        for key in data.keys():
+            data[key] = list(data[key])
+    return data
 
 
 def save_data(afile, data, file_type=None, **keywords):
@@ -74,31 +81,26 @@ def save_data(afile, data, file_type=None, **keywords):
                single_sheet_in_book=single_sheet_in_book,
                **keywords)
 
-
-def get_data(afile, file_type=None, streaming=False, **keywords):
-    """Get data from an excel file source
+def store_data(afile, data, file_type=None, **keywords):
+    """Non public function to store data to afile
 
     :param filename: actual file name, a file stream or actual content
-    :param sheet_name: the name of the sheet to be loaded
-    :param sheet_index: the index of the sheet to be loaded
+    :param data: the data to be written
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
-    :returns: an array if it is a single sheet, an ordered dictionary otherwise
     """
-    if isstream(afile) and file_type is None:
-        file_type = FILE_FORMAT_CSV
     if isstream(afile):
-        data = load_data_new(file_stream=afile, file_type=file_type, **keywords)
+        writer = get_writer_new(
+            file_stream=afile,
+            file_type=file_type,
+            **keywords)
     else:
-        if afile is not None and file_type is not None:
-            data = load_data_new(file_content=afile, file_type=file_type, **keywords)
-        else:
-            data = load_data_new(file_name=afile, file_type=file_type, **keywords)
-    if streaming is False:
-        for key in data.keys():
-            data[key] = list(data[key])
-    return data
-
+        writer = get_writer_new(
+            file_name=afile,
+            file_type=file_type,
+            **keywords)
+    writer.write(data)
+    writer.close()
 
 
 try:
