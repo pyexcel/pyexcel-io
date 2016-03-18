@@ -64,7 +64,7 @@ class NamedContent:
     def __init__(self, name, payload):
         self.name = name
         self.payload = payload
-        
+
 
 @add_metaclass(ABCMeta)
 class SheetReaderBase(object):
@@ -140,7 +140,7 @@ class BookReaderBase(object):
         pass
 
 
-class BookReader(BookReaderBase):		
+class BookReader(BookReaderBase):
     """		
     Standard reader		
     """		
@@ -475,7 +475,7 @@ class NewBookReader(Reader):
         for sheet in self.native_book:
             result[sheet.name] = self.read_sheet(sheet)
         return result
-    
+
 
     @abstractmethod
     def read_sheet(self, native_sheet):

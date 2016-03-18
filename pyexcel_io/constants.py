@@ -7,8 +7,8 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License
 """
-DEFAULT_SHEET_NAME = 'pyexcel_sheet1'
-DEFAULT_SEPARATOR = '__'
+DEFAULT_NAME = 'pyexcel'
+DEFAULT_SHEET_NAME = '%s_sheet1' % DEFAULT_NAME
 
 MESSAGE_INVALID_PARAMETERS = "Invalid parameters"
 MESSAGE_ERROR_02 = "No content, file name. Nothing is given"
@@ -34,3 +34,4 @@ FILE_FORMAT_XLSM = 'xlsm'
 DB_SQL = 'sql'
 DB_DJANGO = 'django'
 KEYWORD_TSV_DIALECT = 'excel-tab'
+KEYWORD_LINE_TERMINATOR = 'lineterminator'
