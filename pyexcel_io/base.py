@@ -126,21 +126,6 @@ class SheetReader(SheetReaderBase):
 
 
 @add_metaclass(ABCMeta)
-class BookReaderBase(object):
-    """
-    Generic book reader
-    """
-
-    def set_type(self, file_type):
-        self.file_type = file_type
-
-    @abstractmethod
-    def sheets(self):
-        """Get sheets in a dictionary"""
-        pass
-
-
-@add_metaclass(ABCMeta)
 class SheetWriterBase(object):
     """
     Generic sheet writer

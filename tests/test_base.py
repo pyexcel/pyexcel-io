@@ -1,7 +1,7 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader,
     SheetWriter, NamedContent,
-    BookReaderBase, SheetWriterBase,
+    SheetWriterBase,
 )
 from pyexcel_io.base import is_empty_array
 from nose.tools import raises
@@ -75,22 +75,6 @@ class TestSheetReader:
         assert content == expected
 
 
-class TestBookReaderBase:
-    @raises(TypeError)
-    def test_abstractness(self):
-        BookReaderBase()
-
-    def test_sheets(self):
-        sample = {"a": 1}
-        class C(BookReaderBase):
-            def sheets(self):
-                BookReaderBase.sheets(self)
-                return sample
-
-        assert C().sheets() == sample
-
-
-
 class TestSheetWriterBase:
     @raises(TypeError)
     def test_abstractness(self):
@@ -114,7 +98,8 @@ class TestSheetWriterBase:
         d.set_size(10)
         d.write_array([11,11])
         d.close()            
-        
+
+
 class TestSheetWriter:
     @raises(TypeError)
     def test_abstractness(self):

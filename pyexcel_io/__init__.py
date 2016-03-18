@@ -11,7 +11,6 @@ from .base import(
     NamedContent,
     SheetReaderBase,
     SheetReader,
-    BookReaderBase,
     SheetWriterBase,
     SheetWriter,
     from_query_sets
