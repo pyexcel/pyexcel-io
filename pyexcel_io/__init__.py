@@ -12,10 +12,8 @@ from .base import(
     SheetReaderBase,
     SheetReader,
     BookReaderBase,
-    BookReader,
     SheetWriterBase,
     SheetWriter,
-    BookWriter,
     from_query_sets
 )
 from ._compact import (

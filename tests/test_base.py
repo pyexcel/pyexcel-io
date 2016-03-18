@@ -1,6 +1,6 @@
 from pyexcel_io import (
     SheetReaderBase, SheetReader,
-    SheetWriter, BookWriter, NamedContent,
+    SheetWriter, NamedContent,
     BookReaderBase, SheetWriterBase,
 )
 from pyexcel_io.base import is_empty_array
@@ -39,20 +39,6 @@ class ArrayWriter(SheetWriter):
 
     def write_row(self, array):
         self.native_sheet.payload.append(array)
-
-
-class DictWriter(BookWriter):
-    def __init__(self, file):
-        BookWriter.__init__(self, file)
-        self.dict = {}
-        
-    def create_sheet(self, name):
-        new_array = []
-        self.dict[name] = new_array
-        return ArrayWriter(self.dict, NamedContent(name, new_array), name)
-
-    def close(self):
-        BookWriter.close(self)
 
 
 class TestSheetReaderBase:
@@ -168,33 +154,3 @@ class TestSheetWriter:
         writer.write_array(content[1:])
         assert native_sheet.payload == content
         assert native_sheet.name == "pyexcel_sheet1"
-
-
-class TestBookWriter:
-    @raises(TypeError)
-    def test_book_writer_abstractness(self):
-        BookWriter("te")
-
-    def test_inheritance(self):
-        class E(BookWriter):
-            def create_sheet(self, name):
-                BookWriter.create_sheet(self, name)
-                pass
-
-            def close(self):
-                BookWriter.close(self)
-                pass
-
-        E("test").create_sheet("test")
-        E("test").close()
-
-    def test_book_writer(self):
-        content = {
-            "Sheet1": [[1,2],[3,4]],
-            "Sheet2": [['a', 'b']]
-        }
-
-        writer = DictWriter("afile")
-        writer.write(content)
-        writer.close()
-        assert writer.dict == content
