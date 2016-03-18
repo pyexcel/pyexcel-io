@@ -39,7 +39,8 @@ And suppose we have the following data structure to be saved::
 
 Here's the actual code to achieve it:
 
-    >>> from pyexcel_io import save_data, DB_SQL, DEFAULT_SHEET_NAME
+    >>> from pyexcel_io import save_data
+    >>> from pyexcel_io.constants import DB_SQL, DEFAULT_SHEET_NAME
     >>> from pyexcel_io.sqlbook import SQLTableImporter, SQLTableImportAdapter
     >>> mysession = Session()
     >>> importer = SQLTableImporter(mysession)
@@ -50,7 +51,7 @@ Here's the actual code to achieve it:
 
 Now let's verify the data:
 
-    >>> from pyexcel_io import from_query_sets
+    >>> from pyexcel_io.base import from_query_sets
     >>> query_sets=mysession.query(Pyexcel).all()
     >>> results = from_query_sets(data[0], query_sets)
     >>> import json
@@ -161,7 +162,7 @@ Here's the code to update both:
     ...     "Category": [Category, data['Category'][0], None, category_init_func],
     ...     "Post": [Post, data['Post'][0], None, post_init_func]
     ... }
-    >>> from pyexcel_io import OrderedDict
+    >>> from pyexcel_io._compact import OrderedDict
     >>> importer = SQLTableImporter(mysession)
     >>> adapter1 = SQLTableImportAdapter(Category)
     >>> adapter1.column_names = data['Category'][0]

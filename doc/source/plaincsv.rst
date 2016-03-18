@@ -25,7 +25,7 @@ Write to a csv file
     ...     from StringIO import StringIO
     ... else:
     ...     from io import StringIO
-    >>> from pyexcel_io import OrderedDict
+    >>> from pyexcel_io._compact import OrderedDict
 
 
 Here's the sample code to write an array to a csv file ::

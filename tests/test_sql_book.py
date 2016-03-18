@@ -3,10 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column , Integer, String, Float, Date, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker
 import datetime
-from pyexcel_io import (
-    from_query_sets,
-    OrderedDict
-)
+from pyexcel_io.base import from_query_sets
+from pyexcel_io._compact import OrderedDict
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
 from pyexcel_io.sqlbook import SQLBookWriter, SQLTableImporter, SQLTableImportAdapter

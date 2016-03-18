@@ -1,4 +1,4 @@
-from pyexcel_io import (
+from pyexcel_io.base import (
     SheetReaderBase, SheetReader,
     SheetWriter, NamedContent,
     SheetWriterBase,

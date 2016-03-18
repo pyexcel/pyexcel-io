@@ -39,7 +39,7 @@ Multiple Sheet Book
 -------------------
 
 When multiple sheets are to be saved as a book, the resulting csvz file will be a zip file that contains each sheet as a csv file named after corresponding sheet name.
-    >>> from pyexcel_io import OrderedDict
+    >>> from pyexcel_io._compact import OrderedDict
     >>> content = OrderedDict()
     >>> content.update({
     ...     'Sheet 1': 

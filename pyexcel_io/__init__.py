@@ -7,43 +7,15 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from .base import(
-    NamedContent,
-    SheetReaderBase,
-    SheetReader,
-    SheetWriterBase,
-    SheetWriter,
-    from_query_sets
-)
-from ._compact import (
-    is_string, StringIO, BytesIO,
-    isstream, OrderedDict, PY2,
-    is_generator)
+from .book import ReaderFactory, WriterFactory
+from .io import load_data_new, get_writer_new
+from .base import SheetReader, SheetWriter
+
+from ._compact import isstream, is_generator, PY2
 from .constants import (
-    MESSAGE_ERROR_02,
-    MESSAGE_ERROR_03,
-    MESSAGE_WRONG_IO_INSTANCE,
-    MESSAGE_CANNOT_WRITE_STREAM_FORMATTER,
-    MESSAGE_CANNOT_READ_STREAM_FORMATTER,
-    MESSAGE_CANNOT_WRITE_FILE_TYPE_FORMATTER,
-    MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER,
     FILE_FORMAT_CSV,
-    FILE_FORMAT_TSV,
-    FILE_FORMAT_CSVZ,
-    FILE_FORMAT_TSVZ,
-    FILE_FORMAT_ODS,
-    FILE_FORMAT_XLS,
-    FILE_FORMAT_XLSX,
-    FILE_FORMAT_XLSM,
-    DB_SQL,
-    DB_DJANGO,
     DEFAULT_SHEET_NAME
 )
-from .base import BINARY_STREAM_TYPES, get_io, validate_io
-from .deprecated import load_data, get_writer
-from .io import load_data_new, get_writer_new
-from .book import ReaderFactory, WriterFactory
-
 
 
 def store_data(afile, data, file_type=None, **keywords):
@@ -126,6 +98,7 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
         for key in data.keys():
             data[key] = list(data[key])
     return data
+
 
 
 try:

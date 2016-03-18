@@ -4,12 +4,7 @@ Saving multiple sheets as CSV format
 .. testcode::
    :hide:
 
-    >>> import sys
-    >>> if sys.version_info[0] < 3:
-    ...     from StringIO import StringIO
-    ... else:
-    ...     from io import StringIO
-    >>> from pyexcel_io import OrderedDict
+    >>> from pyexcel_io._compact import OrderedDict, StringIO
 
 
 Write to multiple sibling csv files

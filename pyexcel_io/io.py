@@ -1,6 +1,12 @@
 from .book import ReaderFactory, WriterFactory
-from .constants import MESSAGE_ERROR_02
 
+
+from ._compact import isstream, is_generator, PY2
+from .constants import (
+    FILE_FORMAT_CSV,
+    MESSAGE_ERROR_02,
+    DEFAULT_SHEET_NAME
+)
 
 def load_data_new(file_name=None,
                   file_content=None,
@@ -62,3 +68,4 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
     else:
         raise IOError("Wrong arguments")
     return writer
+

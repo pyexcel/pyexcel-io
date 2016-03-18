@@ -59,7 +59,8 @@ Write data to a django model
 
 Let's suppose we have a django model:
 
-    >>> from pyexcel_io import save_data, DB_DJANGO, DEFAULT_SHEET_NAME
+    >>> from pyexcel_io import save_data
+    >>> from pyexcel_io.constants import DB_DJANGO, DEFAULT_SHEET_NAME
     >>> from pyexcel_io.djangobook import DjangoModelImporter, DjangoModelExporter
     >>> from pyexcel_io.djangobook import DjangoModelImportAdapter, DjangoModelExportAdapter
     >>> model = FakeDjangoModel()

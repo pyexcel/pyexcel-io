@@ -1,4 +1,6 @@
-from pyexcel_io import save_data, DB_DJANGO, OrderedDict
+from pyexcel_io import save_data
+from pyexcel_io._compact import OrderedDict
+from pyexcel_io.constants import DB_DJANGO
 from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter
 from pyexcel_io.djangobook import DjangoModelImporter, DjangoModelExporter
 from pyexcel_io.djangobook import DjangoModelImportAdapter, DjangoModelExportAdapter

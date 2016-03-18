@@ -1,7 +1,10 @@
 import os
 import sys
-from pyexcel_io import load_data, StringIO, get_writer, get_io, BytesIO
-from pyexcel_io import BINARY_STREAM_TYPES, save_data, get_data, is_string, validate_io
+from pyexcel_io.deprecated  import load_data, get_writer
+from pyexcel_io.base import get_io
+from pyexcel_io._compact import StringIO, BytesIO, is_string
+from pyexcel_io.base import BINARY_STREAM_TYPES, validate_io
+from pyexcel_io import save_data, get_data
 from nose.tools import raises
 
 PY2 = sys.version_info[0] == 2
