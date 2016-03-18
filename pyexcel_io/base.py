@@ -83,37 +83,8 @@ class SheetReader(object):
         pass
 
 
-
 @add_metaclass(ABCMeta)
-class SheetWriterBase(object):
-    """
-    Generic sheet writer
-    """
-
-    @abstractmethod
-    def set_size(self, size):
-        """
-        size of the content will be given
-        """
-        pass
-
-    @abstractmethod
-    def write_array(self, table):
-        """
-        For standalone usage, write an array
-        """
-        pass
-
-    @abstractmethod
-    def close(self):
-        """
-        This call actually save the file
-        """
-        pass
-
-
-@add_metaclass(ABCMeta)
-class SheetWriter(SheetWriterBase):
+class SheetWriter(object):
     """
     Generic sheet writer
     """
