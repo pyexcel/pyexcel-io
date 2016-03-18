@@ -1,7 +1,7 @@
 import os
 from pyexcel_io import save_data, OrderedDict, get_io
-from pyexcel_io.csvzipbook import CSVZipBookReader, CSVZipWriterNew
-from pyexcel_io.csvzipbook import TSVZipBookReader, TSVZipWriterNew
+from pyexcel_io.csvzipbook import CSVZipBookReader, CSVZipBookWriter
+from pyexcel_io.csvzipbook import TSVZipBookReader, TSVZipBookWriter
 import zipfile
 from nose.tools import raises
 import sys
@@ -15,7 +15,7 @@ class TestCSVZ:
     def test_writing(self):
         data = [[1,2,3]]
         file_name = 'pyexcel_sheet1.csv'
-        zipbook = CSVZipWriterNew()
+        zipbook = CSVZipBookWriter()
         zipbook.open(self.file)
         zipbook.write({None: data})
         zipbook.close()
@@ -29,7 +29,7 @@ class TestCSVZ:
 
     def test_reading(self):
         data = [[1,2,3]]
-        zipbook = CSVZipWriterNew()
+        zipbook = CSVZipBookWriter()
         zipbook.open(self.file)
         zipbook.write({None: data})
         zipbook.close()
@@ -50,7 +50,7 @@ class TestTSVZ:
     def test_writing(self):
         data = [[1,2,3]]
         file_name = 'pyexcel_sheet1.tsv'
-        zipbook = TSVZipWriterNew()
+        zipbook = TSVZipBookWriter()
         zipbook.open(self.file)
         zipbook.write({None: data})
         zipbook.close()
@@ -64,7 +64,7 @@ class TestTSVZ:
 
     def test_reading(self):
         data = [[1,2,3]]
-        zipbook = TSVZipWriterNew()
+        zipbook = TSVZipBookWriter()
         zipbook.open(self.file)
         zipbook.write({None: data})
         zipbook.close()
@@ -81,7 +81,7 @@ class TestTSVZ:
 def test_reading_from_memory():
     data = [[1,2,3]]
     io = get_io("csvz")
-    zipbook = CSVZipWriterNew()
+    zipbook = CSVZipBookWriter()
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()

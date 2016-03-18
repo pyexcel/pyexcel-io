@@ -4,14 +4,13 @@ from sqlalchemy import Column , Integer, String, Float, Date, DateTime, ForeignK
 from sqlalchemy.orm import sessionmaker
 import datetime
 from pyexcel_io import (
-    DB_SQL,
     from_query_sets,
     OrderedDict
 )
 from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
 from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
-from pyexcel_io.sqlbook import SQLImporter, SQLTableImporter, SQLTableImportAdapter
-from pyexcel_io.sqlbook import SQLTableExporter, SQLTableExportAdapter, SQLReader
+from pyexcel_io.sqlbook import SQLBookWriter, SQLTableImporter, SQLTableImportAdapter
+from pyexcel_io.sqlbook import SQLTableExporter, SQLTableExportAdapter, SQLBookReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 
@@ -320,7 +319,7 @@ class TestMultipleRead:
         post_adapter.column_names = data['Post'][0]
         post_adapter.row_initializer = post_init_func
         importer.append(post_adapter)
-        writer = SQLImporter()
+        writer = SQLBookWriter()
         writer.open_content(importer)
         to_store = OrderedDict()
         to_store.update({category_adapter.get_name(): data['Category'][1:]})
@@ -334,7 +333,7 @@ class TestMultipleRead:
         exporter.append(category_adapter)
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
-        book = SQLReader()
+        book = SQLBookReader()
         book.open_content(exporter)
         data = book.read_all()
         import json
@@ -386,7 +385,7 @@ class TestDisabledWrite:
         mysession.close()
         mysession2 = Session()
         query_sets=mysession2.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        from_query_sets(self.data[0], query_sets)
         assert len(query_sets) == 0
         mysession2.close()
 

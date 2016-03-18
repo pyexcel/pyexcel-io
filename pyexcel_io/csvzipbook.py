@@ -92,7 +92,7 @@ class TSVZipBookReader(CSVZipBookReader):
         CSVZipBookReader.open_stream(self, file_content, **keywords)
 
 
-class CSVZipWriterNew(NewWriter):
+class CSVZipBookWriter(NewWriter):
     def __init__(self):
         NewWriter.__init__(self, FILE_FORMAT_CSVZ)
         self.zipfile = None
@@ -117,12 +117,12 @@ class CSVZipWriterNew(NewWriter):
         self.zipfile.close()
 
 
-class TSVZipWriterNew(CSVZipWriterNew):
+class TSVZipBookWriter(CSVZipBookWriter):
     def __init__(self):
-        CSVZipWriterNew.__init__(self)
+        CSVZipBookWriter.__init__(self)
         self.file_type = FILE_FORMAT_TSVZ
 
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVZipWriterNew.open(self, file_name, **keywords)
+        CSVZipBookWriter.open(self, file_name, **keywords)
 

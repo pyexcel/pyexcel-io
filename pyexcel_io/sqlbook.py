@@ -146,7 +146,7 @@ class SQLTableImporter(object):
         return self.adapters.get(name, None)
 
 
-class SQLReader(NewBookReader):
+class SQLBookReader(NewBookReader):
     def __init__(self):
         NewBookReader.__init__(self, DB_SQL)
 
@@ -171,7 +171,7 @@ class SQLReader(NewBookReader):
 
 
 
-class SQLImporter(NewWriter):
+class SQLBookWriter(NewWriter):
     def __init__(self):
         NewWriter.__init__(self, DB_SQL)
 

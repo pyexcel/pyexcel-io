@@ -12,13 +12,13 @@ from .constants import (
     DB_DJANGO
 )
 
-from .csvbook import CSVBookReader, CSVBookWriterNew, TSVBookReader, TSVWriterNew
+from .csvbook import CSVBookReader, CSVBookWriter, TSVBookReader, TSVBookWriter
 from .csvzipbook import CSVZipBookReader, TSVZipBookReader
-from .csvzipbook import CSVZipWriterNew, TSVZipWriterNew
+from .csvzipbook import CSVZipBookWriter, TSVZipBookWriter
 
 from .base import Reader, Writer
-from .djangobook import DjangoBookReaderNew,  DjangoBookWriterNew
-from .sqlbook import SQLReader, SQLImporter
+from .djangobook import DjangoBookReader,  DjangoBookWriter
+from .sqlbook import SQLBookReader, SQLBookWriter
 
 
 AVAILABLE_READERS = {
@@ -59,8 +59,8 @@ class ReaderFactory(object):
         FILE_FORMAT_TSV: TSVBookReader,
         FILE_FORMAT_CSVZ: CSVZipBookReader,
         FILE_FORMAT_TSVZ: TSVZipBookReader,
-        DB_SQL: SQLReader,
-        DB_DJANGO: DjangoBookReaderNew
+        DB_SQL: SQLBookReader,
+        DB_DJANGO: DjangoBookReader
     }
 
     @staticmethod
@@ -81,12 +81,12 @@ class ReaderFactory(object):
 
 class WriterFactory(object):
     factories = {
-        FILE_FORMAT_CSV: CSVBookWriterNew,
-        FILE_FORMAT_TSV: TSVWriterNew,
-        FILE_FORMAT_CSVZ: CSVZipWriterNew,
-        FILE_FORMAT_TSVZ: TSVZipWriterNew,
-        DB_SQL: SQLImporter,
-        DB_DJANGO: DjangoBookWriterNew
+        FILE_FORMAT_CSV: CSVBookWriter,
+        FILE_FORMAT_TSV: TSVBookWriter,
+        FILE_FORMAT_CSVZ: CSVZipBookWriter,
+        FILE_FORMAT_TSVZ: TSVZipBookWriter,
+        DB_SQL: SQLBookWriter,
+        DB_DJANGO: DjangoBookWriter
     }
     @staticmethod
     def add_factory(file_type, writer_class):

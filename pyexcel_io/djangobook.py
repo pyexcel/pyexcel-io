@@ -175,7 +175,7 @@ class DjangoModelExporter(object):
         self.adapters.append(import_adapter)
 
 
-class DjangoBookReaderNew(NewBookReader):
+class DjangoBookReader(NewBookReader):
     def __init__(self):
         NewBookReader.__init__(self, DB_DJANGO)
 
@@ -209,7 +209,7 @@ class DjangoModelWriterNew(DjangoModelWriter):
         self.objs = []
 
 
-class DjangoBookWriterNew(NewWriter):
+class DjangoBookWriter(NewWriter):
     def __init__(self):
         NewWriter.__init__(self, DB_DJANGO)
 

@@ -4,7 +4,7 @@ from nose.tools import raises
 from pyexcel_io import get_io, OrderedDict
 from pyexcel_io.csvbook import (
     CSVBookReader,
-    CSVBookWriterNew,
+    CSVBookWriter,
     TSVBookReader
 )
 
@@ -181,7 +181,7 @@ class TestWriteMultipleSheets:
 
     def test_multiple_sheet(self):
         """Write csv book into multiple file"""
-        w = CSVBookWriterNew()
+        w = CSVBookWriter()
         w.open("csv_multiple.csv")
         w.write(self.sheets)
         w.close()
@@ -197,7 +197,7 @@ class TestWriteMultipleSheets:
     def test_multiple_sheet_into_memory(self):
         """Write csv book into a single stream"""
         io = get_io(self.file_type)
-        w = CSVBookWriterNew()
+        w = CSVBookWriter()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
         w.close()
@@ -224,7 +224,7 @@ class TestWriteMultipleSheets:
     def test_multiple_sheet_into_memory_2(self):
         """Write csv book into a single stream"""
         io = get_io(self.file_type)
-        w = CSVBookWriterNew()
+        w = CSVBookWriter()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
         w.close()
@@ -259,7 +259,7 @@ class TestWriter:
         """).strip('\n')
 
     def test_book_writer(self):
-        w = CSVBookWriterNew()
+        w = CSVBookWriter()
         w.open(self.test_file)
         w.write({None: self.data})
         w.close()
@@ -288,7 +288,7 @@ class TestMemoryWriter:
 
     def test_book_writer_to_memroy(self):
         io = get_io(self.file_type)
-        w = CSVBookWriterNew()
+        w = CSVBookWriter()
         w.open(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})
         w.close()

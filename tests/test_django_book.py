@@ -1,8 +1,8 @@
-from pyexcel_io import save_data, DB_DJANGO, OrderedDict, DEFAULT_SHEET_NAME
+from pyexcel_io import save_data, DB_DJANGO, OrderedDict
 from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter
 from pyexcel_io.djangobook import DjangoModelImporter, DjangoModelExporter
 from pyexcel_io.djangobook import DjangoModelImportAdapter, DjangoModelExportAdapter
-from pyexcel_io.djangobook import DjangoBookWriterNew, DjangoBookReaderNew
+from pyexcel_io.djangobook import DjangoBookWriter, DjangoBookReader
 
 class Package:
     def __init__(self, raiseException=False, **keywords):
@@ -236,7 +236,7 @@ class TestMultipleModels:
             adapter1.get_name(): self.content['Sheet1'][1:],
             adapter2.get_name(): self.content['Sheet2'][1:]
         }
-        writer = DjangoBookWriterNew()
+        writer = DjangoBookWriter()
         writer.open_content(importer)
         writer.write(to_store)
         writer.close()
@@ -269,7 +269,7 @@ class TestMultipleModels:
         adapter2 = DjangoModelExportAdapter(model2)
         exporter.append(adapter1)
         exporter.append(adapter2)
-        reader = DjangoBookReaderNew()
+        reader = DjangoBookReader()
         reader.open_content(exporter)
         data = reader.read_all()
         for key in data.keys():
@@ -293,7 +293,7 @@ class TestMultipleModels:
         exporter = DjangoModelExporter()
         adapter = DjangoModelExportAdapter(model1)
         exporter.append(adapter)
-        reader = DjangoBookReaderNew()
+        reader = DjangoBookReader()
         reader.open_content(exporter)
         data = reader.read_all()
         assert list(data['Sheet1']) == self.content['Sheet1']
