@@ -16,7 +16,7 @@ from abc import abstractmethod
 from .base import (
     NewBookReader,
     NewWriter,
-    SheetReaderBase,
+    SheetReader,
     SheetWriter,
     NamedContent,
     ReaderFactory,
@@ -60,14 +60,10 @@ class UTF8Recorder(Iterator):
         return next(self.reader).encode('utf-8')
 
 
-class CSVSheetReader(SheetReaderBase):
+class CSVSheetReader(SheetReader):
     def __init__(self, sheet, encoding="utf-8", **keywords):
-        SheetReaderBase.__init__(self, sheet, **keywords)
+        SheetReader.__init__(self, sheet, **keywords)
         self.encoding = encoding
-
-    @property
-    def name(self):
-        return self.native_sheet.name
 
     @abstractmethod
     def get_file_handle(self):

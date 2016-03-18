@@ -17,7 +17,7 @@ from .base import (
     NamedContent,
     NewBookReader,
     NewWriter,
-    SheetReaderBase,
+    SheetReader,
     SheetWriter,
     from_query_sets,
     is_empty_array,
@@ -35,16 +35,12 @@ class PyexcelSQLSkipRowException(Exception):
     pass
 
 
-class SQLTableReader(SheetReaderBase):
+class SQLTableReader(SheetReader):
     """Read a table
     """
     def __init__(self, session, table):
         self.session = session
         self.table = table
-
-    @property
-    def name(self):
-        return getattr(self.table, '__tablename__', None)
 
     def to_array(self):
         objects = self.session.query(self.table).all()

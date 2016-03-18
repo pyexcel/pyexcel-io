@@ -1,5 +1,5 @@
 from pyexcel_io.base import (
-    SheetReaderBase, SheetReader,
+    SheetReader,
     SheetWriter, NamedContent,
     SheetWriterBase,
 )
@@ -41,38 +41,22 @@ class ArrayWriter(SheetWriter):
         self.native_sheet.payload.append(array)
 
 
-class TestSheetReaderBase:
-
-    @raises(TypeError)
-    def test_abstractness(self):
-        SheetReaderBase("test")
-
-    def test_to_array(self):
-        name = "test"
-        class B(SheetReaderBase):
-            @property
-            def name(self):
-                return self.native_sheet
-            def to_array(self):
-                SheetReaderBase.to_array(self)
-        B(name).to_array()
-        assert B(name).name == name
-
-
 class TestSheetReader:
-    
+
     @raises(TypeError)
     def test_abstractness(self):
         SheetReader("test")
 
-    def test_abstract_functions(self):
-        content = [
-            [1,2,3],
-            [4,5,6]
-        ]
-        areader = ArrayReader(NamedContent("Test", content))
-        expected = list(areader.to_array())
-        assert content == expected
+    def test_to_array(self):
+        name = "test"
+        class B(SheetReader):
+            @property
+            def name(self):
+                return self.native_sheet
+            def to_array(self):
+                SheetReader.to_array(self)
+        B(name).to_array()
+        assert B(name).name == name
 
 
 class TestSheetWriterBase:

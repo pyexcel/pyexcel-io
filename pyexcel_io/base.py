@@ -68,7 +68,7 @@ class NamedContent:
 
 
 @add_metaclass(ABCMeta)
-class SheetReaderBase(object):
+class SheetReader(object):
     """
     Generic sheet reader
     """
@@ -76,54 +76,12 @@ class SheetReaderBase(object):
         self.native_sheet = sheet
         self.keywords = keywords
 
-    @abstractproperty
-    def name(self):
-        pass
-
     @abstractmethod
     def to_array(self):
         """2 dimentional repsentation of the content
         """
         pass
 
-
-class SheetReader(SheetReaderBase):
-    """
-    Standard sheet reader
-    """
-
-    @abstractmethod
-    def number_of_rows(self):
-        """
-        Number of rows in the sheet
-        """
-        pass
-
-    @abstractmethod
-    def number_of_columns(self):
-        """
-        Number of columns in the sheet
-        """
-        pass
-
-    @abstractmethod
-    def cell_value(self, row, column):
-        """
-        Random access to the cells
-        """
-        pass
-
-    def to_array(self):
-        for r in range(0, self.number_of_rows()):
-            row = []
-            tmp_row = []
-            for c in range(0, self.number_of_columns()):
-                cell_value = self.cell_value(r, c)
-                tmp_row.append(cell_value)
-                if cell_value is not None and cell_value != '':
-                    row += tmp_row
-                    tmp_row = []
-            yield row
 
 
 @add_metaclass(ABCMeta)

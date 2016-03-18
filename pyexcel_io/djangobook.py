@@ -17,7 +17,7 @@ from .base import (
     NamedContent,
     NewBookReader,
     NewWriter,
-    SheetReaderBase,
+    SheetReader,
     SheetWriter,
     from_query_sets,
     is_empty_array,
@@ -27,15 +27,11 @@ from .base import (
 )
 
     
-class DjangoModelReader(SheetReaderBase):
+class DjangoModelReader(SheetReader):
     """Read from django model
     """
     def __init__(self, model):
         self.model = model
-
-    @property
-    def name(self):
-        return self.model._meta.model_name
 
     def to_array(self):
         objects = self.model.objects.all()
