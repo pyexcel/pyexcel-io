@@ -1,12 +1,9 @@
-from .base import ReaderFactory, WriterFactory
+from .base import RWManager
 
-
-from ._compact import isstream, is_generator, PY2
 from .constants import (
-    FILE_FORMAT_CSV,
-    MESSAGE_ERROR_02,
-    DEFAULT_SHEET_NAME
+    MESSAGE_ERROR_02
 )
+
 
 def load_data_new(file_name=None,
                   file_content=None,
@@ -30,7 +27,7 @@ def load_data_new(file_name=None,
         raise IOError(MESSAGE_ERROR_02)
     if file_type is None:
         file_type = file_name.split(".")[-1]
-    reader = ReaderFactory.create_reader(file_type)
+    reader = RWManager.create_reader(file_type)
     if file_name:
         reader.open(file_name, **keywords)
     elif file_content:
@@ -57,7 +54,7 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
         file_type = file_name.split(".")[-1]
         file_type_given = False
 
-    writer = WriterFactory.create_writer(file_type)
+    writer = RWManager.create_writer(file_type)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, file_type=file_type, **keywords)
@@ -68,4 +65,3 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
     else:
         raise IOError("Wrong arguments")
     return writer
-

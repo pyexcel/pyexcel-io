@@ -19,8 +19,7 @@ from .base import (
     SheetReader,
     SheetWriter,
     NamedContent,
-    ReaderFactory,
-    WriterFactory
+    RWManager
 )
 from ._compact import (
     is_string,
@@ -272,7 +271,7 @@ class TSVBookWriter(CSVBookWriter):
         CSVBookWriter.open(self, file_name, **keywords)
 
 
-ReaderFactory.add_factory(FILE_FORMAT_CSV, CSVBookReader)
-ReaderFactory.add_factory(FILE_FORMAT_TSV, TSVBookReader)
-WriterFactory.add_factory(FILE_FORMAT_CSV, CSVBookWriter)
-WriterFactory.add_factory(FILE_FORMAT_TSV, TSVBookWriter)
+RWManager.register_reader(FILE_FORMAT_CSV, CSVBookReader)
+RWManager.register_reader(FILE_FORMAT_TSV, TSVBookReader)
+RWManager.register_writer(FILE_FORMAT_CSV, CSVBookWriter)
+RWManager.register_writer(FILE_FORMAT_TSV, TSVBookWriter)

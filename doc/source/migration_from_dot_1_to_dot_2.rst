@@ -1,7 +1,7 @@
 API changes from 0.1.0 to 0.2.0
 ================================================================================
 
-pyexcel-io version 0.2.0 is not backward compatible and requires version
+pyexcel-io version 0.2.0 is not 100% backward compatible and requires version
 0.2.0 of its plugins to function seamlessly. Here are the differences.
 
 

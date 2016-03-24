@@ -1,6 +1,11 @@
 Working with xls, xlsx, and ods formats
 ================================================================================
 
+.. note::
+
+   No longer, you will need to do explicit imports for pyexcel-io extensions.
+   Instead, you install them and manage them via pip.
+
 Work with physical file
 -----------------------------------------------------------------------------
 

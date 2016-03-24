@@ -410,32 +410,40 @@ def resolve_missing_extensions(extension, available_list):
         raise NotImplementedError()
 
 
-class ReaderFactory(object):
-    factories = {}
+class RWManager(object):
+    reader_factories = {}
+    writer_factories = {}
 
     @staticmethod
-    def add_factory(file_type, reader_class):
-        ReaderFactory.factories[file_type] = reader_class
+    def register_reader(file_type, reader_class):
+        RWManager._add_a_handler(RWManager.reader_factories,
+                                 file_type, reader_class)
+
+    @staticmethod
+    def register_writer(file_type, writer_class):
+        RWManager._add_a_handler(RWManager.writer_factories,
+                                 file_type, writer_class)
+
+    @staticmethod
+    def _add_a_handler(factories, file_type, handler):
+        if file_type in factories:
+            print("Warning! %s has been registered" % file_type)
+        factories[file_type] = handler
 
     @staticmethod
     def create_reader(file_type):
-        if file_type in ReaderFactory.factories:
-            reader_class = ReaderFactory.factories[file_type]
+        if file_type in RWManager.reader_factories:
+            reader_class = RWManager.reader_factories[file_type]
             return reader_class()
         else:
             resolve_missing_extensions(file_type, AVAILABLE_READERS)
 
-
-class WriterFactory(object):
-    factories = {}
-    @staticmethod
-    def add_factory(file_type, writer_class):
-        WriterFactory.factories[file_type] = writer_class
-
     @staticmethod
     def create_writer(file_type):
-        if file_type in WriterFactory.factories:
-            writer_class = WriterFactory.factories[file_type]
+        if file_type in RWManager.writer_factories:
+            writer_class = RWManager.writer_factories[file_type]
             return writer_class()
         else:
             resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
+            
+

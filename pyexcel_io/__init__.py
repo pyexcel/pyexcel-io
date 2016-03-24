@@ -11,7 +11,7 @@ import pyexcel_io.csvbook
 import pyexcel_io.csvzipbook
 import pyexcel_io.sqlbook
 import pyexcel_io.djangobook
-from .base import ReaderFactory, WriterFactory
+from .base import RWManager
 from .io import load_data_new, get_writer_new
 from .base import SheetReader, SheetWriter, get_io
 
@@ -105,7 +105,7 @@ def store_data(afile, data, file_type=None, **keywords):
 
 try:
     import pyexcel_xls
-    pyexcel_xls.extend_pyexcel(ReaderFactory, WriterFactory)
+    pyexcel_xls.extend_pyexcel(RWManager)
 except Exception as e:
     print(e)
     pass
@@ -113,14 +113,14 @@ except Exception as e:
 
 try:
     import pyexcel_xlsx
-    pyexcel_xlsx.extend_pyexcel(ReaderFactory, WriterFactory)
+    pyexcel_xlsx.extend_pyexcel(RWManager)
 except:
     pass
 
 
 try:
     import pyexcel_ods3
-    pyexcel_ods3.extend_pyexcel(ReaderFactory, WriterFactory)
+    pyexcel_ods3.extend_pyexcel(RWManager)
 except:
     pass
 

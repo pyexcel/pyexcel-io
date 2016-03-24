@@ -22,8 +22,7 @@ from .base import (
     from_query_sets,
     is_empty_array,
     swap_empty_string_for_none,
-    ReaderFactory,
-    WriterFactory
+    RWManager
 )
 
 
@@ -180,12 +179,17 @@ class SQLBookWriter(NewWriter):
         for sheet_name in incoming_dict:
             adapter = self.importer.get(sheet_name)
             if adapter:
-                sheet_writer = SQLTableWriter(self.importer.session, (adapter.table, adapter.column_names, adapter.column_name_mapping_dict, adapter.row_initializer))
+                sheet_writer = SQLTableWriter(
+                    self.importer.session,
+                    (adapter.table, adapter.column_names,
+                     adapter.column_name_mapping_dict, adapter.row_initializer)
+                )
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
 
     def close(self):
         pass
 
-ReaderFactory.add_factory(DB_SQL, SQLBookReader)
-WriterFactory.add_factory(DB_SQL, SQLBookWriter)
+
+RWManager.register_reader(DB_SQL, SQLBookReader)
+RWManager.register_writer(DB_SQL, SQLBookWriter)
