@@ -128,7 +128,13 @@ class TSVZipBookWriter(CSVZipBookWriter):
         CSVZipBookWriter.open(self, file_name, **keywords)
 
 
-RWManager.register_reader(FILE_FORMAT_CSVZ, CSVZipBookReader)
-RWManager.register_reader(FILE_FORMAT_TSVZ, TSVZipBookReader)
-RWManager.register_writer(FILE_FORMAT_CSVZ, CSVZipBookWriter)
-RWManager.register_writer(FILE_FORMAT_TSVZ, TSVZipBookWriter)
+RWManager.register_readers({
+    FILE_FORMAT_CSVZ: CSVZipBookReader,
+    FILE_FORMAT_TSVZ: TSVZipBookReader
+})
+RWManager.register_writers({
+    FILE_FORMAT_CSVZ: CSVZipBookWriter,
+    FILE_FORMAT_TSVZ: TSVZipBookWriter
+})
+RWManager.register_file_type_as_binary_stream(FILE_FORMAT_CSVZ)
+RWManager.register_file_type_as_binary_stream(FILE_FORMAT_TSVZ)

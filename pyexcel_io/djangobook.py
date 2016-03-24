@@ -224,5 +224,6 @@ class DjangoBookWriter(NewWriter):
     def close(self):
         pass
 
-RWManager.register_reader(DB_DJANGO, DjangoBookReader)
-RWManager.register_writer(DB_DJANGO, DjangoBookWriter)
+
+RWManager.register_a_reader(DB_DJANGO, DjangoBookReader)
+RWManager.register_a_writer(DB_DJANGO, DjangoBookWriter)

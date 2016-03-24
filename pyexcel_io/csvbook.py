@@ -271,7 +271,14 @@ class TSVBookWriter(CSVBookWriter):
         CSVBookWriter.open(self, file_name, **keywords)
 
 
-RWManager.register_reader(FILE_FORMAT_CSV, CSVBookReader)
-RWManager.register_reader(FILE_FORMAT_TSV, TSVBookReader)
-RWManager.register_writer(FILE_FORMAT_CSV, CSVBookWriter)
-RWManager.register_writer(FILE_FORMAT_TSV, TSVBookWriter)
+RWManager.register_readers({
+    FILE_FORMAT_CSV: CSVBookReader,
+    FILE_FORMAT_TSV: TSVBookReader
+})
+RWManager.register_writers({
+    FILE_FORMAT_CSV: CSVBookWriter,
+    FILE_FORMAT_TSV: TSVBookWriter
+})
+
+RWManager.register_file_type_as_text_stream(FILE_FORMAT_CSV)
+RWManager.register_file_type_as_text_stream(FILE_FORMAT_TSV)

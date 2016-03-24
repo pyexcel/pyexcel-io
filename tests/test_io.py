@@ -1,9 +1,9 @@
 import os
 import sys
 from pyexcel_io.deprecated  import load_data, get_writer
-from pyexcel_io.base import get_io
+from pyexcel_io.base import get_io, RWManager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
-from pyexcel_io.base import BINARY_STREAM_TYPES, validate_io
+from pyexcel_io.base import validate_io
 from pyexcel_io import save_data, get_data
 from nose.tools import raises
 
@@ -17,11 +17,6 @@ def test_none_type_load_data():
 @raises(IOError)
 def test_wrong_parameter_to_load_data():
     load_data(1)
-
-    
-@raises(IOError)
-def test_wrong_parameter_to_get_writer():
-    get_writer()
 
     
 @raises(IOError)
@@ -94,7 +89,7 @@ def test_writer_xlsm_data_from_memory2():
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it
-    BINARY_STREAM_TYPES.append('unknown1')
+    RWManager.register_file_type_as_binary_stream('unknown1')
     get_writer(io, file_type="unknown1")
 
 

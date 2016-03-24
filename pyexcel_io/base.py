@@ -29,15 +29,6 @@ from .constants import (
 )
 
 
-# Please also register here
-TEXT_STREAM_TYPES = [FILE_FORMAT_CSV, FILE_FORMAT_TSV]
-
-# Please also register here
-BINARY_STREAM_TYPES = [FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
-                       FILE_FORMAT_ODS, FILE_FORMAT_XLS,
-                       FILE_FORMAT_XLSX, FILE_FORMAT_XLSM]
-
-
 
 def add_metaclass(metaclass):
     """
@@ -179,18 +170,18 @@ def get_io(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    if file_type in TEXT_STREAM_TYPES:
+    if file_type in RWManager.text_stream_types:
         return StringIO()
-    elif file_type in BINARY_STREAM_TYPES:
+    elif file_type in RWManager.binary_stream_types:
         return BytesIO()
     else:
         return None
 
 
 def validate_io(file_type, stream):
-    if file_type in TEXT_STREAM_TYPES:
+    if file_type in RWManager.text_stream_types:
         return isinstance(stream, StringIO)
-    elif file_type in BINARY_STREAM_TYPES:
+    elif file_type in RWManager.binary_stream_types:
         return isinstance(stream, BytesIO)
     else:
         return False
@@ -413,14 +404,35 @@ def resolve_missing_extensions(extension, available_list):
 class RWManager(object):
     reader_factories = {}
     writer_factories = {}
+    text_stream_types = []
+    binary_stream_types = []
 
     @staticmethod
-    def register_reader(file_type, reader_class):
+    def register_file_type_as_text_stream(file_type):
+        RWManager.text_stream_types.append(file_type)
+
+    @staticmethod
+    def register_file_type_as_binary_stream(file_type):
+        RWManager.binary_stream_types.append(file_type)
+
+
+    @staticmethod
+    def register_readers(file_type_reader_dict):
+        for file_type, reader_class in file_type_reader_dict.items():
+            RWManager.register_a_reader(file_type, reader_class)
+
+    @staticmethod
+    def register_a_reader(file_type, reader_class):
         RWManager._add_a_handler(RWManager.reader_factories,
                                  file_type, reader_class)
 
     @staticmethod
-    def register_writer(file_type, writer_class):
+    def register_writers(file_type_writer_dict):
+        for file_type, writer_class in file_type_writer_dict.items():
+            RWManager.register_a_writer(file_type, writer_class)
+
+    @staticmethod
+    def register_a_writer(file_type, writer_class):
         RWManager._add_a_handler(RWManager.writer_factories,
                                  file_type, writer_class)
 

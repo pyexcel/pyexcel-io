@@ -191,5 +191,5 @@ class SQLBookWriter(NewWriter):
         pass
 
 
-RWManager.register_reader(DB_SQL, SQLBookReader)
-RWManager.register_writer(DB_SQL, SQLBookWriter)
+RWManager.register_a_reader(DB_SQL, SQLBookReader)
+RWManager.register_a_writer(DB_SQL, SQLBookWriter)
