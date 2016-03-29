@@ -15,8 +15,8 @@ from .constants import (
 )
 from .base import (
     NamedContent,
-    NewBookReader,
-    NewWriter,
+    BookReader,
+    BookWriter,
     SheetReader,
     SheetWriter,
     RWManager
@@ -169,9 +169,9 @@ class DjangoModelExporter(object):
         self.adapters.append(import_adapter)
 
 
-class DjangoBookReader(NewBookReader):
+class DjangoBookReader(BookReader):
     def __init__(self):
-        NewBookReader.__init__(self, DB_DJANGO)
+        BookReader.__init__(self, DB_DJANGO)
 
     def open(self, file_name, **keywords):
         raise NotImplementedError()
@@ -203,9 +203,9 @@ class DjangoModelWriterNew(DjangoModelWriter):
         self.objs = []
 
 
-class DjangoBookWriter(NewWriter):
+class DjangoBookWriter(BookWriter):
     def __init__(self):
-        NewWriter.__init__(self, DB_DJANGO)
+        BookWriter.__init__(self, DB_DJANGO)
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content

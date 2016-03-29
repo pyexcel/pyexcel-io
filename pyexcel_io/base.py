@@ -144,7 +144,7 @@ def validate_io(file_type, stream):
         return False
 
 
-class NewBookReader(object):
+class BookReader(object):
     """
     Standard reader
     """
@@ -232,7 +232,7 @@ class NewBookReader(object):
         pass
 
 
-class NewWriter(object):
+class BookWriter(object):
     def __init__(self, file_type):
         self.file_type = file_type
         self.writer = None

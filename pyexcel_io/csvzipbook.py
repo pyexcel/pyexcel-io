@@ -10,7 +10,7 @@
 import csv
 import zipfile
 from ._compact import StringIO, PY2
-from .base import NewBookReader, NewWriter
+from .base import BookReader, BookWriter
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,
@@ -39,9 +39,9 @@ class CSVZipSheetWriter(CSVSheetWriter):
         self.content.close()
 
 
-class CSVZipBookReader(NewBookReader):
+class CSVZipBookReader(BookReader):
     def __init__(self):
-        NewBookReader.__init__(self, FILE_FORMAT_CSVZ)
+        BookReader.__init__(self, FILE_FORMAT_CSVZ)
         self.zipfile = None
 
     def load_from_stream(self, file_content):
@@ -93,13 +93,13 @@ class TSVZipBookReader(CSVZipBookReader):
         CSVZipBookReader.open_stream(self, file_content, **keywords)
 
 
-class CSVZipBookWriter(NewWriter):
+class CSVZipBookWriter(BookWriter):
     def __init__(self):
-        NewWriter.__init__(self, FILE_FORMAT_CSVZ)
+        BookWriter.__init__(self, FILE_FORMAT_CSVZ)
         self.zipfile = None
 
     def open(self, file_name, **keywords):
-        NewWriter.open(self, file_name, **keywords)
+        BookWriter.open(self, file_name, **keywords)
         self.zipfile = zipfile.ZipFile(file_name, 'w')
 
     def create_sheet(self, name):

@@ -15,14 +15,13 @@ from .constants import (
 )
 from .base import (
     NamedContent,
-    NewBookReader,
-    NewWriter,
+    BookReader,
+    BookWriter,
     SheetReader,
     SheetWriter,
     RWManager
 )
 from .utils import from_query_sets, is_empty_array, swap_empty_string_for_none
-
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -142,9 +141,9 @@ class SQLTableImporter(object):
         return self.adapters.get(name, None)
 
 
-class SQLBookReader(NewBookReader):
+class SQLBookReader(BookReader):
     def __init__(self):
-        NewBookReader.__init__(self, DB_SQL)
+        BookReader.__init__(self, DB_SQL)
 
     def open(self, file_name, **keywords):
         raise NotImplementedError()
@@ -167,9 +166,9 @@ class SQLBookReader(NewBookReader):
 
 
 
-class SQLBookWriter(NewWriter):
+class SQLBookWriter(BookWriter):
     def __init__(self):
-        NewWriter.__init__(self, DB_SQL)
+        BookWriter.__init__(self, DB_SQL)
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content

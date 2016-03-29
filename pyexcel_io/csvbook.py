@@ -14,8 +14,8 @@ import codecs
 import glob
 from abc import abstractmethod
 from .base import (
-    NewBookReader,
-    NewWriter,
+    BookReader,
+    BookWriter,
     SheetReader,
     SheetWriter,
     NamedContent,
@@ -170,13 +170,13 @@ class CSVSheetWriter(SheetWriter):
             self.f.write(DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
 
 
-class CSVBookReader(NewBookReader):
+class CSVBookReader(BookReader):
     def __init__(self):
         self.load_from_memory_flag = False
         self.line_terminator = '\r\n'
         self.sheet_name = None
         self.sheet_index = None
-        NewBookReader.__init__(self, FILE_FORMAT_CSV)
+        BookReader.__init__(self, FILE_FORMAT_CSV)
 
     def load_from_stream(self, file_content):
         if KEYWORD_LINE_TERMINATOR in self.keywords:
@@ -252,9 +252,9 @@ class TSVBookReader(CSVBookReader):
         CSVBookReader.open_stream(self, file_content, **keywords)
 
 
-class CSVBookWriter(NewWriter):
+class CSVBookWriter(BookWriter):
     def __init__(self):
-        NewWriter.__init__(self, FILE_FORMAT_CSV)
+        BookWriter.__init__(self, FILE_FORMAT_CSV)
         self.index = 0
 
     def create_sheet(self, name):
