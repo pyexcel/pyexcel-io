@@ -43,7 +43,7 @@ from .constants import (
 DEFAULT_SEPARATOR = '__'
 DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % DEFAULT_NAME + "%s"
 SEPARATOR_MATCHER = "---pyexcel:(.*)---"
-
+DEFAULT_CSV_STREAM_FILE_FORMATTER = "---pyexcel:%s---%s"
 
 class UTF8Recorder(Iterator):
     """
@@ -120,7 +120,9 @@ class CSVSheetWriter(SheetWriter):
         if single_sheet_in_book:
             sheet_name = None
         elif isstream(filename):
-            filename.write("---pyexcel:%s---%s" % (sheet_name, self.line_terminator))
+            filename.write(DEFAULT_CSV_STREAM_FILE_FORMATTER % (
+                sheet_name,
+                self.line_terminator))
         self.sheet_index = sheet_index
         SheetWriter.__init__(self, filename,
                              sheet_name, sheet_name,
@@ -130,12 +132,13 @@ class CSVSheetWriter(SheetWriter):
         if is_string(type(self.native_book)):
             if name != DEFAULT_SHEET_NAME:
                 names = self.native_book.split(".")
-                file_name = "%s%s%s%s%s.%s" % (names[0],
-                                               DEFAULT_SEPARATOR,
-                                               name,              # sheet name
-                                               DEFAULT_SEPARATOR,
-                                               self.sheet_index,  # sheet index
-                                               names[1])
+                file_name = "%s%s%s%s%s.%s" % (
+                    names[0],
+                    DEFAULT_SEPARATOR,
+                    name,              # sheet name
+                    DEFAULT_SEPARATOR,
+                    self.sheet_index,  # sheet index
+                    names[1])
             else:
                 file_name = self.native_book
             if PY2:
@@ -185,13 +188,14 @@ class CSVBookReader(NewBookReader):
             sheets = content.split(separator)
             named_contents = []
             for sheet in sheets:
-                if sheet != '':
-                    lines = sheet.split(self.line_terminator)
-                    result = re.match(SEPARATOR_MATCHER, lines[0])
-                    new_content = '\n'.join(lines[1:])
-                    new_sheet = NamedContent(result.group(1),
-                                             StringIO(new_content))
-                    named_contents.append(new_sheet)
+                if sheet == '':  # skip empty named sheet
+                    continue
+                lines = sheet.split(self.line_terminator)
+                result = re.match(SEPARATOR_MATCHER, lines[0])
+                new_content = '\n'.join(lines[1:])
+                new_sheet = NamedContent(result.group(1),
+                                         StringIO(new_content))
+                named_contents.append(new_sheet)
             return named_contents
         else:
             file_content.seek(0)
@@ -201,19 +205,21 @@ class CSVBookReader(NewBookReader):
         if KEYWORD_LINE_TERMINATOR in self.keywords:
             self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
         names = file_name.split('.')
-        filepattern = "%s%s*%s*.%s" % (names[0],
-                                       DEFAULT_SEPARATOR,
-                                       DEFAULT_SEPARATOR,
-                                       names[1])
+        filepattern = "%s%s*%s*.%s" % (
+            names[0],
+            DEFAULT_SEPARATOR,
+            DEFAULT_SEPARATOR,
+            names[1])
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
             file_parts = os.path.split(file_name)
             return [NamedContent(file_parts[-1], file_name)]
         else:
-            matcher = "%s%s(.*)%s(.*).%s" % (names[0],
-                                             DEFAULT_SEPARATOR,
-                                             DEFAULT_SEPARATOR,
-                                             names[1])
+            matcher = "%s%s(.*)%s(.*).%s" % (
+                names[0],
+                DEFAULT_SEPARATOR,
+                DEFAULT_SEPARATOR,
+                names[1])
             tmp_file_list = []
             for filen in filelist:
                 result = re.match(matcher, filen)
