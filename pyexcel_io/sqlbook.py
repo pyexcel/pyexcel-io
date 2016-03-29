@@ -19,11 +19,10 @@ from .base import (
     NewWriter,
     SheetReader,
     SheetWriter,
-    from_query_sets,
-    is_empty_array,
-    swap_empty_string_for_none,
     RWManager
 )
+from .utils import from_query_sets, is_empty_array, swap_empty_string_for_none
+
 
 
 class PyexcelSQLSkipRowException(Exception):

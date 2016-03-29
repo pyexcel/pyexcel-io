@@ -7,27 +7,29 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import datetime
 from abc import ABCMeta, abstractmethod
+
 from ._compact import PY2, is_generator, OrderedDict, isstream
-from ._compact import StringIO, BytesIO, is_string
+from ._compact import StringIO, BytesIO
+from .utils import resolve_missing_readers, resolve_missing_writers
 from .constants import (
     DEFAULT_SHEET_NAME,
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE,
     MESSAGE_LOADING_FORMATTER,
-    FILE_FORMAT_CSV,
-    FILE_FORMAT_TSV,
-    FILE_FORMAT_CSVZ,
-    FILE_FORMAT_TSVZ,
-    FILE_FORMAT_ODS,
-    FILE_FORMAT_XLS,
-    FILE_FORMAT_XLSX,
-    FILE_FORMAT_XLSM,
     DB_SQL,
     DB_DJANGO
 )
 
+
+class NamedContent:
+    """
+    Helper class for content that does not have a name
+    """
+
+    def __init__(self, name, payload):
+        self.name = name
+        self.payload = payload
 
 
 def add_metaclass(metaclass):
@@ -46,16 +48,6 @@ def add_metaclass(metaclass):
         orig_vars.pop('__weakref__', None)
         return metaclass(cls.__name__, cls.__bases__, orig_vars)
     return wrapper
-
-
-class NamedContent:
-    """
-    Helper class for content that does not have a name
-    """
-
-    def __init__(self, name, payload):
-        self.name = name
-        self.payload = payload
 
 
 @add_metaclass(ABCMeta)
@@ -127,41 +119,6 @@ class SheetWriter(object):
         This call actually save the file
         """
         pass
-
-
-def from_query_sets(column_names, query_sets):
-    """
-    Convert query sets into an array
-    """
-    yield column_names
-    for row in query_sets:
-        new_array = []
-        for column in column_names:
-            value = getattr(row, column)
-            if isinstance(value, (datetime.date, datetime.time)):
-                value = value.isoformat()
-            new_array.append(value)
-        yield new_array
-
-
-def is_empty_array(array):
-    """
-    Check if an array is an array of '' or not
-    """
-    if PY2:
-        return len(filter(lambda element: element != '', array)) == 0
-    else:
-        return len(list(filter(lambda element: element != '', array))) == 0
-
-
-def swap_empty_string_for_none(array):
-    def swap(x):
-        if x == '':
-            return None
-        else:
-            return x
-    return [swap(x) for x in array]
-
 
 
 def get_io(file_type):
@@ -371,36 +328,6 @@ class NewWriter(Writer):
         pass
 
 
-AVAILABLE_READERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_XLSM: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
-}
-
-AVAILABLE_WRITERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: 'pyexcel-xlsx',
-    FILE_FORMAT_XLSM: 'pyexcel-xlsx',
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
-}
-
-
-
-def resolve_missing_extensions(extension, available_list):
-    handler = available_list.get(extension)
-    message = ""
-    if handler:
-        if is_string(type(handler)):
-            message = MESSAGE_LOADING_FORMATTER % (extension, handler)
-        else:
-            merged = "%s or %s" % (handler[0], handler[1])
-            message = MESSAGE_LOADING_FORMATTER % (extension, merged)
-        raise NotImplementedError(message)
-    else:
-        raise NotImplementedError()
-
-
 class RWManager(object):
     reader_factories = {}
     writer_factories = {}
@@ -448,7 +375,7 @@ class RWManager(object):
             reader_class = RWManager.reader_factories[file_type]
             return reader_class()
         else:
-            resolve_missing_extensions(file_type, AVAILABLE_READERS)
+            resolve_missing_readers(file_type)
 
     @staticmethod
     def create_writer(file_type):
@@ -456,6 +383,4 @@ class RWManager(object):
             writer_class = RWManager.writer_factories[file_type]
             return writer_class()
         else:
-            resolve_missing_extensions(file_type, AVAILABLE_WRITERS)
-            
-
+            resolve_missing_writers(file_type)

@@ -2,7 +2,7 @@ from pyexcel_io.base import (
     SheetReader,
     SheetWriter, NamedContent,
 )
-from pyexcel_io.base import is_empty_array
+from pyexcel_io.utils import is_empty_array
 from nose.tools import raises
 
 

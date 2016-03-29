@@ -51,7 +51,7 @@ Here's the actual code to achieve it:
 
 Now let's verify the data:
 
-    >>> from pyexcel_io.base import from_query_sets
+    >>> from pyexcel_io.utils import from_query_sets
     >>> query_sets=mysession.query(Pyexcel).all()
     >>> results = from_query_sets(data[0], query_sets)
     >>> import json
