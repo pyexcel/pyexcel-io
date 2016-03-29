@@ -1,9 +1,8 @@
 import os
 import sys
 from pyexcel_io.deprecated  import load_data, get_writer
-from pyexcel_io.base import get_io, RWManager
+from pyexcel_io.base import RWManager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
-from pyexcel_io.base import validate_io
 from pyexcel_io import save_data, get_data
 from nose.tools import raises
 
@@ -94,13 +93,13 @@ def test_writer_unknown_data_from_memory2():
 
 
 def test_get_io():
-    io = get_io("hello")
+    io = RWManager.get_io("hello")
     assert io == None
 
 
 def test_binary_file_content():
     data = [['1','2','3']]
-    io = get_io("csvz")
+    io = RWManager.get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
     assert result['pyexcel_sheet1'] == data
@@ -108,7 +107,7 @@ def test_binary_file_content():
 
 def test_text_file_content():
     data = [['1','2','3']]
-    io = get_io("csv")
+    io = RWManager.get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
     assert result['csv'] == data
@@ -132,7 +131,7 @@ def test_is_string():
         assert is_string(type('a')) == True
 
 def test_validate_io():
-    assert validate_io("csd", StringIO()) == False
+    assert RWManager.validate_io("csd", StringIO()) == False
 
 
 @raises(TypeError)

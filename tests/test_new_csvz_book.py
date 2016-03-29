@@ -1,7 +1,7 @@
 import os
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
-from pyexcel_io.base import get_io
+from pyexcel_io.base import RWManager
 from pyexcel_io.csvzipbook import CSVZipBookReader, CSVZipBookWriter
 from pyexcel_io.csvzipbook import TSVZipBookReader, TSVZipBookWriter
 import zipfile
@@ -82,7 +82,7 @@ class TestTSVZ:
 
 def test_reading_from_memory():
     data = [[1,2,3]]
-    io = get_io("csvz")
+    io = RWManager.get_io("csvz")
     zipbook = CSVZipBookWriter()
     zipbook.open_stream(io)
     zipbook.write({None: data})

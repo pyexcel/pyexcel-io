@@ -1,7 +1,7 @@
 import os
 from textwrap import dedent
 from nose.tools import raises
-from pyexcel_io.base import get_io, NamedContent
+from pyexcel_io.base import RWManager, NamedContent
 from pyexcel_io.csvbook import (
     CSVSheetReader,
     CSVFileReader,
@@ -33,7 +33,7 @@ class TestReaders:
         assert result == self.data
 
     def test_sheet_memory_reader(self):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
@@ -90,7 +90,7 @@ class TestMemoryWriter:
         """).strip('\n')
 
     def test_sheet_writer_to_memory(self):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         w = CSVSheetWriter(io, None, single_sheet_in_book=True)
         for row in self.data:
             w.write_row(row)

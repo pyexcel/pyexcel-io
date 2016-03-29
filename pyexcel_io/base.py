@@ -121,29 +121,6 @@ class SheetWriter(object):
         pass
 
 
-def get_io(file_type):
-    """A utility function to help you generate a correct io stream
-
-    :param file_type: a supported file type
-    :returns: a appropriate io stream, None otherwise
-    """
-    if file_type in RWManager.text_stream_types:
-        return StringIO()
-    elif file_type in RWManager.binary_stream_types:
-        return BytesIO()
-    else:
-        return None
-
-
-def validate_io(file_type, stream):
-    if file_type in RWManager.text_stream_types:
-        return isinstance(stream, StringIO)
-    elif file_type in RWManager.binary_stream_types:
-        return isinstance(stream, BytesIO)
-    else:
-        return False
-
-
 class BookReader(object):
     """
     Standard reader
@@ -161,7 +138,7 @@ class BookReader(object):
         self.native_book = self.load_from_file(file_name)
 
     def open_stream(self, file_stream, **keywords):
-        if validate_io(self.file_type, file_stream):
+        if RWManager.validate_io(self.file_type, file_stream):
             self.file_stream = file_stream
             self.keywords = keywords
         else:
@@ -169,7 +146,7 @@ class BookReader(object):
         self.native_book = self.load_from_stream(file_stream)
 
     def open_content(self, file_content, **keywords):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         if PY2:
             io.write(file_content)
         else:
@@ -244,7 +221,7 @@ class BookWriter(object):
 
     def open_stream(self, file_stream, **keywords):
         if isstream(file_stream):
-            if not validate_io(self.file_type, file_stream):
+            if not RWManager.validate_io(self.file_type, file_stream):
                 raise IOError(MESSAGE_WRONG_IO_INSTANCE)
         else:
             raise IOError(MESSAGE_ERROR_03)
@@ -324,3 +301,28 @@ class RWManager(object):
             return writer_class()
         else:
             resolve_missing_writers(file_type)
+
+
+    @staticmethod
+    def get_io(file_type):
+        """A utility function to help you generate a correct io stream
+    
+        :param file_type: a supported file type
+        :returns: a appropriate io stream, None otherwise
+        """
+        if file_type in RWManager.text_stream_types:
+            return StringIO()
+        elif file_type in RWManager.binary_stream_types:
+            return BytesIO()
+        else:
+            return None
+    
+    
+    @staticmethod
+    def validate_io(file_type, stream):
+        if file_type in RWManager.text_stream_types:
+            return isinstance(stream, StringIO)
+        elif file_type in RWManager.binary_stream_types:
+            return isinstance(stream, BytesIO)
+        else:
+            return False

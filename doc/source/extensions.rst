@@ -28,8 +28,8 @@ Work with memory file
 
 Here is the sample code to work with memory file::
 
-    >>> from pyexcel_io.base import get_io
-    >>> io = get_io("xls")
+    >>> from pyexcel_io.base import RWManager
+    >>> io = RWManager.get_io("xls")
     >>> data = [[1,2,3]]
     >>> save_data(io, data, "xls")
 

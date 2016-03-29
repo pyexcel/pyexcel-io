@@ -1,7 +1,7 @@
 import os
 from textwrap import dedent
 from nose.tools import raises
-from pyexcel_io.base import get_io
+from pyexcel_io.base import RWManager
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.csvbook import (
     CSVBookReader,
@@ -30,7 +30,7 @@ class TestReaders:
         assert list(sheets[self.test_file]) == self.data
 
     def test_book_reader_from_memory_source(self):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
@@ -63,7 +63,7 @@ class TestTSVReaders:
         assert list(sheets[self.test_file]) == self.data
 
     def test_book_reader_from_memory_source(self):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
@@ -197,7 +197,7 @@ class TestWriteMultipleSheets:
 
     def test_multiple_sheet_into_memory(self):
         """Write csv book into a single stream"""
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         w = CSVBookWriter()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
@@ -224,7 +224,7 @@ class TestWriteMultipleSheets:
 
     def test_multiple_sheet_into_memory_2(self):
         """Write csv book into a single stream"""
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         w = CSVBookWriter()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
@@ -288,7 +288,7 @@ class TestMemoryWriter:
         """).strip('\n')
 
     def test_book_writer_to_memroy(self):
-        io = get_io(self.file_type)
+        io = RWManager.get_io(self.file_type)
         w = CSVBookWriter()
         w.open(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})
