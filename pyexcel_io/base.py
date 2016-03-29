@@ -144,9 +144,11 @@ def validate_io(file_type, stream):
         return False
 
 
-class Reader(object):
-    def __init__(self, file_type, reader_class):
-        self.reader_class = reader_class
+class NewBookReader(object):
+    """
+    Standard reader
+    """
+    def __init__(self, file_type):
         self.file_type = file_type
         self.reader = None
         self.file_name = None
@@ -156,6 +158,7 @@ class Reader(object):
     def open(self, file_name, **keywords):
         self.file_name = file_name
         self.keywords = keywords
+        self.native_book = self.load_from_file(file_name)
 
     def open_stream(self, file_stream, **keywords):
         if validate_io(self.file_type, file_stream):
@@ -163,6 +166,7 @@ class Reader(object):
             self.keywords = keywords
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
+        self.native_book = self.load_from_stream(file_stream)
 
     def open_content(self, file_content, **keywords):
         io = get_io(self.file_type)
@@ -176,52 +180,6 @@ class Reader(object):
             io.write(content)
         io.seek(0)
         self.open_stream(io, **keywords)
-
-    def read_sheet_by_name(self, sheet_name):
-        return self._read_with_parameters(load_sheet_with_name=sheet_name)
-
-    def read_sheet_by_index(self, sheet_index):
-        return self._read_with_parameters(load_sheet_at_index=sheet_index)
-
-    def read_all(self):
-        return self._read_with_parameters()
-
-    def _read_with_parameters(self, load_sheet_with_name=None, load_sheet_at_index=None):
-        if self.file_name:
-            if self.file_name in [DB_SQL, DB_DJANGO]:
-                reader = self.reader_class(**self.keywords)
-            else:
-                reader = self.reader_class(
-                    self.file_name,
-                    load_sheet_with_name=load_sheet_with_name,
-                    load_sheet_at_index=load_sheet_at_index,
-                    **self.keywords)
-        else:
-            reader = self.reader_class(None,
-                                       file_content=self.file_stream,
-                                       load_sheet_with_name=load_sheet_with_name,
-                                       load_sheet_at_index=load_sheet_at_index,
-                                       **self.keywords)
-        return reader.sheets()
-
-    def close(self):
-        pass
-
-
-class NewBookReader(Reader):
-    """
-    Standard reader
-    """
-    def __init__(self, file_type):
-        Reader.__init__(self, file_type, None)
-
-    def open(self, file_name, **keywords):
-        Reader.open(self, file_name, **keywords)
-        self.native_book = self.load_from_file(file_name)
-
-    def open_stream(self, file_stream, **keywords):
-        Reader.open_stream(self, file_stream, **keywords)
-        self.native_book = self.load_from_stream(file_stream)
 
     def read_sheet_by_name(self, sheet_name):
         named_contents = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
@@ -274,15 +232,11 @@ class NewBookReader(Reader):
         pass
 
 
-class Writer(object):
-    def __init__(self, file_type, writer_class):
+class NewWriter(object):
+    def __init__(self, file_type):
         self.file_type = file_type
-        self.writer_class = writer_class
         self.writer = None
         self.file_alike_object = None
-
-    def open_content(self, file_content, **keywords):
-        pass
 
     def open(self, file_name, **keywords):
         self.file_alike_object = file_name
@@ -296,22 +250,8 @@ class Writer(object):
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 
-    def write(self, data):
-        self.writer = self.writer_class(self.file_alike_object,
-                                        **self.keywords)
-        self.writer.write(data)
-
-    def close(self):
-        if self.writer:
-            self.writer.close()
-
-
-class NewWriter(Writer):
-    def __init__(self, file_type):
-        Writer.__init__(self, file_type, None)
-
-    def open(self, file_name, **keywords):
-        Writer.open(self, file_name, **keywords)
+    def open_content(self, file_content, **keywords):
+        pass
 
     def write(self, incoming_dict):
         for sheet_name in incoming_dict:
