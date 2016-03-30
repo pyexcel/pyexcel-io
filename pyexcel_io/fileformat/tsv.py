@@ -13,7 +13,7 @@ from ..constants import (
     KEYWORD_TSV_DIALECT
 )
 
-from .csv import CSVBookReader, CSVBookWriter
+from .csvformat import CSVBookReader, CSVBookWriter
 
 class TSVBookReader(CSVBookReader):
     def __init__(self):
