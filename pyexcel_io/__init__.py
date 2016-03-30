@@ -14,21 +14,20 @@ from .manager import RWManager
 try:
     import pyexcel_xls
     pyexcel_xls.extend_pyexcel(RWManager)
-except Exception as e:
-    print(e)
+except ImportError:
     pass
 
 
 try:
     import pyexcel_xlsx
     pyexcel_xlsx.extend_pyexcel(RWManager)
-except:
+except ImportError:
     pass
 
 
 try:
     import pyexcel_ods3
     pyexcel_ods3.extend_pyexcel(RWManager)
-except:
+except ImportError:
     pass
 

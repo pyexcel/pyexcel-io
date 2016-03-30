@@ -1,8 +1,8 @@
 """
-    pyexcel_io.csvzipbook
+    pyexcel_io.fileformat.csvz
     ~~~~~~~~~~~~~~~~~~~
 
-    The lower level csv file format handler.
+    The lower level csvz file format handler.
 
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details

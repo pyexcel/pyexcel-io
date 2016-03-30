@@ -1,3 +1,12 @@
+"""
+    pyexcel_io.fileformat.tsv
+    ~~~~~~~~~~~~~~~~~~~
+
+    The lower level tsv file format handler.
+
+    :copyright: (c) 2014-2016 by Onni Software Ltd.
+    :license: New BSD License, see LICENSE for more details
+"""
 from ..manager import RWManager
 from ..constants import (
     FILE_FORMAT_TSV,

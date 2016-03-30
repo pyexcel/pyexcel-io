@@ -6,6 +6,7 @@ from .constants import (
     MESSAGE_ERROR_02
 )
 
+
 def get_data(afile, file_type=None, streaming=False, **keywords):
     """Get data from an excel file source
 
