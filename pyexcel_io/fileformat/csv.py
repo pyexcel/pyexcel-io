@@ -29,8 +29,6 @@ from .._compact import (
 from ..constants import (
     DEFAULT_SHEET_NAME,
     FILE_FORMAT_CSV,
-    FILE_FORMAT_TSV,
-    KEYWORD_TSV_DIALECT,
     DEFAULT_NAME,
     KEYWORD_LINE_TERMINATOR
 )
@@ -234,20 +232,6 @@ class CSVBookReader(BookReader):
         return reader.to_array()
 
 
-class TSVBookReader(CSVBookReader):
-    def __init__(self):
-        CSVBookReader.__init__(self)
-        self.file_type = FILE_FORMAT_TSV
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVBookReader.open(self, file_name, **keywords)
-
-    def open_stream(self, file_content, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVBookReader.open_stream(self, file_content, **keywords)
-
-
 class CSVBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self, FILE_FORMAT_CSV)
@@ -263,24 +247,6 @@ class CSVBookWriter(BookWriter):
         return writer
 
 
-class TSVBookWriter(CSVBookWriter):
-    def __init__(self):
-        CSVBookWriter.__init__(self)
-        self.file_type = FILE_FORMAT_TSV
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVBookWriter.open(self, file_name, **keywords)
-
-
-RWManager.register_readers({
-    FILE_FORMAT_CSV: CSVBookReader,
-    FILE_FORMAT_TSV: TSVBookReader
-})
-RWManager.register_writers({
-    FILE_FORMAT_CSV: CSVBookWriter,
-    FILE_FORMAT_TSV: TSVBookWriter
-})
-
+RWManager.register_a_reader(FILE_FORMAT_CSV, CSVBookReader)
+RWManager.register_a_writer(FILE_FORMAT_CSV, CSVBookWriter)
 RWManager.register_file_type_as_text_stream(FILE_FORMAT_CSV)
-RWManager.register_file_type_as_text_stream(FILE_FORMAT_TSV)

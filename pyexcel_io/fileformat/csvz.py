@@ -13,10 +13,7 @@ import zipfile
 from .._compact import StringIO, PY2
 from ..book import BookReader, BookWriter
 from ..manager import RWManager
-from ..constants import (
-    DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
-    KEYWORD_TSV_DIALECT
-)
+from ..constants import  DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
 
 from .csv import (
     CSVinMemoryReader,
@@ -81,20 +78,6 @@ class CSVZipBookReader(BookReader):
         self.zipfile.close()
 
 
-class TSVZipBookReader(CSVZipBookReader):
-    def __init__(self):
-        CSVZipBookReader.__init__(self)
-        self.file_type = FILE_FORMAT_TSVZ
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVZipBookReader.open(self, file_name, **keywords)
-
-    def open_stream(self, file_content, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVZipBookReader.open_stream(self, file_content, **keywords)
-
-
 class CSVZipBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self, FILE_FORMAT_CSVZ)
@@ -120,23 +103,6 @@ class CSVZipBookWriter(BookWriter):
         self.zipfile.close()
 
 
-class TSVZipBookWriter(CSVZipBookWriter):
-    def __init__(self):
-        CSVZipBookWriter.__init__(self)
-        self.file_type = FILE_FORMAT_TSVZ
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVZipBookWriter.open(self, file_name, **keywords)
-
-
-RWManager.register_readers({
-    FILE_FORMAT_CSVZ: CSVZipBookReader,
-    FILE_FORMAT_TSVZ: TSVZipBookReader
-})
-RWManager.register_writers({
-    FILE_FORMAT_CSVZ: CSVZipBookWriter,
-    FILE_FORMAT_TSVZ: TSVZipBookWriter
-})
+RWManager.register_a_reader(FILE_FORMAT_CSVZ, CSVZipBookReader)
+RWManager.register_a_writer(FILE_FORMAT_CSVZ, CSVZipBookWriter)
 RWManager.register_file_type_as_binary_stream(FILE_FORMAT_CSVZ)
-RWManager.register_file_type_as_binary_stream(FILE_FORMAT_TSVZ)

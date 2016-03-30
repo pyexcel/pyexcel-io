@@ -7,8 +7,10 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import pyexcel_io.file.csv
-import pyexcel_io.file.csvz
+import pyexcel_io.fileformat.csv
+import pyexcel_io.fileformat.tsv
+import pyexcel_io.fileformat.csvz
+import pyexcel_io.fileformat.tsvz
 import pyexcel_io.database.sql
 import pyexcel_io.database.django
 from .manager import RWManager

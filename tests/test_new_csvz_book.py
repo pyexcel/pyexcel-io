@@ -2,8 +2,8 @@ import os
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
 from pyexcel_io.manager import RWManager
-from pyexcel_io.file.csvz import CSVZipBookReader, CSVZipBookWriter
-from pyexcel_io.file.csvz import TSVZipBookReader, TSVZipBookWriter
+from pyexcel_io.fileformat.csvz import CSVZipBookReader, CSVZipBookWriter
+from pyexcel_io.fileformat.tsvz import TSVZipBookReader, TSVZipBookWriter
 import zipfile
 from nose.tools import raises
 import sys
