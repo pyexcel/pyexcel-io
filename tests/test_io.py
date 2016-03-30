@@ -1,7 +1,7 @@
 import os
 import sys
 from pyexcel_io.deprecated  import load_data, get_writer
-from pyexcel_io.base import RWManager
+from pyexcel_io.book import RWManager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io import save_data, get_data
 from nose.tools import raises

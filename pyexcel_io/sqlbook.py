@@ -7,21 +7,16 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from .book import BookReader, BookWriter
+from .sheet import SheetReader, SheetWriter, NamedContent
+from .manager import RWManager
+from .utils import from_query_sets, is_empty_array, swap_empty_string_for_none
 from .constants import (
     MESSAGE_INVALID_PARAMETERS,
     MESSAGE_EMPTY_ARRAY,
     MESSAGE_IGNORE_ROW,
     DB_SQL
 )
-from .base import (
-    NamedContent,
-    BookReader,
-    BookWriter,
-    SheetReader,
-    SheetWriter,
-    RWManager
-)
-from .utils import from_query_sets, is_empty_array, swap_empty_string_for_none
 
 
 class PyexcelSQLSkipRowException(Exception):

@@ -9,14 +9,15 @@
 """
 import csv
 import zipfile
+
 from ._compact import StringIO, PY2
-from .base import BookReader, BookWriter
+from .book import BookReader, BookWriter
 from .csvbook import (
     CSVinMemoryReader,
     NamedContent,
     CSVSheetWriter,
-    RWManager
 )
+from .manager import RWManager
 from .constants import (
     DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
     KEYWORD_TSV_DIALECT

@@ -28,7 +28,7 @@ Work with memory file
 
 Here is the sample code to work with memory file::
 
-    >>> from pyexcel_io.base import RWManager
+    >>> from pyexcel_io.book import RWManager
     >>> io = RWManager.get_io("xls")
     >>> data = [[1,2,3]]
     >>> save_data(io, data, "xls")

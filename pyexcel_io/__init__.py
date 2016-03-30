@@ -11,9 +11,8 @@ import pyexcel_io.csvbook
 import pyexcel_io.csvzipbook
 import pyexcel_io.sqlbook
 import pyexcel_io.djangobook
-from .base import RWManager
+from .manager import RWManager
 from .io import load_data_new, get_writer_new
-from .base import SheetReader, SheetWriter
 
 from ._compact import isstream, is_generator, PY2
 from .constants import (

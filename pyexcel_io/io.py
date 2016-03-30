@@ -1,4 +1,4 @@
-from .base import RWManager
+from .manager import RWManager
 
 from .constants import (
     MESSAGE_ERROR_02

@@ -10,17 +10,13 @@
 import re
 import os
 import csv
-import codecs
 import glob
+import codecs
 from abc import abstractmethod
-from .base import (
-    BookReader,
-    BookWriter,
-    SheetReader,
-    SheetWriter,
-    NamedContent,
-    RWManager
-)
+
+from .book import BookReader, BookWriter
+from .sheet import SheetReader, SheetWriter, NamedContent
+from .manager import RWManager
 from ._compact import (
     is_string,
     StringIO,

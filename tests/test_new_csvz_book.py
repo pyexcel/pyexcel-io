@@ -1,7 +1,7 @@
 import os
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
-from pyexcel_io.base import RWManager
+from pyexcel_io.manager import RWManager
 from pyexcel_io.csvzipbook import CSVZipBookReader, CSVZipBookWriter
 from pyexcel_io.csvzipbook import TSVZipBookReader, TSVZipBookWriter
 import zipfile

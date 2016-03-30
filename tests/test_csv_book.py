@@ -1,7 +1,8 @@
 import os
 from textwrap import dedent
 from nose.tools import raises
-from pyexcel_io.base import RWManager, NamedContent
+from pyexcel_io.manager import RWManager
+from pyexcel_io.sheet import NamedContent
 from pyexcel_io.csvbook import (
     CSVSheetReader,
     CSVFileReader,
