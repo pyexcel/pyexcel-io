@@ -14,10 +14,10 @@ import glob
 import codecs
 from abc import abstractmethod
 
-from .book import BookReader, BookWriter
-from .sheet import SheetReader, SheetWriter, NamedContent
-from .manager import RWManager
-from ._compact import (
+from ..book import BookReader, BookWriter
+from ..sheet import SheetReader, SheetWriter, NamedContent
+from ..manager import RWManager
+from .._compact import (
     is_string,
     StringIO,
     BytesIO,
@@ -26,7 +26,7 @@ from ._compact import (
     Iterator,
     isstream
 )
-from .constants import (
+from ..constants import (
     DEFAULT_SHEET_NAME,
     FILE_FORMAT_CSV,
     FILE_FORMAT_TSV,

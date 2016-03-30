@@ -1,10 +1,10 @@
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
-from pyexcel_io.djangobook import DjangoModelReader, DjangoModelWriter
-from pyexcel_io.djangobook import DjangoModelImporter, DjangoModelExporter
-from pyexcel_io.djangobook import DjangoModelImportAdapter, DjangoModelExportAdapter
-from pyexcel_io.djangobook import DjangoBookWriter, DjangoBookReader
+from pyexcel_io.database.django import DjangoModelReader, DjangoModelWriter
+from pyexcel_io.database.django import DjangoModelImporter, DjangoModelExporter
+from pyexcel_io.database.django import DjangoModelImportAdapter, DjangoModelExportAdapter
+from pyexcel_io.database.django import DjangoBookWriter, DjangoBookReader
 
 class Package:
     def __init__(self, raiseException=False, **keywords):

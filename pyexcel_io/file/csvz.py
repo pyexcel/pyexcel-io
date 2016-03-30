@@ -10,17 +10,18 @@
 import csv
 import zipfile
 
-from ._compact import StringIO, PY2
-from .book import BookReader, BookWriter
-from .csvbook import (
+from .._compact import StringIO, PY2
+from ..book import BookReader, BookWriter
+from ..manager import RWManager
+from ..constants import (
+    DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
+    KEYWORD_TSV_DIALECT
+)
+
+from .csv import (
     CSVinMemoryReader,
     NamedContent,
     CSVSheetWriter,
-)
-from .manager import RWManager
-from .constants import (
-    DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ, FILE_FORMAT_TSVZ,
-    KEYWORD_TSV_DIALECT
 )
 
 

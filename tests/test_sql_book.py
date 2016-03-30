@@ -5,10 +5,10 @@ from sqlalchemy.orm import sessionmaker
 import datetime
 from pyexcel_io.utils import from_query_sets
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.sqlbook import SQLTableReader, SQLTableWriter
-from pyexcel_io.sqlbook import PyexcelSQLSkipRowException
-from pyexcel_io.sqlbook import SQLBookWriter, SQLTableImporter, SQLTableImportAdapter
-from pyexcel_io.sqlbook import SQLTableExporter, SQLTableExportAdapter, SQLBookReader
+from pyexcel_io.database.sql import SQLTableReader, SQLTableWriter
+from pyexcel_io.database.sql import PyexcelSQLSkipRowException
+from pyexcel_io.database.sql import SQLBookWriter, SQLTableImporter, SQLTableImportAdapter
+from pyexcel_io.database.sql import SQLTableExporter, SQLTableExportAdapter, SQLBookReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
 

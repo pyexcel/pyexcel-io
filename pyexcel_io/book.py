@@ -9,17 +9,17 @@
 """
 from abc import abstractmethod
 
+from .manager import RWManager
 from ._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE
 )
-from .manager import RWManager
 
 
 class BookReader(object):
     """
-    Standard reader
+    Standard book reader
     """
     def __init__(self, file_type):
         self.file_type = file_type
@@ -55,7 +55,8 @@ class BookReader(object):
         self.open_stream(io, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
-        named_contents = list(filter(lambda nc: nc.name == sheet_name, self.native_book))
+        named_contents = list(filter(lambda nc: nc.name == sheet_name,
+                                     self.native_book))
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
@@ -106,6 +107,9 @@ class BookReader(object):
 
 
 class BookWriter(object):
+    """
+    Standard book writer
+    """
     def __init__(self, file_type):
         self.file_type = file_type
         self.writer = None

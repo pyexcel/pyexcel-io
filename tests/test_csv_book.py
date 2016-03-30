@@ -3,7 +3,7 @@ from textwrap import dedent
 from nose.tools import raises
 from pyexcel_io.manager import RWManager
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.csvbook import (
+from pyexcel_io.file.csv import (
     CSVSheetReader,
     CSVFileReader,
     CSVinMemoryReader,
