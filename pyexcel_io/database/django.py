@@ -86,12 +86,54 @@ class DjangoModelWriter(SheetWriter):
                     continue
 
 
+class DjangoModelWriterNew(DjangoModelWriter):
+    def __init__(self, adapter, batch_size=None):
+        self.batch_size = batch_size
+        self.mymodel = adapter.model
+        self.column_names = adapter.get_column_names()
+        self.mapdict = adapter.get_column_name_mapping_dict()
+        self.initializer = adapter.get_row_initializer()
+        self.objs = []
+
+
 class DjangoModelExportAdapter(object):
     def __init__(self, model):
         self.model = model
 
     def get_name(self):
         return self.model._meta.model_name
+
+
+class DjangoModelExporter(object):
+    def __init__(self):
+        self.adapters = []
+
+    def append(self, import_adapter):
+        self.adapters.append(import_adapter)
+
+
+class DjangoBookReader(BookReader):
+    def __init__(self):
+        BookReader.__init__(self, DB_DJANGO)
+
+    def open(self, file_name, **keywords):
+        raise NotImplementedError()
+
+    def open_stream(self, file_stream, **keywords):
+        raise NotImplementedError()
+
+    def open_content(self, file_content, **keywords):
+        self.exporter = file_content
+        self._load_from_django_models()
+
+    def read_sheet(self, native_sheet):
+        reader = DjangoModelReader(native_sheet.payload)
+        return reader.to_array()
+
+    def _load_from_django_models(self):
+        django_models = self.exporter.adapters
+        self.native_book = [NamedContent(adapter.get_name(), adapter.model)
+                            for adapter in django_models]
 
 
 class DjangoModelImportAdapter(DjangoModelExportAdapter):
@@ -155,48 +197,6 @@ class DjangoModelImporter(object):
         return self.adapters.get(name, None)
 
 
-class DjangoModelExporter(object):
-    def __init__(self):
-        self.adapters = []
-
-    def append(self, import_adapter):
-        self.adapters.append(import_adapter)
-
-
-class DjangoBookReader(BookReader):
-    def __init__(self):
-        BookReader.__init__(self, DB_DJANGO)
-
-    def open(self, file_name, **keywords):
-        raise NotImplementedError()
-
-    def open_stream(self, file_stream, **keywords):
-        raise NotImplementedError()
-
-    def open_content(self, file_content, **keywords):
-        self.exporter = file_content
-        self._load_from_django_models()
-
-    def read_sheet(self, native_sheet):
-        reader = DjangoModelReader(native_sheet.payload)
-        return reader.to_array()
-
-    def _load_from_django_models(self):
-        django_models = self.exporter.adapters
-        self.native_book = [NamedContent(adapter.get_name(), adapter.model)
-                            for adapter in django_models]
-
-
-class DjangoModelWriterNew(DjangoModelWriter):
-    def __init__(self, adapter, batch_size=None):
-        self.batch_size = batch_size
-        self.mymodel = adapter.model
-        self.column_names = adapter.get_column_names()
-        self.mapdict = adapter.get_column_name_mapping_dict()
-        self.initializer = adapter.get_row_initializer()
-        self.objs = []
-
-
 class DjangoBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self, DB_DJANGO)
@@ -204,13 +204,12 @@ class DjangoBookWriter(BookWriter):
     def open_content(self, file_content, **keywords):
         self.importer = file_content
 
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            model = self.importer.get(sheet_name)
-            if model:
-                sheet_writer = DjangoModelWriterNew(model)
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
+    def create_sheet(self, sheet_name):
+        sheet_writer = None
+        model = self.importer.get(sheet_name)
+        if model:
+            sheet_writer = DjangoModelWriterNew(model)
+        return sheet_writer
 
 
 RWManager.register_a_reader(DB_DJANGO, DjangoBookReader)

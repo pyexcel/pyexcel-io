@@ -98,21 +98,12 @@ class SQLTableWriter(SheetWriter):
             self.session.commit()
 
 
-
 class SQLTableExportAdapter(object):
     def __init__(self, table):
         self.table = table
 
     def get_name(self):
         return getattr(self.table, '__tablename__', None)
-
-
-class SQLTableImportAdapter(SQLTableExportAdapter):
-    def __init__(self, table):
-        SQLTableExportAdapter.__init__(self, table)
-        self.row_initializer = None
-        self.column_names = None
-        self.column_name_mapping_dict = None
 
 
 class SQLTableExporter(object):
@@ -122,18 +113,6 @@ class SQLTableExporter(object):
 
     def append(self, import_adapter):
         self.adapters.append(import_adapter)
-
-
-class SQLTableImporter(object):
-    def __init__(self, session):
-        self.session = session
-        self.adapters = {}
-
-    def append(self, import_adapter):
-        self.adapters[import_adapter.get_name()] = import_adapter
-
-    def get(self, name):
-        return self.adapters.get(name, None)
 
 
 class SQLBookReader(BookReader):
@@ -160,6 +139,26 @@ class SQLBookReader(BookReader):
                             for adapter in tables]
 
 
+class SQLTableImportAdapter(SQLTableExportAdapter):
+    def __init__(self, table):
+        SQLTableExportAdapter.__init__(self, table)
+        self.row_initializer = None
+        self.column_names = None
+        self.column_name_mapping_dict = None
+
+
+class SQLTableImporter(object):
+    def __init__(self, session):
+        self.session = session
+        self.adapters = {}
+
+    def append(self, import_adapter):
+        self.adapters[import_adapter.get_name()] = import_adapter
+
+    def get(self, name):
+        return self.adapters.get(name, None)
+
+
 class SQLBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self, DB_SQL)
@@ -167,18 +166,17 @@ class SQLBookWriter(BookWriter):
     def open_content(self, file_content, **keywords):
         self.importer = file_content
 
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            adapter = self.importer.get(sheet_name)
-            if adapter:
-                sheet_writer = SQLTableWriter(
+    def create_sheet(self, sheet_name):
+        sheet_writer = None
+        adapter = self.importer.get(sheet_name)
+        if adapter:
+            sheet_writer = SQLTableWriter(
                     self.importer.session,
                     (adapter.table, adapter.column_names,
-                     adapter.column_name_mapping_dict, adapter.row_initializer)
-                )
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-
+                     adapter.column_name_mapping_dict,
+                     adapter.row_initializer)
+            )
+        return sheet_writer
 
 RWManager.register_a_reader(DB_SQL, SQLBookReader)
 RWManager.register_a_writer(DB_SQL, SQLBookWriter)

@@ -35,8 +35,9 @@ from ..constants import (
 
 DEFAULT_SEPARATOR = '__'
 DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % DEFAULT_NAME + "%s"
-SEPARATOR_MATCHER = "---pyexcel:(.*)---"
-DEFAULT_CSV_STREAM_FILE_FORMATTER = "---pyexcel:%s---%s"
+SEPARATOR_MATCHER = "---%s:(.*)---" % DEFAULT_NAME
+DEFAULT_CSV_STREAM_FILE_FORMATTER = "---%s:" % DEFAULT_NAME + "%s---%s"
+
 
 class UTF8Recorder(Iterator):
     """
