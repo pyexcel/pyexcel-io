@@ -148,17 +148,16 @@ class SQLBookReader(BookReader):
 
     def open_content(self, file_content, **keywords):
         self.exporter = file_content
-        self.load_from_tables()
-
-    def load_from_tables(self):
-        tables = self.exporter.adapters
-        self.native_book = [NamedContent(adapter.get_name(), adapter.table)
-                            for adapter in tables]
+        self._load_from_tables()
 
     def read_sheet(self, native_sheet):
         reader = SQLTableReader(self.exporter.session, native_sheet.payload)
         return reader.to_array()
 
+    def _load_from_tables(self):
+        tables = self.exporter.adapters
+        self.native_book = [NamedContent(adapter.get_name(), adapter.table)
+                            for adapter in tables]
 
 
 class SQLBookWriter(BookWriter):
@@ -179,9 +178,6 @@ class SQLBookWriter(BookWriter):
                 )
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
-
-    def close(self):
-        pass
 
 
 RWManager.register_a_reader(DB_SQL, SQLBookReader)

@@ -17,7 +17,24 @@ from .constants import (
 )
 
 
-class BookReader(object):
+class RWInterface(object):
+    """
+    The common methods for book reader and writer
+    """
+    def open(self, file_name, **keywords):
+        pass
+
+    def open_stream(self, file_stream, **keywords):
+        pass
+
+    def open_content(self, file_content, **keywords):
+        pass
+
+    def close(self):
+        pass
+
+
+class BookReader(RWInterface):
     """
     Standard book reader
     """
@@ -31,7 +48,6 @@ class BookReader(object):
     def open(self, file_name, **keywords):
         self.file_name = file_name
         self.keywords = keywords
-        self.native_book = self.load_from_file(file_name)
 
     def open_stream(self, file_stream, **keywords):
         if RWManager.validate_io(self.file_type, file_stream):
@@ -39,7 +55,6 @@ class BookReader(object):
             self.keywords = keywords
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        self.native_book = self.load_from_stream(file_stream)
 
     def open_content(self, file_content, **keywords):
         io = RWManager.get_io(self.file_type)
@@ -86,27 +101,14 @@ class BookReader(object):
 
     @abstractmethod
     def load_from_stream(self, file_content):
-        """Load content from memory
-
-        :params stream file_content: the actual file content in memory
-        :returns: a book
-        """
         pass
 
     @abstractmethod
     def load_from_file(self, file_name):
-        """Load content from a file
-
-        :params str filename: an accessible file path
-        :returns: a book
-        """
-        pass
-
-    def close(self):
         pass
 
 
-class BookWriter(object):
+class BookWriter(RWInterface):
     """
     Standard book writer
     """
@@ -127,9 +129,6 @@ class BookWriter(object):
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 
-    def open_content(self, file_content, **keywords):
-        pass
-
     def write(self, incoming_dict):
         for sheet_name in incoming_dict:
             sheet_writer = self.create_sheet(sheet_name)
@@ -139,7 +138,4 @@ class BookWriter(object):
 
     @abstractmethod
     def create_sheet(self, sheet_name):
-        pass
-
-    def close(self):
         pass

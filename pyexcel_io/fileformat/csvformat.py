@@ -20,7 +20,6 @@ from ..manager import RWManager
 from .._compact import (
     is_string,
     StringIO,
-    BytesIO,
     PY2,
     text_type,
     Iterator,
@@ -158,10 +157,11 @@ class CSVSheetWriter(SheetWriter):
         """
         This call close the file handle
         """
-        if not (isinstance(self.f, StringIO) or isinstance(self.f, BytesIO)):
+        if not isstream(self.f):
             self.f.close()
         elif not self.single_sheet_in_book:
-            self.f.write(DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
+            self.f.write(
+                DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
 
 
 class CSVBookReader(BookReader):
@@ -172,11 +172,31 @@ class CSVBookReader(BookReader):
         self.sheet_index = None
         BookReader.__init__(self, FILE_FORMAT_CSV)
 
-    def load_from_stream(self, file_content):
+    def open(self, file_name, **keywords):
+        BookReader.open(self, file_name, **keywords)
+        self.native_book = self._load_from_file()
+
+    def open_stream(self, file_stream, **keywords):
+        BookReader.open_stream(self, file_stream, **keywords)
+        self.native_book = self._load_from_stream()
+
+    def read_sheet(self, native_sheet):
+        if self.load_from_memory_flag:
+            reader = CSVinMemoryReader(native_sheet, **self.keywords)
+        else:
+            reader = CSVFileReader(native_sheet, **self.keywords)
+        return reader.to_array()
+
+    def _load_from_stream(self):
+        """Load content from memory
+
+        :params stream file_content: the actual file content in memory
+        :returns: a book
+        """
         if KEYWORD_LINE_TERMINATOR in self.keywords:
             self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
         self.load_from_memory_flag = True
-        content = file_content.getvalue()
+        content = self.file_stream.getvalue()
         separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator
         if separator in content:
             sheets = content.split(separator)
@@ -192,13 +212,18 @@ class CSVBookReader(BookReader):
                 named_contents.append(new_sheet)
             return named_contents
         else:
-            file_content.seek(0)
-            return [NamedContent(self.file_type, file_content)]
+            self.file_stream.seek(0)
+            return [NamedContent(self.file_type, self.file_stream)]
 
-    def load_from_file(self, file_name):
+    def _load_from_file(self):
+        """Load content from a file
+
+        :params str filename: an accessible file path
+        :returns: a book
+        """
         if KEYWORD_LINE_TERMINATOR in self.keywords:
             self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
-        names = file_name.split('.')
+        names = self.file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (
             names[0],
             DEFAULT_SEPARATOR,
@@ -206,8 +231,8 @@ class CSVBookReader(BookReader):
             names[1])
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
-            file_parts = os.path.split(file_name)
-            return [NamedContent(file_parts[-1], file_name)]
+            file_parts = os.path.split(self.file_name)
+            return [NamedContent(file_parts[-1], self.file_name)]
         else:
             matcher = "%s%s(.*)%s(.*).%s" % (
                 names[0],
@@ -223,13 +248,6 @@ class CSVBookReader(BookReader):
                                                    key=lambda row: row[1]):
                 ret.append(NamedContent(lsheetname, filen))
             return ret
-
-    def read_sheet(self, native_sheet):
-        if self.load_from_memory_flag:
-            reader = CSVinMemoryReader(native_sheet, **self.keywords)
-        else:
-            reader = CSVFileReader(native_sheet, **self.keywords)
-        return reader.to_array()
 
 
 class CSVBookWriter(BookWriter):

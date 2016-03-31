@@ -86,8 +86,6 @@ class DjangoModelWriter(SheetWriter):
                     continue
 
 
-
-
 class DjangoModelExportAdapter(object):
     def __init__(self, model):
         self.model = model
@@ -177,16 +175,16 @@ class DjangoBookReader(BookReader):
 
     def open_content(self, file_content, **keywords):
         self.exporter = file_content
-        self.load_from_django_models()
-
-    def load_from_django_models(self):
-        django_models = self.exporter.adapters
-        self.native_book = [NamedContent(adapter.get_name(), adapter.model)
-                            for adapter in django_models]
+        self._load_from_django_models()
 
     def read_sheet(self, native_sheet):
         reader = DjangoModelReader(native_sheet.payload)
         return reader.to_array()
+
+    def _load_from_django_models(self):
+        django_models = self.exporter.adapters
+        self.native_book = [NamedContent(adapter.get_name(), adapter.model)
+                            for adapter in django_models]
 
 
 class DjangoModelWriterNew(DjangoModelWriter):
@@ -213,9 +211,6 @@ class DjangoBookWriter(BookWriter):
                 sheet_writer = DjangoModelWriterNew(model)
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
-
-    def close(self):
-        pass
 
 
 RWManager.register_a_reader(DB_DJANGO, DjangoBookReader)

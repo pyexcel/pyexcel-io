@@ -10,9 +10,8 @@
 from abc import ABCMeta, abstractmethod
 
 from ._compact import is_generator
-from .constants import (
-    DEFAULT_SHEET_NAME
-)
+from .constants import DEFAULT_SHEET_NAME
+
 
 
 class NamedContent:

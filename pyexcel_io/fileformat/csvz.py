@@ -43,14 +43,13 @@ class CSVZipBookReader(BookReader):
         BookReader.__init__(self, FILE_FORMAT_CSVZ)
         self.zipfile = None
 
-    def load_from_stream(self, file_content):
-        self.zipfile = zipfile.ZipFile(file_content, 'r')
-        sheets = [NamedContent(self._get_sheet_name(name), name)
-                  for name in self.zipfile.namelist()]
-        return sheets
+    def open(self, file_name, **keywords):
+        BookReader.open(self, file_name, **keywords)
+        self.native_book = self._load_from_file_alike_object(self.file_name)
 
-    def load_from_file(self, file_name):
-        return self.load_from_stream(file_name)
+    def open_stream(self, file_stream, **keywords):
+        BookReader.open_stream(self, file_stream, **keywords)
+        self.native_book = self._load_from_file_alike_object(self.file_stream)
 
     def read_sheet(self, native_sheet):
         content = self.zipfile.read(native_sheet.payload)
@@ -68,14 +67,20 @@ class CSVZipBookReader(BookReader):
         )
         return reader.to_array()
 
+    def close(self):
+        self.zipfile.close()
+
+    def _load_from_file_alike_object(self, file_alike_object):
+        self.zipfile = zipfile.ZipFile(file_alike_object, 'r')
+        sheets = [NamedContent(self._get_sheet_name(name), name)
+                  for name in self.zipfile.namelist()]
+        return sheets
+            
     def _get_sheet_name(self, filename):
         len_of_a_dot = 1
         len_of_csv_word = 3
         name_len = len(filename) - len_of_a_dot - len_of_csv_word
         return filename[:name_len]
-
-    def close(self):
-        self.zipfile.close()
 
 
 class CSVZipBookWriter(BookWriter):
