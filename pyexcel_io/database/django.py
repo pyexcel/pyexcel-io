@@ -1,5 +1,5 @@
 """
-    pyexcel_io.djangobook
+    pyexcel_io.database.django
     ~~~~~~~~~~~~~~~~~~~
 
     The lower level handler for django import and export
@@ -96,9 +96,13 @@ class DjangoModelWriterNew(DjangoModelWriter):
         self.objs = []
 
 
-class DjangoModelExportAdapter(object):
+class DjangoModelExportAdapter(NamedContent):
     def __init__(self, model):
         self.model = model
+
+    @property
+    def name(self):
+        return self.get_name()
 
     def get_name(self):
         return self.model._meta.model_name
@@ -127,13 +131,11 @@ class DjangoBookReader(BookReader):
         self._load_from_django_models()
 
     def read_sheet(self, native_sheet):
-        reader = DjangoModelReader(native_sheet.payload)
+        reader = DjangoModelReader(native_sheet.model)
         return reader.to_array()
 
     def _load_from_django_models(self):
-        django_models = self.exporter.adapters
-        self.native_book = [NamedContent(adapter.get_name(), adapter.model)
-                            for adapter in django_models]
+        self.native_book = self.exporter.adapters
 
 
 class DjangoModelImportAdapter(DjangoModelExportAdapter):

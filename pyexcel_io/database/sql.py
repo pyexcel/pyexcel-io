@@ -1,5 +1,5 @@
 """
-    pyexcel_io.sqlbook
+    pyexcel_io.database.sql
     ~~~~~~~~~~~~~~~~~~~
 
     The lower level handler for database import and export
@@ -98,9 +98,13 @@ class SQLTableWriter(SheetWriter):
             self.session.commit()
 
 
-class SQLTableExportAdapter(object):
+class SQLTableExportAdapter(NamedContent):
     def __init__(self, table):
         self.table = table
+
+    @property
+    def name(self):
+        return self.get_name()
 
     def get_name(self):
         return getattr(self.table, '__tablename__', None)
@@ -130,13 +134,11 @@ class SQLBookReader(BookReader):
         self._load_from_tables()
 
     def read_sheet(self, native_sheet):
-        reader = SQLTableReader(self.exporter.session, native_sheet.payload)
+        reader = SQLTableReader(self.exporter.session, native_sheet.table)
         return reader.to_array()
 
     def _load_from_tables(self):
-        tables = self.exporter.adapters
-        self.native_book = [NamedContent(adapter.get_name(), adapter.table)
-                            for adapter in tables]
+        self.native_book = self.exporter.adapters
 
 
 class SQLTableImportAdapter(SQLTableExportAdapter):
@@ -153,7 +155,7 @@ class SQLTableImporter(object):
         self.adapters = {}
 
     def append(self, import_adapter):
-        self.adapters[import_adapter.get_name()] = import_adapter
+        self.adapters[import_adapter.name] = import_adapter
 
     def get(self, name):
         return self.adapters.get(name, None)
