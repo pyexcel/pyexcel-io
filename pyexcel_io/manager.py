@@ -48,8 +48,6 @@ class RWManager(object):
 
     @staticmethod
     def _add_a_handler(factories, file_type, handler):
-        if file_type in factories:
-            print("Warning! %s has been registered" % file_type)
         factories[file_type] = handler
 
     @staticmethod
