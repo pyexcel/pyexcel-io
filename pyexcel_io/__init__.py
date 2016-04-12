@@ -7,27 +7,30 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from .fileformat import csvformat
+from .fileformat import csvz
+from .fileformat import tsv
+from .fileformat import tsvz
+from .database import django
+from .database import sql
 from .io import get_data, save_data
 from .manager import RWManager
 
 
 try:
     import pyexcel_xls
-    pyexcel_xls.extend_pyexcel(RWManager)
 except ImportError:
     pass
 
 
 try:
     import pyexcel_xlsx
-    pyexcel_xlsx.extend_pyexcel(RWManager)
 except ImportError:
     pass
 
 
 try:
     import pyexcel_ods3
-    pyexcel_ods3.extend_pyexcel(RWManager)
 except ImportError:
     pass
 
