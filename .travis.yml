@@ -2,8 +2,6 @@ sudo: false
 language: python
 notifications:
   email: false
-env:
-  global:
 python:
   - 2.7
   - 2.6
@@ -11,11 +9,10 @@ python:
   - 3.4
   - 3.5
   - pypy
-install:
+before_script:
   - if [[ $TRAVIS_PYTHON_VERSION == "2.6" ]]; then pip install ordereddict; fi
   - pip install https://github.com/pyexcel/pyexcel-xls/archive/master.zip
   - touch requirements.txt
-  - pip install -r requirements.txt
   - pip install -r tests/requirements.txt
 script:
   make test
