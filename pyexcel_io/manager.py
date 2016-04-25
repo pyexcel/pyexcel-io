@@ -18,6 +18,21 @@ class RWManager(object):
     binary_stream_types = []
 
     @staticmethod
+    def register_readers_and_writers(plugins):
+        for plugin in plugins:
+            if 'reader' in plugin:
+                RWManager.register_a_reader(plugin['file_type'], plugin['reader'])
+            if 'writer' in plugin:
+                RWManager.register_a_writer(plugin['file_type'], plugin['writer'])
+            stream_type = plugin.get('stream_type', None)
+            if stream_type == 'text':
+                RWManager.register_file_type_as_text_stream(plugin['file_type'])
+            elif stream_type == 'binary':
+                RWManager.register_file_type_as_binary_stream(plugin['file_type'])
+            #else:
+                # ignored for now
+
+    @staticmethod
     def register_file_type_as_text_stream(file_type):
         RWManager.text_stream_types.append(file_type)
 
@@ -54,7 +69,9 @@ class RWManager(object):
     def create_reader(file_type):
         if file_type in RWManager.reader_factories:
             reader_class = RWManager.reader_factories[file_type]
-            return reader_class()
+            reader = reader_class()
+            reader.set_type(file_type)
+            return reader
         else:
             resolve_missing_readers(file_type)
 
@@ -62,7 +79,9 @@ class RWManager(object):
     def create_writer(file_type):
         if file_type in RWManager.writer_factories:
             writer_class = RWManager.writer_factories[file_type]
-            return writer_class()
+            writer = writer_class()
+            writer.set_type(file_type)
+            return writer
         else:
             resolve_missing_writers(file_type)
 

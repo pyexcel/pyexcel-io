@@ -12,7 +12,6 @@ import zipfile
 
 from .._compact import StringIO, PY2
 from ..book import BookReader, BookWriter
-from ..manager import RWManager
 from ..constants import  DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
 
 from .csvformat import (
@@ -40,7 +39,8 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
 class CSVZipBookReader(BookReader):
     def __init__(self):
-        BookReader.__init__(self, FILE_FORMAT_CSVZ)
+        BookReader.__init__(self)
+        self.file_type = FILE_FORMAT_CSVZ
         self.zipfile = None
 
     def open(self, file_name, **keywords):
@@ -85,7 +85,8 @@ class CSVZipBookReader(BookReader):
 
 class CSVZipBookWriter(BookWriter):
     def __init__(self):
-        BookWriter.__init__(self, FILE_FORMAT_CSVZ)
+        BookWriter.__init__(self)
+        self.file_type = FILE_FORMAT_CSVZ
         self.zipfile = None
 
     def open(self, file_name, **keywords):
@@ -108,6 +109,11 @@ class CSVZipBookWriter(BookWriter):
         self.zipfile.close()
 
 
-RWManager.register_a_reader(FILE_FORMAT_CSVZ, CSVZipBookReader)
-RWManager.register_a_writer(FILE_FORMAT_CSVZ, CSVZipBookWriter)
-RWManager.register_file_type_as_binary_stream(FILE_FORMAT_CSVZ)
+_registry = {
+    "file_type": FILE_FORMAT_CSVZ,
+    "reader": CSVZipBookReader,
+    "writer": CSVZipBookWriter,
+    "stream_type": "binary"
+}
+
+exports = (_registry,)

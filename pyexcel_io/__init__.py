@@ -7,32 +7,33 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from .fileformat import csvformat
-from .fileformat import csvz
-from .fileformat import tsv
-from .fileformat import tsvz
-from .database import django
-from .database import sql
 from .io import get_data, save_data
-from .fileformat import csvformat, csvz, tsv, tsvz
-from .database import sql, django
 from .manager import RWManager
+import fileformat, database
+
+exports = fileformat.exports + database.exports
 
 
 try:
     import pyexcel_xls
+    exports += pyexcel_xls.exports
 except ImportError:
     pass
 
 
 try:
     import pyexcel_xlsx
+    exports += pyexcel_xlsx.exports
 except ImportError:
     pass
 
 
 try:
     import pyexcel_ods3
+    exports += pyexcel_ods3.exports
 except ImportError:
     pass
+
+
+RWManager.register_readers_and_writers(exports)
 

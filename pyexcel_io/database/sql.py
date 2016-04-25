@@ -9,7 +9,6 @@
 """
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
-from ..manager import RWManager
 from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
 from ..constants import (
     MESSAGE_INVALID_PARAMETERS,
@@ -120,9 +119,6 @@ class SQLTableExporter(object):
 
 
 class SQLBookReader(BookReader):
-    def __init__(self):
-        BookReader.__init__(self, DB_SQL)
-
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 
@@ -162,9 +158,6 @@ class SQLTableImporter(object):
 
 
 class SQLBookWriter(BookWriter):
-    def __init__(self):
-        BookWriter.__init__(self, DB_SQL)
-
     def open_content(self, file_content, **keywords):
         self.importer = file_content
 
@@ -180,5 +173,12 @@ class SQLBookWriter(BookWriter):
             )
         return sheet_writer
 
-RWManager.register_a_reader(DB_SQL, SQLBookReader)
-RWManager.register_a_writer(DB_SQL, SQLBookWriter)
+
+_registry = {
+    "file_type": DB_SQL,
+    "reader": SQLBookReader,
+    "writer": SQLBookWriter,
+    "stream_type": "text"
+}
+
+exports = (_registry,)

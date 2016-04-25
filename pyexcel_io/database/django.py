@@ -9,7 +9,6 @@
 """
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
-from ..manager import RWManager
 from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
 from ..constants import (
     MESSAGE_EMPTY_ARRAY,
@@ -117,9 +116,6 @@ class DjangoModelExporter(object):
 
 
 class DjangoBookReader(BookReader):
-    def __init__(self):
-        BookReader.__init__(self, DB_DJANGO)
-
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 
@@ -200,8 +196,6 @@ class DjangoModelImporter(object):
 
 
 class DjangoBookWriter(BookWriter):
-    def __init__(self):
-        BookWriter.__init__(self, DB_DJANGO)
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content
@@ -214,5 +208,11 @@ class DjangoBookWriter(BookWriter):
         return sheet_writer
 
 
-RWManager.register_a_reader(DB_DJANGO, DjangoBookReader)
-RWManager.register_a_writer(DB_DJANGO, DjangoBookWriter)
+_registry = {
+    "file_type": DB_DJANGO,
+    "reader": DjangoBookReader,
+    "writer": DjangoBookWriter,
+    "stream_type": "special"
+}
+
+exports = (_registry,)

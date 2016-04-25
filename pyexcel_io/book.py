@@ -21,25 +21,28 @@ class RWInterface(object):
     """
     The common methods for book reader and writer
     """
+    def RWInterface(self):
+        self.file_type = None
+        
     def open(self, file_name, **keywords):
         pass
 
     def open_stream(self, file_stream, **keywords):
         pass
 
-    def open_content(self, file_content, **keywords):
-        pass
+    def set_type(self, file_type):
+        self.file_type = file_type
 
     def close(self):
         pass
+
 
 
 class BookReader(RWInterface):
     """
     Standard book reader
     """
-    def __init__(self, file_type):
-        self.file_type = file_type
+    def __init__(self):
         self.reader = None
         self.file_name = None
         self.file_stream = None
@@ -99,21 +102,12 @@ class BookReader(RWInterface):
         """
         pass
 
-    @abstractmethod
-    def load_from_stream(self, file_content):
-        pass
-
-    @abstractmethod
-    def load_from_file(self, file_name):
-        pass
-
 
 class BookWriter(RWInterface):
     """
     Standard book writer
     """
-    def __init__(self, file_type):
-        self.file_type = file_type
+    def __init__(self):
         self.writer = None
         self.file_alike_object = None
 

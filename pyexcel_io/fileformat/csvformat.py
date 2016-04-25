@@ -16,7 +16,6 @@ from abc import abstractmethod
 
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
-from ..manager import RWManager
 from .._compact import (
     is_string,
     StringIO,
@@ -167,11 +166,12 @@ class CSVSheetWriter(SheetWriter):
 
 class CSVBookReader(BookReader):
     def __init__(self):
+        BookReader.__init__(self)
+        self.file_type = FILE_FORMAT_CSV
         self.load_from_memory_flag = False
         self.line_terminator = '\r\n'
         self.sheet_name = None
         self.sheet_index = None
-        BookReader.__init__(self, FILE_FORMAT_CSV)
 
     def open(self, file_name, **keywords):
         BookReader.open(self, file_name, **keywords)
@@ -253,7 +253,8 @@ class CSVBookReader(BookReader):
 
 class CSVBookWriter(BookWriter):
     def __init__(self):
-        BookWriter.__init__(self, FILE_FORMAT_CSV)
+        BookWriter.__init__(self)
+        self.file_type = FILE_FORMAT_CSV
         self.index = 0
 
     def create_sheet(self, name):
@@ -266,6 +267,11 @@ class CSVBookWriter(BookWriter):
         return writer
 
 
-RWManager.register_a_reader(FILE_FORMAT_CSV, CSVBookReader)
-RWManager.register_a_writer(FILE_FORMAT_CSV, CSVBookWriter)
-RWManager.register_file_type_as_text_stream(FILE_FORMAT_CSV)
+_registry = {
+    "file_type": FILE_FORMAT_CSV,
+    "reader": CSVBookReader,
+    "writer": CSVBookWriter,
+    "stream_type": "text"
+}
+
+exports = (_registry,)

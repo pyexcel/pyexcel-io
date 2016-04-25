@@ -7,7 +7,6 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ..manager import RWManager
 from ..constants import (
     FILE_FORMAT_TSV,
     KEYWORD_TSV_DIALECT
@@ -30,15 +29,22 @@ class TSVBookReader(CSVBookReader):
 
 
 class TSVBookWriter(CSVBookWriter):
+
     def __init__(self):
         CSVBookWriter.__init__(self)
         self.file_type = FILE_FORMAT_TSV
-
+    
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVBookWriter.open(self, file_name, **keywords)
 
 
-RWManager.register_a_reader(FILE_FORMAT_TSV, CSVBookReader)
-RWManager.register_a_writer(FILE_FORMAT_TSV, CSVBookWriter)
-RWManager.register_file_type_as_text_stream(FILE_FORMAT_TSV)
+_registry = {
+    "file_type": FILE_FORMAT_TSV,
+    "reader": TSVBookReader,
+    "writer": TSVBookWriter,
+    "stream_type": "text"
+}
+
+exports = (_registry,)
+
