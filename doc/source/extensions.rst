@@ -20,7 +20,7 @@ And you can also get the data back::
     >>> from pyexcel_io import get_data
     >>> data = get_data("test.xls")
     >>> data['pyexcel_sheet1']
-    [[1.0, 2.0, 3.0]]
+    [[1, 2, 3]]
 
 
 Work with memory file
@@ -39,7 +39,7 @@ And you can also get the data back::
 
     >>> data = get_data(io, "xls") 
     >>> data['pyexcel_sheet1']
-    [[1.0, 2.0, 3.0]]
+    [[1, 2, 3]]
 
 The same applies to :meth:`pyexcel_io.get_data`.
 

@@ -9,7 +9,7 @@
 """
 from .io import get_data, save_data
 from .manager import RWManager
-import fileformat, database
+from . import fileformat, database
 
 exports = fileformat.exports + database.exports
 
