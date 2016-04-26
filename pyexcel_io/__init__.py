@@ -15,22 +15,22 @@ exports = fileformat.exports + database.exports
 
 
 try:
-    import pyexcel_xls
-    exports += pyexcel_xls.exports
+    import pyexcel_xls.xls as xls
+    exports += xls.exports
 except ImportError:
     pass
 
 
 try:
-    import pyexcel_xlsx
-    exports += pyexcel_xlsx.exports
+    import pyexcel_xlsx.xlsx as xlsx
+    exports += xlsx.exports
 except ImportError:
     pass
 
 
 try:
-    import pyexcel_ods3
-    exports += pyexcel_ods3.exports
+    import pyexcel_ods3.ods as ods
+    exports += ods.exports
 except ImportError:
     pass
 
