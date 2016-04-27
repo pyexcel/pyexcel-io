@@ -16,10 +16,12 @@ class RWManager(object):
     writer_factories = {}
     text_stream_types = []
     binary_stream_types = []
+    file_types = []
 
     @staticmethod
     def register_readers_and_writers(plugins):
         for plugin in plugins:
+            RWManager.file_types.append(plugin['file_type'])
             if 'reader' in plugin:
                 RWManager.register_a_reader(plugin['file_type'], plugin['reader'])
             if 'writer' in plugin:
