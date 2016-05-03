@@ -1,4 +1,5 @@
 import os
+from unittest import TestCase
 from textwrap import dedent
 from nose.tools import raises
 from pyexcel_io.manager import RWManager
@@ -11,7 +12,7 @@ from pyexcel_io.fileformat.csvformat import (
 )
 
 
-class TestReaders:
+class TestReaders(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
@@ -19,6 +20,11 @@ class TestReaders:
             ["1", "2", "3"],
             ["4", "5", "6"],
             ["7", "8", "9"]
+        ]
+        self.expected_data =[
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]
         with open(self.test_file, 'w') as f:
             for row in self.data:
@@ -31,7 +37,7 @@ class TestReaders:
     def test_sheet_file_reader(self):
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))
         result = list(r.to_array())
-        assert result == self.data
+        self.assertEqual(result, self.expected_data)
 
     def test_sheet_memory_reader(self):
         io = RWManager.get_io(self.file_type)
@@ -40,21 +46,20 @@ class TestReaders:
         io.seek(0)
         r = CSVinMemoryReader(NamedContent(self.file_type, io))
         result = list(r.to_array())
-        assert result == self.data
+        self.assertEqual(result, self.expected_data)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-
-class TestWriter:
+class TestWriter(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
         self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]
         self.result = dedent("""
            1,2,3
@@ -69,20 +74,20 @@ class TestWriter:
         w.close()
         with open(self.test_file, 'r') as f:
             content = f.read().replace('\r', '')
-            assert content.strip('\n') == self.result
+            self.assertEqual(content.strip('\n'), self.result)
     
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-class TestMemoryWriter:
+class TestMemoryWriter(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
         self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]
         self.result = dedent("""
            1,2,3
@@ -97,10 +102,10 @@ class TestMemoryWriter:
             w.write_row(row)
         w.close()
         content = io.getvalue().replace('\r', '')
-        assert content.strip('\n') == self.result
-    
+        self.assertEqual(content.strip('\n'), self.result)
 
-class TestNonUniformCSV:
+
+class TestNonUniformCSV(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
@@ -116,11 +121,11 @@ class TestNonUniformCSV:
     def test_sheet_file_reader(self):
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))
         result = list(r.to_array())
-        assert result == [
-            ["1"],
-            ["4", "5", "6"],
-            ["", "7"]
-        ]
+        self.assertEqual(result, [
+            [1],
+            [4, 5, 6],
+            ["", 7]
+        ])
 
     def tearDown(self):
         os.unlink(self.test_file)

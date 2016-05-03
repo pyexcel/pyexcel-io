@@ -32,7 +32,7 @@ And it can be read out as well and can be saved in any other supported format.
     >>> data = get_data("myfile.csvz")
     >>> import json
     >>> json.dumps(data)
-    '{"pyexcel_sheet1": [["1", "2", "3"]]}'
+    '{"pyexcel_sheet1": [[1, 2, 3]]}'
     
 
 Multiple Sheet Book
@@ -77,7 +77,7 @@ The csvz book can be read back with two lines of code. And once it is read out, 
 
     >>> book2 = get_data("mybook.csvz")
     >>> json.dumps(book2)
-    '{"Sheet 1": [["1.0", "2.0", "3.0"], ["4.0", "5.0", "6.0"], ["7.0", "8.0", "9.0"]], "Sheet 2": [["X", "Y", "Z"], ["1.0", "2.0", "3.0"], ["4.0", "5.0", "6.0"]], "Sheet 3": [["O", "P", "Q"], ["3.0", "2.0", "1.0"], ["4.0", "3.0", "2.0"]]}'
+    '{"Sheet 1": [[1, 2, 3], [4, 5, 6], [7, 8, 9]], "Sheet 2": [["X", "Y", "Z"], [1, 2, 3], [4, 5, 6]], "Sheet 3": [["O", "P", "Q"], [3, 2, 1], [4, 3, 2]]}'
 
 
 Open csvz without pyexcel-io

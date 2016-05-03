@@ -11,6 +11,7 @@ import re
 import os
 import csv
 import glob
+import math
 import codecs
 from abc import abstractmethod
 
@@ -53,9 +54,13 @@ class UTF8Recorder(Iterator):
 
 
 class CSVSheetReader(SheetReader):
-    def __init__(self, sheet, encoding="utf-8", **keywords):
+    def __init__(self, sheet, encoding="utf-8",
+                 auto_detect_float=True, auto_detect_int=True,
+                 **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.encoding = encoding
+        self.auto_detect_int = auto_detect_int
+        self.auto_detect_float = auto_detect_float
 
     @abstractmethod
     def get_file_handle(self):
@@ -69,11 +74,32 @@ class CSVSheetReader(SheetReader):
             for element in row:
                 if PY2:
                     element = element.decode(self.encoding)
+                if element is not None and element != '':
+                    element = self._convert_cell(element)
                 tmp_row.append(element)
                 if element is not None and element != '':
                     myrow += tmp_row
                     tmp_row = []
             yield myrow
+            
+    def _convert_cell(self, csv_cell_text):
+        ret = None
+        if self.auto_detect_float:
+            ret = self._get_float(csv_cell_text)
+            if ret is not None and self.auto_detect_int:
+                if ret == math.floor(ret):
+                    ret = int(ret)
+        if ret is not None:
+            return ret
+        else:
+            return csv_cell_text
+
+
+    def _get_float(self, csv_cell_text):
+        try:
+            return float(csv_cell_text)
+        except ValueError:
+            return None
 
 
 class CSVFileReader(CSVSheetReader):

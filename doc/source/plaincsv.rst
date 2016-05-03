@@ -51,7 +51,7 @@ Here's the sample code::
     >>> data = get_data("your_file.csv")
     >>> import json
     >>> print(json.dumps(data))
-    {"your_file.csv": [["1", "2", "3"], ["4", "5", "6"]]}
+    {"your_file.csv": [[1, 2, 3], [4, 5, 6]]}
 
 Write a csv to memory
 --------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ Continue from previous example::
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
     >>> data = get_data(io)
     >>> print(json.dumps(data))
-    {"csv": [["1", "2", "3"], ["4", "5", "6"]]}
+    {"csv": [[1, 2, 3], [4, 5, 6]]}
 
 
 

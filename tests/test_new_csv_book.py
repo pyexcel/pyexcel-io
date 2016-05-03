@@ -1,4 +1,5 @@
 import os
+from unittest import TestCase
 from textwrap import dedent
 from nose.tools import raises
 from pyexcel_io.manager import RWManager
@@ -7,7 +8,7 @@ from pyexcel_io.fileformat.csvformat import CSVBookReader, CSVBookWriter
 from pyexcel_io.fileformat.tsv import TSVBookReader
 
 
-class TestReaders:
+class TestReaders(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
@@ -15,6 +16,11 @@ class TestReaders:
             ["1", "2", "3"],
             ["4", "5", "6"],
             ["7", "8", "9"]
+        ]
+        self.expected_data =[
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]
         with open(self.test_file, 'w') as f:
             for row in self.data:
@@ -24,7 +30,7 @@ class TestReaders:
         b = CSVBookReader()
         b.open(self.test_file)
         sheets = b.read_all()
-        assert list(sheets[self.test_file]) == self.data
+        self.assertEqual(list(sheets[self.test_file]), self.expected_data)
 
     def test_book_reader_from_memory_source(self):
         io = RWManager.get_io(self.file_type)
@@ -34,13 +40,13 @@ class TestReaders:
         b = CSVBookReader()
         b.open_stream(io)
         sheets = b.read_all()
-        assert list(sheets['csv']) == self.data
+        self.assertEqual(list(sheets['csv']), self.expected_data)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-class TestTSVReaders:
+class TestTSVReaders(TestCase):
     def setUp(self):
         self.file_type = "tsv"
         self.test_file = "tsv_book." + self.file_type
@@ -48,6 +54,11 @@ class TestTSVReaders:
             ["1", "2", "3"],
             ["4", "5", "6"],
             ["7", "8", "9"]
+        ]
+        self.expected_data =[
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]
         with open(self.test_file, 'w') as f:
             for row in self.data:
@@ -57,7 +68,7 @@ class TestTSVReaders:
         b = TSVBookReader()
         b.open(self.test_file)
         sheets = b.read_all()
-        assert list(sheets[self.test_file]) == self.data
+        self.assertEqual(list(sheets[self.test_file]), self.expected_data)
 
     def test_book_reader_from_memory_source(self):
         io = RWManager.get_io(self.file_type)
@@ -67,13 +78,13 @@ class TestTSVReaders:
         b = TSVBookReader()
         b.open_stream(io)
         sheets = b.read_all()
-        assert list(sheets['tsv']) == self.data
+        self.assertEqual(list(sheets['tsv']), self.expected_data)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-class TestReadMultipleSheets:
+class TestReadMultipleSheets(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
@@ -82,10 +93,19 @@ class TestReadMultipleSheets:
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
+        self.expected_data =[
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]
         self.sheets = OrderedDict()
         self.sheets.update({"sheet1": self.data})
         self.sheets.update({"sheet2": self.data})
         self.sheets.update({"sheet3": self.data})
+        self.expected_sheets = OrderedDict()
+        self.expected_sheets.update({"sheet1": self.expected_data})
+        self.expected_sheets.update({"sheet2": self.expected_data})
+        self.expected_sheets.update({"sheet3": self.expected_data})
         index = 0
         for key, value in self.sheets.items():
             file_name = self.test_file_formatter % (key, index)
@@ -100,13 +120,13 @@ class TestReadMultipleSheets:
         sheets = b.read_all()
         for key in sheets:
             sheets[key] = list(sheets[key])
-        assert sheets == self.sheets
+        self.assertEqual(sheets, self.expected_sheets)
 
     def test_read_one_from_many_by_name(self):
         b = CSVBookReader()
         b.open("csv_multiple.csv")
         sheets = b.read_sheet_by_name("sheet1")
-        assert list(sheets["sheet1"]) == self.sheets["sheet1"]
+        self.assertEqual(list(sheets["sheet1"]), self.expected_sheets["sheet1"])
 
     @raises(ValueError)
     def test_read_one_from_many_by_non_existent_name(self):
@@ -118,7 +138,7 @@ class TestReadMultipleSheets:
         b = CSVBookReader()
         b.open("csv_multiple.csv")
         sheets = b.read_sheet_by_index(1)
-        assert list(sheets["sheet2"]) == self.sheets["sheet2"]
+        self.assertEqual(list(sheets["sheet2"]), self.expected_sheets["sheet2"])
 
     @raises(IndexError)
     def test_read_one_from_many_by_wrong_index(self):
@@ -134,7 +154,7 @@ class TestReadMultipleSheets:
             index = index + 1
 
 
-class TestWriteMultipleSheets:
+class TestWriteMultipleSheets(TestCase):
     def setUp(self):
         self.file_type = "csv"
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
@@ -153,10 +173,29 @@ class TestWriteMultipleSheets:
             ["4", "5", "6888"],
             ["7", "8", "9"]
         ]
+        self.expected_data1 = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]
+        self.expected_data2 = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 1000]
+        ]
+        self.expected_data3 = [
+            [1, 2, 3],
+            [4, 5, 6888],
+            [7, 8, 9]
+        ]
         self.sheets = OrderedDict()
         self.sheets.update({"sheet1": self.data1})
         self.sheets.update({"sheet2": self.data2})
         self.sheets.update({"sheet3": self.data3})
+        self.expected_sheets = OrderedDict()
+        self.expected_sheets.update({"sheet1": self.expected_data1})
+        self.expected_sheets.update({"sheet2": self.expected_data2})
+        self.expected_sheets.update({"sheet3": self.expected_data3})
         self.result_dict = OrderedDict()
         self.result1 = dedent("""
            1,2,3
@@ -217,7 +256,7 @@ class TestWriteMultipleSheets:
             7,8,9
             ---pyexcel---
             """)
-        assert content == expected
+        self.assertEqual(content, expected)
 
     def test_multiple_sheet_into_memory_2(self):
         """Write csv book into a single stream"""
@@ -231,7 +270,7 @@ class TestWriteMultipleSheets:
         sheets = reader.read_all()
         for sheet in sheets:
             sheets[sheet] = list(sheets[sheet])
-        assert sheets == self.sheets
+        self.assertEqual(sheets, self.expected_sheets)
 
     def delete_files(self):
         index = 0

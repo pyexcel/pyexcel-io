@@ -102,7 +102,7 @@ def test_binary_file_content():
     io = RWManager.get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
-    assert result['pyexcel_sheet1'] == data
+    assert result['pyexcel_sheet1'] == [[1, 2, 3]]
 
 
 def test_text_file_content():
@@ -110,7 +110,7 @@ def test_text_file_content():
     io = RWManager.get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
-    assert result['csv'] == data
+    assert result['csv'] == [[1, 2, 3]]
 
 
 def test_conversion_from_bytes_to_text():
@@ -120,7 +120,7 @@ def test_conversion_from_bytes_to_text():
     with open(test_file, "rb") as f:
         content = f.read()
         result = get_data(content, 'csv')
-        assert result['csv'] == data
+        assert result['csv'] == [[1, 2, 3]]
     os.unlink(test_file)
 
 

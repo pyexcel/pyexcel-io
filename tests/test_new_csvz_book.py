@@ -1,4 +1,5 @@
 import os
+from unittest import TestCase
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
 from pyexcel_io.manager import RWManager
@@ -10,7 +11,7 @@ import sys
 PY2 = sys.version_info[0] == 2
 
 
-class TestCSVZ:
+class TestCSVZ(TestCase):
     def setUp(self):
         self.file = "csvz.csvz"
 
@@ -22,11 +23,11 @@ class TestCSVZ:
         zipbook.write({None: data})
         zipbook.close()
         zip = zipfile.ZipFile(self.file, 'r')
-        assert zip.namelist() == [file_name]
+        self.assertEqual(zip.namelist(), [file_name])
         content = zip.read(file_name)
         if not PY2:
             content = content.decode('utf-8')
-        assert content.replace('\r','').strip('\n') == "1,2,3"
+        self.assertEqual(content.replace('\r','').strip('\n'), "1,2,3")
         zip.close()    
 
     def test_reading(self):
@@ -38,14 +39,14 @@ class TestCSVZ:
         zipreader = CSVZipBookReader()
         zipreader.open(self.file)
         data = zipreader.read_all()
-        assert list(data['pyexcel_sheet1']) == [['1','2','3']]
+        self.assertEqual(list(data['pyexcel_sheet1']), [[1, 2, 3]])
         zipreader.close()
         
     def tearDown(self):
         os.unlink(self.file)
 
 
-class TestTSVZ:
+class TestTSVZ(TestCase):
     def setUp(self):
         self.file = "tsv.tsvz"
 
@@ -57,11 +58,11 @@ class TestTSVZ:
         zipbook.write({None: data})
         zipbook.close()
         zip = zipfile.ZipFile(self.file, 'r')
-        assert zip.namelist() == [file_name]
+        self.assertEqual(zip.namelist(), [file_name])
         content = zip.read(file_name)
         if not PY2:
             content = content.decode('utf-8')
-        assert content.replace('\r','').strip('\n') == "1\t2\t3"
+        self.assertEqual(content.replace('\r','').strip('\n'), "1\t2\t3")
         zip.close()
 
     def test_reading(self):
@@ -73,7 +74,7 @@ class TestTSVZ:
         zipreader = TSVZipBookReader()
         zipreader.open(self.file)
         data = zipreader.read_all()
-        assert list(data['pyexcel_sheet1']) == [['1','2','3']]
+        self.assertEqual(list(data['pyexcel_sheet1']), [[1, 2, 3]])
         zipreader.close()
 
     def tearDown(self):
@@ -90,10 +91,10 @@ def test_reading_from_memory():
     zipreader = CSVZipBookReader()
     zipreader.open_stream(io)
     data = zipreader.read_all()
-    assert list(data['pyexcel_sheet1']) == [['1','2','3']]
+    assert list(data['pyexcel_sheet1']) == [[1, 2, 3]]
 
         
-class TestMultipleSheet:
+class TestMultipleSheet(TestCase):
     def setUp(self):
         self.content = OrderedDict()
         self.content.update({
@@ -127,11 +128,11 @@ class TestMultipleSheet:
         reader = CSVZipBookReader()
         reader.open(self.file)
         sheets = reader.read_sheet_by_name("Sheet 1")
-        assert list(sheets['Sheet 1']) == [
-            [u'1.0', u'2.0', u'3.0'],
-            [u'4.0', u'5.0', u'6.0'],
-            [u'7.0', u'8.0', u'9.0']
-        ]
+        self.assertEqual(list(sheets['Sheet 1']), [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ])
         
     @raises(ValueError)
     def test_read_one_from_many_by_unknown_name(self):
@@ -143,18 +144,17 @@ class TestMultipleSheet:
         reader = CSVZipBookReader()
         reader.open(self.file)
         sheets = reader.read_sheet_by_index(0)
-        assert list(sheets['Sheet 1']) == [
-            [u'1.0', u'2.0', u'3.0'],
-            [u'4.0', u'5.0', u'6.0'],
-            [u'7.0', u'8.0', u'9.0']
-        ]
+        self.assertEqual(list(sheets['Sheet 1']), [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ])
 
     @raises(IndexError)
     def test_read_one_from_many_by_unknown_index(self):
         reader = CSVZipBookReader()
         reader.open(self.file)
         reader.read_sheet_by_index(9999)
-
 
     def tearDown(self):
         os.unlink(self.file)

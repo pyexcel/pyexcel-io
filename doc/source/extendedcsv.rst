@@ -30,7 +30,7 @@ Here's the sample code::
     >>> data = get_data("your_file.csv")
     >>> import json
     >>> print(json.dumps(data))
-    {"Sheet 1": [["1", "2", "3"], ["4", "5", "6"]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
+    {"Sheet 1": [[1, 2, 3], [4, 5, 6]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
 
 Here is what you would get::
 
@@ -67,7 +67,7 @@ Continue from previous example::
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
     >>> data = get_data(io)
     >>> print(json.dumps(data))
-    {"Sheet 1": [["1", "2", "3"], ["4", "5", "6"]], "Sheet 2": [["7", "8", "9"], ["10", "11", "12"]]}
+    {"Sheet 1": [[1, 2, 3], [4, 5, 6]], "Sheet 2": [[7, 8, 9], [10, 11, 12]]}
 
 
 .. testcode::
