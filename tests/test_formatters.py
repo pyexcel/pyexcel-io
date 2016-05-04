@@ -1,8 +1,36 @@
 import os
+import datetime
 from unittest import TestCase
 from textwrap import dedent
 
 import pyexcel as pe
+
+
+class TestDateFormat(TestCase):
+    def setUp(self):
+        self.excel_filename = "testdateformat.csv"
+        self.data = [[
+            datetime.date(2014,12,25),
+            datetime.datetime(2014,12,25,11,11,11),
+            datetime.datetime(2014,12,25,11,11,11,10)
+        ]]
+        pe.save_as(dest_file_name=self.excel_filename, array=self.data)
+    
+    def test_auto_detect_float(self):
+        sheet = pe.get_sheet(file_name=self.excel_filename)
+        self.assertEqual(sheet.to_array(), self.data)
+
+    def test_auto_detect_float_false(self):
+        expected = [[
+            '2014-12-25',
+            '2014-12-25 11:11:11',
+            '2014-12-25 11:11:11.000010']]
+        sheet = pe.get_sheet(file_name=self.excel_filename,
+                             auto_detect_datetime=False)
+        self.assertEqual(sheet.to_array(), expected)
+
+    def tearDown(self):
+        os.unlink(self.excel_filename)
 
 
 class TestAutoDetectInt(TestCase):
