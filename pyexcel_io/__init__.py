@@ -13,27 +13,24 @@ from . import fileformat, database
 
 exports = fileformat.exports + database.exports
 
+from pkgutil import iter_modules
 
-try:
-    import pyexcel_xls.xls as xls
-    exports += xls.exports
-except ImportError:
-    pass
+black_list = [__name__, 'pyexcel_webio', 'pyexcel_text']
 
+for _, module_name, ispkg in iter_modules():
+    if module_name in black_list:
+        continue
 
-try:
-    import pyexcel_xlsx.xlsx as xlsx
-    exports += xlsx.exports
-except ImportError:
-    pass
-
-
-try:
-    import pyexcel_ods3.ods as ods
-    exports += ods.exports
-except ImportError:
-    pass
-
+    if ispkg and module_name.startswith('pyexcel_'):
+        try:
+            plugin = __import__(module_name)
+            if hasattr(plugin, '__pyexcel_io_plugins__'):
+                for p in plugin.__pyexcel_io_plugins__:
+                    plugin = __import__("%s.%s" % (module_name, p))
+                    submodule = getattr(plugin, p)
+                    exports += submodule.exports
+        except ImportError:
+            continue
 
 RWManager.register_readers_and_writers(exports)
 
