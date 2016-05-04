@@ -30,9 +30,26 @@ Write to a csv file
 
 Here's the sample code to write an array to a csv file ::
 
+   >>> import datetime
    >>> from pyexcel_io import save_data
-   >>> data = [[1, 2, 3], [4, 5, 6]]
+   >>> data = [
+   ...     [1, 2.0, 3.1],
+   ...     [
+   ...         datetime.date(2016, 5, 4),
+   ...         datetime.datetime(2016, 5, 4, 17, 39, 12),
+   ...         datetime.datetime(2016, 5, 4, 17, 40, 12, 100)
+   ...     ]
+   ... ]
    >>> save_data("your_file.csv", data)
+
+Let's verify the file content::
+
+    >>> with open("your_file.csv", "r") as csvfile:
+    ...     print(csvfile.read())
+    1,2.0,3.1
+    2016-05-04,2016-05-04 17:39:12,2016-05-04 17:40:12.000100
+    <BLANKLINE>
+
 
 Change line endings
 *************************
@@ -45,13 +62,38 @@ to change it, you can do:
 Read from a csv file
 --------------------------------------------------------------------------------
 
-Here's the sample code::
+And we can read the written csv file back as the following code::
 
     >>> from pyexcel_io import get_data
     >>> data = get_data("your_file.csv")
-    >>> import json
-    >>> print(json.dumps(data))
-    {"your_file.csv": [[1, 2, 3], [4, 5, 6]]}
+	>>> import pprint
+    >>> pprint.pprint(data['your_file.csv'])
+    [[1, 2, 3.1],
+     [datetime.date(2016, 5, 4),
+      datetime.datetime(2016, 5, 4, 17, 39, 12),
+      datetime.datetime(2016, 5, 4, 17, 40, 12, 100)]]
+
+As you can see, pyexcel-io not only reads the csv file back but also
+recognizes the data types: `int`, `float`, `date` and `datetime`. However, it
+does give your cpu some extra job. When you are handling a large csv file and
+the cpu budget is of your concern, you may switch off the type detection feature.
+For example, let's switch all off:
+  
+    >>> data = get_data("your_file.csv", auto_detect_float=False, auto_detect_datetime=False)
+    >>> pprint.pprint(data['your_file.csv'])
+    [[u'1', u'2.0', u'3.1'],
+     [u'2016-05-04', u'2016-05-04 17:39:12', u'2016-05-04 17:40:12.000100']]
+
+In addition to `auto_detect_float` and `auto_detect_datetime`, there is another flag named `auto_detect_int`, which becomes active only if `auto_detect_float` is `True`. Now, let's play a bit with `auto_detect_int`:
+
+    >>> data = get_data("your_file.csv", auto_detect_int=False)
+    >>> pprint.pprint(data['your_file.csv'])
+    [[1.0, 2.0, 3.1],
+     [datetime.date(2016, 5, 4),
+      datetime.datetime(2016, 5, 4, 17, 39, 12),
+      datetime.datetime(2016, 5, 4, 17, 40, 12, 100)]]
+
+As you see, all numeric data are identified as float type. If you looked a few paragraphs above, you would notice `auto_detect_int` affected [1, 2, ..] in the first row.
 
 Write a csv to memory
 --------------------------------------------------------------------------------
@@ -70,11 +112,12 @@ Here's the sample code to write a dictionary as a csv into memory::
 Read from a csv from memory
 --------------------------------------------------------------------------------
 
-Continue from previous example::
+Continue from previous example:
 
     >>> # This is just an illustration
     >>> # In reality, you might deal with csv file upload
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
+	>>> import json
     >>> data = get_data(io)
     >>> print(json.dumps(data))
     {"csv": [[1, 2, 3], [4, 5, 6]]}
