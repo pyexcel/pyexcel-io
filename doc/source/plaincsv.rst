@@ -44,10 +44,10 @@ Here's the sample code to write an array to a csv file ::
 Let's verify the file content::
 
    >>> with open("your_file.csv", "r") as csvfile:
-   ...     print(csvfile.read())
+   ...     for line in csvfile.readlines():
+   ...         print(line.strip())
    1,2.0,3.0
    2016-05-04,2016-05-04 17:39:12,2016-05-04 17:40:12.000100
-   <BLANKLINE>
 
 
 Change line endings
