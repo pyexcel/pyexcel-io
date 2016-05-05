@@ -27,13 +27,12 @@ Write to a csv file
     ...     from io import StringIO
     >>> from pyexcel_io._compact import OrderedDict
 
-
 Here's the sample code to write an array to a csv file ::
 
    >>> import datetime
    >>> from pyexcel_io import save_data
    >>> data = [
-   ...     [1, 2.0, 3.1],
+   ...     [1, 2.0, 3.0],
    ...     [
    ...         datetime.date(2016, 5, 4),
    ...         datetime.datetime(2016, 5, 4, 17, 39, 12),
@@ -44,11 +43,11 @@ Here's the sample code to write an array to a csv file ::
 
 Let's verify the file content::
 
-    >>> with open("your_file.csv", "r") as csvfile:
-    ...     print(csvfile.read())
-    1,2.0,3.1
-    2016-05-04,2016-05-04 17:39:12,2016-05-04 17:40:12.000100
-    <BLANKLINE>
+   >>> with open("your_file.csv", "r") as csvfile:
+   ...     print(csvfile.read())
+   1,2.0,3.0
+   2016-05-04,2016-05-04 17:39:12,2016-05-04 17:40:12.000100
+   <BLANKLINE>
 
 
 Change line endings
@@ -65,10 +64,10 @@ Read from a csv file
 And we can read the written csv file back as the following code::
 
     >>> from pyexcel_io import get_data
+    >>> import pprint
     >>> data = get_data("your_file.csv")
-	>>> import pprint
     >>> pprint.pprint(data['your_file.csv'])
-    [[1, 2, 3.1],
+    [[1, 2, 3],
      [datetime.date(2016, 5, 4),
       datetime.datetime(2016, 5, 4, 17, 39, 12),
       datetime.datetime(2016, 5, 4, 17, 40, 12, 100)]]
@@ -80,15 +79,15 @@ the cpu budget is of your concern, you may switch off the type detection feature
 For example, let's switch all off:
   
     >>> data = get_data("your_file.csv", auto_detect_float=False, auto_detect_datetime=False)
-    >>> pprint.pprint(data['your_file.csv'])
-    [[u'1', u'2.0', u'3.1'],
-     [u'2016-05-04', u'2016-05-04 17:39:12', u'2016-05-04 17:40:12.000100']]
+	>>> import json
+    >>> json.dumps(data['your_file.csv'])
+    '[["1", "2.0", "3.0"], ["2016-05-04", "2016-05-04 17:39:12", "2016-05-04 17:40:12.000100"]]'
 
 In addition to `auto_detect_float` and `auto_detect_datetime`, there is another flag named `auto_detect_int`, which becomes active only if `auto_detect_float` is `True`. Now, let's play a bit with `auto_detect_int`:
 
     >>> data = get_data("your_file.csv", auto_detect_int=False)
     >>> pprint.pprint(data['your_file.csv'])
-    [[1.0, 2.0, 3.1],
+    [[1.0, 2.0, 3.0],
      [datetime.date(2016, 5, 4),
       datetime.datetime(2016, 5, 4, 17, 39, 12),
       datetime.datetime(2016, 5, 4, 17, 40, 12, 100)]]
@@ -117,7 +116,7 @@ Continue from previous example:
     >>> # This is just an illustration
     >>> # In reality, you might deal with csv file upload
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
-	>>> import json
+    >>> import json
     >>> data = get_data(io)
     >>> print(json.dumps(data))
     {"csv": [[1, 2, 3], [4, 5, 6]]}
