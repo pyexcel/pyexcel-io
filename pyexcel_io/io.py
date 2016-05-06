@@ -95,6 +95,7 @@ def load_data_new(file_name=None,
                   file_type=None,
                   sheet_name=None,
                   sheet_index=None,
+                  library=None,
                   **keywords):
     """Load data from any supported excel formats
 
@@ -111,7 +112,7 @@ def load_data_new(file_name=None,
         raise IOError(MESSAGE_ERROR_02)
     if file_type is None:
         file_type = file_name.split(".")[-1]
-    reader = RWManager.create_reader(file_type)
+    reader = RWManager.create_reader(file_type, library)
     if file_name:
         reader.open(file_name, **keywords)
     elif file_content:
@@ -128,7 +129,8 @@ def load_data_new(file_name=None,
     return result
 
 
-def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords):
+def get_writer_new(file_name=None, file_stream=None,
+                   file_type=None, library=None, **keywords):
     number_of_none_inputs = list(filter(lambda x: x is not None,
                                         [file_name, file_stream]))
     if len(number_of_none_inputs) != 1:
@@ -138,7 +140,7 @@ def get_writer_new(file_name=None, file_stream=None, file_type=None, **keywords)
         file_type = file_name.split(".")[-1]
         file_type_given = False
 
-    writer = RWManager.create_writer(file_type)
+    writer = RWManager.create_writer(file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, file_type=file_type, **keywords)

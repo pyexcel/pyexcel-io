@@ -29,7 +29,8 @@ for _, module_name, ispkg in iter_modules():
                     plugin = __import__("%s.%s" % (module_name, p))
                     submodule = getattr(plugin, p)
                     exports += submodule.exports
-        except ImportError:
+        except ImportError as e:
+            print e
             continue
 
 RWManager.register_readers_and_writers(exports)

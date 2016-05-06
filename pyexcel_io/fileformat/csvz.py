@@ -113,7 +113,9 @@ _registry = {
     "file_type": FILE_FORMAT_CSVZ,
     "reader": CSVZipBookReader,
     "writer": CSVZipBookWriter,
-    "stream_type": "binary"
+    "stream_type": "binary",
+    "mime_type": "application/zip",
+    "library": "built-in"
 }
 
 exports = (_registry,)

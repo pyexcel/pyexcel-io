@@ -212,7 +212,8 @@ _registry = {
     "file_type": DB_DJANGO,
     "reader": DjangoBookReader,
     "writer": DjangoBookWriter,
-    "stream_type": "special"
+    "stream_type": "special",
+    "library": "built-in"
 }
 
 exports = (_registry,)

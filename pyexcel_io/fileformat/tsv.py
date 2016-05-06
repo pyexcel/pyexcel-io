@@ -43,7 +43,9 @@ _registry = {
     "file_type": FILE_FORMAT_TSV,
     "reader": TSVBookReader,
     "writer": TSVBookWriter,
-    "stream_type": "text"
+    "stream_type": "text",
+    "mime_type": "text/tab-separated-values",
+    "library": "built-in"
 }
 
 exports = (_registry,)

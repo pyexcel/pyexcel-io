@@ -178,7 +178,8 @@ _registry = {
     "file_type": DB_SQL,
     "reader": SQLBookReader,
     "writer": SQLBookWriter,
-    "stream_type": "text"
+    "stream_type": "special",
+    "library": "built-in"
 }
 
 exports = (_registry,)

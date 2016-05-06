@@ -326,7 +326,9 @@ _registry = {
     "file_type": FILE_FORMAT_CSV,
     "reader": CSVBookReader,
     "writer": CSVBookWriter,
-    "stream_type": "text"
+    "stream_type": "text",
+    "mime_type": "text/csv",
+    "library": "built-in"
 }
 
 exports = (_registry,)
