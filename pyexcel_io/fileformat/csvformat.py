@@ -317,7 +317,12 @@ def _detect_date_value(csv_cell_text):
 
 def _detect_float_value(csv_cell_text):
     try:
-        return float(csv_cell_text)
+        if csv_cell_text.startswith('0'):
+            # do not convert if a number starts with 0
+            # e.g. 014325
+            return None
+        else:
+            return float(csv_cell_text)
     except ValueError:
         return None
 
