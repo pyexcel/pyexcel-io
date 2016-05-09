@@ -53,7 +53,7 @@ class SheetReader(object):
 
     @abstractmethod
     def to_array(self):
-        """2 dimentional repsentation of the content
+        """2 dimentional representation of the content
         """
         pass
 
