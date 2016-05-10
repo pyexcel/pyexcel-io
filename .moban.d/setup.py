@@ -1,9 +1,4 @@
 {% extends 'setup.py.jj2' %}
-{%block extras %}
-import sys
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-    dependencies.append('ordereddict')
-{%endblock%}
 
 {%block additional_keywords%}
         'API',
