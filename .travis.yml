@@ -11,10 +11,10 @@ python:
   - 3.4
   - 3.5
 before_install:
-  - if [[ $TRAVIS_PYTHON_VERSION == "2.6" ]]; then pip install ordereddict; fi
-  - pip install https://github.com/pyexcel/pyexcel-xls/archive/master.zip
-  - touch requirements.txt
-  - if [[ -f rnd_requirements.txt ]]; then pip install -r rnd_requirements.txt; fi
+  - if [[ -f rnd_requirements.txt ]]; then
+      pip install --upgrade "setuptools==17.1" ;
+      pip install -r rnd_requirements.txt ;
+    fi
   - pip install -r tests/requirements.txt
 script:
   make test

@@ -1,5 +1,2 @@
-#/bin/bash
 pip freeze
-nosetests --rednose --with-cov --cov pyexcel_io --cov tests --with-doctest --doctest-extension=.rst doc/source tests pyexcel_io
-
-
+nosetests --with-cov --cover-package pyexcel_io --cover-package tests --with-doctest --doctest-extension=.rst tests README.rst pyexcel_io
