@@ -11,9 +11,14 @@ from pyexcel_io.database.sql import SQLBookWriter, SQLTableImporter, SQLTableImp
 from pyexcel_io.database.sql import SQLTableExporter, SQLTableExportAdapter, SQLBookReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises
+import platform
 
+engine = None
+if platform.python_implementation() == 'PyPy':
+    engine=create_engine("sqlite:///tmp.db")
+else:
+    engine=create_engine("sqlite://")
 
-engine=create_engine("sqlite:///tmp.db")
 Base=declarative_base()
 
 
