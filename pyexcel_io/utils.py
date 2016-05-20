@@ -2,27 +2,29 @@ import datetime
 
 from ._compact import PY2
 from ._compact import is_string
-from .constants import (
-    FILE_FORMAT_ODS,
-    FILE_FORMAT_XLS,
-    FILE_FORMAT_XLSX,
-    FILE_FORMAT_XLSM,
-    MESSAGE_LOADING_FORMATTER
-)
+from . import constants
 
 
 AVAILABLE_READERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_XLSM: ('pyexcel-xls', 'pyexcel-xlsx'),
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
+    constants.FILE_FORMAT_XLS: 'pyexcel-xls',
+    constants.FILE_FORMAT_XLSX: ('pyexcel-xls', 'pyexcel-xlsx'),
+    constants.FILE_FORMAT_XLSM: ('pyexcel-xls', 'pyexcel-xlsx'),
+    constants.FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3'),
+    constants.FILE_FORMAT_CSV: 'pyexcel-io',
+    constants.FILE_FORMAT_TSV: 'pyexcel-io',
+    constants.FILE_FORMAT_CSVZ: 'pyexcel-io',
+    constants.FILE_FORMAT_TSVZ: 'pyexcel-io'
 }
 
 AVAILABLE_WRITERS = {
-    FILE_FORMAT_XLS: 'pyexcel-xls',
-    FILE_FORMAT_XLSX: 'pyexcel-xlsx',
-    FILE_FORMAT_XLSM: 'pyexcel-xlsx',
-    FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3')
+    constants.FILE_FORMAT_XLS: 'pyexcel-xls',
+    constants.FILE_FORMAT_XLSX: 'pyexcel-xlsx',
+    constants.FILE_FORMAT_XLSM: 'pyexcel-xlsx',
+    constants.FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3'),
+    constants.FILE_FORMAT_CSV: 'pyexcel-io',
+    constants.FILE_FORMAT_TSV: 'pyexcel-io',
+    constants.FILE_FORMAT_CSVZ: 'pyexcel-io',
+    constants.FILE_FORMAT_TSVZ: 'pyexcel-io'
 }
 
 
@@ -74,10 +76,10 @@ def resolve_missing_extensions(extension, available_list):
     message = ""
     if handler:
         if is_string(type(handler)):
-            message = MESSAGE_LOADING_FORMATTER % (extension, handler)
+            message = constants.MESSAGE_LOADING_FORMATTER % (extension, handler)
         else:
             merged = "%s or %s" % (handler[0], handler[1])
-            message = MESSAGE_LOADING_FORMATTER % (extension, merged)
+            message = constants.MESSAGE_LOADING_FORMATTER % (extension, merged)
         raise NotImplementedError(message)
     else:
         raise NotImplementedError()
