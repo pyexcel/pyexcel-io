@@ -75,7 +75,7 @@ class CSVZipBookReader(BookReader):
         sheets = [NamedContent(self._get_sheet_name(name), name)
                   for name in self.zipfile.namelist()]
         return sheets
-            
+
     def _get_sheet_name(self, filename):
         len_of_a_dot = 1
         len_of_csv_word = 3

@@ -23,19 +23,28 @@ class RWInterface(object):
     """
     def RWInterface(self):
         self.file_type = None
-        
+
     def open(self, file_name, **keywords):
-        pass
+        """open a file for read or write"""
+        raise NotImplementedError("Please implement this method")
 
     def open_stream(self, file_stream, **keywords):
-        pass
+        """open a file stream for read or write"""
+        raise NotImplementedError("Please implement this method")
 
     def set_type(self, file_type):
+        """
+        set the file type for the instance
+
+        file type is needed when a third party library could
+        handle more than one file type"""
         self.file_type = file_type
 
     def close(self):
+        """
+        close the file handle if necessary
+        """
         pass
-
 
 
 class BookReader(RWInterface):
@@ -47,12 +56,23 @@ class BookReader(RWInterface):
         self.file_name = None
         self.file_stream = None
         self.keywords = None
+        self.native_book = None
 
     def open(self, file_name, **keywords):
+        """
+        open a file with unlimited keywords
+
+        keywords are passed on to individual readers
+        """
         self.file_name = file_name
         self.keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
+        """
+        open a file with unlimited keywords for reading
+
+        keywords are passed on to individual readers
+        """
         if RWManager.validate_io(self.file_type, file_stream):
             self.file_stream = file_stream
             self.keywords = keywords
@@ -60,6 +80,12 @@ class BookReader(RWInterface):
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
 
     def open_content(self, file_content, **keywords):
+        """
+        read file content as if it is a file stream with
+        unlimited keywords for reading
+
+        keywords are passed on to individual readers
+        """
         io = RWManager.get_io(self.file_type)
         if PY2:
             io.write(file_content)
@@ -73,8 +99,11 @@ class BookReader(RWInterface):
         self.open_stream(io, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
-        named_contents = list(filter(lambda nc: nc.name == sheet_name,
-                                     self.native_book))
+        """
+        read a named sheet from a excel data book
+        """
+        named_contents = [content for content in self.native_book
+                           if content.name == sheet_name]
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
@@ -82,6 +111,9 @@ class BookReader(RWInterface):
             raise ValueError("Cannot find sheet %s" % sheet_name)
 
     def read_sheet_by_index(self, sheet_index):
+        """
+        read an indexed sheet from a excel data book
+        """
         try:
             sheet = self.native_book[sheet_index]
             return {sheet.name: self.read_sheet(sheet)}
@@ -90,17 +122,19 @@ class BookReader(RWInterface):
             raise
 
     def read_all(self):
+        """
+        read everything from a excel data book
+        """
         result = OrderedDict()
         for sheet in self.native_book:
             result[sheet.name] = self.read_sheet(sheet)
         return result
 
-
-    @abstractmethod
     def read_sheet(self, native_sheet):
-        """Return a context specific sheet from a native sheet
         """
-        pass
+        Return a context specific sheet from a native sheet
+        """
+        raise NotImplementedError("Please implement this method")
 
 
 class BookWriter(RWInterface):
@@ -112,10 +146,20 @@ class BookWriter(RWInterface):
         self.file_alike_object = None
 
     def open(self, file_name, **keywords):
+        """
+        open a file with unlimited keywords for writing
+
+        keywords are passed on to individual writers
+        """
         self.file_alike_object = file_name
         self.keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
+        """
+        open a file stream with unlimited keywords for writing
+
+        keywords are passed on to individual writers
+        """
         if isstream(file_stream):
             if not RWManager.validate_io(self.file_type, file_stream):
                 raise IOError(MESSAGE_WRONG_IO_INSTANCE)

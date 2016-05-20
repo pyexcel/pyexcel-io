@@ -166,10 +166,10 @@ class SQLBookWriter(BookWriter):
         adapter = self.importer.get(sheet_name)
         if adapter:
             sheet_writer = SQLTableWriter(
-                    self.importer.session,
-                    (adapter.table, adapter.column_names,
-                     adapter.column_name_mapping_dict,
-                     adapter.row_initializer)
+                self.importer.session,
+                (adapter.table, adapter.column_names,
+                 adapter.column_name_mapping_dict,
+                 adapter.row_initializer)
             )
         return sheet_writer
 

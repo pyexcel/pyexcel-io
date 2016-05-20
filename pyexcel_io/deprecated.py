@@ -32,11 +32,11 @@ def load_data(filename,
               sheet_name=None,
               sheet_index=None,
               **keywords):
-    file_name=None
-    file_stream=None
-    file_content=None
-    extension=None
-    from_memory=False
+    file_name = None
+    file_stream = None
+    file_content = None
+    extension = None
+    from_memory = False
     if filename is None:
         raise IOError(MESSAGE_ERROR_02)
     elif not is_string(type(filename)) and not isstream(filename):

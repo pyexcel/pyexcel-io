@@ -47,7 +47,7 @@ else:
 def is_string(atype):
     """find out if a type is str or not"""
     if atype == str:
-            return True
+        return True
     elif PY2:
         if atype == unicode:
             return True

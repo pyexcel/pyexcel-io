@@ -41,7 +41,7 @@ class RWManager(object):
             RWManager.register_file_type_as_binary_stream(file_type)
         if mime_type is not None:
             RWManager.mime_types[file_type] = mime_type
-        
+
     @staticmethod
     def register_file_type_as_text_stream(file_type):
         RWManager.text_stream_types.append(file_type)
@@ -101,7 +101,7 @@ class RWManager(object):
     @staticmethod
     def get_io(file_type):
         """A utility function to help you generate a correct io stream
-    
+
         :param file_type: a supported file type
         :returns: a appropriate io stream, None otherwise
         """

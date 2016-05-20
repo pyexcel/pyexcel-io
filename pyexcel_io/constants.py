@@ -21,7 +21,8 @@ MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER = "Cannot read content of file type %s f
 MESSAGE_LOADING_FORMATTER = "The plugin for file type %s is not installed. Please install %s"
 MESSAGE_EMPTY_ARRAY = "One empty row is found"
 MESSAGE_IGNORE_ROW = "One row is ignored"
-MESSAGE_DB_EXCEPTION = "Warning: Bulk insertion got below exception. Trying to do it one by one slowly."
+MESSAGE_DB_EXCEPTION = """
+Warning: Bulk insertion got below exception. Trying to do it one by one slowly."""
 
 FILE_FORMAT_CSV = 'csv'
 FILE_FORMAT_TSV = 'tsv'

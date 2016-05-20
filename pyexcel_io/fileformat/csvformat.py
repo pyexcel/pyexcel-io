@@ -84,7 +84,7 @@ class CSVSheetReader(SheetReader):
                     myrow += tmp_row
                     tmp_row = []
             yield myrow
-            
+
     def _convert_cell(self, csv_cell_text):
         ret = None
         if self.auto_detect_float:

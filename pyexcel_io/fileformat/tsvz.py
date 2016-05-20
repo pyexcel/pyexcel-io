@@ -35,7 +35,7 @@ class TSVZipBookWriter(CSVZipBookWriter):
     def __init__(self):
         CSVZipBookWriter.__init__(self)
         self.file_type = FILE_FORMAT_TSVZ
-    
+
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVZipBookWriter.open(self, file_name, **keywords)
