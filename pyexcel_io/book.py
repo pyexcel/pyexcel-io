@@ -142,7 +142,6 @@ class BookWriter(RWInterface):
     Standard book writer
     """
     def __init__(self):
-        self.writer = None
         self.file_alike_object = None
 
     def open(self, file_name, **keywords):
