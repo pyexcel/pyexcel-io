@@ -121,7 +121,7 @@ def load_data_new(file_name=None,
         reader.open_stream(file_stream, **keywords)
     if sheet_name:
         result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index:
+    elif sheet_index is not None:
         result = reader.read_sheet_by_index(sheet_index)
     else:
         result = reader.read_all()
