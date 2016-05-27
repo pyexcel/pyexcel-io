@@ -49,7 +49,7 @@ Here's the actual code to achieve it:
     >>> importer.append(adapter)
     >>> save_data(importer, {adapter.get_name(): data[1:]}, file_type=DB_SQL)
 
-Now let's verify the data:
+Please note that, the data dict shall have table name as its key. Now let's verify the data:
 
     >>> from pyexcel_io.utils import from_query_sets
     >>> query_sets=mysession.query(Pyexcel).all()

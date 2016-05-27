@@ -158,8 +158,9 @@ class SQLTableImporter(object):
 
 
 class SQLBookWriter(BookWriter):
-    def open_content(self, file_content, **keywords):
+    def open_content(self, file_content, auto_commit=True, **keywords):
         self.importer = file_content
+        self.auto_commit = auto_commit
 
     def create_sheet(self, sheet_name):
         sheet_writer = None
@@ -169,7 +170,8 @@ class SQLBookWriter(BookWriter):
                 self.importer.session,
                 (adapter.table, adapter.column_names,
                  adapter.column_name_mapping_dict,
-                 adapter.row_initializer)
+                 adapter.row_initializer),
+                auto_commit=self.auto_commit
             )
         return sheet_writer
 
