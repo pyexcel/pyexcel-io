@@ -5,12 +5,15 @@ from nose.tools import raises
 from pyexcel_io.manager import RWManager
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.fileformat.csvformat import CSVBookReader, CSVBookWriter
-from pyexcel_io.fileformat.tsv import TSVBookReader
+from pyexcel_io.fileformat.tsv import TSVBookReader, TSVBookWriter
 
 
-class TestReaders(TestCase):
+class TestCSVReaders(TestCase):
+    file_type = 'csv'
+    reader_class = CSVBookReader
+    delimiter = ','
+
     def setUp(self):
-        self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
         self.data = [
             ["1", "2", "3"],
@@ -24,10 +27,10 @@ class TestReaders(TestCase):
         ]
         with open(self.test_file, 'w') as f:
             for row in self.data:
-                f.write(",".join(row) + "\n")
+                f.write(self.delimiter.join(row) + "\n")
 
     def test_book_reader(self):
-        b = CSVBookReader()
+        b = self.reader_class()
         b.open(self.test_file)
         sheets = b.read_all()
         self.assertEqual(list(sheets[self.test_file]), self.expected_data)
@@ -37,57 +40,29 @@ class TestReaders(TestCase):
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
-        b = CSVBookReader()
+        b = self.reader_class()
         b.open_stream(io)
         sheets = b.read_all()
-        self.assertEqual(list(sheets['csv']), self.expected_data)
+        self.assertEqual(list(sheets[self.file_type]), self.expected_data)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-class TestTSVReaders(TestCase):
-    def setUp(self):
-        self.file_type = "tsv"
-        self.test_file = "tsv_book." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
-        self.expected_data =[
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ]
-        with open(self.test_file, 'w') as f:
-            for row in self.data:
-                f.write("\t".join(row) + "\n")
-
-    def test_book_reader(self):
-        b = TSVBookReader()
-        b.open(self.test_file)
-        sheets = b.read_all()
-        self.assertEqual(list(sheets[self.test_file]), self.expected_data)
-
-    def test_book_reader_from_memory_source(self):
-        io = RWManager.get_io(self.file_type)
-        with open(self.test_file, 'r') as f:
-            io.write(f.read())
-        io.seek(0)
-        b = TSVBookReader()
-        b.open_stream(io)
-        sheets = b.read_all()
-        self.assertEqual(list(sheets['tsv']), self.expected_data)
-
-    def tearDown(self):
-        os.unlink(self.test_file)
+class TestTSVReaders(TestCSVReaders):
+    file_type = "tsv"
+    reader_class = TSVBookReader
+    delimiter = '\t'
 
 
 class TestReadMultipleSheets(TestCase):
+    file_type = "csv"
+    reader_class = CSVBookReader
+    delimiter = ','
+
     def setUp(self):
-        self.file_type = "csv"
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
+        self.merged_book_file = "csv_multiple." + self.file_type
         self.data = [
             ["1", "2", "3"],
             ["4", "5", "6"],
@@ -111,39 +86,39 @@ class TestReadMultipleSheets(TestCase):
             file_name = self.test_file_formatter % (key, index)
             with open(file_name, 'w') as f:
                 for row in value:
-                    f.write(",".join(row) + "\n")
+                    f.write(self.delimiter.join(row) + "\n")
             index = index + 1
 
     def test_multiple_sheet(self):
-        b = CSVBookReader()
-        b.open("csv_multiple.csv")
+        b = self.reader_class()
+        b.open(self.merged_book_file)
         sheets = b.read_all()
         for key in sheets:
             sheets[key] = list(sheets[key])
         self.assertEqual(sheets, self.expected_sheets)
 
     def test_read_one_from_many_by_name(self):
-        b = CSVBookReader()
-        b.open("csv_multiple.csv")
+        b = self.reader_class()
+        b.open(self.merged_book_file)
         sheets = b.read_sheet_by_name("sheet1")
         self.assertEqual(list(sheets["sheet1"]), self.expected_sheets["sheet1"])
 
     @raises(ValueError)
     def test_read_one_from_many_by_non_existent_name(self):
-        b = CSVBookReader()
-        b.open("csv_multiple.csv")
+        b = self.reader_class()
+        b.open(self.merged_book_file)
         b.read_sheet_by_name("notknown")
 
     def test_read_one_from_many_by_index(self):
-        b = CSVBookReader()
-        b.open("csv_multiple.csv")
+        b = self.reader_class()
+        b.open(self.merged_book_file)
         sheets = b.read_sheet_by_index(1)
         self.assertEqual(list(sheets["sheet2"]), self.expected_sheets["sheet2"])
 
     @raises(IndexError)
     def test_read_one_from_many_by_wrong_index(self):
-        b = CSVBookReader()
-        b.open("csv_multiple.csv")
+        b = self.reader_class()
+        b.open(self.merged_book_file)
         b.read_sheet_by_index(90)
 
     def tearDown(self):
@@ -154,10 +129,52 @@ class TestReadMultipleSheets(TestCase):
             index = index + 1
 
 
+class TestTSVBookReaders(TestReadMultipleSheets):
+    file_type = 'tsv'
+    reader_class = TSVBookReader
+    delimiter = '\t'
+
+
 class TestWriteMultipleSheets(TestCase):
+    file_type = "csv"
+    writer_class = CSVBookWriter
+    reader_class = CSVBookReader
+    result1 = dedent("""
+        1,2,3
+        4,5,6
+        7,8,9
+        """).strip('\n')
+    result2 = dedent("""
+        1,2,3
+        4,5,6
+        7,8,1000
+        """).strip('\n')
+    result3 = dedent("""
+        1,2,3
+        4,5,6888
+        7,8,9
+        """).strip('\n')
+    merged = dedent("""\
+        ---pyexcel:sheet1---
+        1,2,3
+        4,5,6
+        7,8,9
+        ---pyexcel---
+        ---pyexcel:sheet2---
+        1,2,3
+        4,5,6
+        7,8,1000
+        ---pyexcel---
+        ---pyexcel:sheet3---
+        1,2,3
+        4,5,6888
+        7,8,9
+        ---pyexcel---
+        """)
+    
     def setUp(self):
-        self.file_type = "csv"
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
+        self.merged_book_file = "csv_multiple." + self.file_type
         self.data1 = [
             ["1", "2", "3"],
             ["4", "5", "6"],
@@ -197,29 +214,13 @@ class TestWriteMultipleSheets(TestCase):
         self.expected_sheets.update({"sheet2": self.expected_data2})
         self.expected_sheets.update({"sheet3": self.expected_data3})
         self.result_dict = OrderedDict()
-        self.result1 = dedent("""
-           1,2,3
-           4,5,6
-           7,8,9
-        """).strip('\n')
-        self.result2 = dedent("""
-           1,2,3
-           4,5,6
-           7,8,1000
-        """).strip('\n')
-        self.result3 = dedent("""
-           1,2,3
-           4,5,6888
-           7,8,9
-        """).strip('\n')
         self.result_dict.update({"sheet1": self.result1})
         self.result_dict.update({"sheet2": self.result2})
         self.result_dict.update({"sheet3": self.result3})
 
     def test_multiple_sheet(self):
-        """Write csv book into multiple file"""
-        w = CSVBookWriter()
-        w.open("csv_multiple.csv")
+        w = self.writer_class()
+        w.open(self.merged_book_file)
         w.write(self.sheets)
         w.close()
         index = 0
@@ -232,40 +233,22 @@ class TestWriteMultipleSheets(TestCase):
         self.delete_files()
 
     def test_multiple_sheet_into_memory(self):
-        """Write csv book into a single stream"""
         io = RWManager.get_io(self.file_type)
-        w = CSVBookWriter()
+        w = self.writer_class()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
         w.close()
         content = io.getvalue()
-        expected = dedent("""\
-            ---pyexcel:sheet1---
-            1,2,3
-            4,5,6
-            7,8,9
-            ---pyexcel---
-            ---pyexcel:sheet2---
-            1,2,3
-            4,5,6
-            7,8,1000
-            ---pyexcel---
-            ---pyexcel:sheet3---
-            1,2,3
-            4,5,6888
-            7,8,9
-            ---pyexcel---
-            """)
-        self.assertEqual(content, expected)
+        self.assertEqual(content, self.merged)
 
     def test_multiple_sheet_into_memory_2(self):
         """Write csv book into a single stream"""
         io = RWManager.get_io(self.file_type)
-        w = CSVBookWriter()
+        w = self.writer_class()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
         w.close()
-        reader = CSVBookReader()
+        reader = self.reader_class()
         reader.open_stream(io, lineterminator='\n')
         sheets = reader.read_all()
         for sheet in sheets:
@@ -280,54 +263,116 @@ class TestWriteMultipleSheets(TestCase):
             index = index + 1
 
 
-class TestWriter:
+class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
+    file_type = 'tsv'
+    writer_class = TSVBookWriter
+    reader_class = TSVBookReader
+    result1 = dedent("""
+        1\t2\t3
+        4\t5\t6
+        7\t8\t9
+        """).strip('\n')
+    result2 = dedent("""
+        1\t2\t3
+        4\t5\t6
+        7\t8\t1000
+        """).strip('\n')
+    result3 = dedent("""
+        1\t2\t3
+        4\t5\t6888
+        7\t8\t9
+        """).strip('\n')
+    merged = dedent("""\
+        ---pyexcel:sheet1---
+        1\t2\t3
+        4\t5\t6
+        7\t8\t9
+        ---pyexcel---
+        ---pyexcel:sheet2---
+        1\t2\t3
+        4\t5\t6
+        7\t8\t1000
+        ---pyexcel---
+        ---pyexcel:sheet3---
+        1\t2\t3
+        4\t5\t6888
+        7\t8\t9
+        ---pyexcel---
+        """)
+
+
+class TestWriter(TestCase):
+    file_type = 'csv'
+    writer_class = CSVBookWriter
+    result = dedent("""
+        1,2,3
+        4,5,6
+        7,8,9
+        """).strip('\n')
+
     def setUp(self):
-        self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
         self.data = [
             ["1", "2", "3"],
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.result = dedent("""
-           1,2,3
-           4,5,6
-           7,8,9
-        """).strip('\n')
 
     def test_book_writer(self):
-        w = CSVBookWriter()
+        w = self.writer_class()
         w.open(self.test_file)
         w.write({None: self.data})
         w.close()
         with open(self.test_file, 'r') as f:
             content = f.read().replace('\r', '')
-            assert content.strip('\n') == self.result
+            self.assertEqual(content.strip('\n'), self.result)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
-class TestMemoryWriter:
+class TestTSVWriters(TestWriter):
+    file_type = 'tsv'
+    writer_class = TSVBookWriter
+    result = dedent("""
+        1\t2\t3
+        4\t5\t6
+        7\t8\t9
+        """).strip('\n')
+
+
+class TestMemoryWriter(TestCase):
+    file_type = "csv"
+    writer_class = CSVBookWriter
+    result = dedent("""
+           1,2,3
+           4,5,6
+           7,8,9
+        """).strip('\n')
+
     def setUp(self):
-        self.file_type = "csv"
         self.test_file = "csv_book." + self.file_type
         self.data = [
             ["1", "2", "3"],
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.result = dedent("""
-           1,2,3
-           4,5,6
-           7,8,9
-        """).strip('\n')
 
     def test_book_writer_to_memroy(self):
         io = RWManager.get_io(self.file_type)
-        w = CSVBookWriter()
+        w = self.writer_class()
         w.open(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})
         w.close()
         content = io.getvalue().replace('\r', '')
         assert content.strip('\n') == self.result
+
+
+class TestTSVMemoryWriter(TestMemoryWriter):
+    file_type = 'tsv'
+    writer_class = TSVBookWriter
+    result = dedent("""
+           1\t2\t3
+           4\t5\t6
+           7\t8\t9
+        """).strip('\n')
