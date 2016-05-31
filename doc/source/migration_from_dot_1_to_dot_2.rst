@@ -19,3 +19,19 @@ Version 0.1.0 and elder, load_data was used by pyexcel and maybe by others.
 Version 0.2.0 discourage you from using it as it will be removed at some point
 in the future.
 
+auto_dectect_datetime
+--------------------------------------------------------------------------------
+
+The datetime formats are:
+
+#. %Y-%m-%d
+#. %Y-%m-%d %H:%M:%S
+#. %Y-%m-%d %H:%M:%S.%f
+
+Any other datetime formats will be thrown as ValueError
+
+'library' option is added
+--------------------------------------------------------------------------------
+
+In order to have overlapping plugins co-exit, 'library' option is added to
+get_data and save_data.

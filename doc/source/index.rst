@@ -72,18 +72,19 @@ For individual excel file formats, please install them as you wish:
    `ods`_         ods (python 2.6, 2.7)   odfpy         2.6, 2.7          
    ============== ======================= ============= ==================
 
-Please import them before you start to access the desired file formats::
-
-    import pyexcel_plugin
-
-After that, you can start get and save data in the loaded format.
+After that, you can start get and save data in the loaded format. There
+are two plugins for the same file format, e.g. pyexcel-ods3 and pyexcel-ods.
+If you want to choose one, please try pip uninstall the un-wanted one. And if
+you want to have both installed but wanted to use one of them for a function
+call(or file type) and the other for another function call(or file type), you can
+pass on "library" option to get_data and save_data.
 
 .. table:: Plugin compatibility table
 
     ============= ======= ======== ======= ======== =========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `text`_       
     ============= ======= ======== ======= ======== =========
-    0.2.0         0.2.0   0.2.0    0.2.0   0.2.0    0.2.0
+    0.2.0         0.2.0   0.2.0    0.2.0   0.2.0    N/A
     0.1.0         0.1.0   0.1.0    0.1.0   0.1.0    0.1.0
     ============= ======= ======== ======= ======== =========
 
@@ -93,6 +94,9 @@ After that, you can start get and save data in the loaded format.
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _text: https://github.com/pyexcel/pyexcel-text
+
+.. note::
+   pyexcel-text is no longer a plugin of pyexcel-io but a direct plugin of pyexcel
 
 Special note
 --------------------------------------------------------------------------------
@@ -123,13 +127,6 @@ API
    
    get_data
    save_data
-
-Utility functions
-
-.. autosummary::
-   :toctree: api/
-   
-   get_io
 
 
 Indices and tables

@@ -11,6 +11,7 @@ Added
 #. auto detect `datetime`, `float` and `int`. Detection can be switched off by
    `auto_detect_datetime`, `auto_detect_float`, `auto_detect_int`
 
+   
 0.1.0 - 17.01.2016
 --------------------------------------------------------------------------------
 
