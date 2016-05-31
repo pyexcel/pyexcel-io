@@ -30,9 +30,10 @@ class TestReaders(TestCase):
             for row in self.data:
                 f.write(",".join(row) + "\n")
 
-    @raises(TypeError)
+    @raises(NotImplementedError)
     def test_sheet_reader(self):
-        CSVSheetReader(self.test_file)
+        sheet = CSVSheetReader(self.test_file)
+        sheet.get_file_handle()
 
     def test_sheet_file_reader(self):
         r = CSVFileReader(NamedContent(self.file_type, self.test_file))

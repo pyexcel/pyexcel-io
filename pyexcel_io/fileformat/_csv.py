@@ -1,5 +1,5 @@
 """
-    pyexcel_io.csvbook
+    pyexcel_io._csv
     ~~~~~~~~~~~~~~~~~~~
 
     The lower level csv file format handler.
@@ -14,7 +14,6 @@ import glob
 import math
 import codecs
 import datetime
-from abc import abstractmethod
 
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
@@ -65,9 +64,8 @@ class CSVSheetReader(SheetReader):
         self.auto_detect_float = auto_detect_float
         self.auto_detect_datetime = auto_detect_datetime
 
-    @abstractmethod
     def get_file_handle(self):
-        pass
+        raise NotImplementedError("Please implement get_file_handle()")
 
     def to_array(self):
         reader = csv.reader(self.get_file_handle(), **self.keywords)
