@@ -42,9 +42,10 @@ class ArrayWriter(SheetWriter):
 
 class TestSheetReader:
 
-    @raises(TypeError)
+    @raises(NotImplementedError)
     def test_abstractness(self):
-        SheetReader("test")
+        reader = SheetReader("test")
+        reader.to_array()
 
     def test_to_array(self):
         name = "test"
@@ -53,20 +54,22 @@ class TestSheetReader:
             def name(self):
                 return self.native_sheet
             def to_array(self):
-                SheetReader.to_array(self)
-        B(name).to_array()
-        assert B(name).name == name
+                pass
+        b = B(name)
+        b.to_array()
+        assert b.name == name
 
 
 class TestSheetWriter:
-    @raises(TypeError)
+
+    @raises(NotImplementedError)
     def test_abstractness(self):
-        SheetWriter("te","st", "abstract")
+        writer = SheetWriter("te","st", "abstract")
+        writer.write_row([])
 
     def test_inheritance(self):
         class D(SheetWriter):
             def write_row(self, row):
-                SheetWriter.write_row(self, row)
                 pass
 
         d = D('t','e','s')

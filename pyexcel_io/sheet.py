@@ -7,11 +7,8 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from abc import ABCMeta, abstractmethod
-
 from ._compact import is_generator
 from .constants import DEFAULT_SHEET_NAME
-
 
 
 class NamedContent:
@@ -24,25 +21,6 @@ class NamedContent:
         self.payload = payload
 
 
-def add_metaclass(metaclass):
-    """
-    Class decorator for creating a class with a metaclass.
-    """
-    def wrapper(cls):
-        orig_vars = cls.__dict__.copy()
-        slots = orig_vars.get('__slots__')
-        if slots is not None:
-            if isinstance(slots, str):
-                slots = [slots]
-            for slots_var in slots:
-                orig_vars.pop(slots_var)
-        orig_vars.pop('__dict__', None)
-        orig_vars.pop('__weakref__', None)
-        return metaclass(cls.__name__, cls.__bases__, orig_vars)
-    return wrapper
-
-
-@add_metaclass(ABCMeta)
 class SheetReader(object):
     """
     Generic sheet reader
@@ -51,14 +29,12 @@ class SheetReader(object):
         self.native_sheet = sheet
         self.keywords = keywords
 
-    @abstractmethod
     def to_array(self):
         """2 dimentional representation of the content
         """
-        pass
+        raise NotImplementedError("Please implement to_array()")
 
 
-@add_metaclass(ABCMeta)
 class SheetWriter(object):
     """
     Generic sheet writer
@@ -86,12 +62,11 @@ class SheetWriter(object):
         """
         pass
 
-    @abstractmethod
     def write_row(self, array):
         """
         write a row into the file
         """
-        pass
+        raise NotImplementedError("Please implement write_row")
 
     def write_array(self, table):
         """
