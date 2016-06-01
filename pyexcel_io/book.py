@@ -7,8 +7,6 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from abc import abstractmethod
-
 from .manager import RWManager
 from ._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
@@ -21,7 +19,7 @@ class RWInterface(object):
     """
     The common methods for book reader and writer
     """
-    def RWInterface(self):
+    def __init__(self):
         self.file_type = None
 
     def open(self, file_name, **keywords):
@@ -173,6 +171,5 @@ class BookWriter(RWInterface):
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
 
-    @abstractmethod
     def create_sheet(self, sheet_name):
         pass

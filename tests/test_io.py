@@ -1,12 +1,27 @@
 import os
 import sys
+from unittest import TestCase
 from pyexcel_io.deprecated  import load_data, get_writer
 from pyexcel_io.book import RWManager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
+from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
+from pyexcel_io.io import load_data_new, get_writer_new
 from nose.tools import raises
 
+
 PY2 = sys.version_info[0] == 2
+
+
+@raises(IOError)
+def test_no_valid_parameters():
+    load_data_new()
+
+
+@raises(IOError)
+def test_no_valid_parameters_2():
+    get_writer_new()
+
 
 @raises(IOError)
 def test_none_type_load_data():
@@ -17,7 +32,7 @@ def test_none_type_load_data():
 def test_wrong_parameter_to_load_data():
     load_data(1)
 
-    
+
 @raises(IOError)
 def test_wrong_parameter_to_get_writer():
     get_writer(1)
@@ -97,6 +112,17 @@ def test_get_io():
     assert io == None
 
 
+def test_default_csv_format():
+    data = [['1','2','3']]
+    io = RWManager.get_io("csv")
+    # test default format for saving is 'csv'
+    save_data(io, data)
+    io.seek(0)
+    # test default format for reading is 'csv'
+    result = get_data(io)
+    assert result['csv'] == [[1, 2, 3]]
+
+
 def test_binary_file_content():
     data = [['1','2','3']]
     io = RWManager.get_io("csvz")
@@ -150,3 +176,52 @@ def test_generator_can_be_written():
     expected = get_data(test_fixture)
     assert data2[test_filename] == expected['test.csv']
     os.unlink(test_filename)
+
+
+class TestReadMultipleSheets(TestCase):
+    file_type = "csv"
+    delimiter = ','
+
+    def setUp(self):
+        self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
+        self.merged_book_file = "csv_multiple." + self.file_type
+        self.data = [
+            ["1", "2", "3"],
+            ["4", "5", "6"],
+            ["7", "8", "9"]
+        ]
+        self.expected_data =[
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]
+        self.sheets = OrderedDict()
+        self.sheets.update({"sheet1": self.data})
+        self.sheets.update({"sheet2": self.data})
+        self.sheets.update({"sheet3": self.data})
+        self.expected_sheets = OrderedDict()
+        self.expected_sheets.update({"sheet1": self.expected_data})
+        self.expected_sheets.update({"sheet2": self.expected_data})
+        self.expected_sheets.update({"sheet3": self.expected_data})
+        index = 0
+        for key, value in self.sheets.items():
+            file_name = self.test_file_formatter % (key, index)
+            with open(file_name, 'w') as f:
+                for row in value:
+                    f.write(self.delimiter.join(row) + "\n")
+            index = index + 1
+
+    def test_sheet_name(self):
+        sheets = get_data(self.merged_book_file, sheet_name="sheet1")
+        self.assertEqual(sheets['sheet1'], self.expected_sheets['sheet1'])
+
+    def test_sheet_index(self):
+        sheets = get_data(self.merged_book_file, sheet_index=1)
+        self.assertEqual(sheets['sheet2'], self.expected_sheets['sheet2'])
+
+    def tearDown(self):
+        index = 0
+        for key, value in self.sheets.items():
+            file_name = self.test_file_formatter % (key, index)
+            os.unlink(file_name)
+            index = index + 1

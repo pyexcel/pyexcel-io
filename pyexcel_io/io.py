@@ -136,7 +136,7 @@ def get_writer_new(file_name=None, file_stream=None,
     if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
     file_type_given = True
-    if file_type is None:
+    if file_type is None and file_name:
         file_type = file_name.split(".")[-1]
         file_type_given = False
 
@@ -148,6 +148,5 @@ def get_writer_new(file_name=None, file_stream=None,
             writer.open(file_name, **keywords)
     elif file_stream:
         writer.open_stream(file_stream, **keywords)
-    else:
-        raise IOError("Wrong arguments")
+    #else: is resolved by earlier raise statement
     return writer
