@@ -392,3 +392,14 @@ class TestDisabledWrite:
         assert len(query_sets) == 0
         mysession2.close()
 
+
+@raises(NotImplementedError)
+def test_not_implemented_method():
+    reader = SQLBookReader()
+    reader.open("afile")
+
+
+@raises(NotImplementedError)
+def test_not_implemented_method_2():
+    reader = SQLBookReader()
+    reader.open_stream("afile")

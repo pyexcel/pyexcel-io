@@ -1,3 +1,4 @@
+from nose.tools import raises
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
@@ -5,6 +6,7 @@ from pyexcel_io.database.django import DjangoModelReader, DjangoModelWriter
 from pyexcel_io.database.django import DjangoModelImporter, DjangoModelExporter
 from pyexcel_io.database.django import DjangoModelImportAdapter, DjangoModelExportAdapter
 from pyexcel_io.database.django import DjangoBookWriter, DjangoBookReader
+
 
 class Package:
     def __init__(self, raiseException=False, **keywords):
@@ -299,3 +301,15 @@ class TestMultipleModels:
         reader.open_content(exporter)
         data = reader.read_all()
         assert list(data['Sheet1']) == self.content['Sheet1']
+
+
+@raises(NotImplementedError)
+def test_not_implemented_method():
+    reader = DjangoBookReader()
+    reader.open("afile")
+
+
+@raises(NotImplementedError)
+def test_not_implemented_method_2():
+    reader = DjangoBookReader()
+    reader.open_stream("afile")
