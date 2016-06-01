@@ -139,6 +139,14 @@ def test_text_file_content():
     assert result['csv'] == [[1, 2, 3]]
 
 
+def test_library_parameter():
+    data = [['1','2','3']]
+    io = RWManager.get_io("csv")
+    save_data(io, data, 'csv', library="built-in")
+    result = get_data(io.getvalue(), 'csv', library="built-in")
+    assert result['csv'] == [[1, 2, 3]]
+
+
 def test_conversion_from_bytes_to_text():
     test_file = "conversion.csv"
     data = [['1','2','3']]
