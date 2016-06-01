@@ -10,6 +10,7 @@ class TestDateFormat(TestCase):
     def setUp(self):
         self.excel_filename = "testdateformat.csv"
         self.data = [[
+            '01/06/2016',
             datetime.date(2014,12,25),
             datetime.datetime(2014,12,25,11,11,11),
             datetime.datetime(2014,12,25,11,11,11,10)
@@ -22,6 +23,7 @@ class TestDateFormat(TestCase):
 
     def test_auto_detect_float_false(self):
         expected = [[
+            '01/06/2016',
             '2014-12-25',
             '2014-12-25 11:11:11',
             '2014-12-25 11:11:11.000010']]
@@ -35,7 +37,7 @@ class TestDateFormat(TestCase):
 
 class TestAutoDetectInt(TestCase):
     def setUp(self):
-        self.content = [[1,2,3.1]]
+        self.content = [[1, 2, 3.1]]
         self.test_file = "test_auto_detect_init.csv"
         pe.save_as(array=self.content, dest_file_name=self.test_file)
 
@@ -87,7 +89,7 @@ class TestAutoDetectFloat(TestCase):
     """
     
     def setUp(self):
-        self.content = [[1,2.0,3.1]]
+        self.content = [[1, 2.0, 3.1]]
         self.test_file = "test_auto_detect_init.csv"
         pe.save_as(array=self.content, dest_file_name=self.test_file)
 
@@ -110,6 +112,26 @@ class TestAutoDetectFloat(TestCase):
         | 1 | 2.0 | 3.1 |
         +---+-----+-----+""").strip()
         self.assertEqual(str(book), expected)
+
+    def tearDown(self):
+        os.unlink(self.test_file)
+
+
+class TestSpecialStrings(TestCase):
+    """
+    csv format would keep all as text 1, 2.0, 3.1
+    without auto-detection, they all stay as text format after reading
+    out
+    """
+    
+    def setUp(self):
+        self.content = [['01', 1, 2.0, 3.1]]
+        self.test_file = "test_auto_detect_init.csv"
+        pe.save_as(array=self.content, dest_file_name=self.test_file)
+
+    def test_auto_detect_float_false(self):
+        sheet = pe.get_sheet(file_name=self.test_file)
+        self.assertEqual(sheet.to_array(), [['01', 1, 2, 3.1]])
 
     def tearDown(self):
         os.unlink(self.test_file)
