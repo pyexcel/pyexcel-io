@@ -165,8 +165,12 @@ def test_is_string():
         assert is_string(type('a')) == True
 
 def test_validate_io():
-    assert RWManager.validate_io("csd", StringIO()) == False
-
+    if PY2:
+        # because this function in python 2 is hardcode
+        # why? because validation is not needed in python 3
+        assert RWManager.validate_io("csd", StringIO()) == True
+    else:
+        assert RWManager.validate_io("csd", StringIO()) == False
 
 @raises(TypeError)
 def test_generator_is_obtained():

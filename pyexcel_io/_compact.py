@@ -24,8 +24,9 @@ def is_generator(struct):
 
 
 if PY2:
-    from StringIO import StringIO
-    from StringIO import StringIO as BytesIO
+    from cStringIO import StringIO
+    from cStringIO import StringIO as BytesIO
+    from StringIO import StringIO as SlowStringIO
     text_type = unicode
 
     class Iterator(object):
@@ -33,7 +34,10 @@ if PY2:
             return type(self).__next__(self)
 
     def isstream(instance):
-        return isinstance(instance, StringIO)
+        import cStringIO
+        return (isinstance(instance, cStringIO.InputType) or
+                isinstance(instance, cStringIO.OutputType) or
+                isinstance(instance, SlowStringIO))
 
 else:
     from io import StringIO, BytesIO
