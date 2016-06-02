@@ -37,11 +37,29 @@ def from_query_sets(column_names, query_sets):
     for row in query_sets:
         new_array = []
         for column in column_names:
-            value = getattr(row, column)
+            if '__' in column:
+                value = _get_complex_attribute(row, column)
+            else:
+                value = _get_simple_attribute(row, column)
             if isinstance(value, (datetime.date, datetime.time)):
                 value = value.isoformat()
             new_array.append(value)
         yield new_array
+
+
+def _get_complex_attribute(row, attribute):
+    attributes = attribute.split('__')
+    value = row
+    for attributee in attributes:
+        value = _get_simple_attribute(value, attributee)
+    return value
+
+
+def _get_simple_attribute(row, attribute):
+    value = getattr(row, attribute)
+    if isinstance(value, (datetime.date, datetime.time)):
+        value = value.isoformat()
+    return value
 
 
 def is_empty_array(array):

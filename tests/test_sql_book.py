@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column , Integer, String, Float, Date, DateTime, ForeignKey
@@ -10,7 +11,7 @@ from pyexcel_io.database.sql import PyexcelSQLSkipRowException
 from pyexcel_io.database.sql import SQLBookWriter, SQLTableImporter, SQLTableImportAdapter
 from pyexcel_io.database.sql import SQLTableExporter, SQLTableExportAdapter, SQLBookReader
 from sqlalchemy.orm import relationship, backref
-from nose.tools import raises
+from nose.tools import raises, eq_
 import platform
 
 engine = None
@@ -28,6 +29,7 @@ class Pyexcel(Base):
     name=Column(String, unique=True)
     weight=Column(Float)
     birth=Column(Date)
+
 
 class Post(Base):
     __tablename__ = 'post'
@@ -50,6 +52,7 @@ class Post(Base):
 
     def __repr__(self):
         return '<Post %r>' % self.title
+
 
 class Category(Base):
     __tablename__ = 'category'
@@ -339,10 +342,15 @@ class TestMultipleRead:
         book = SQLBookReader()
         book.open_content(exporter)
         data = book.read_all()
-        import json
         for key in data.keys():
             data[key] = list(data[key])
         assert json.dumps(data) == '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], "post": [["body", "category_id", "id", "pub_date", "title"], ["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], ["informal", 2, 2, "2015-01-20T23:28:30", "Title B"]]}'
+
+    def test_foreign_key(self):
+        all_posts = self.session.query(Post).all()
+        column_names = ['category__name', 'title']
+        data = list(from_query_sets(column_names, all_posts))
+        eq_(json.dumps(data), '[["category__name", "title"], ["News", "Title A"], ["Sports", "Title B"]]')
 
     def tearDown(self):
         self.session.close()
