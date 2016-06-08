@@ -21,6 +21,8 @@ release = '0.2.1'
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'default'
+
+
 def setup(app):
     app.add_stylesheet('theme_overrides.css')
 html_static_path = ['_static']
