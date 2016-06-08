@@ -6,8 +6,8 @@ class MyWriter(SheetWriter):
 
     def set_size(self, size):
         self.native_book = size
-        
-        
+
+
 def test_write_empty_array():
     test_string = "somebook"
     writer = MyWriter(test_string, "somesheet", "somename")

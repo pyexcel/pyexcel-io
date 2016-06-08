@@ -19,6 +19,6 @@ before_install:
   - test ! -f rnd_requirements.txt || pip install -r rnd_requirements.txt ;
   - pip install -r tests/requirements.txt
 script:
-  make test
+  - make test
 after_success:
   codecov

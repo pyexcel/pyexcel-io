@@ -1,7 +1,7 @@
 import os
 import sys
 from unittest import TestCase
-from pyexcel_io.deprecated  import load_data, get_writer
+from pyexcel_io.deprecated import load_data, get_writer
 from pyexcel_io.book import RWManager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
@@ -109,11 +109,11 @@ def test_writer_unknown_data_from_memory2():
 
 def test_get_io():
     io = RWManager.get_io("hello")
-    assert io == None
+    assert io is None
 
 
 def test_default_csv_format():
-    data = [['1','2','3']]
+    data = [['1', '2', '3']]
     io = RWManager.get_io("csv")
     # test default format for saving is 'csv'
     save_data(io, data)
@@ -124,7 +124,7 @@ def test_default_csv_format():
 
 
 def test_binary_file_content():
-    data = [['1','2','3']]
+    data = [['1', '2', '3']]
     io = RWManager.get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
@@ -132,7 +132,7 @@ def test_binary_file_content():
 
 
 def test_text_file_content():
-    data = [['1','2','3']]
+    data = [['1', '2', '3']]
     io = RWManager.get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
@@ -140,7 +140,7 @@ def test_text_file_content():
 
 
 def test_library_parameter():
-    data = [['1','2','3']]
+    data = [['1', '2', '3']]
     io = RWManager.get_io("csv")
     save_data(io, data, 'csv', library="built-in")
     result = get_data(io.getvalue(), 'csv', library="built-in")
@@ -149,7 +149,7 @@ def test_library_parameter():
 
 def test_conversion_from_bytes_to_text():
     test_file = "conversion.csv"
-    data = [['1','2','3']]
+    data = [['1', '2', '3']]
     save_data(test_file, data)
     with open(test_file, "rb") as f:
         content = f.read()
@@ -160,21 +160,24 @@ def test_conversion_from_bytes_to_text():
 
 def test_is_string():
     if PY2:
-        assert is_string(type(u'a')) == True
+        assert is_string(type(u'a')) is True
     else:
-        assert is_string(type('a')) == True
+        assert is_string(type('a')) is True
+
 
 def test_validate_io():
     if PY2:
         # because this function in python 2 is hardcode
         # why? because validation is not needed in python 3
-        assert RWManager.validate_io("csd", StringIO()) == True
+        assert RWManager.validate_io("csd", StringIO()) is True
     else:
-        assert RWManager.validate_io("csd", StringIO()) == False
+        assert RWManager.validate_io("csd", StringIO()) is False
+
 
 @raises(TypeError)
 def test_generator_is_obtained():
-    data = get_data(os.path.join("tests", "fixtures", "test.csv"), streaming=True)
+    data = get_data(os.path.join("tests", "fixtures", "test.csv"),
+                    streaming=True)
     len(data['test.csv'])
 
 
@@ -202,7 +205,7 @@ class TestReadMultipleSheets(TestCase):
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.expected_data =[
+        self.expected_data = [
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]

@@ -23,12 +23,16 @@ class RWManager(object):
     def register_readers_and_writers(plugins):
         for plugin in plugins:
             the_file_type = plugin['file_type']
-            RWManager.register_a_file_type(the_file_type, plugin.get('stream_type', None), plugin.get('mime_type', None))
+            RWManager.register_a_file_type(
+                the_file_type, plugin.get('stream_type', None),
+                plugin.get('mime_type', None))
             if 'reader' in plugin:
-                RWManager.register_a_reader(the_file_type, plugin['reader'], plugin['library'])
+                RWManager.register_a_reader(
+                    the_file_type, plugin['reader'], plugin['library'])
             if 'writer' in plugin:
-                RWManager.register_a_writer(the_file_type, plugin['writer'], plugin['library'])
-            #else:
+                RWManager.register_a_writer(
+                    the_file_type, plugin['writer'], plugin['library'])
+            # else:
                 # ignored for now
 
     @staticmethod

@@ -7,6 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+# flake8: noqa
 from .io import get_data, save_data
 from .manager import RWManager
 from . import fileformat, database
@@ -33,4 +34,3 @@ for _, module_name, ispkg in iter_modules():
             continue
 
 RWManager.register_readers_and_writers(exports)
-

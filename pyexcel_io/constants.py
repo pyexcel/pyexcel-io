@@ -7,6 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License
 """
+# flake8: noqa
 DEFAULT_NAME = 'pyexcel'
 DEFAULT_SHEET_NAME = '%s_sheet1' % DEFAULT_NAME
 

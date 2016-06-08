@@ -20,12 +20,15 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
     if isstream(afile):
-        data = load_data_new(file_stream=afile, file_type=file_type, **keywords)
+        data = load_data_new(file_stream=afile,
+                             file_type=file_type, **keywords)
     else:
         if afile is not None and file_type is not None:
-            data = load_data_new(file_content=afile, file_type=file_type, **keywords)
+            data = load_data_new(file_content=afile,
+                                 file_type=file_type, **keywords)
         else:
-            data = load_data_new(file_name=afile, file_type=file_type, **keywords)
+            data = load_data_new(file_name=afile,
+                                 file_type=file_type, **keywords)
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])
@@ -106,8 +109,8 @@ def load_data_new(file_name=None,
     :param keywords: any other parameters
     """
     result = {}
-    number_of_none_inputs = list(filter(lambda x: x is not None,
-                                        [file_name, file_content, file_stream]))
+    inputs = [file_name, file_content, file_stream]
+    number_of_none_inputs = [x for x in inputs if x is not None]
     if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
     if file_type is None:
@@ -148,5 +151,5 @@ def get_writer_new(file_name=None, file_stream=None,
             writer.open(file_name, **keywords)
     elif file_stream:
         writer.open_stream(file_stream, **keywords)
-    #else: is resolved by earlier raise statement
+    # else: is resolved by earlier raise statement
     return writer

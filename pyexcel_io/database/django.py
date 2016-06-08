@@ -177,8 +177,9 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
             self.column_names.output = self.column_name_mapping_dict.input
             self.column_name_mapping_dict.output = None
         elif isinstance(self.column_name_mapping_dict.input, dict):
-            self.column_names.output = [self.column_name_mapping_dict.input[name]
-                                        for name in self.column_names.input]
+            self.column_names.output = [
+                self.column_name_mapping_dict.input[name]
+                for name in self.column_names.input]
             self.column_name_mapping_dict.output = None
         if self.column_names.output is None:
             self.column_names.output = self.column_names.input

@@ -11,12 +11,12 @@ class TestDateFormat(TestCase):
         self.excel_filename = "testdateformat.csv"
         self.data = [[
             '01/06/2016',
-            datetime.date(2014,12,25),
-            datetime.datetime(2014,12,25,11,11,11),
-            datetime.datetime(2014,12,25,11,11,11,10)
+            datetime.date(2014, 12, 25),
+            datetime.datetime(2014, 12, 25, 11, 11, 11),
+            datetime.datetime(2014, 12, 25, 11, 11, 11, 10)
         ]]
         pe.save_as(dest_file_name=self.excel_filename, array=self.data)
-    
+
     def test_auto_detect_float(self):
         sheet = pe.get_sheet(file_name=self.excel_filename)
         self.assertEqual(sheet.to_array(), self.data)
@@ -87,7 +87,7 @@ class TestAutoDetectFloat(TestCase):
     without auto-detection, they all stay as text format after reading
     out
     """
-    
+
     def setUp(self):
         self.content = [[1, 2.0, 3.1]]
         self.test_file = "test_auto_detect_init.csv"
@@ -123,7 +123,7 @@ class TestSpecialStrings(TestCase):
     without auto-detection, they all stay as text format after reading
     out
     """
-    
+
     def setUp(self):
         self.content = [['01', 1, 2.0, 3.1]]
         self.test_file = "test_auto_detect_init.csv"

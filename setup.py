@@ -11,11 +11,15 @@ VERSION = '0.2.1'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
-DESCRIPTION = 'A python library to read and write structured data in csv, zipped csv format and to/from databases'
+DESCRIPTION = (
+    'A python library to read and write structured data in csv, zipped csv ' +
+    'format and to/from databases' +
+    ''
+)
 KEYWORDS = [
-   'excel',
-   'python',
-   'pyexcel',
+    'excel',
+    'python',
+    'pyexcel',
         'API',
         'tsv',
         'tsvz'
@@ -30,9 +34,9 @@ EXTRAS_REQUIRE = {
     'xls': ['pyexcel-xls>=0.2.0'],
     'xlsx': ['pyexcel-xlsx>=0.1.0'],
     'ods': ['pyexcel-ods3>=0.1.0'],
-  ':python_version<"2.7"': [
-    'ordereddict'
-  ],
+    ':python_version<"2.7"': [
+        'ordereddict'
+    ],
 }
 
 CLASSIFIERS = [

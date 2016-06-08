@@ -26,6 +26,7 @@ DEPRECATED_GET_WRITER = partial(
     deprecated,
     message="Deprecated since 0.2.0! Please use save_data.")
 
+
 @DEPRECATED_DATA_LOADER
 def load_data(filename,
               file_type=None,

@@ -14,6 +14,7 @@ from ..constants import (
 
 from ._csv import CSVBookReader, CSVBookWriter
 
+
 class TSVBookReader(CSVBookReader):
     def __init__(self):
         CSVBookReader.__init__(self)
@@ -49,4 +50,3 @@ _registry = {
 }
 
 exports = (_registry,)
-

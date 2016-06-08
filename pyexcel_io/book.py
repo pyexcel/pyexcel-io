@@ -101,7 +101,7 @@ class BookReader(RWInterface):
         read a named sheet from a excel data book
         """
         named_contents = [content for content in self.native_book
-                           if content.name == sheet_name]
+                          if content.name == sheet_name]
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:

@@ -28,7 +28,6 @@ AVAILABLE_WRITERS = {
 }
 
 
-
 def from_query_sets(column_names, query_sets):
     """
     Convert query sets into an array
@@ -94,12 +93,12 @@ def resolve_missing_extensions(extension, available_list):
     message = ""
     if handler:
         if is_string(type(handler)):
-            message = constants.MESSAGE_LOADING_FORMATTER % (extension, handler)
+            message = constants.MESSAGE_LOADING_FORMATTER % (
+                extension, handler)
         else:
             merged = "%s or %s" % (handler[0], handler[1])
-            message = constants.MESSAGE_LOADING_FORMATTER % (extension, merged)
+            message = constants.MESSAGE_LOADING_FORMATTER % (
+                extension, merged)
         raise NotImplementedError(message)
     else:
         raise NotImplementedError()
-
-

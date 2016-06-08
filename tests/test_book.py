@@ -19,6 +19,7 @@ def test_book_reader():
     reader = BookReader()
     reader.read_sheet(1)
 
+
 @raises(IOError)
 def test_book_writer():
     writer = BookWriter()

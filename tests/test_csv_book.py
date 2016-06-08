@@ -21,7 +21,7 @@ class TestReaders(TestCase):
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.expected_data =[
+        self.expected_data = [
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]
@@ -76,7 +76,7 @@ class TestWriter(TestCase):
         with open(self.test_file, 'r') as f:
             content = f.read().replace('\r', '')
             self.assertEqual(content.strip('\n'), self.result)
-    
+
     def tearDown(self):
         os.unlink(self.test_file)
 

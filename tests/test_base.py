@@ -1,16 +1,16 @@
 from pyexcel_io.sheet import (
     SheetReader,
-    SheetWriter, NamedContent,
+    SheetWriter, NamedContent
 )
 from pyexcel_io.utils import is_empty_array
 from nose.tools import raises
 
 
 def test_is_empty_array():
-    a=["", "", "", ""]
-    assert is_empty_array(a) == True
-    b=[1, "", "", ""]
-    assert is_empty_array(b) == False
+    a = ["", "", "", ""]
+    assert is_empty_array(a) is True
+    b = [1, "", "", ""]
+    assert is_empty_array(b) is False
 
 
 class ArrayReader(SheetReader):
@@ -49,10 +49,12 @@ class TestSheetReader:
 
     def test_to_array(self):
         name = "test"
+
         class B(SheetReader):
             @property
             def name(self):
                 return self.native_sheet
+
             def to_array(self):
                 pass
         b = B(name)
@@ -64,7 +66,7 @@ class TestSheetWriter:
 
     @raises(NotImplementedError)
     def test_abstractness(self):
-        writer = SheetWriter("te","st", "abstract")
+        writer = SheetWriter("te", "st", "abstract")
         writer.write_row([])
 
     def test_inheritance(self):
@@ -72,16 +74,16 @@ class TestSheetWriter:
             def write_row(self, row):
                 pass
 
-        d = D('t','e','s')
-        d.write_row([11,11])
+        d = D('t', 'e', 's')
+        d.write_row([11, 11])
         d.set_size(10)
 
     def test_writer(self):
         native_sheet = NamedContent("test", [])
         content = [
-            [1,2],
-            [3,4],
-            [5,6]
+            [1, 2],
+            [3, 4],
+            [5, 6]
         ]
         writer = ArrayWriter(None, native_sheet, "test")
         writer.write_row(content[0])
@@ -91,9 +93,9 @@ class TestSheetWriter:
     def test_writer2(self):
         native_sheet = NamedContent("test", [])
         content = [
-            [1,2],
-            [3,4],
-            [5,6]
+            [1, 2],
+            [3, 4],
+            [5, 6]
         ]
         writer = ArrayWriter(None, native_sheet, None)
         writer.write_row(content[0])

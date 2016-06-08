@@ -20,7 +20,7 @@ class TestCSVReaders(TestCase):
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.expected_data =[
+        self.expected_data = [
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]
@@ -68,7 +68,7 @@ class TestReadMultipleSheets(TestCase):
             ["4", "5", "6"],
             ["7", "8", "9"]
         ]
-        self.expected_data =[
+        self.expected_data = [
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]
@@ -101,7 +101,8 @@ class TestReadMultipleSheets(TestCase):
         b = self.reader_class()
         b.open(self.merged_book_file)
         sheets = b.read_sheet_by_name("sheet1")
-        self.assertEqual(list(sheets["sheet1"]), self.expected_sheets["sheet1"])
+        self.assertEqual(list(sheets["sheet1"]),
+                         self.expected_sheets["sheet1"])
 
     @raises(ValueError)
     def test_read_one_from_many_by_non_existent_name(self):
@@ -113,7 +114,8 @@ class TestReadMultipleSheets(TestCase):
         b = self.reader_class()
         b.open(self.merged_book_file)
         sheets = b.read_sheet_by_index(1)
-        self.assertEqual(list(sheets["sheet2"]), self.expected_sheets["sheet2"])
+        self.assertEqual(list(sheets["sheet2"]),
+                         self.expected_sheets["sheet2"])
 
     @raises(IndexError)
     def test_read_one_from_many_by_wrong_index(self):
@@ -171,7 +173,7 @@ class TestWriteMultipleSheets(TestCase):
         7,8,9
         ---pyexcel---
         """)
-    
+
     def setUp(self):
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
         self.merged_book_file = "csv_multiple." + self.file_type

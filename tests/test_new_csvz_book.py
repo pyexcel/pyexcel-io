@@ -21,7 +21,7 @@ class TestCSVZ(TestCase):
         self.file = "csvz." + self.file_type
 
     def test_writing(self):
-        data = [[1,2,3]]
+        data = [[1, 2, 3]]
         file_name = 'pyexcel_sheet1.' + self.file_type[0:3]
         zipbook = self.writer_class()
         zipbook.open(self.file)
@@ -32,11 +32,11 @@ class TestCSVZ(TestCase):
         content = zip.read(file_name)
         if not PY2:
             content = content.decode('utf-8')
-        self.assertEqual(content.replace('\r','').strip('\n'), self.result)
+        self.assertEqual(content.replace('\r', '').strip('\n'), self.result)
         zip.close()
 
     def test_reading(self):
-        data = [[1,2,3]]
+        data = [[1, 2, 3]]
         zipbook = self.writer_class()
         zipbook.open(self.file)
         zipbook.write({None: data})
@@ -46,7 +46,7 @@ class TestCSVZ(TestCase):
         data = zipreader.read_all()
         self.assertEqual(list(data['pyexcel_sheet1']), [[1, 2, 3]])
         zipreader.close()
-        
+
     def tearDown(self):
         os.unlink(self.file)
 
@@ -59,7 +59,7 @@ class TestTSVZ(TestCSVZ):
 
 
 def test_reading_from_memory():
-    data = [[1,2,3]]
+    data = [[1, 2, 3]]
     io = RWManager.get_io("csvz")
     zipbook = CSVZipBookWriter()
     zipbook.open_stream(io)
@@ -72,7 +72,7 @@ def test_reading_from_memory():
 
 
 def test_reading_from_memory_tsvz():
-    data = [[1,2,3]]
+    data = [[1, 2, 3]]
     io = RWManager.get_io("tsvz")
     zipbook = TSVZipBookWriter()
     zipbook.open_stream(io)
@@ -83,7 +83,7 @@ def test_reading_from_memory_tsvz():
     data = zipreader.read_all()
     assert list(data['pyexcel_sheet1']) == [[1, 2, 3]]
 
-        
+
 class TestMultipleSheet(TestCase):
     file_name = "mybook.csvz"
     reader_class = CSVZipBookReader
@@ -91,28 +91,28 @@ class TestMultipleSheet(TestCase):
     def setUp(self):
         self.content = OrderedDict()
         self.content.update({
-            'Sheet 1': 
+            'Sheet 1':
                 [
-                    [1.0, 2.0, 3.0], 
-                    [4.0, 5.0, 6.0], 
+                    [1.0, 2.0, 3.0],
+                    [4.0, 5.0, 6.0],
                     [7.0, 8.0, 9.0]
                 ]
         })
         self.content.update({
-            'Sheet 2': 
+            'Sheet 2':
                 [
-                    ['X', 'Y', 'Z'], 
-                    [1.0, 2.0, 3.0], 
+                    ['X', 'Y', 'Z'],
+                    [1.0, 2.0, 3.0],
                     [4.0, 5.0, 6.0]
                 ]
         })
         self.content.update({
-            'Sheet 3': 
+            'Sheet 3':
                 [
-                    ['O', 'P', 'Q'], 
-                    [3.0, 2.0, 1.0], 
+                    ['O', 'P', 'Q'],
+                    [3.0, 2.0, 1.0],
                     [4.0, 3.0, 2.0]
-                ] 
+                ]
         })
         save_data(self.file_name, self.content)
 
@@ -125,7 +125,7 @@ class TestMultipleSheet(TestCase):
             [4, 5, 6],
             [7, 8, 9]
         ])
-        
+
     @raises(ValueError)
     def test_read_one_from_many_by_unknown_name(self):
         reader = self.reader_class()
@@ -155,4 +155,3 @@ class TestMultipleSheet(TestCase):
 class TestMultipleTSVSheet(TestMultipleSheet):
     file_name = "mybook.tsvz"
     reader_class = TSVZipBookReader
-
