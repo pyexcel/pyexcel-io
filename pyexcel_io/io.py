@@ -19,7 +19,7 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     """
     if isstream(afile) and file_type is None:
         file_type = FILE_FORMAT_CSV
-    if isstream(afile):
+    if isstream(afile) or isinstance(afile, file):
         data = load_data_new(file_stream=afile,
                              file_type=file_type, **keywords)
     else:
@@ -146,7 +146,7 @@ def get_writer_new(file_name=None, file_stream=None,
     writer = RWManager.create_writer(file_type, library)
     if file_name:
         if file_type_given:
-            writer.open_content(file_name, file_type=file_type, **keywords)
+            writer.open_stream(file_name, **keywords)
         else:
             writer.open(file_name, **keywords)
     elif file_stream:

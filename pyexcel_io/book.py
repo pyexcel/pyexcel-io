@@ -71,6 +71,8 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
+        if isinstance(file_stream, file):
+            file_stream = _convert_file_to_stream(file_stream, self.file_type)
         if RWManager.validate_io(self.file_type, file_stream):
             self.file_stream = file_stream
             self.keywords = keywords
@@ -84,17 +86,8 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        io = RWManager.get_io(self.file_type)
-        if PY2:
-            io.write(file_content)
-        else:
-            if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
-                content = file_content.decode('utf-8')
-            else:
-                content = file_content
-            io.write(content)
-        io.seek(0)
-        self.open_stream(io, **keywords)
+        file_stream = _convert_content_to_stream(file_content, self.file_type)
+        self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
         """
@@ -135,6 +128,25 @@ class BookReader(RWInterface):
         raise NotImplementedError("Please implement this method")
 
 
+def _convert_file_to_stream(file_handle, file_type):
+    file_content = file_handle.read()
+    return _convert_content_to_stream(file_content, file_type)
+
+
+def _convert_content_to_stream(file_content, file_type):
+    io = RWManager.get_io(file_type)
+    if PY2:
+        io.write(file_content)
+    else:
+        if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
+            content = file_content.decode('utf-8')
+        else:
+            content = file_content
+        io.write(content)
+    io.seek(0)
+    return io
+
+
 class BookWriter(RWInterface):
     """
     Standard book writer
@@ -160,7 +172,7 @@ class BookWriter(RWInterface):
         if isstream(file_stream):
             if not RWManager.validate_io(self.file_type, file_stream):
                 raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        else:
+        elif not isinstance(file_stream, file):
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 
