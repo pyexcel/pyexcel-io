@@ -142,7 +142,7 @@ def test_file_handle_as_output():
         content = f.read()
         eq_(content, '1,2,3\n')
 
-    
+
 def test_binary_file_content():
     data = [['1', '2', '3']]
     io = RWManager.get_io("csvz")
