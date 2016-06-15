@@ -33,7 +33,8 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
     def close(self):
         file_name = "%s.%s" % (self.native_sheet, self.file_extension)
-        self.native_book.writestr(file_name, self.content.getvalue())
+        self.content.seek(0)
+        self.native_book.writestr(file_name, self.content.read())
         self.content.close()
 
 

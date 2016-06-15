@@ -22,8 +22,7 @@ from .._compact import (
     StringIO,
     PY2,
     text_type,
-    Iterator,
-    isstream
+    Iterator
 )
 from ..constants import (
     DEFAULT_SHEET_NAME,
@@ -151,7 +150,6 @@ class CSVSheetWriter(SheetWriter):
             self.writer.writerow(array)
 
 
-
 class CSVFileWriter(CSVSheetWriter):
     def close(self):
         self.f.close()
@@ -173,7 +171,8 @@ class CSVFileWriter(CSVSheetWriter):
         else:
             self.f = open(file_name, "w", newline="")
         self.writer = csv.writer(self.f, **self.keywords)
-        
+
+
 class CSVMemoryWriter(CSVSheetWriter):
     def __init__(self, filename, name,
                  encoding="utf-8", single_sheet_in_book=False,
@@ -181,8 +180,7 @@ class CSVMemoryWriter(CSVSheetWriter):
         CSVSheetWriter.__init__(self, filename, name,
                                 encoding=encoding,
                                 single_sheet_in_book=single_sheet_in_book,
-                                sheet_index=sheet_index, **keywords
-                            )
+                                sheet_index=sheet_index, **keywords)
         if not single_sheet_in_book:
             self.native_book.write(DEFAULT_CSV_STREAM_FILE_FORMATTER % (
                 self.sheet_name,
@@ -193,9 +191,15 @@ class CSVMemoryWriter(CSVSheetWriter):
         self.writer = csv.writer(self.f, **self.keywords)
 
     def close(self):
-        if not self.single_sheet_in_book:
+        if self.single_sheet_in_book:
+            #  on purpose, the this is not done
+            #  because the io stream can be used later
+            #  self.f.close()
+            pass
+        else:
             self.f.write(
                 DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
+
 
 class CSVBookReader(BookReader):
     def __init__(self):
@@ -230,7 +234,8 @@ class CSVBookReader(BookReader):
         if KEYWORD_LINE_TERMINATOR in self.keywords:
             self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
         self.load_from_memory_flag = True
-        content = self.file_stream.getvalue()
+        self.file_stream.seek(0)
+        content = self.file_stream.read()
         separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator
         if separator in content:
             sheets = content.split(separator)

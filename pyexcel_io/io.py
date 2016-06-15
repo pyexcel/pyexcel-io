@@ -146,7 +146,7 @@ def get_writer_new(file_name=None, file_stream=None,
     writer = RWManager.create_writer(file_type, library)
     if file_name:
         if file_type_given:
-            writer.open_content(file_name, file_type=file_type, **keywords)
+            writer.open_content(file_name, **keywords)
         else:
             writer.open(file_name, **keywords)
     elif file_stream:
