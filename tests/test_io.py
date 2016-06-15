@@ -7,7 +7,7 @@ from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
 from pyexcel_io.io import load_data_new, get_writer_new
-from nose.tools import raises
+from nose.tools import raises, eq_
 
 
 PY2 = sys.version_info[0] == 2
@@ -123,6 +123,26 @@ def test_default_csv_format():
     assert result['csv'] == [[1, 2, 3]]
 
 
+def test_file_handle_as_input():
+    test_file = "file_handle.csv"
+    with open(test_file, 'w') as f:
+        f.write("1,2,3")
+
+    with open(test_file, 'r') as f:
+        data = get_data(f, 'csv')
+        eq_(data['csv'], [[1, 2, 3]])
+
+
+def test_file_handle_as_output():
+    test_file = "file_handle.csv"
+    with open(test_file, 'w') as f:
+        save_data(f, [[1, 2, 3]], 'csv', lineterminator='\n')
+
+    with open(test_file, 'r') as f:
+        content = f.read()
+        eq_(content, '1,2,3\n')
+
+    
 def test_binary_file_content():
     data = [['1', '2', '3']]
     io = RWManager.get_io("csvz")
