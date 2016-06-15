@@ -30,6 +30,10 @@ class RWInterface(object):
         """open a file stream for read or write"""
         raise NotImplementedError("Please implement this method")
 
+    def open_content(self, file_stream, **keywords):
+        """open a file content for read or write"""
+        raise NotImplementedError("Please implement this method")
+
     def set_type(self, file_type):
         """
         set the file type for the instance
@@ -71,8 +75,6 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        if isinstance(file_stream, file):
-            file_stream = _convert_file_to_stream(file_stream, self.file_type)
         if RWManager.validate_io(self.file_type, file_stream):
             self.file_stream = file_stream
             self.keywords = keywords
@@ -128,11 +130,6 @@ class BookReader(RWInterface):
         raise NotImplementedError("Please implement this method")
 
 
-def _convert_file_to_stream(file_handle, file_type):
-    file_content = file_handle.read()
-    return _convert_content_to_stream(file_content, file_type)
-
-
 def _convert_content_to_stream(file_content, file_type):
     io = RWManager.get_io(file_type)
     if PY2:
@@ -172,7 +169,7 @@ class BookWriter(RWInterface):
         if isstream(file_stream):
             if not RWManager.validate_io(self.file_type, file_stream):
                 raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        elif not isinstance(file_stream, file):
+        else:
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 

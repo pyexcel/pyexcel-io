@@ -38,7 +38,8 @@ if PY2:
         import cStringIO
         return (isinstance(instance, cStringIO.InputType) or
                 isinstance(instance, cStringIO.OutputType) or
-                isinstance(instance, SlowStringIO))
+                isinstance(instance, SlowStringIO) or
+                isinstance(instance, file))
 
 else:
     from io import StringIO, BytesIO
@@ -46,7 +47,7 @@ else:
     Iterator = object
 
     def isstream(instance):
-        return isinstance(instance, StringIO) or isinstance(instance, BytesIO)
+        return isinstance(instance, StringIO) or isinstance(instance, BytesIO) or hasattr(instance, 'read')
 
 
 def is_string(atype):

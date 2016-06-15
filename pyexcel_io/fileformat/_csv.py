@@ -127,42 +127,17 @@ class CSVSheetWriter(SheetWriter):
                  encoding="utf-8", single_sheet_in_book=False,
                  sheet_index=None, **keywords):
         self.encoding = encoding
-        sheet_name = name
+        self.sheet_name = name
         self.single_sheet_in_book = single_sheet_in_book
         self.line_terminator = '\r\n'
         if KEYWORD_LINE_TERMINATOR in keywords:
             self.line_terminator = keywords[KEYWORD_LINE_TERMINATOR]
         if single_sheet_in_book:
-            sheet_name = None
-        elif isstream(filename):
-            filename.write(DEFAULT_CSV_STREAM_FILE_FORMATTER % (
-                sheet_name,
-                self.line_terminator))
+            self.sheet_name = None
         self.sheet_index = sheet_index
         SheetWriter.__init__(self, filename,
-                             sheet_name, sheet_name,
+                             self.sheet_name, self.sheet_name,
                              **keywords)
-
-    def set_sheet_name(self, name):
-        if is_string(type(self.native_book)):
-            if name != DEFAULT_SHEET_NAME:
-                names = self.native_book.split(".")
-                file_name = "%s%s%s%s%s.%s" % (
-                    names[0],
-                    DEFAULT_SEPARATOR,
-                    name,              # sheet name
-                    DEFAULT_SEPARATOR,
-                    self.sheet_index,  # sheet index
-                    names[1])
-            else:
-                file_name = self.native_book
-            if PY2:
-                self.f = open(file_name, "wb")
-            else:
-                self.f = open(file_name, "w", newline="")
-        else:
-            self.f = self.native_book
-        self.writer = csv.writer(self.f, **self.keywords)
 
     def write_row(self, array):
         """
@@ -175,16 +150,52 @@ class CSVSheetWriter(SheetWriter):
         else:
             self.writer.writerow(array)
 
+
+
+class CSVFileWriter(CSVSheetWriter):
     def close(self):
-        """
-        This call close the file handle
-        """
-        if not isstream(self.f):
-            self.f.close()
-        elif not self.single_sheet_in_book:
+        self.f.close()
+
+    def set_sheet_name(self, name):
+        if name != DEFAULT_SHEET_NAME:
+            names = self.native_book.split(".")
+            file_name = "%s%s%s%s%s.%s" % (
+                names[0],
+                DEFAULT_SEPARATOR,
+                name,              # sheet name
+                DEFAULT_SEPARATOR,
+                self.sheet_index,  # sheet index
+                names[1])
+        else:
+            file_name = self.native_book
+        if PY2:
+            self.f = open(file_name, "wb")
+        else:
+            self.f = open(file_name, "w", newline="")
+        self.writer = csv.writer(self.f, **self.keywords)
+        
+class CSVMemoryWriter(CSVSheetWriter):
+    def __init__(self, filename, name,
+                 encoding="utf-8", single_sheet_in_book=False,
+                 sheet_index=None, **keywords):
+        CSVSheetWriter.__init__(self, filename, name,
+                                encoding=encoding,
+                                single_sheet_in_book=single_sheet_in_book,
+                                sheet_index=sheet_index, **keywords
+                            )
+        if not single_sheet_in_book:
+            self.native_book.write(DEFAULT_CSV_STREAM_FILE_FORMATTER % (
+                self.sheet_name,
+                self.line_terminator))
+
+    def set_sheet_name(self, name):
+        self.f = self.native_book
+        self.writer = csv.writer(self.f, **self.keywords)
+
+    def close(self):
+        if not self.single_sheet_in_book:
             self.f.write(
                 DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
-
 
 class CSVBookReader(BookReader):
     def __init__(self):
@@ -280,7 +291,12 @@ class CSVBookWriter(BookWriter):
         self.index = 0
 
     def create_sheet(self, name):
-        writer = CSVSheetWriter(
+        writer_class = None
+        if is_string(type(self.file_alike_object)):
+            writer_class = CSVFileWriter
+        else:
+            writer_class = CSVMemoryWriter
+        writer = writer_class(
             self.file_alike_object,
             name,
             sheet_index=self.index,

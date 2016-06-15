@@ -8,7 +8,8 @@ from pyexcel_io.fileformat._csv import (
     CSVSheetReader,
     CSVFileReader,
     CSVinMemoryReader,
-    CSVSheetWriter
+    CSVFileWriter,
+    CSVMemoryWriter
 )
 
 
@@ -69,7 +70,7 @@ class TestWriter(TestCase):
         """).strip('\n')
 
     def test_sheet_writer(self):
-        w = CSVSheetWriter(self.test_file, None)
+        w = CSVFileWriter(self.test_file, None)
         for row in self.data:
             w.write_row(row)
         w.close()
@@ -98,7 +99,7 @@ class TestMemoryWriter(TestCase):
 
     def test_sheet_writer_to_memory(self):
         io = RWManager.get_io(self.file_type)
-        w = CSVSheetWriter(io, None, single_sheet_in_book=True)
+        w = CSVMemoryWriter(io, None, single_sheet_in_book=True)
         for row in self.data:
             w.write_row(row)
         w.close()
