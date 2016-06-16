@@ -77,7 +77,7 @@ class CSVZipBookReader(BookReader):
             sheets = [NamedContent(self._get_sheet_name(name), name)
                       for name in self.zipfile.namelist()]
             return sheets
-        except zipfile.BadZipFile:
+        except zipfile.BadZipfile:
             print("StringIO instance was passed by any chance?")
             raise
 

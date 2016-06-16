@@ -8,7 +8,7 @@ from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
 from pyexcel_io.io import load_data_new, get_writer_new
 from nose.tools import raises, eq_
-import zipfile
+from zipfile import BadZipfile
 
 
 PY2 = sys.version_info[0] == 2
@@ -66,13 +66,13 @@ def test_load_unknown_data_from_memory():
     load_data(io, file_type="unknown")
 
 
-@raises(zipfile.BadZipFile)
+@raises(BadZipfile)
 def test_load_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
         load_data(io, file_type="csvz")
     else:
-        raise zipfile.BadZipFile("pass it")
+        raise BadZipfile("pass it")
 
 
 @raises(NotImplementedError)
