@@ -92,7 +92,7 @@ def test_writer_csvz_data_from_memory():
         writer = get_writer(io, file_type="csvz")
         writer.write({'adb': [[2, 3]]})
     else:
-        raise IOError("pass it")
+        raise TypeError("pass it")
 
 
 @raises(NotImplementedError)
