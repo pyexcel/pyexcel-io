@@ -27,27 +27,19 @@ def is_generator(struct):
 if PY2:
     from cStringIO import StringIO
     from cStringIO import StringIO as BytesIO
-    from StringIO import StringIO as SlowStringIO
     text_type = unicode
 
     class Iterator(object):
         def next(self):
             return type(self).__next__(self)
 
-    def isstream(instance):
-        import cStringIO
-        return (isinstance(instance, cStringIO.InputType) or
-                isinstance(instance, cStringIO.OutputType) or
-                isinstance(instance, SlowStringIO) or
-                isinstance(instance, file))
-
 else:
     from io import StringIO, BytesIO
     text_type = str
     Iterator = object
 
-    def isstream(instance):
-        return isinstance(instance, StringIO) or isinstance(instance, BytesIO) or hasattr(instance, 'read')
+def isstream(instance):
+    return hasattr(instance, 'read')
 
 
 def is_string(atype):

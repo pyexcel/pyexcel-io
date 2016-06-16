@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ._compact import StringIO, BytesIO, PY2
+from ._compact import StringIO, BytesIO
 from .utils import resolve_missing_readers, resolve_missing_writers
 
 
@@ -115,15 +115,3 @@ class RWManager(object):
             return BytesIO()
         else:
             return None
-
-    @staticmethod
-    def validate_io(file_type, stream):
-        if PY2:
-            # only python 3 cares about stringio types
-            return True
-        if file_type in RWManager.text_stream_types:
-            return isinstance(stream, StringIO)
-        elif file_type in RWManager.binary_stream_types:
-            return isinstance(stream, BytesIO)
-        else:
-            return False

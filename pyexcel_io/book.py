@@ -75,7 +75,7 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        if RWManager.validate_io(self.file_type, file_stream):
+        if isstream(file_stream):
             self.file_stream = file_stream
             self.keywords = keywords
         else:
@@ -166,10 +166,7 @@ class BookWriter(RWInterface):
 
         keywords are passed on to individual writers
         """
-        if isstream(file_stream):
-            if not RWManager.validate_io(self.file_type, file_stream):
-                raise IOError(MESSAGE_WRONG_IO_INSTANCE)
-        else:
+        if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 
