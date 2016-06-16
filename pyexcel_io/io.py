@@ -136,6 +136,7 @@ def get_writer_new(file_name=None, file_stream=None,
                    file_type=None, library=None, **keywords):
     number_of_none_inputs = list(filter(lambda x: x is not None,
                                         [file_name, file_stream]))
+
     if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
     file_type_given = True

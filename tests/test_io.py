@@ -8,6 +8,7 @@ from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
 from pyexcel_io.io import load_data_new, get_writer_new
 from nose.tools import raises, eq_
+import zipfile
 
 
 PY2 = sys.version_info[0] == 2
@@ -65,13 +66,13 @@ def test_load_unknown_data_from_memory():
     load_data(io, file_type="unknown")
 
 
-@raises(IOError)
+@raises(zipfile.BadZipFile)
 def test_load_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
         load_data(io, file_type="csvz")
     else:
-        raise IOError("pass it")
+        raise zipfile.BadZipFile("pass it")
 
 
 @raises(NotImplementedError)
@@ -84,11 +85,12 @@ def test_write_unknown_data():
     get_writer("test.unknown")
 
 
-@raises(IOError)
+@raises(TypeError)
 def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        get_writer(io, file_type="csvz")
+        writer = get_writer(io, file_type="csvz")
+        writer.write({'adb': [[2, 3]]})
     else:
         raise IOError("pass it")
 
@@ -96,7 +98,7 @@ def test_writer_csvz_data_from_memory():
 @raises(NotImplementedError)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
-    get_writer(io, file_type="xlsm")
+    get_writer(io, file_type="xlsms")
 
 
 @raises(NotImplementedError)
