@@ -115,3 +115,17 @@ class RWManager(object):
             return BytesIO()
         else:
             return None
+
+    @staticmethod
+    def get_io_type(file_type):
+        """A utility function to help you generate a correct io stream
+
+        :param file_type: a supported file type
+        :returns: a appropriate io stream, None otherwise
+        """
+        if file_type in RWManager.text_stream_types:
+            return "string"
+        elif file_type in RWManager.binary_stream_types:
+            return "bytes"
+        else:
+            return None
