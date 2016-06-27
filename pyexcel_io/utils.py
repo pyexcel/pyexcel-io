@@ -49,8 +49,11 @@ def from_query_sets(column_names, query_sets):
 def _get_complex_attribute(row, attribute):
     attributes = attribute.split('__')
     value = row
-    for attributee in attributes:
-        value = _get_simple_attribute(value, attributee)
+    try:
+        for attributee in attributes:
+            value = _get_simple_attribute(value, attributee)
+    except AttributeError:
+        value = None
     return value
 
 
