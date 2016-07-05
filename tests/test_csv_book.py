@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 from unittest import TestCase
 from textwrap import dedent
-from nose.tools import raises
+from nose.tools import raises, eq_
 from pyexcel_io.manager import RWManager
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.fileformat._csv import (
@@ -11,6 +14,7 @@ from pyexcel_io.fileformat._csv import (
     CSVFileWriter,
     CSVMemoryWriter
 )
+from pyexcel_io._compact import BytesIO
 
 
 class TestReaders(TestCase):
@@ -131,3 +135,24 @@ class TestNonUniformCSV(TestCase):
 
     def tearDown(self):
         os.unlink(self.test_file)
+
+
+def test_utf16_encoding():
+    test_file = os.path.join("tests", "fixtures", "csv-encoding-utf16.csv")
+    reader = CSVFileReader(
+        NamedContent('csv', test_file),
+        encoding="utf-16")
+    content = list(reader.to_array())
+    expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
+    eq_(content, expected)
+
+
+def test_utf16_memory_encoding():
+    test_content = u'Äkkilähdöt,Matkakirjoituksia,Matkatoimistot'
+    test_content = BytesIO(test_content.encode('utf-16'))
+    reader = CSVinMemoryReader(
+        NamedContent('csv', test_content),
+        encoding="utf-16")
+    content = list(reader.to_array())
+    expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
+    eq_(content, expected)

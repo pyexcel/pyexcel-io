@@ -20,6 +20,7 @@ from ..sheet import SheetReader, SheetWriter, NamedContent
 from .._compact import (
     is_string,
     StringIO,
+    BytesIO,
     PY2,
     text_type,
     Iterator
@@ -72,8 +73,6 @@ class CSVSheetReader(SheetReader):
             myrow = []
             tmp_row = []
             for element in row:
-                if PY2:
-                    element = element.decode(self.encoding)
                 if element is not None and element != '':
                     element = self._convert_cell(element)
                 tmp_row.append(element)
@@ -103,7 +102,8 @@ class CSVFileReader(CSVSheetReader):
             f1 = open(self.native_sheet.payload, 'rb')
             f = UTF8Recorder(f1, self.encoding)
         else:
-            f = open(self.native_sheet.payload, 'r')
+            f = open(self.native_sheet.payload, 'r',
+                     encoding=self.encoding)
         return f
 
 
@@ -113,7 +113,12 @@ class CSVinMemoryReader(CSVSheetReader):
             f = UTF8Recorder(self.native_sheet.payload,
                              self.encoding)
         else:
-            f = self.native_sheet.payload
+            if isinstance(self.native_sheet.payload, BytesIO):
+                content = self.native_sheet.payload.read()
+                f = StringIO(content.decode(self.encoding))
+            else:
+                f = self.native_sheet.payload
+
         return f
 
 
