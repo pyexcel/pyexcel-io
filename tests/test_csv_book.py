@@ -137,16 +137,29 @@ class TestNonUniformCSV(TestCase):
         os.unlink(self.test_file)
 
 
-def test_utf16_encoding():
+def test_utf16_decoding():
     test_file = os.path.join("tests", "fixtures", "csv-encoding-utf16.csv")
     reader = CSVFileReader(
         NamedContent('csv', test_file),
         encoding="utf-16")
     content = list(reader.to_array())
     if PY2:
-        content[0] = [ s.encode('utf-8') for s in content[0]]
+        content[0] = [s.encode('utf-8') for s in content[0]]
     expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
     eq_(content, expected)
+
+
+def test_utf16_encoding():
+    content = [[u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot']]
+    test_file = "test-utf16-encoding.csv"
+    writer = CSVFileWriter(
+        test_file, None,
+        encoding="utf-16")
+    writer.write_array(content)
+    writer.close()
+    with open(test_file, "r") as f:
+        actual = f.read()
+        print(actual)
 
 
 def test_utf16_memory_encoding():
@@ -157,6 +170,6 @@ def test_utf16_memory_encoding():
         encoding="utf-16")
     content = list(reader.to_array())
     if PY2:
-        content[0] = [ s.encode('utf-8') for s in content[0]]
+        content[0] = [s.encode('utf-8') for s in content[0]]
     expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
     eq_(content, expected)
