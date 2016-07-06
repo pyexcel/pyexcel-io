@@ -143,6 +143,7 @@ def test_utf16_encoding():
         NamedContent('csv', test_file),
         encoding="utf-16")
     content = list(reader.to_array())
+    content[0] = [ s.encode('utf-8') for s in content[0]]
     expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
     eq_(content, expected)
 
@@ -154,5 +155,6 @@ def test_utf16_memory_encoding():
         NamedContent('csv', test_content),
         encoding="utf-16")
     content = list(reader.to_array())
+    content[0] = [ s.encode('utf-8') for s in content[0]]
     expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
     eq_(content, expected)

@@ -73,6 +73,8 @@ class CSVSheetReader(SheetReader):
             myrow = []
             tmp_row = []
             for element in row:
+                if PY2:
+                    element = element.decode('utf-8')
                 if element is not None and element != '':
                     element = self._convert_cell(element)
                 tmp_row.append(element)
