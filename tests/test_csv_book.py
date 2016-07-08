@@ -14,7 +14,7 @@ from pyexcel_io.fileformat._csv import (
     CSVFileWriter,
     CSVMemoryWriter
 )
-from pyexcel_io._compact import BytesIO, PY2
+from pyexcel_io._compact import BytesIO, PY2, StringIO
 
 
 class TestReaders(TestCase):
@@ -154,15 +154,18 @@ def test_utf16_encoding():
     test_file = "test-utf16-encoding.csv"
     writer = CSVFileWriter(
         test_file, None,
-        encoding="utf-16")
+        encoding="utf-16", lineterminator="\n")
     writer.write_array(content)
     writer.close()
-    with open(test_file, "r") as f:
-        actual = f.read()
-        print(actual)
+    with open(test_file, "rb") as f:
+        actual = f.read().decode('utf-16')
+        if PY2:
+            actual = actual.encode('utf-8')
+        eq_(actual, 'Äkkilähdöt,Matkakirjoituksia,Matkatoimistot\n')
+    os.unlink(test_file)
 
 
-def test_utf16_memory_encoding():
+def test_utf16_memory_decoding():
     test_content = u'Äkkilähdöt,Matkakirjoituksia,Matkatoimistot'
     test_content = BytesIO(test_content.encode('utf-16'))
     reader = CSVinMemoryReader(
@@ -173,3 +176,16 @@ def test_utf16_memory_encoding():
         content[0] = [s.encode('utf-8') for s in content[0]]
     expected = [['Äkkilähdöt', 'Matkakirjoituksia', 'Matkatoimistot']]
     eq_(content, expected)
+
+
+def test_utf16_memory_encoding():
+    content = [[u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot']]
+    io = StringIO()
+    writer = CSVMemoryWriter(
+        io, None, lineterminator="\n", single_sheet_in_book=True,
+        encoding="utf-16")
+    writer.write_array(content)
+    actual = io.getvalue()
+    if PY2:
+        actual = actual.decode('utf-16')
+    eq_(actual, u'Äkkilähdöt,Matkakirjoituksia,Matkatoimistot\n')

@@ -53,6 +53,36 @@ class UTF8Recorder(Iterator):
         return next(self.reader).encode('utf-8')
 
 
+class UnicodeWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = StringIO()
+        self.writer = csv.writer(self.queue, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([text_type(s).encode("utf-8") for s in row])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+
+
 class CSVSheetReader(SheetReader):
     def __init__(self, sheet, encoding="utf-8",
                  auto_detect_float=True, auto_detect_int=True,
@@ -149,12 +179,7 @@ class CSVSheetWriter(SheetWriter):
         """
         write a row into the file
         """
-        if PY2:
-            self.writer.writerow(
-                [text_type(s if s is not None else '').encode(self.encoding)
-                 for s in array])
-        else:
-            self.writer.writerow(array)
+        self.writer.writerow(array)
 
 
 class CSVFileWriter(CSVSheetWriter):
@@ -175,9 +200,12 @@ class CSVFileWriter(CSVSheetWriter):
             file_name = self.native_book
         if PY2:
             self.f = open(file_name, "wb")
+            self.writer = UnicodeWriter(self.f, encoding=self.encoding,
+                                        **self.keywords)
         else:
-            self.f = open(file_name, "w", newline="")
-        self.writer = csv.writer(self.f, **self.keywords)
+            self.f = open(file_name, "w", newline="",
+                          encoding=self.encoding)
+            self.writer = csv.writer(self.f, **self.keywords)
 
 
 class CSVMemoryWriter(CSVSheetWriter):
@@ -194,8 +222,13 @@ class CSVMemoryWriter(CSVSheetWriter):
                 self.line_terminator))
 
     def set_sheet_name(self, name):
-        self.f = self.native_book
-        self.writer = csv.writer(self.f, **self.keywords)
+        if PY2:
+            self.f = self.native_book
+            self.writer = UnicodeWriter(self.f, encoding=self.encoding,
+                                        **self.keywords)
+        else:
+            self.f = self.native_book
+            self.writer = csv.writer(self.f, **self.keywords)
 
     def close(self):
         if self.single_sheet_in_book:
