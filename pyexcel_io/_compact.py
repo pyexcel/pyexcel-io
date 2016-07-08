@@ -25,8 +25,8 @@ def is_generator(struct):
 
 
 if PY2:
-    from cStringIO import StringIO
-    from cStringIO import StringIO as BytesIO
+    from StringIO import StringIO
+    from StringIO import StringIO as BytesIO
     text_type = unicode
 
     class Iterator(object):
