@@ -216,10 +216,6 @@ class CSVMemoryWriter(CSVSheetWriter):
                                 encoding=encoding,
                                 single_sheet_in_book=single_sheet_in_book,
                                 sheet_index=sheet_index, **keywords)
-        if not single_sheet_in_book:
-            self.native_book.write(DEFAULT_CSV_STREAM_FILE_FORMATTER % (
-                self.sheet_name,
-                self.line_terminator))
 
     def set_sheet_name(self, name):
         if PY2:
@@ -229,6 +225,10 @@ class CSVMemoryWriter(CSVSheetWriter):
         else:
             self.f = self.native_book
             self.writer = csv.writer(self.f, **self.keywords)
+        if not self.single_sheet_in_book:
+            self.writer.writerow([DEFAULT_CSV_STREAM_FILE_FORMATTER % (
+                self.sheet_name,
+                "")])
 
     def close(self):
         if self.single_sheet_in_book:
@@ -237,8 +237,8 @@ class CSVMemoryWriter(CSVSheetWriter):
             #  self.f.close()
             pass
         else:
-            self.f.write(
-                DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator)
+            self.writer.writerow(
+                [DEFAULT_SHEET_SEPARATOR_FORMATTER % ""])
 
 
 class CSVBookReader(BookReader):
