@@ -4,6 +4,12 @@ Change log
 0.22 - unreleased
 --------------------------------------------------------------------------------
 
+Added
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. support pagination. two pairs: start_row, row_limit and start_column, column_limit
+   help you deal with large files.
+
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
