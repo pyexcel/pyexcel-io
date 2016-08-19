@@ -104,6 +104,59 @@ class TestSingleRead:
         assert list(data) == content
         mysession.close()
 
+    def test_sql_filter(self):
+        mysession = Session()
+        sheet = SQLTableReader(mysession, Pyexcel, start_row=1)
+        data = sheet.to_array()
+        content = [
+            ['2014-11-11', 0, 'Adam', 11.25],
+            ['2014-11-12', 1, 'Smith', 12.25]
+        ]
+        # 'pyexcel'' here is the table name
+        assert list(data) == content
+        mysession.close()
+
+
+    def test_sql_filter_1(self):
+        mysession = Session()
+        sheet = SQLTableReader(mysession, Pyexcel,
+                               start_row=1, row_limit=1)
+        data = sheet.to_array()
+        content = [
+            ['2014-11-11', 0, 'Adam', 11.25]
+        ]
+        # 'pyexcel'' here is the table name
+        assert list(data) == content
+        mysession.close()
+
+    def test_sql_filter_2(self):
+        mysession = Session()
+        sheet = SQLTableReader(mysession, Pyexcel, start_column=1)
+        data = sheet.to_array()
+        content = [
+            ['id', 'name', 'weight'],
+            [0, 'Adam', 11.25],
+            [1, 'Smith', 12.25]
+        ]
+        # 'pyexcel'' here is the table name
+        assert list(data) == content
+        mysession.close()
+
+    def test_sql_filter_3(self):
+        mysession = Session()
+        sheet = SQLTableReader(mysession, Pyexcel,
+                               start_column=1, column_limit=1)
+        data = sheet.to_array()
+        content = [
+            ['id'],
+            [0],
+            [1]
+        ]
+        # 'pyexcel'' here is the table name
+        assert list(data) == content
+        mysession.close()
+
+
 
 class TestSingleWrite:
     def setUp(self):
