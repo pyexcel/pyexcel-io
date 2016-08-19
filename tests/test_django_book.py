@@ -1,4 +1,4 @@
-from nose.tools import raises
+from nose.tools import raises, eq_
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
@@ -325,3 +325,49 @@ def test_not_implemented_method():
 def test_not_implemented_method_2():
     reader = DjangoBookReader()
     reader.open_stream("afile")
+
+
+class TestFilter:
+    def setUp(self):
+        self.data = [
+            ["X", "Y", "Z"],
+            [1, 2, 3],
+            [4, 5, 6]
+        ]
+        self.result = [
+            {'Y': 2, 'X': 1, 'Z': 3},
+            {'Y': 5, 'X': 4, 'Z': 6}
+        ]
+        self.model = FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter = DjangoModelImportAdapter(self.model)
+        adapter.set_column_names(self.data[0])
+        importer.append(adapter)
+        save_data(importer, {adapter.get_name(): self.data[1:]},
+                  file_type=DB_DJANGO)
+        assert self.model.objects.objs == self.result
+        self.model._meta.update(["X", "Y", "Z"])
+
+    def test_load_sheet_from_django_model_with_filter(self):
+        reader = DjangoModelReader(self.model, start_row=0, row_limit=2)
+        data = reader.to_array()
+        expected = [['X', 'Y', 'Z'], [1, 2, 3]]
+        eq_(list(data), expected)
+
+    def test_load_sheet_from_django_model_with_filter_1(self):
+        reader = DjangoModelReader(self.model, start_row=1, row_limit=3)
+        data = reader.to_array()
+        expected = [[1, 2, 3], [4, 5, 6]]
+        eq_(list(data), expected)
+
+    def test_load_sheet_from_django_model_with_filter_2(self):
+        reader = DjangoModelReader(self.model, start_column=1)
+        data = reader.to_array()
+        expected = [['Y', 'Z'], [2, 3], [5, 6]]
+        eq_(list(data), expected)
+
+    def test_load_sheet_from_django_model_with_filter_3(self):
+        reader = DjangoModelReader(self.model, start_column=1, column_limit=1)
+        data = reader.to_array()
+        expected = [['Y'], [2], [5]]
+        eq_(list(data), expected)

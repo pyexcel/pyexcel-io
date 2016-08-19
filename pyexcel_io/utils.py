@@ -28,14 +28,21 @@ AVAILABLE_WRITERS = {
 }
 
 
-def from_query_sets(column_names, query_sets):
+def from_query_sets(column_names, query_sets,
+                    skip_row_func=None, start_row=0, row_limit=-1):
     """
     Convert query sets into an array
     """
-    yield column_names
-    for row in query_sets:
+    if start_row == 0:
+        yield column_names
+    for row_index, row in enumerate(query_sets):
+        if skip_row_func is not None:
+            if skip_row_func(row_index + 1, start_row, row_limit):
+                # + 1 means: column_names were counted in as one row
+                continue
+
         new_array = []
-        for column in column_names:
+        for column_index, column in enumerate(column_names):
             if '__' in column:
                 value = _get_complex_attribute(row, column)
             else:
@@ -105,3 +112,13 @@ def resolve_missing_extensions(extension, available_list):
         raise NotImplementedError(message)
     else:
         raise NotImplementedError()
+
+
+def _index_filter(current_index, start, limit=-1):
+    out_range = True
+    if current_index >= start:
+        out_range = False
+    if limit > 0 and out_range is False:
+        if current_index >= (start + limit):
+            out_range = True
+    return out_range

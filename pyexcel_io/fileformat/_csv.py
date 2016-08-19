@@ -99,10 +99,21 @@ class CSVSheetReader(SheetReader):
 
     def to_array(self):
         reader = csv.reader(self.get_file_handle(), **self.keywords)
-        for row in reader:
+
+        for row_number, row in enumerate(reader):
             myrow = []
             tmp_row = []
-            for element in row:
+
+            if self.skip_row(row_number, self.start_row, self.row_limit):
+                continue
+
+            for column_index, element in enumerate(row):
+                skip_column = self.skip_column(column_index,
+                                               self.start_column,
+                                               self.column_limit)
+                if skip_column:
+                    continue
+
                 if PY2:
                     element = element.decode('utf-8')
                 if element is not None and element != '':

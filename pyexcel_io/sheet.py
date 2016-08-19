@@ -9,6 +9,17 @@
 """
 from ._compact import is_generator
 from .constants import DEFAULT_SHEET_NAME
+from .utils import _index_filter
+
+
+__DEFAULTS = {
+    "skip_row": _index_filter,
+    "start_row": 0,
+    "row_limit": -1,
+    "skip_column": _index_filter,
+    "start_column": 0,
+    "column_limit": -1
+}
 
 
 class NamedContent:
@@ -25,9 +36,25 @@ class SheetReader(object):
     """
     Generic sheet reader
     """
-    def __init__(self, sheet, **keywords):
+    def __init__(self, sheet,
+                 start_row=0, row_limit=-1,
+                 start_column=0, column_limit=-1,
+                 skip_row_func=None, skip_column_func=None,
+                 **keywords):
         self.native_sheet = sheet
-        self.keywords = keywords
+        self.keywords = {}
+        self.keywords.update(keywords)
+        self.start_row = start_row
+        self.row_limit = row_limit
+        self.start_column = start_column
+        self.column_limit = column_limit
+        self.skip_row = _index_filter
+        self.skip_column = _index_filter
+
+        if skip_row_func:
+            self.skip_row = skip_row_func
+        if skip_column_func:
+            self.skip_column = skip_column_func
 
     def to_array(self):
         """2 dimentional representation of the content

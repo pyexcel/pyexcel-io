@@ -21,8 +21,9 @@ from ..constants import (
 class DjangoModelReader(SheetReader):
     """Read from django model
     """
-    def __init__(self, model):
+    def __init__(self, model, **keywords):
         self.model = model
+        SheetReader.__init__(self, model, **keywords)
 
     def to_array(self):
         objects = self.model.objects.all()
@@ -32,7 +33,20 @@ class DjangoModelReader(SheetReader):
             column_names = sorted(
                 [field.attname
                  for field in self.model._meta.concrete_fields])
-            return from_query_sets(column_names, objects)
+            export_column_names = []
+            for column_index, column_name in enumerate(column_names):
+                skip_column = self.skip_column(column_index,
+                                               self.start_column,
+                                               self.column_limit)
+                if skip_column:
+                    continue
+                else:
+                    export_column_names.append(column_name)
+
+            return from_query_sets(export_column_names, objects,
+                                   skip_row_func=self.skip_row,
+                                   start_row=self.start_row,
+                                   row_limit=self.row_limit)
 
 
 class DjangoModelWriter(SheetWriter):

@@ -29,9 +29,10 @@ class PyexcelSQLSkipRowException(Exception):
 class SQLTableReader(SheetReader):
     """Read a table
     """
-    def __init__(self, session, table):
+    def __init__(self, session, table, **keywords):
         self.session = session
         self.table = table
+        SheetReader.__init__(self, table, **keywords)
 
     def to_array(self):
         objects = self.session.query(self.table).all()
@@ -40,7 +41,20 @@ class SQLTableReader(SheetReader):
         else:
             column_names = sorted([column for column in objects[0].__dict__
                                    if column != '_sa_instance_state'])
-            return from_query_sets(column_names, objects)
+            export_column_names = []
+            for column_index, column_name in enumerate(column_names):
+                skip_column = self.skip_column(column_index,
+                                               self.start_column,
+                                               self.column_limit)
+                if skip_column:
+                    continue
+                else:
+                    export_column_names.append(column_name)
+
+            return from_query_sets(export_column_names, objects,
+                                   skip_row_func=self.skip_row,
+                                   start_row=self.start_row,
+                                   row_limit=self.row_limit)
 
 
 class SQLTableWriter(SheetWriter):
