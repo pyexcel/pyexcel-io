@@ -116,7 +116,6 @@ class TestSingleRead:
         assert list(data) == content
         mysession.close()
 
-
     def test_sql_filter_1(self):
         mysession = Session()
         sheet = SQLTableReader(mysession, Pyexcel,
@@ -155,7 +154,6 @@ class TestSingleRead:
         # 'pyexcel'' here is the table name
         assert list(data) == content
         mysession.close()
-
 
 
 class TestSingleWrite:
