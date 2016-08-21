@@ -2,14 +2,15 @@
 pyexcel-io - Let you focus on data, instead of file formats
 ================================================================================
 
-.. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.png
-    :target: http://travis-ci.org/pyexcel/pyexcel-io
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
+   :target: http://travis-ci.org/pyexcel/pyexcel-io
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-io/coverage.png
     :target: https://codecov.io/github/pyexcel/pyexcel-io
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
-    :target: http://pyexcel-io.readthedocs.org/en/latest/
+   :target: http://pyexcel-io.readthedocs.org/en/latest/
+
 
 **pyexcel-io** provides **one** application programming interface(API) to read
 and write the data in excel format, import the data into and export the data
@@ -37,42 +38,40 @@ library `pyexcel <https://github.com/pyexcel/pyexcel>`__ .
 If you would like to extend it, you may use it to write your own
 extension to handle a specific file format.
 
-Features to be released
-================================================================================
-
-1. Code refactoring
-2. Automatic plugin discovery
-3. [[ your feature requests ]]
 
 Known constraints
-================================================================================
+==================
 
-Fonts, colors and charts are not supported. 
+Fonts, colors and charts are not supported.
 
 
 Installation
 ================================================================================
 
+Recently, pyexcel(0.2.2+) and its plugins(0.2.0+) started using newer version of setuptools. Please upgrade your setup tools before install latest pyexcel components:
 
-You can install it via pip::
+.. code-block:: bash
+
+    $ pip install --upgrade setuptools
+
+You can install it via pip:
+
+.. code-block:: bash
 
     $ pip install pyexcel-io
 
 
-or clone it and install it::
+or clone it and install it:
+
+.. code-block:: bash
 
     $ git clone http://github.com/pyexcel/pyexcel-io.git
     $ cd pyexcel-io
     $ python setup.py install
 
 
+
 License
-===========
+================================================================================
 
 New BSD License
-
-
-Dependencies
-============
-
-1. python 2.6, orderreddict

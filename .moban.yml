@@ -14,3 +14,4 @@ targets:
   - MANIFEST.in: MANIFEST.in.jj2
   - test.sh: test.sh.jj2
   - test.bat: test.sh.jj2
+  - README.rst: README.rst
