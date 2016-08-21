@@ -11,7 +11,8 @@
 :Source code: http://github.com/pyexcel/pyexcel-io
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
-:Version: |version|
+:Development: |version|
+:Released: |release|
 :Generated: |today|
 
 Introduction
