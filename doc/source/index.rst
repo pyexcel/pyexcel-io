@@ -82,12 +82,12 @@ pass on "library" option to get_data and save_data.
 
 .. table:: Plugin compatibility table
 
-    ============= ======= ======== ======= ======== =========
-    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `text`_       
-    ============= ======= ======== ======= ======== =========
-    0.2.0         0.2.0   0.2.0    0.2.0   0.2.0    N/A
-    0.1.0         0.1.0   0.1.0    0.1.0   0.1.0    0.1.0
-    ============= ======= ======== ======= ======== =========
+    ============= ======= ======== ======= ========
+    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_      
+    ============= ======= ======== ======= ========
+    0.2.2         0.2.2   0.2.2    0.2.1   0.2.1   
+    0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0   
+    ============= ======= ======== ======= ========
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
@@ -111,6 +111,7 @@ Tutorial
    :maxdepth: 2
 
    plaincsv
+   pagination
    extendedcsv
    csvz
    sqlalchemy

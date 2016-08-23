@@ -122,7 +122,6 @@ Continue from previous example:
     {"csv": [[1, 2, 3], [4, 5, 6]]}
 
 
-
 .. testcode::
    :hide:
 
