@@ -92,7 +92,8 @@ class SheetReader(object):
                 if cell_value is not None and cell_value != '':
                     return_row += tmp_row
                     tmp_row = []
-            yield return_row
+            if len(return_row) > 0:
+                yield return_row
 
 
 class SheetWriter(object):
