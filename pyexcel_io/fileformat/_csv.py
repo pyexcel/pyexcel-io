@@ -25,18 +25,14 @@ from .._compact import (
     text_type,
     Iterator
 )
-from ..constants import (
-    DEFAULT_SHEET_NAME,
-    FILE_FORMAT_CSV,
-    DEFAULT_NAME,
-    KEYWORD_LINE_TERMINATOR
-)
+import pyexcel_io.constants as constants
 
 
 DEFAULT_SEPARATOR = '__'
-DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % DEFAULT_NAME + "%s"
-SEPARATOR_MATCHER = "---%s:(.*)---" % DEFAULT_NAME
-DEFAULT_CSV_STREAM_FILE_FORMATTER = "---%s:" % DEFAULT_NAME + "%s---%s"
+DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % constants.DEFAULT_NAME + "%s"
+SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
+DEFAULT_CSV_STREAM_FILE_FORMATTER = (
+    "---%s:" % constants.DEFAULT_NAME + "%s---%s")
 
 
 class UTF8Recorder(Iterator):
@@ -104,15 +100,22 @@ class CSVSheetReader(SheetReader):
             myrow = []
             tmp_row = []
 
-            if self.skip_row(row_number, self.start_row, self.row_limit):
+            row_position = self.skip_row(row_number,
+                                         self.start_row,
+                                         self.row_limit)
+            if row_position == constants.LEFT_OF_THE_RANGE:
                 continue
+            elif row_position == constants.RIGHT_OF_THE_RANGE:
+                break
 
             for column_index, element in enumerate(row):
-                skip_column = self.skip_column(column_index,
-                                               self.start_column,
-                                               self.column_limit)
-                if skip_column:
+                column_position = self.skip_column(column_index,
+                                                   self.start_column,
+                                                   self.column_limit)
+                if column_position == constants.LEFT_OF_THE_RANGE:
                     continue
+                elif column_position == constants.RIGHT_OF_THE_RANGE:
+                    break
 
                 if PY2:
                     element = element.decode('utf-8')
@@ -177,8 +180,8 @@ class CSVSheetWriter(SheetWriter):
         self.sheet_name = name
         self.single_sheet_in_book = single_sheet_in_book
         self.line_terminator = '\r\n'
-        if KEYWORD_LINE_TERMINATOR in keywords:
-            self.line_terminator = keywords[KEYWORD_LINE_TERMINATOR]
+        if constants.KEYWORD_LINE_TERMINATOR in keywords:
+            self.line_terminator = keywords[constants.KEYWORD_LINE_TERMINATOR]
         if single_sheet_in_book:
             self.sheet_name = None
         self.sheet_index = sheet_index
@@ -198,7 +201,7 @@ class CSVFileWriter(CSVSheetWriter):
         self.f.close()
 
     def set_sheet_name(self, name):
-        if name != DEFAULT_SHEET_NAME:
+        if name != constants.DEFAULT_SHEET_NAME:
             names = self.native_book.split(".")
             file_name = "%s%s%s%s%s.%s" % (
                 names[0],
@@ -255,7 +258,7 @@ class CSVMemoryWriter(CSVSheetWriter):
 class CSVBookReader(BookReader):
     def __init__(self):
         BookReader.__init__(self)
-        self.file_type = FILE_FORMAT_CSV
+        self.file_type = constants.FILE_FORMAT_CSV
         self.load_from_memory_flag = False
         self.line_terminator = '\r\n'
         self.sheet_name = None
@@ -282,8 +285,8 @@ class CSVBookReader(BookReader):
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
-        if KEYWORD_LINE_TERMINATOR in self.keywords:
-            self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
+        if constants.KEYWORD_LINE_TERMINATOR in self.keywords:
+            self.line_terminator = self.keywords[constants.KEYWORD_LINE_TERMINATOR]
         self.load_from_memory_flag = True
         self.file_stream.seek(0)
         content = self.file_stream.read()
@@ -311,8 +314,8 @@ class CSVBookReader(BookReader):
         :params str filename: an accessible file path
         :returns: a book
         """
-        if KEYWORD_LINE_TERMINATOR in self.keywords:
-            self.line_terminator = self.keywords[KEYWORD_LINE_TERMINATOR]
+        if constants.KEYWORD_LINE_TERMINATOR in self.keywords:
+            self.line_terminator = self.keywords[constants.KEYWORD_LINE_TERMINATOR]
         names = self.file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (
             names[0],
@@ -343,7 +346,7 @@ class CSVBookReader(BookReader):
 class CSVBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self)
-        self.file_type = FILE_FORMAT_CSV
+        self.file_type = constants.FILE_FORMAT_CSV
         self.index = 0
 
     def create_sheet(self, name):
@@ -398,7 +401,7 @@ def _detect_float_value(csv_cell_text):
 
 
 _registry = {
-    "file_type": FILE_FORMAT_CSV,
+    "file_type": constants.FILE_FORMAT_CSV,
     "reader": CSVBookReader,
     "writer": CSVBookWriter,
     "stream_type": "text",

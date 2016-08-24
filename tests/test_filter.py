@@ -1,18 +1,23 @@
+
 import os
 
 from pyexcel_io import get_data, save_data
 from pyexcel_io.utils import _index_filter
 from nose.tools import eq_
-
+import pyexcel_io.constants as constants
 
 def test_index_filter():
-    current_index, start, limit, expected = (0, 1, -1, True)
+    current_index, start, limit, expected = (0, 1, -1,
+                                             constants.LEFT_OF_THE_RANGE)
     eq_(_index_filter(current_index, start, limit), expected)
-    current_index, start, limit, expected = (2, 1, -1, False)
+    current_index, start, limit, expected = (2, 1, -1,
+                                             constants.IN_THE_RANGE)
     eq_(_index_filter(current_index, start, limit), expected)
-    current_index, start, limit, expected = (2, 1, 10, False)
+    current_index, start, limit, expected = (2, 1, 10,
+                                             constants.IN_THE_RANGE)
     eq_(_index_filter(current_index, start, limit), expected)
-    current_index, start, limit, expected = (100, 1, 10, True)
+    current_index, start, limit, expected = (100, 1, 10,
+                                             constants.RIGHT_OF_THE_RANGE)
     eq_(_index_filter(current_index, start, limit), expected)
 
 

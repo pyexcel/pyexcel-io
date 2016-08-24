@@ -37,3 +37,7 @@ DB_SQL = 'sql'
 DB_DJANGO = 'django'
 KEYWORD_TSV_DIALECT = 'excel-tab'
 KEYWORD_LINE_TERMINATOR = 'lineterminator'
+
+LEFT_OF_THE_RANGE = -1
+IN_THE_RANGE = 0
+RIGHT_OF_THE_RANGE = 1
