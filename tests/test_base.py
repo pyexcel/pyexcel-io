@@ -45,7 +45,7 @@ class TestSheetReader:
     @raises(NotImplementedError)
     def test_abstractness(self):
         reader = SheetReader("test")
-        reader.to_array()
+        reader._cell_value()
 
     def test_to_array(self):
         name = "test"

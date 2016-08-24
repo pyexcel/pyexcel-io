@@ -8,8 +8,9 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ._compact import is_generator
-from .constants import DEFAULT_SHEET_NAME
 from .utils import _index_filter
+import pyexcel_io.constants as constants
+import six
 
 
 __DEFAULTS = {
@@ -56,10 +57,43 @@ class SheetReader(object):
         if skip_column_func:
             self.skip_column = skip_column_func
 
+    def _cell_value(self, row, column):
+        """
+        implement this method if the customer driver
+        provides random access
+        """
+        raise NotImplementedError("Please implement to_array()")
+
     def to_array(self):
         """2 dimentional representation of the content
         """
-        raise NotImplementedError("Please implement to_array()")
+        for row in six.range(0, self.number_of_rows()):
+            row_position = self.skip_row(row,
+                                         self.start_row,
+                                         self.row_limit)
+            if row_position == constants.SKIP_DATA:
+                continue
+            elif row_position == constants.STOP_ITERATION:
+                break
+
+            return_row = []
+            tmp_row = []
+
+            for column in six.range(0, self.number_of_columns()):
+                column_position = self.skip_column(column,
+                                                   self.start_column,
+                                                   self.column_limit)
+                if column_position == constants.SKIP_DATA:
+                    continue
+                elif column_position == constants.STOP_ITERATION:
+                    break
+
+                cell_value = self._cell_value(row, column)
+                tmp_row.append(cell_value)
+                if cell_value is not None and cell_value != '':
+                    return_row += tmp_row
+                    tmp_row = []
+            yield return_row
 
 
 class SheetWriter(object):
@@ -71,7 +105,7 @@ class SheetWriter(object):
         if name:
             sheet_name = name
         else:
-            sheet_name = DEFAULT_SHEET_NAME
+            sheet_name = constants.DEFAULT_SHEET_NAME
         self.native_book = native_book
         self.native_sheet = native_sheet
         self.keywords = keywords
