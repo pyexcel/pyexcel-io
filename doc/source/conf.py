@@ -4,6 +4,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
+'sphinx.ext.autosummary'
 ]
 
 intersphinx_mapping = {

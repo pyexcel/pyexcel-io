@@ -101,6 +101,10 @@ pass on "library" option to get_data and save_data.
 
 Special note
 --------------------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth:2 
+
    migration_from_dot_1_to_dot_2
 
 
