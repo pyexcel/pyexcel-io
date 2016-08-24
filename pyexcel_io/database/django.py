@@ -10,12 +10,7 @@
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
 from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
-from ..constants import (
-    MESSAGE_EMPTY_ARRAY,
-    MESSAGE_DB_EXCEPTION,
-    MESSAGE_IGNORE_ROW,
-    DB_DJANGO
-)
+import pyexcel_io.constants as constants
 
 
 class DjangoModelReader(SheetReader):
@@ -35,11 +30,13 @@ class DjangoModelReader(SheetReader):
                  for field in self.model._meta.concrete_fields])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
-                skip_column = self.skip_column(column_index,
-                                               self.start_column,
-                                               self.column_limit)
-                if skip_column:
+                column_position = self.skip_column(column_index,
+                                                   self.start_column,
+                                                   self.column_limit)
+                if column_position == constants.SKIP_DATA:
                     continue
+                elif column_position == constants.STOP_ITERATION:
+                    break
                 else:
                     export_column_names.append(column_name)
 
@@ -71,7 +68,7 @@ class DjangoModelWriter(SheetWriter):
 
     def write_row(self, array):
         if is_empty_array(array):
-            print(MESSAGE_EMPTY_ARRAY)
+            print(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
             model_to_be_created = self.initializer(new_array)
@@ -87,13 +84,13 @@ class DjangoModelWriter(SheetWriter):
             self.mymodel.objects.bulk_create(self.objs,
                                              batch_size=self.batch_size)
         except Exception as e:
-            print(MESSAGE_DB_EXCEPTION)
+            print(constants.MESSAGE_DB_EXCEPTION)
             print(e)
             for object in self.objs:
                 try:
                     object.save()
                 except Exception as e2:
-                    print(MESSAGE_IGNORE_ROW)
+                    print(constants.MESSAGE_IGNORE_ROW)
                     print(e2)
                     print(object)
                     continue
@@ -224,7 +221,7 @@ class DjangoBookWriter(BookWriter):
 
 
 _registry = {
-    "file_type": DB_DJANGO,
+    "file_type": constants.DB_DJANGO,
     "reader": DjangoBookReader,
     "writer": DjangoBookWriter,
     "stream_type": "special",

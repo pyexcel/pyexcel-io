@@ -14,7 +14,8 @@ from ..constants import (
     MESSAGE_INVALID_PARAMETERS,
     MESSAGE_EMPTY_ARRAY,
     MESSAGE_IGNORE_ROW,
-    DB_SQL
+    DB_SQL,
+    SKIP_DATA, STOP_ITERATION
 )
 
 
@@ -43,11 +44,13 @@ class SQLTableReader(SheetReader):
                                    if column != '_sa_instance_state'])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
-                skip_column = self.skip_column(column_index,
+                column_position = self.skip_column(column_index,
                                                self.start_column,
                                                self.column_limit)
-                if skip_column:
+                if column_position == SKIP_DATA:
                     continue
+                elif column_position == STOP_ITERATION:
+                    break
                 else:
                     export_column_names.append(column_name)
 

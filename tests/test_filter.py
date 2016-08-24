@@ -8,16 +8,16 @@ import pyexcel_io.constants as constants
 
 def test_index_filter():
     current_index, start, limit, expected = (0, 1, -1,
-                                             constants.LEFT_OF_THE_RANGE)
+                                             constants.SKIP_DATA)
     eq_(_index_filter(current_index, start, limit), expected)
     current_index, start, limit, expected = (2, 1, -1,
-                                             constants.IN_THE_RANGE)
+                                             constants.TAKE_DATA)
     eq_(_index_filter(current_index, start, limit), expected)
     current_index, start, limit, expected = (2, 1, 10,
-                                             constants.IN_THE_RANGE)
+                                             constants.TAKE_DATA)
     eq_(_index_filter(current_index, start, limit), expected)
     current_index, start, limit, expected = (100, 1, 10,
-                                             constants.RIGHT_OF_THE_RANGE)
+                                             constants.STOP_ITERATION)
     eq_(_index_filter(current_index, start, limit), expected)
 
 

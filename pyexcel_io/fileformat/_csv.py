@@ -103,18 +103,18 @@ class CSVSheetReader(SheetReader):
             row_position = self.skip_row(row_number,
                                          self.start_row,
                                          self.row_limit)
-            if row_position == constants.LEFT_OF_THE_RANGE:
+            if row_position == constants.SKIP_DATA:
                 continue
-            elif row_position == constants.RIGHT_OF_THE_RANGE:
+            elif row_position == constants.STOP_ITERATION:
                 break
 
             for column_index, element in enumerate(row):
                 column_position = self.skip_column(column_index,
                                                    self.start_column,
                                                    self.column_limit)
-                if column_position == constants.LEFT_OF_THE_RANGE:
+                if column_position == constants.SKIP_DATA:
                     continue
-                elif column_position == constants.RIGHT_OF_THE_RANGE:
+                elif column_position == constants.STOP_ITERATION:
                     break
 
                 if PY2:

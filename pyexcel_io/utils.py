@@ -39,9 +39,9 @@ def from_query_sets(column_names, query_sets,
         if skip_row_func is not None:
             # + 1 means: column_names were counted in as one row
             row_position = skip_row_func(row_index + 1, start_row, row_limit)
-            if row_position == constants.LEFT_OF_THE_RANGE:
+            if row_position == constants.SKIP_DATA:
                 continue
-            elif row_position == constants.RIGHT_OF_THE_RANGE:
+            elif row_position == constants.STOP_ITERATION:
                 break
 
         new_array = []
@@ -118,10 +118,10 @@ def resolve_missing_extensions(extension, available_list):
 
 
 def _index_filter(current_index, start, limit=-1):
-    out_range = constants.LEFT_OF_THE_RANGE
+    out_range = constants.SKIP_DATA
     if current_index >= start:
-        out_range = constants.IN_THE_RANGE
-    if limit > 0 and out_range == constants.IN_THE_RANGE:
+        out_range = constants.TAKE_DATA
+    if limit > 0 and out_range == constants.TAKE_DATA:
         if current_index >= (start + limit):
-            out_range = constants.RIGHT_OF_THE_RANGE
+            out_range = constants.STOP_ITERATION
     return out_range
