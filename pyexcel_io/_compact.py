@@ -28,6 +28,7 @@ if PY2:
     from StringIO import StringIO
     from StringIO import StringIO as BytesIO
     text_type = unicode
+    irange = xrange
 
     class Iterator(object):
         def next(self):
@@ -37,6 +38,7 @@ else:
     from io import StringIO, BytesIO
     text_type = str
     Iterator = object
+    irange = range
 
 def isstream(instance):
     return hasattr(instance, 'read')

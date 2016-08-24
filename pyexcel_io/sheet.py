@@ -7,10 +7,9 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ._compact import is_generator
+from ._compact import is_generator, irange
 from .utils import _index_filter
 import pyexcel_io.constants as constants
-import six.moves as six
 
 
 __DEFAULTS = {
@@ -67,7 +66,7 @@ class SheetReader(object):
     def to_array(self):
         """2 dimentional representation of the content
         """
-        for row in six.range(0, self.number_of_rows()):
+        for row in irange(self.number_of_rows()):
             row_position = self.skip_row(row,
                                          self.start_row,
                                          self.row_limit)
@@ -79,7 +78,7 @@ class SheetReader(object):
             return_row = []
             tmp_row = []
 
-            for column in six.range(0, self.number_of_columns()):
+            for column in irange(0, self.number_of_columns()):
                 column_position = self.skip_column(column,
                                                    self.start_column,
                                                    self.column_limit)
