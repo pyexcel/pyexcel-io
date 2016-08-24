@@ -10,7 +10,7 @@
 from ._compact import is_generator
 from .utils import _index_filter
 import pyexcel_io.constants as constants
-import six
+import six.moves as six
 
 
 __DEFAULTS = {
