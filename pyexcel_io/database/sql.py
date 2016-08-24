@@ -10,13 +10,7 @@
 from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
 from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
-from ..constants import (
-    MESSAGE_INVALID_PARAMETERS,
-    MESSAGE_EMPTY_ARRAY,
-    MESSAGE_IGNORE_ROW,
-    DB_SQL,
-    SKIP_DATA, STOP_ITERATION
-)
+import pyexcel_io.constants as constants
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -45,11 +39,11 @@ class SQLTableReader(SheetReader):
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
                 column_position = self.skip_column(column_index,
-                                               self.start_column,
-                                               self.column_limit)
-                if column_position == SKIP_DATA:
+                                                   self.start_column,
+                                                   self.column_limit)
+                if column_position == constants.SKIP_DATA:
                     continue
-                elif column_position == STOP_ITERATION:
+                elif column_position == constants.STOP_ITERATION:
                     break
                 else:
                     export_column_names.append(column_name)
@@ -75,7 +69,7 @@ class SQLTableWriter(SheetWriter):
             (self.table, self.column_names,
              self.mapdict, self.initializer) = table_params
         else:
-            raise ValueError(MESSAGE_INVALID_PARAMETERS)
+            raise ValueError(constants.MESSAGE_INVALID_PARAMETERS)
 
         if isinstance(self.mapdict, list):
             self.column_names = self.mapdict
@@ -83,13 +77,13 @@ class SQLTableWriter(SheetWriter):
 
     def write_row(self, array):
         if is_empty_array(array):
-            print(MESSAGE_EMPTY_ARRAY)
+            print(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
             try:
                 self._write_row(new_array)
             except PyexcelSQLSkipRowException:
-                print(MESSAGE_IGNORE_ROW)
+                print(constants.MESSAGE_IGNORE_ROW)
                 print(new_array)
 
     def _write_row(self, array):
@@ -194,7 +188,7 @@ class SQLBookWriter(BookWriter):
 
 
 _registry = {
-    "file_type": DB_SQL,
+    "file_type": constants.DB_SQL,
     "reader": SQLBookReader,
     "writer": SQLBookWriter,
     "stream_type": "special",

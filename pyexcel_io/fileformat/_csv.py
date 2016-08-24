@@ -285,8 +285,9 @@ class CSVBookReader(BookReader):
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
-        if constants.KEYWORD_LINE_TERMINATOR in self.keywords:
-            self.line_terminator = self.keywords[constants.KEYWORD_LINE_TERMINATOR]
+        self.line_terminator = self.keywords.get(
+            constants.KEYWORD_LINE_TERMINATOR,
+            self.line_terminator)
         self.load_from_memory_flag = True
         self.file_stream.seek(0)
         content = self.file_stream.read()
@@ -314,8 +315,9 @@ class CSVBookReader(BookReader):
         :params str filename: an accessible file path
         :returns: a book
         """
-        if constants.KEYWORD_LINE_TERMINATOR in self.keywords:
-            self.line_terminator = self.keywords[constants.KEYWORD_LINE_TERMINATOR]
+        self.line_terminator = self.keywords.get(
+            constants.KEYWORD_LINE_TERMINATOR,
+            self.line_terminator)
         names = self.file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (
             names[0],
