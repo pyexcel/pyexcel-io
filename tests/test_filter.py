@@ -1,10 +1,10 @@
-
 import os
 
 from pyexcel_io import get_data, save_data
 from pyexcel_io.utils import _index_filter
 from nose.tools import eq_
 import pyexcel_io.constants as constants
+
 
 def test_index_filter():
     current_index, start, limit, expected = (0, 1, -1,
