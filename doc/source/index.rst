@@ -11,8 +11,8 @@
 :Source code: http://github.com/pyexcel/pyexcel-io
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
-:Development: |version|
-:Released: |release|
+:Development: |release|
+:Released: |version|
 :Generated: |today|
 
 Introduction
@@ -82,16 +82,17 @@ pass on "library" option to get_data and save_data.
 
 .. table:: Plugin compatibility table
 
-    ============= ======= ======== ======= ========
-    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_      
-    ============= ======= ======== ======= ========
-    0.2.2         0.2.2   0.2.2    0.2.1   0.2.1   
-    0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0   
-    ============= ======= ======== ======= ========
+    ============= ======= ======== ======= ======== ========
+    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `xlsxw`_
+    ============= ======= ======== ======= ======== ========
+    0.2.2         0.2.2   0.2.2    0.2.1   0.2.1    0.0.1
+    0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0    0.0.1
+    ============= ======= ======== ======= ======== ========
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
 .. _xlsx: https://github.com/pyexcel/pyexcel-xlsx
+.. _xlsx: https://github.com/pyexcel/pyexcel-xlsxw
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _text: https://github.com/pyexcel/pyexcel-text
