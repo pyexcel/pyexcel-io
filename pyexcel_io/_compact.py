@@ -11,14 +11,13 @@
 import types
 import sys
 
+PY2 = sys.version_info[0] == 2
+PY26 = PY2 and sys.version_info[1] < 7
 
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+if PY26:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
-
-PY2 = sys.version_info[0] == 2
-
 
 def is_generator(struct):
     return isinstance(struct, types.GeneratorType)

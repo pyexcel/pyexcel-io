@@ -4,6 +4,7 @@ except ImportError:
     from ez_setup import use_setuptools
     use_setuptools()
     from setuptools import setup, find_packages
+from pyexcel_io._compact import PY26
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
@@ -30,13 +31,13 @@ KEYWORDS = [
 INSTALL_REQUIRES = [
 ]
 
+if PY26:
+    INSTALL_REQUIRES.append('ordereddict')
+
 EXTRAS_REQUIRE = {
     'xls': ['pyexcel-xls>=0.2.0'],
     'xlsx': ['pyexcel-xlsx>=0.1.0'],
     'ods': ['pyexcel-ods3>=0.1.0'],
-    ':python_version<"2.7"': [
-        'ordereddict'
-    ],
 }
 
 CLASSIFIERS = [

@@ -1,5 +1,9 @@
 {% extends 'setup.py.jj2' %}
 
+{%block compat_block%}
+from pyexcel_io._compact import PY26
+{%endblock%}
+
 {%block additional_keywords%}
     'API',
     'tsv',
