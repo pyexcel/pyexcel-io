@@ -4,7 +4,10 @@ except ImportError:
     from ez_setup import use_setuptools
     use_setuptools()
     from setuptools import setup, find_packages
-from pyexcel_io._compact import PY26
+import sys
+PY2 = sys.version_info[0] == 2
+PY26 = PY2 and sys.version_info[1] < 7
+
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'

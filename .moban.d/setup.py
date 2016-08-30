@@ -1,7 +1,6 @@
 {% extends 'setup.py.jj2' %}
 
-{%block compat_block%}
-from pyexcel_io._compact import PY26
+{%block platform_block%}
 {%endblock%}
 
 {%block additional_keywords%}
