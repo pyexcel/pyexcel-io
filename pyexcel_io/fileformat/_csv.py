@@ -81,13 +81,14 @@ class UnicodeWriter:
 
 class CSVSheetReader(SheetReader):
     def __init__(self, sheet, encoding="utf-8",
-                 auto_detect_float=True, auto_detect_int=True,
-                 auto_detect_datetime=True,
+                 auto_detect_float=True, ignore_infinity=True,
+                 auto_detect_int=True, auto_detect_datetime=True,
                  **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.encoding = encoding
         self.auto_detect_int = auto_detect_int
         self.auto_detect_float = auto_detect_float
+        self.ignore_infinity = ignore_infinity
         self.auto_detect_datetime = auto_detect_datetime
 
     def get_file_handle(self):
@@ -131,9 +132,13 @@ class CSVSheetReader(SheetReader):
         ret = None
         if self.auto_detect_float:
             ret = _detect_float_value(csv_cell_text)
-            if ret is not None and self.auto_detect_int:
-                if ret == math.floor(ret):
-                    ret = int(ret)
+            if ret is not None:
+                if ret == float('inf'):
+                    if self.ignore_infinity:
+                        ret = csv_cell_text
+                elif self.auto_detect_int:
+                    if ret == math.floor(ret):
+                        ret = int(ret)
         if ret is None and self.auto_detect_datetime:
             ret = _detect_date_value(csv_cell_text)
         if ret is None:

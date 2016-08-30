@@ -16,3 +16,12 @@ def test_issue_8():
     written_data = get_data(test_file)
     eq_(data, written_data[test_file])
     os.unlink(test_file)
+
+
+def test_issue_20():
+    test_file= os.path.join("tests",
+                            "fixtures",
+                            "issue8.csv")
+    data = get_data(test_file)
+    expected = [[u'to', u'infinity', u'and', u'beyond']]
+    eq_(data['issue8.csv'], expected)
