@@ -44,23 +44,23 @@ def test_wrong_parameter_to_get_writer2():
     get_writer(1, file_type="csv")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_load_ods_data():
     load_data("test.ods")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_load_ods_data_from_memory():
     io = BytesIO()
     load_data(io, file_type="ods")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_load_unknown_data():
     load_data("test.unknown")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_load_unknown_data_from_memory():
     io = BytesIO()
     load_data(io, file_type="unknown")
@@ -75,12 +75,12 @@ def test_load_csvz_data_from_memory():
         raise BadZipfile("pass it")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_write_xlsx_data():
     get_writer("test.xlsx")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_write_unknown_data():
     get_writer("test.unknown")
 
@@ -95,13 +95,13 @@ def test_writer_csvz_data_from_memory():
         raise TypeError("pass it")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
     get_writer(io, file_type="xlsms")
 
 
-@raises(NotImplementedError)
+@raises(IOError)
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it

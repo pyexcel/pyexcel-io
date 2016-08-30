@@ -86,7 +86,7 @@ class RWManager(object):
             handler.set_type(file_type)
             return handler
 
-        raise Exception("No suitable library found for %s" % file_type)
+        raise IOError("No suitable library found for %s" % file_type)
 
     @staticmethod
     def create_reader(file_type, library=None):
