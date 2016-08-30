@@ -40,6 +40,7 @@ class SheetReader(object):
                  start_row=0, row_limit=-1,
                  start_column=0, column_limit=-1,
                  skip_row_func=None, skip_column_func=None,
+                 skip_empty_rows=True,
                  **keywords):
         self.native_sheet = sheet
         self.keywords = {}
@@ -50,6 +51,7 @@ class SheetReader(object):
         self.column_limit = column_limit
         self.skip_row = _index_filter
         self.skip_column = _index_filter
+        self.skip_empty_rows = skip_empty_rows
 
         if skip_row_func:
             self.skip_row = skip_row_func
@@ -92,8 +94,12 @@ class SheetReader(object):
                 if cell_value is not None and cell_value != '':
                     return_row += tmp_row
                     tmp_row = []
-            if len(return_row) > 0:
-                yield return_row
+            if self.skip_empty_rows:
+                if len(return_row) < 1:
+                    # we by-pass next yeild here
+                    # because it is an empty row
+                    continue
+            yield return_row
 
 
 class SheetWriter(object):
