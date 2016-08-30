@@ -75,7 +75,9 @@ class RWManager(object):
         if file_type in factories:
             handler_dict = factories[file_type]
             if library is not None:
-                handler_class = handler_dict[library]
+                handler_class = handler_dict.get(library, None)
+                if handler_class is None:
+                    raise Exception("%s is not installed" % library)
             else:
                 for _, _handler in handler_dict.items():
                     handler_class = _handler
@@ -83,8 +85,8 @@ class RWManager(object):
             handler = handler_class()
             handler.set_type(file_type)
             return handler
-        else:
-            return None
+
+        raise Exception("No suitable library found for %s" % file_type)
 
     @staticmethod
     def create_reader(file_type, library=None):

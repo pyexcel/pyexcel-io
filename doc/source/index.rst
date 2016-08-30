@@ -62,13 +62,13 @@ For individual excel file formats, please install them as you wish:
    Package name   Supported file formats  Dependencies  Python versions     
    ============== ======================= ============= ==================   
    `pyexcel-io`_  csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3, 
-                                                        3.4, pypy  
+                                                        3.4, pypy, pypy3
                   tsvz [#f2]_
    `xls`_         xls, xlsx(read only),   xlrd, xlwt    2.6, 2.7, 3.3,
-                                                        3.4, pypy
+                                                        3.4, pypy, pypy3
                   xlsm(read only)
    `xlsx`_        xlsx                    openpyxl      2.6, 2.7, 3.3,
-                                                        3.4, pypy   
+                                                        3.4, pypy, pypy3   
    `ods3`_        ods                     ezodf, lxml   2.6, 2.7, 3.3, 3.4
    `ods`_         ods (python 2.6, 2.7)   odfpy         2.6, 2.7          
    ============== ======================= ============= ==================
@@ -103,7 +103,7 @@ Special note
 --------------------------------------------------------------------------------
 
 .. toctree::
-   :maxdepth:2 
+   :maxdepth: 2 
 
    migration_from_dot_1_to_dot_2
 
