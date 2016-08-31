@@ -120,18 +120,12 @@ pass on "library" option to get_data and save_data.
 .. note::
    pyexcel-text is no longer a plugin of pyexcel-io but a direct plugin of pyexcel
 
-Special note
---------------------------------------------------------------------------------
 
 .. toctree::
-   :caption: Note
+   :caption: Migration Note
    :maxdepth: 2 
 
    migration_from_dot_1_to_dot_2
-
-
-Tutorial
---------------------------------------------------------------------------------
 
 .. toctree::
    :caption: Tutorial
