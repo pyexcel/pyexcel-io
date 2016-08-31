@@ -81,11 +81,13 @@ For individual excel file formats, please install them as you wish:
    `pyexcel-ods`_    ods (python 2.6, 2.7)   odfpy         2.6, 2.7
    ================= ======================= ============= ==================
 
+.. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
 .. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
 .. _pyexcel-ods: https://github.com/pyexcel/pyexcel-ods
 .. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
+
 .. rubric:: Footnotes
 
 .. [#f1] zipped csv file
