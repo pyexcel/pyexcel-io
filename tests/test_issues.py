@@ -19,9 +19,9 @@ def test_issue_8():
 
 
 def test_issue_20():
-    test_file= os.path.join("tests",
-                            "fixtures",
-                            "issue8.csv")
+    test_file = os.path.join("tests",
+                             "fixtures",
+                             "issue20.csv")
     data = get_data(test_file)
     expected = [[u'to', u'infinity', u'and', u'beyond']]
-    eq_(data['issue8.csv'], expected)
+    eq_(data['issue20.csv'], expected)
