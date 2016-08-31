@@ -58,7 +58,7 @@ pass on "library" option to get_data and save_data.
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
 .. _xlsx: https://github.com/pyexcel/pyexcel-xlsx
-.. _xlsx: https://github.com/pyexcel/pyexcel-xlsxw
+.. _xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _text: https://github.com/pyexcel/pyexcel-text
@@ -70,6 +70,7 @@ Special note
 --------------------------------------------------------------------------------
 
 .. toctree::
+   :caption: Note
    :maxdepth: 2 
 
    migration_from_dot_1_to_dot_2
@@ -79,6 +80,7 @@ Tutorial
 --------------------------------------------------------------------------------
 
 .. toctree::
+   :caption: Tutorial
    :maxdepth: 2
 
    plaincsv
@@ -97,7 +99,7 @@ API
 
 .. autosummary::
    :toctree: api/
-   
+
    get_data
    save_data
 
