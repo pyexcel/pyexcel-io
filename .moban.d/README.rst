@@ -8,19 +8,7 @@ from database. It provides support for csv(z) format, django database and
 sqlalchemy supported databases. Its supported file formats are extended to cover
 "xls", "xlsx", "ods" by the following extensions:
 
-================ ==================================
-Plugins          Supported file formats            
-================ ==================================
-`pyexcel-xls`_   xls, xlsx(r), xlsm(r)
-`pyexcel-xlsx`_  xlsx
-`pyexcel-ods3`_  ods
-`pyexcel-ods`_   ods (python 2.6, 2.7 only)        
-================ ==================================
-
-.. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
-.. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
-.. _pyexcel-ods: https://github.com/pyexcel/pyexcel-ods
-.. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
+{% include "io-plugins-list.rst.jj2" %}
 
 If you need to manipulate the data, you might do it yourself or use its brother
 library `pyexcel <https://github.com/pyexcel/pyexcel>`__ .

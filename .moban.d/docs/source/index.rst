@@ -3,16 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-`pyexcel-io` - Let you focus on data, instead of file formats
-================================================================================
-
-:Author: C.W.
-:Source code: http://github.com/pyexcel/pyexcel-io.git
-:Issues: http://github.com/pyexcel/pyexcel-io/issues
-:License: New BSD License
-:Development: |release|
-:Released: |version|
-:Generated: |today|
+{%include "header.rst.jj2" %}
 
 Introduction
 --------------------------------------------------------------------------------
@@ -42,54 +33,11 @@ as of 2014. They are invented and supported by `pyexcel-io`_.
 Installation
 --------------------------------------------------------------------------------
 
-You can install it via pip:
-
-.. code-block:: bash
-
-    $ pip install pyexcel-io
-
-
-or clone it and install it:
-
-.. code-block:: bash
-
-    $ git clone http://github.com/pyexcel/pyexcel-io.git
-    $ cd pyexcel-io
-    $ python setup.py install
+{%include "installation.rst.jj2" %}
 
 For individual excel file formats, please install them as you wish:
 
-.. _file-format-list:
-.. _a-map-of-plugins-and-file-formats:
-
-.. table:: A list of file formats supported by external plugins
-
-   ================= ======================= ============= ==================   
-   Package name      Supported file formats  Dependencies  Python versions     
-   ================= ======================= ============= ==================   
-   `pyexcel-io`_     csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3, 
-                                                           3.4, pypy, pypy3
-                     tsvz [#f2]_
-   `pyexcel-xls`_    xls, xlsx(read only),   xlrd, xlwt    2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
-                     xlsm(read only)
-   `pyexcel-xlsx`_   xlsx                    openpyxl      2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3   
-   `pyexcel-xlsxw`_  xlsx(write only)        xlsxwriter    2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
-   `pyexcel-ods3`_   ods                     ezodf, lxml   2.6, 2.7, 3.3, 3.4
-   `pyexcel-ods`_    ods (python 2.6, 2.7)   odfpy         2.6, 2.7
-   ================= ======================= ============= ==================
-
-.. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
-.. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
-.. _pyexcel-ods: https://github.com/pyexcel/pyexcel-ods
-.. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
-.. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
-.. rubric:: Footnotes
-
-.. [#f1] zipped csv file
-.. [#f2] zipped tsv file
+{%include "io-plugins-list.rst.jj2" %}
 
 After that, you can start get and save data in the loaded format. There
 are two plugins for the same file format, e.g. pyexcel-ods3 and pyexcel-ods.
