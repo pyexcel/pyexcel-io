@@ -16,18 +16,22 @@ import pyexcel_io.constants as constants
 class DjangoModelReader(SheetReader):
     """Read from django model
     """
-    def __init__(self, model, **keywords):
-        self.model = model
+    def __init__(self, model, export_columns=None, **keywords):
         SheetReader.__init__(self, model, **keywords)
+        self.model = model
+        self.export_columns = export_columns
 
     def to_array(self):
         objects = self.model.objects.all()
         if len(objects) == 0:
             return []
         else:
-            column_names = sorted(
-                [field.attname
-                 for field in self.model._meta.concrete_fields])
+            if self.export_columns:
+                column_names = self.export_columns
+            else:
+                column_names = sorted(
+                    [field.attname
+                     for field in self.model._meta.concrete_fields])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
                 column_position = self.skip_column(column_index,
@@ -107,8 +111,9 @@ class DjangoModelWriterNew(DjangoModelWriter):
 
 
 class DjangoModelExportAdapter(NamedContent):
-    def __init__(self, model):
+    def __init__(self, model, export_columns=None):
         self.model = model
+        self.export_columns = export_columns
 
     @property
     def name(self):
@@ -138,7 +143,8 @@ class DjangoBookReader(BookReader):
         self._load_from_django_models()
 
     def read_sheet(self, native_sheet):
-        reader = DjangoModelReader(native_sheet.model)
+        reader = DjangoModelReader(native_sheet.model,
+                                   native_sheet.export_columns)
         return reader.to_array()
 
     def _load_from_django_models(self):
