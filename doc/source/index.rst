@@ -68,17 +68,23 @@ For individual excel file formats, please install them as you wish:
    Package name      Supported file formats  Dependencies  Python versions
    ================= ======================= ============= ==================
    `pyexcel-io`_     csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
+                                                           3.4, 3.5,
+                                                           pypy, pypy3
                      tsvz [#f2]_
    `pyexcel-xls`_    xls, xlsx(read only),   xlrd, xlwt    2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
+                                                           3.4, 3.5,
+                                                           pypy, pypy3
                      xlsm(read only)
    `pyexcel-xlsx`_   xlsx                    openpyxl      2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
+                                                           3.4, 3.5,
+                                                           pypy, pypy3
    `pyexcel-xlsxw`_  xlsx(write only)        xlsxwriter    2.6, 2.7, 3.3,
-                                                           3.4, pypy, pypy3
+                                                           3.4, 3.5,
+                                                           pypy, pypy3
    `pyexcel-ods3`_   ods                     ezodf, lxml   2.6, 2.7, 3.3, 3.4
+                                                           3.5
    `pyexcel-ods`_    ods (python 2.6, 2.7)   odfpy         2.6, 2.7, 3.3, 3.4
+                                                           3.5
    ================= ======================= ============= ==================
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
