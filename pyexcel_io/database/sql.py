@@ -24,18 +24,22 @@ class PyexcelSQLSkipRowException(Exception):
 class SQLTableReader(SheetReader):
     """Read a table
     """
-    def __init__(self, session, table, **keywords):
+    def __init__(self, session, table, export_columns=None, **keywords):
+        SheetReader.__init__(self, table, **keywords)
         self.session = session
         self.table = table
-        SheetReader.__init__(self, table, **keywords)
+        self.export_columns = export_columns
 
     def to_array(self):
         objects = self.session.query(self.table).all()
         if len(objects) == 0:
             return []
         else:
-            column_names = sorted([column for column in objects[0].__dict__
-                                   if column != '_sa_instance_state'])
+            if self.export_columns:
+                column_names = self.export_columns
+            else:
+                column_names = sorted([column for column in objects[0].__dict__
+                                       if column != '_sa_instance_state'])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
                 column_position = self.skip_column(column_index,
@@ -109,8 +113,9 @@ class SQLTableWriter(SheetWriter):
 
 
 class SQLTableExportAdapter(NamedContent):
-    def __init__(self, table):
+    def __init__(self, table, export_columns=None):
         self.table = table
+        self.export_columns = export_columns
 
     @property
     def name(self):
@@ -141,7 +146,10 @@ class SQLBookReader(BookReader):
         self._load_from_tables()
 
     def read_sheet(self, native_sheet):
-        reader = SQLTableReader(self.exporter.session, native_sheet.table)
+        reader = SQLTableReader(
+            self.exporter.session,
+            native_sheet.table,
+            native_sheet.export_columns)
         return reader.to_array()
 
     def _load_from_tables(self):
