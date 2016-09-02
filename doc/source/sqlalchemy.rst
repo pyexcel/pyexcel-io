@@ -228,6 +228,17 @@ Let's use previous data for reading and see if we could get them via
     >>> json.dumps(data)
     '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], "post": [["body", "category_id", "id", "pub_date", "title"], ["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], ["informal", 2, 2, "2015-01-20T23:28:30", "Title B"]]}'
 
+What if we read a subset per each table
+
+    >>> exporter = SQLTableExporter(mysession)
+    >>> adapter = SQLTableExportAdapter(Category, ['name'])
+    >>> exporter.append(adapter)
+    >>> adapter = SQLTableExportAdapter(Post, ['title'])
+    >>> exporter.append(adapter)
+    >>> data = get_data(exporter, file_type=DB_SQL)
+    >>> json.dumps(data)
+    '{"category": [["name"], ["News"], ["Sports"]], "post": [["title"], ["Title A"], ["Title B"]]}'
+
 .. testcode::
    :hide:
 
