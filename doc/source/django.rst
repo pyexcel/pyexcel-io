@@ -99,6 +99,15 @@ Continue from previous example, you can read this back::
    >>> data
    OrderedDict([('Sheet0', [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]])])
 
+Read a sub set of the columns:
+
+   >>> exporter = DjangoModelExporter()
+   >>> adapter = DjangoModelExportAdapter(model, ['X'])
+   >>> exporter.append(adapter)
+   >>> data = get_data(exporter, file_type=DB_DJANGO)
+   >>> data
+   OrderedDict([('Sheet0', [['X'], [1], [4]])])
+
 Write data into multiple models
 --------------------------------------------------------------------------------
 
