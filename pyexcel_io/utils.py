@@ -50,8 +50,6 @@ def from_query_sets(column_names, query_sets,
                 value = _get_complex_attribute(row, column)
             else:
                 value = _get_simple_attribute(row, column)
-            if isinstance(value, (datetime.date, datetime.time)):
-                value = value.isoformat()
             new_array.append(value)
         yield new_array
 
