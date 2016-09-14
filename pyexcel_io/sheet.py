@@ -12,16 +12,6 @@ from .utils import _index_filter
 import pyexcel_io.constants as constants
 
 
-__DEFAULTS = {
-    "skip_row": _index_filter,
-    "start_row": 0,
-    "row_limit": -1,
-    "skip_column": _index_filter,
-    "start_column": 0,
-    "column_limit": -1
-}
-
-
 class NamedContent:
     """
     Helper class for content that does not have a name
