@@ -106,6 +106,7 @@ class TestSingleRead:
 
     def test_sql_formating(self):
         mysession = Session()
+
         def custom_renderer(row):
             return [str(element) for element in row]
         # the key for this test case

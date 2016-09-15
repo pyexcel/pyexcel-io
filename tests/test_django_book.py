@@ -197,6 +197,7 @@ class TestSheet:
                   file_type=DB_DJANGO)
         assert model.objects.objs == self.result
         model._meta.update(["X", "Y", "Z"])
+
         def row_renderer(row):
             return [str(element) for element in row]
         # the key point of this test case
