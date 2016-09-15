@@ -187,6 +187,29 @@ class TestSheet:
         data = reader.to_array()
         assert list(data) == self.data
 
+    def test_load_and_format_sheet_from_django_model(self):
+        model = FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter = DjangoModelImportAdapter(model)
+        adapter.set_column_names(self.data[0])
+        importer.append(adapter)
+        save_data(importer, {adapter.get_name(): self.data[1:]},
+                  file_type=DB_DJANGO)
+        assert model.objects.objs == self.result
+        model._meta.update(["X", "Y", "Z"])
+        def row_renderer(row):
+            return [str(element) for element in row]
+        # the key point of this test case
+        reader = DjangoModelReader(model,
+                                   row_renderer=row_renderer)
+        data = reader.to_array()
+        expected = [
+            ["X", "Y", "Z"],
+            ['1', '2', '3'],
+            ['4', '5', '6']
+        ]
+        eq_(list(data), expected)
+
     def test_mapping_array(self):
         data2 = [
             ["A", "B", "C"],

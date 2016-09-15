@@ -30,7 +30,7 @@ class SheetReader(object):
                  start_row=0, row_limit=-1,
                  start_column=0, column_limit=-1,
                  skip_row_func=None, skip_column_func=None,
-                 skip_empty_rows=True,
+                 skip_empty_rows=True, row_renderer=None,
                  **keywords):
         self.native_sheet = sheet
         self.keywords = {}
@@ -42,6 +42,7 @@ class SheetReader(object):
         self.skip_row = _index_filter
         self.skip_column = _index_filter
         self.skip_empty_rows = skip_empty_rows
+        self.row_renderer = row_renderer
 
         if skip_row_func:
             self.skip_row = skip_row_func
@@ -89,6 +90,9 @@ class SheetReader(object):
                     # we by-pass next yeild here
                     # because it is an empty row
                     continue
+
+            if self.row_renderer:
+                return_row = self.row_renderer(return_row)
             yield return_row
 
 

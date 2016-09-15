@@ -126,6 +126,8 @@ class CSVSheetReader(SheetReader):
                 if element is not None and element != '':
                     myrow += tmp_row
                     tmp_row = []
+            if self.row_renderer:
+                myrow = self.row_renderer(myrow)
             yield myrow
 
     def _convert_cell(self, csv_cell_text):

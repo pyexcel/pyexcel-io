@@ -29,6 +29,7 @@ AVAILABLE_WRITERS = {
 
 
 def from_query_sets(column_names, query_sets,
+                    row_renderer=None,
                     skip_row_func=None, start_row=0, row_limit=-1):
     """
     Convert query sets into an array
@@ -51,6 +52,8 @@ def from_query_sets(column_names, query_sets,
             else:
                 value = _get_simple_attribute(row, column)
             new_array.append(value)
+        if row_renderer:
+            new_array = row_renderer(new_array)
         yield new_array
 
 

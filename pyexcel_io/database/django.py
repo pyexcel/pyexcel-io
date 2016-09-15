@@ -45,6 +45,7 @@ class DjangoModelReader(SheetReader):
                     export_column_names.append(column_name)
 
             return from_query_sets(export_column_names, objects,
+                                   row_renderer=self.row_renderer,
                                    skip_row_func=self.skip_row,
                                    start_row=self.start_row,
                                    row_limit=self.row_limit)

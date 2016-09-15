@@ -162,7 +162,7 @@ Here's what you need to do:
     >>> data
     OrderedDict([('Sheet1', [['X', 'Y', 'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]), ('Sheet2', [['A', 'B', 'C'], [1, 4, 7], [2, 5, 8], [3, 6, 9]])])
 
-What if we need only a set of each model
+What if we need only a subset of each model
 
     >>> exporter = DjangoModelExporter()
     >>> adapter1 = DjangoModelExportAdapter(model1, ['X'])

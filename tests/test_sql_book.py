@@ -100,8 +100,24 @@ class TestSingleRead:
             ['2014-11-11', 0, 'Adam', 11.25],
             ['2014-11-12', 1, 'Smith', 12.25]
         ]
-        # 'pyexcel'' here is the table name
+        # 'pyexcel' here is the table name
         assert list(data) == content
+        mysession.close()
+
+    def test_sql_formating(self):
+        mysession = Session()
+        def custom_renderer(row):
+            return [str(element) for element in row]
+        # the key for this test case
+        sheet = SQLTableReader(mysession, Pyexcel,
+                               row_renderer=custom_renderer)
+        data = sheet.to_array()
+        content = [
+            ['birth', 'id', 'name', 'weight'],
+            ['2014-11-11', '0', 'Adam', '11.25'],
+            ['2014-11-12', '1', 'Smith', '12.25']
+        ]
+        eq_(list(data), content)
         mysession.close()
 
     def test_sql_filter(self):
