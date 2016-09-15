@@ -79,6 +79,7 @@ pass on "library" option to get_data and save_data.
 
    plaincsv
    pagination
+   renderer
    extendedcsv
    csvz
    sqlalchemy
