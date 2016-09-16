@@ -54,8 +54,8 @@ if PY26:
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 EXTRAS_REQUIRE = {
     'xls': ['pyexcel-xls>=0.2.0'],
-    'xlsx': ['pyexcel-xlsx>=0.1.0'],
-    'ods': ['pyexcel-ods3>=0.1.0'],
+    'xlsx': ['pyexcel-xlsx>=0.2.0'],
+    'ods': ['pyexcel-ods3>=0.2.0'],
 }
 
 

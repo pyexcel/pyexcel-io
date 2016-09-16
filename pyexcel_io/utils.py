@@ -28,9 +28,19 @@ AVAILABLE_WRITERS = {
 }
 
 
+def _index_filter(current_index, start, limit=-1):
+    out_range = constants.SKIP_DATA
+    if current_index >= start:
+        out_range = constants.TAKE_DATA
+    if limit > 0 and out_range == constants.TAKE_DATA:
+        if current_index >= (start + limit):
+            out_range = constants.STOP_ITERATION
+    return out_range
+
+
 def from_query_sets(column_names, query_sets,
                     row_renderer=None,
-                    skip_row_func=None, start_row=0, row_limit=-1):
+                    skip_row_func=_index_filter, start_row=0, row_limit=-1):
     """
     Convert query sets into an array
     """
@@ -116,13 +126,3 @@ def resolve_missing_extensions(extension, available_list):
         raise NotImplementedError(message)
     else:
         raise NotImplementedError()
-
-
-def _index_filter(current_index, start, limit=-1):
-    out_range = constants.SKIP_DATA
-    if current_index >= start:
-        out_range = constants.TAKE_DATA
-    if limit > 0 and out_range == constants.TAKE_DATA:
-        if current_index >= (start + limit):
-            out_range = constants.STOP_ITERATION
-    return out_range
