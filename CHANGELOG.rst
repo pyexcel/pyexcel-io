@@ -15,8 +15,8 @@ Updated
 Added
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#. `#20 <https://github.com/pyexcel/pyexcel-io/issues/20>`__, choose subset from data base tables for export
-#. `#21 <https://github.com/pyexcel/pyexcel-io/issues/21>`__, custom renderer if given `row_renderer` as parameter.
+#. `#21 <https://github.com/pyexcel/pyexcel-io/issues/21>`__, choose subset from data base tables for export
+#. `#22 <https://github.com/pyexcel/pyexcel-io/issues/22>`__, custom renderer if given `row_renderer` as parameter.
 
 0.22 - 31.08.2016
 --------------------------------------------------------------------------------
