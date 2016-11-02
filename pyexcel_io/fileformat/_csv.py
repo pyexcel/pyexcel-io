@@ -15,9 +15,9 @@ import math
 import codecs
 import datetime
 
-from ..book import BookReader, BookWriter
-from ..sheet import SheetReader, SheetWriter, NamedContent
-from .._compact import (
+from pyexcel_io.book import BookReader, BookWriter
+from pyexcel_io.sheet import SheetReader, SheetWriter, NamedContent
+from pyexcel._compact import (
     is_string,
     StringIO,
     BytesIO,

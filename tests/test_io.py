@@ -2,7 +2,7 @@ import os
 import sys
 from unittest import TestCase
 from pyexcel_io.deprecated import load_data, get_writer
-from pyexcel_io.book import RWManager
+import pyexcel_io.manager as manager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
@@ -12,6 +12,16 @@ from zipfile import BadZipfile
 
 
 PY2 = sys.version_info[0] == 2
+
+
+@raises(NotImplementedError)
+def test_not_implemented_1():
+    load_data("something")
+
+
+@raises(NotImplementedError)
+def test_not_implemented_2():
+    get_writer("something")
 
 
 @raises(IOError)
@@ -26,70 +36,70 @@ def test_no_valid_parameters_2():
 
 @raises(IOError)
 def test_none_type_load_data():
-    load_data(None)
+    get_data(None)
 
 
-@raises(IOError)
-def test_wrong_parameter_to_load_data():
-    load_data(1)
+@raises(Exception)
+def test_wrong_parameter_to_get_data():
+    get_data(1)
 
 
-@raises(IOError)
+@raises(Exception)
 def test_wrong_parameter_to_get_writer():
-    get_writer(1)
+    get_writer_new(1)
 
 
-@raises(IOError)
+@raises(NotImplementedError)
 def test_wrong_parameter_to_get_writer2():
-    get_writer(1, file_type="csv")
+    get_writer_new(1, file_type="csv")
 
 
 @raises(IOError)
 def test_load_ods_data():
-    load_data("test.ods")
+    get_data("test.ods")
 
 
 @raises(IOError)
 def test_load_ods_data_from_memory():
     io = BytesIO()
-    load_data(io, file_type="ods")
+    get_data(io, file_type="ods")
 
 
 @raises(IOError)
 def test_load_unknown_data():
-    load_data("test.unknown")
+    get_data("test.unknown")
 
 
 @raises(IOError)
 def test_load_unknown_data_from_memory():
     io = BytesIO()
-    load_data(io, file_type="unknown")
+    get_data(io, file_type="unknown")
 
 
 @raises(BadZipfile)
 def test_load_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        load_data(io, file_type="csvz")
+        get_data(io, file_type="csvz")
     else:
         raise BadZipfile("pass it")
 
 
 @raises(IOError)
 def test_write_xlsx_data():
-    get_writer("test.xlsx")
+    get_data("test.xlsx")
 
 
 @raises(IOError)
 def test_write_unknown_data():
-    get_writer("test.unknown")
+    get_data("test.unknown")
 
 
 @raises(TypeError)
 def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        writer = get_writer(io, file_type="csvz")
+        writer = get_writer_new(io, file_type="csvz")
         writer.write({'adb': [[2, 3]]})
     else:
         raise TypeError("pass it")
@@ -98,25 +108,25 @@ def test_writer_csvz_data_from_memory():
 @raises(IOError)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
-    get_writer(io, file_type="xlsms")
+    get_writer_new(io, file_type="xlsms")
 
 
 @raises(IOError)
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it
-    RWManager.register_file_type_as_binary_stream('unknown1')
-    get_writer(io, file_type="unknown1")
+    manager.register_file_type_as_binary_stream('unknown1')
+    get_writer_new(io, file_type="unknown1")
 
 
 def test_get_io():
-    io = RWManager.get_io("hello")
+    io = manager.get_io("hello")
     assert io is None
 
 
 def test_default_csv_format():
     data = [['1', '2', '3']]
-    io = RWManager.get_io("csv")
+    io = manager.get_io("csv")
     # test default format for saving is 'csv'
     save_data(io, data)
     io.seek(0)
@@ -147,7 +157,7 @@ def test_file_handle_as_output():
 
 def test_binary_file_content():
     data = [['1', '2', '3']]
-    io = RWManager.get_io("csvz")
+    io = manager.get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
     assert result['pyexcel_sheet1'] == [[1, 2, 3]]
@@ -155,7 +165,7 @@ def test_binary_file_content():
 
 def test_text_file_content():
     data = [['1', '2', '3']]
-    io = RWManager.get_io("csv")
+    io = manager.get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
     assert result['csv'] == [[1, 2, 3]]
@@ -163,7 +173,7 @@ def test_text_file_content():
 
 def test_library_parameter():
     data = [['1', '2', '3']]
-    io = RWManager.get_io("csv")
+    io = manager.get_io("csv")
     save_data(io, data, 'csv', library="built-in")
     result = get_data(io.getvalue(), 'csv', library="built-in")
     assert result['csv'] == [[1, 2, 3]]

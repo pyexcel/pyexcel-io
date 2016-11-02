@@ -5,7 +5,7 @@ import os
 from unittest import TestCase
 from textwrap import dedent
 from nose.tools import raises, eq_
-from pyexcel_io.manager import RWManager
+import pyexcel_io.manager as manager
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.fileformat._csv import (
     CSVSheetReader,
@@ -46,7 +46,7 @@ class TestReaders(TestCase):
         self.assertEqual(result, self.expected_data)
 
     def test_sheet_memory_reader(self):
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
@@ -102,7 +102,7 @@ class TestMemoryWriter(TestCase):
         """).strip('\n')
 
     def test_sheet_writer_to_memory(self):
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         w = CSVMemoryWriter(io, None, single_sheet_in_book=True)
         for row in self.data:
             w.write_row(row)

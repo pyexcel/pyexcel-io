@@ -2,7 +2,7 @@ import os
 from unittest import TestCase
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
-from pyexcel_io.manager import RWManager
+import pyexcel_io.manager as manager
 from pyexcel_io.fileformat.csvz import CSVZipBookReader, CSVZipBookWriter
 from pyexcel_io.fileformat.tsvz import TSVZipBookReader, TSVZipBookWriter
 import zipfile
@@ -60,7 +60,7 @@ class TestTSVZ(TestCSVZ):
 
 def test_reading_from_memory():
     data = [[1, 2, 3]]
-    io = RWManager.get_io("csvz")
+    io = manager.get_io("csvz")
     zipbook = CSVZipBookWriter()
     zipbook.open_stream(io)
     zipbook.write({None: data})
@@ -73,7 +73,7 @@ def test_reading_from_memory():
 
 def test_reading_from_memory_tsvz():
     data = [[1, 2, 3]]
-    io = RWManager.get_io("tsvz")
+    io = manager.get_io("tsvz")
     zipbook = TSVZipBookWriter()
     zipbook.open_stream(io)
     zipbook.write({None: data})

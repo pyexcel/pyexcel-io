@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from .manager import RWManager
+from . import manager
 from ._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
     MESSAGE_ERROR_03,
@@ -130,20 +130,6 @@ class BookReader(RWInterface):
         raise NotImplementedError("Please implement this method")
 
 
-def _convert_content_to_stream(file_content, file_type):
-    io = RWManager.get_io(file_type)
-    if PY2:
-        io.write(file_content)
-    else:
-        if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
-            content = file_content.decode('utf-8')
-        else:
-            content = file_content
-        io.write(content)
-    io.seek(0)
-    return io
-
-
 class BookWriter(RWInterface):
     """
     Standard book writer
@@ -179,3 +165,17 @@ class BookWriter(RWInterface):
 
     def create_sheet(self, sheet_name):
         pass
+
+
+def _convert_content_to_stream(file_content, file_type):
+    io = manager.get_io(file_type)
+    if PY2:
+        io.write(file_content)
+    else:
+        if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
+            content = file_content.decode('utf-8')
+        else:
+            content = file_content
+        io.write(content)
+    io.seek(0)
+    return io

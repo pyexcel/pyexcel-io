@@ -2,7 +2,7 @@ import os
 from unittest import TestCase
 from textwrap import dedent
 from nose.tools import raises
-from pyexcel_io.manager import RWManager
+import pyexcel_io.manager as manager
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.fileformat._csv import CSVBookReader, CSVBookWriter
 from pyexcel_io.fileformat.tsv import TSVBookReader, TSVBookWriter
@@ -36,7 +36,7 @@ class TestCSVReaders(TestCase):
         self.assertEqual(list(sheets[self.test_file]), self.expected_data)
 
     def test_book_reader_from_memory_source(self):
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         with open(self.test_file, 'r') as f:
             io.write(f.read())
         io.seek(0)
@@ -235,7 +235,7 @@ class TestWriteMultipleSheets(TestCase):
         self.delete_files()
 
     def test_multiple_sheet_into_memory(self):
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         w = self.writer_class()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
@@ -245,7 +245,7 @@ class TestWriteMultipleSheets(TestCase):
 
     def test_multiple_sheet_into_memory_2(self):
         """Write csv book into a single stream"""
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         w = self.writer_class()
         w.open(io, lineterminator='\n')
         w.write(self.sheets)
@@ -361,7 +361,7 @@ class TestMemoryWriter(TestCase):
         ]
 
     def test_book_writer_to_memroy(self):
-        io = RWManager.get_io(self.file_type)
+        io = manager.get_io(self.file_type)
         w = self.writer_class()
         w.open(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})

@@ -1,5 +1,5 @@
 from ._compact import isstream, is_generator, PY2
-from .manager import RWManager
+from . import manager
 from .constants import (
     FILE_FORMAT_CSV,
     DEFAULT_SHEET_NAME,
@@ -114,8 +114,11 @@ def load_data_new(file_name=None,
     if len(number_of_none_inputs) != 1:
         raise IOError(MESSAGE_ERROR_02)
     if file_type is None:
-        file_type = file_name.split(".")[-1]
-    reader = RWManager.create_reader(file_type, library)
+        try:
+            file_type = file_name.split(".")[-1]
+        except AttributeError:
+            raise Exception("file_name should be a string type")
+    reader = manager.create_reader(file_type, library)
     if file_name:
         reader.open(file_name, **keywords)
     elif file_content:
@@ -141,10 +144,13 @@ def get_writer_new(file_name=None, file_stream=None,
         raise IOError(MESSAGE_ERROR_02)
     file_type_given = True
     if file_type is None and file_name:
-        file_type = file_name.split(".")[-1]
+        try:
+            file_type = file_name.split(".")[-1]
+        except AttributeError:
+            raise Exception("file_name should be a string type")
         file_type_given = False
 
-    writer = RWManager.create_writer(file_type, library)
+    writer = manager.create_writer(file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)

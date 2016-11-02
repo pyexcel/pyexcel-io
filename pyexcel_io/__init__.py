@@ -9,7 +9,7 @@
 """
 # flake8: noqa
 from .io import get_data, save_data
-from .manager import RWManager
+import pyexcel_io.manager as manager
 from . import fileformat, database
 
 exports = fileformat.exports + database.exports
@@ -33,4 +33,4 @@ for _, module_name, ispkg in iter_modules():
         except ImportError:
             continue
 
-RWManager.register_readers_and_writers(exports)
+manager.register_readers_and_writers(exports)
