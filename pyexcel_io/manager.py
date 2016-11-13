@@ -19,6 +19,10 @@ file_types = ()
 mime_types = {}
 
 
+def get_writers():
+    return writer_factories.keys()
+
+
 def register_readers_and_writers(plugins):
     for plugin in plugins:
         the_file_type = plugin['file_type']

@@ -255,7 +255,6 @@ class CSVMemoryWriter(CSVSheetWriter):
         if self.single_sheet_in_book:
             #  on purpose, the this is not done
             #  because the io stream can be used later
-            #  self.f.close()
             pass
         else:
             self.writer.writerow(

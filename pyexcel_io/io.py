@@ -1,10 +1,6 @@
 from ._compact import isstream, is_generator, PY2
 from . import manager
-from .constants import (
-    FILE_FORMAT_CSV,
-    DEFAULT_SHEET_NAME,
-    MESSAGE_ERROR_02
-)
+import pyexcel_io.constants as constants
 
 
 def get_data(afile, file_type=None, streaming=False, **keywords):
@@ -18,7 +14,7 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     :returns: an array if it is a single sheet, an ordered dictionary otherwise
     """
     if isstream(afile) and file_type is None:
-        file_type = FILE_FORMAT_CSV
+        file_type = constants.FILE_FORMAT_CSV
     if isstream(afile):
         data = load_data_new(file_stream=afile,
                              file_type=file_type, **keywords)
@@ -50,7 +46,7 @@ def save_data(afile, data, file_type=None, **keywords):
     to_store = data
     if isinstance(data, list) or is_generator(data):
         single_sheet_in_book = True
-        to_store = {DEFAULT_SHEET_NAME: data}
+        to_store = {constants.DEFAULT_SHEET_NAME: data}
     else:
         if PY2:
             keys = data.keys()
@@ -62,7 +58,7 @@ def save_data(afile, data, file_type=None, **keywords):
             single_sheet_in_book = False
 
     if isstream(afile) and file_type is None:
-        file_type = FILE_FORMAT_CSV
+        file_type = constants.FILE_FORMAT_CSV
 
     store_data(afile, to_store,
                file_type=file_type,
@@ -112,7 +108,7 @@ def load_data_new(file_name=None,
     inputs = [file_name, file_content, file_stream]
     number_of_none_inputs = [x for x in inputs if x is not None]
     if len(number_of_none_inputs) != 1:
-        raise IOError(MESSAGE_ERROR_02)
+        raise IOError(constants.MESSAGE_ERROR_02)
     if file_type is None:
         try:
             file_type = file_name.split(".")[-1]
@@ -141,7 +137,7 @@ def get_writer_new(file_name=None, file_stream=None,
                                         [file_name, file_stream]))
 
     if len(number_of_none_inputs) != 1:
-        raise IOError(MESSAGE_ERROR_02)
+        raise IOError(constants.MESSAGE_ERROR_02)
     file_type_given = True
     if file_type is None and file_name:
         try:
