@@ -95,7 +95,7 @@ class TestAutoDetectFloat(TestCase):
 
     def test_auto_detect_float_false(self):
         sheet = pe.get_sheet(file_name=self.test_file, auto_detect_float=False)
-        self.assertEqual(sheet.to_array(), [['1', '2.0', '3.1']])
+        self.assertEqual(sheet.to_array(), [[1, '2.0', '3.1']])
         expected = dedent("""
         test_auto_detect_init.csv:
         +---+-----+-----+
@@ -105,7 +105,7 @@ class TestAutoDetectFloat(TestCase):
 
     def test_get_book_auto_detect_float_false(self):
         book = pe.get_book(file_name=self.test_file, auto_detect_float=False)
-        self.assertEqual(book[0].to_array(), [['1', '2.0', '3.1']])
+        self.assertEqual(book[0].to_array(), [[1, '2.0', '3.1']])
         expected = dedent("""
         test_auto_detect_init.csv:
         +---+-----+-----+
