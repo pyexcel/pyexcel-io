@@ -1,7 +1,7 @@
 Change log
 ================================================================================
 
-0.24 - unreleased
+unreleased
 --------------------------------------------------------------------------------
 
 Updated
@@ -9,7 +9,16 @@ Updated
 
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__, use cString by default
 
-0.23 - unreleased
+0.24 - unreleased
+--------------------------------------------------------------------------------
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#23 <https://github.com/pyexcel/pyexcel-io/issues/23>`__, Failed to convert
+   long integer string in python 2 to its actual value
+
+0.23 - 16.09.2016
 --------------------------------------------------------------------------------
 
 Added

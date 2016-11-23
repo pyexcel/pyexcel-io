@@ -70,14 +70,13 @@ For individual excel file formats, please install them as you wish:
    `pyexcel-io`_     csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3,
                      tsvz [#f2]_                           3.4, 3.5,
                                                            pypy, pypy3
-   `pyexcel-xls`_    xls, xlsx(read only),   xlrd, xlwt    same as above
-                     xlsm(read only)                       
-                                                           
-   `pyexcel-xlsx`_   xlsx                    openpyxl      same as above
-   `pyexcel-xlsxw`_  xlsx(write only)        xlsxwriter    same as above
-   `pyexcel-ods3`_   ods                     ezodf, lxml   2.6, 2.7, 3.3, 3.4
-                                                           3.5
-   `pyexcel-ods`_    ods                     odfpy         same as above
+   `pyexcel-xls`_    xls, xlsx(read only),   `xlrd`_,      same as above
+                     xlsm(read only)         `xlwt`_
+   `pyexcel-xlsx`_   xlsx                    `openpyxl`_   same as above
+   `pyexcel-xlsxw`_  xlsx(write only)        `XlsxWriter`_ same as above
+   `pyexcel-ods3`_   ods                     `ezodf`_,     2.6, 2.7, 3.3, 3.4
+                                             lxml          3.5
+   `pyexcel-ods`_    ods                     `odfpy`_      same as above
    ================= ======================= ============= ==================
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
@@ -86,6 +85,13 @@ For individual excel file formats, please install them as you wish:
 .. _pyexcel-ods: https://github.com/pyexcel/pyexcel-ods
 .. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
+
+.. _xlrd: https://github.com/python-excel/xlrd
+.. _xlwt: https://github.com/python-excel/xlwt
+.. _openpyxl: https://bitbucket.org/openpyxl/openpyxl
+.. _XlsxWriter: https://github.com/jmcnamara/XlsxWriter
+.. _ezodf: https://github.com/T0ha/ezodf
+.. _odfpy: https://github.com/eea/odfpy
 
 
 .. rubric:: Footnotes

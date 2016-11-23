@@ -133,7 +133,7 @@ class SheetWriter(object):
         """
         For standalone usage, write an array
         """
-        if not is_generator(table):
+        if hasattr(table, '__len__'):
             rows = len(table)
             if rows < 1:
                 return

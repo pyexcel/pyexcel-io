@@ -25,3 +25,18 @@ def test_issue_20():
     data = get_data(test_file)
     expected = [[u'to', u'infinity', u'and', u'beyond']]
     eq_(data['issue20.csv'], expected)
+
+
+def test_issue_23():
+    test_file = os.path.join("tests",
+                             "fixtures",
+                             "issue23.csv")
+    data = get_data(test_file)
+    expected = [
+        [8204235414504252L, u'inf'],
+        [82042354145042521L, u'-inf'],
+        [820423541450425216L, 0],
+        [820423541450425247L, 1],
+        [8204235414504252490L, 1.1]
+    ]
+    eq_(data['issue23.csv'], expected)

@@ -132,21 +132,21 @@ class CSVSheetReader(SheetReader):
 
     def _convert_cell(self, csv_cell_text):
         ret = None
-        if self.auto_detect_float:
+        if self.auto_detect_int:
+            ret = _detect_int_value(csv_cell_text)
+        if ret is None and self.auto_detect_float:
             ret = _detect_float_value(csv_cell_text)
-            if ret is not None:
-                if ret == float('inf'):
-                    if self.ignore_infinity:
-                        ret = csv_cell_text
-                elif self.auto_detect_int:
-                    if ret == math.floor(ret):
-                        ret = int(ret)
+            shall_we_ignore_the_conversion = (
+                (ret in [float('inf'), float('-inf')]) and
+                self.ignore_infinity
+            )
+            if shall_we_ignore_the_conversion:
+                ret = None
         if ret is None and self.auto_detect_datetime:
             ret = _detect_date_value(csv_cell_text)
         if ret is None:
-            return csv_cell_text
-        else:
-            return ret
+            ret = csv_cell_text
+        return ret
 
 
 class CSVFileReader(CSVSheetReader):
@@ -404,6 +404,15 @@ def _detect_float_value(csv_cell_text):
             return None
         else:
             return float(csv_cell_text)
+    except ValueError:
+        return None
+
+
+def _detect_int_value(csv_cell_text):
+    if csv_cell_text.startswith('0') and len(csv_cell_text) > 1:
+        return None
+    try:
+        return int(csv_cell_text)
     except ValueError:
         return None
 
