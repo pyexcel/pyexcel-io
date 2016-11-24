@@ -67,7 +67,7 @@ And we can read the written csv file back as the following code::
     >>> import pprint
     >>> data = get_data("your_file.csv")
     >>> pprint.pprint(data['your_file.csv'])
-    [[1, 2, 3],
+    [[1, 2.0, 3.0],
      [datetime.date(2016, 5, 4),
       datetime.datetime(2016, 5, 4, 17, 39, 12),
       datetime.datetime(2016, 5, 4, 17, 40, 12, 100)]]
@@ -81,7 +81,7 @@ For example, let's switch all off:
     >>> data = get_data("your_file.csv", auto_detect_float=False, auto_detect_datetime=False)
 	>>> import json
     >>> json.dumps(data['your_file.csv'])
-    '[["1", "2.0", "3.0"], ["2016-05-04", "2016-05-04 17:39:12", "2016-05-04 17:40:12.000100"]]'
+    '[[1, "2.0", "3.0"], ["2016-05-04", "2016-05-04 17:39:12", "2016-05-04 17:40:12.000100"]]'
 
 In addition to `auto_detect_float` and `auto_detect_datetime`, there is another flag named `auto_detect_int`, which becomes active only if `auto_detect_float` is `True`. Now, let's play a bit with `auto_detect_int`:
 

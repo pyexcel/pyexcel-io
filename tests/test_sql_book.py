@@ -70,6 +70,7 @@ class Category(Base):
     def __str__(self):
         return self.__repr__()
 
+
 Session = sessionmaker(bind=engine)
 
 

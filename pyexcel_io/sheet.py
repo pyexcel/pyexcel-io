@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ._compact import is_generator, irange
+from ._compact import irange
 from .utils import _index_filter
 import pyexcel_io.constants as constants
 

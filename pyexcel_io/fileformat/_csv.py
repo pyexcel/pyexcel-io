@@ -11,7 +11,6 @@ import re
 import os
 import csv
 import glob
-import math
 import codecs
 import datetime
 

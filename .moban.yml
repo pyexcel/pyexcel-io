@@ -5,7 +5,7 @@ configuration:
   - ".moban.d"
   configuration: pyexcel_io.yaml
 targets:
-  - "doc/source/conf.py": "docs/source/conf.py"
+  - "docs/source/conf.py": "docs/source/conf.py"
   - setup.py: setup.py
   - .travis.yml: travis.yml.jj2
   - requirements.txt: requirements.txt.jj2
@@ -15,4 +15,4 @@ targets:
   - test.sh: test.sh.jj2
   - test.bat: test.sh.jj2
   - README.rst: README.rst
-  - "doc/source/index.rst": "docs/source/index.rst"
+  - "docs/source/index.rst": "docs/source/index.rst"
