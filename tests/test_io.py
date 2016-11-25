@@ -95,14 +95,14 @@ def test_write_unknown_data():
     get_data("test.unknown")
 
 
-@raises(TypeError)
+@raises(NotImplementedError)
 def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
         writer = get_writer_new(io, file_type="csvz")
         writer.write({'adb': [[2, 3]]})
     else:
-        raise TypeError("pass it")
+        raise NotImplementedError("pass it")
 
 
 @raises(IOError)
