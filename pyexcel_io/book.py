@@ -20,7 +20,7 @@ class RWInterface(object):
     The common methods for book reader and writer
     """
     def __init__(self):
-        self.file_type = None
+        self._file_type = None
 
     def open(self, file_name, **keywords):
         """open a file for read or write"""
@@ -40,7 +40,7 @@ class RWInterface(object):
 
         file type is needed when a third party library could
         handle more than one file type"""
-        self.file_type = file_type
+        self._file_type = file_type
 
     def close(self):
         """
@@ -54,11 +54,11 @@ class BookReader(RWInterface):
     Standard book reader
     """
     def __init__(self):
-        self.reader = None
-        self.file_name = None
-        self.file_stream = None
-        self.keywords = None
-        self.native_book = None
+        self._file_name = None
+        self._file_stream = None
+        self._keywords = None
+        self._native_book = None
+        self._keywords = None
 
     def open(self, file_name, **keywords):
         """
@@ -66,8 +66,8 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        self.file_name = file_name
-        self.keywords = keywords
+        self._file_name = file_name
+        self._keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
         """
@@ -76,8 +76,8 @@ class BookReader(RWInterface):
         keywords are passed on to individual readers
         """
         if isstream(file_stream):
-            self.file_stream = file_stream
-            self.keywords = keywords
+            self._file_stream = file_stream
+            self._keywords = keywords
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
 
@@ -88,14 +88,14 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        file_stream = _convert_content_to_stream(file_content, self.file_type)
+        file_stream = _convert_content_to_stream(file_content, self._file_type)
         self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
         """
         read a named sheet from a excel data book
         """
-        named_contents = [content for content in self.native_book
+        named_contents = [content for content in self._native_book
                           if content.name == sheet_name]
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
@@ -108,7 +108,7 @@ class BookReader(RWInterface):
         read an indexed sheet from a excel data book
         """
         try:
-            sheet = self.native_book[sheet_index]
+            sheet = self._native_book[sheet_index]
             return {sheet.name: self.read_sheet(sheet)}
         except IndexError:
             self.close()
@@ -119,7 +119,7 @@ class BookReader(RWInterface):
         read everything from a excel data book
         """
         result = OrderedDict()
-        for sheet in self.native_book:
+        for sheet in self._native_book:
             result[sheet.name] = self.read_sheet(sheet)
         return result
 
@@ -135,7 +135,7 @@ class BookWriter(RWInterface):
     Standard book writer
     """
     def __init__(self):
-        self.file_alike_object = None
+        self._file_alike_object = None
 
     def open(self, file_name, **keywords):
         """
@@ -143,8 +143,8 @@ class BookWriter(RWInterface):
 
         keywords are passed on to individual writers
         """
-        self.file_alike_object = file_name
-        self.keywords = keywords
+        self._file_alike_object = file_name
+        self._keywords = keywords
 
     def open_stream(self, file_stream, **keywords):
         """

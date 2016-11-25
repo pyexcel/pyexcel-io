@@ -32,22 +32,22 @@ class SheetReader(object):
                  skip_row_func=None, skip_column_func=None,
                  skip_empty_rows=True, row_renderer=None,
                  **keywords):
-        self.native_sheet = sheet
-        self.keywords = {}
-        self.keywords.update(keywords)
-        self.start_row = start_row
-        self.row_limit = row_limit
-        self.start_column = start_column
-        self.column_limit = column_limit
-        self.skip_row = _index_filter
-        self.skip_column = _index_filter
-        self.skip_empty_rows = skip_empty_rows
-        self.row_renderer = row_renderer
+        self._native_sheet = sheet
+        self._keywords = {}
+        self._keywords.update(keywords)
+        self._start_row = start_row
+        self._row_limit = row_limit
+        self._start_column = start_column
+        self._column_limit = column_limit
+        self._skip_row = _index_filter
+        self._skip_column = _index_filter
+        self._skip_empty_rows = skip_empty_rows
+        self._row_renderer = row_renderer
 
         if skip_row_func:
-            self.skip_row = skip_row_func
+            self._skip_row = skip_row_func
         if skip_column_func:
-            self.skip_column = skip_column_func
+            self._skip_column = skip_column_func
 
     def _cell_value(self, row, column):
         """
@@ -60,9 +60,8 @@ class SheetReader(object):
         """2 dimentional representation of the content
         """
         for row in irange(self.number_of_rows()):
-            row_position = self.skip_row(row,
-                                         self.start_row,
-                                         self.row_limit)
+            row_position = self._skip_row(
+                row, self._start_row, self._row_limit)
             if row_position == constants.SKIP_DATA:
                 continue
             elif row_position == constants.STOP_ITERATION:
@@ -72,9 +71,8 @@ class SheetReader(object):
             tmp_row = []
 
             for column in irange(0, self.number_of_columns()):
-                column_position = self.skip_column(column,
-                                                   self.start_column,
-                                                   self.column_limit)
+                column_position = self._skip_column(
+                    column, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
                     continue
                 elif column_position == constants.STOP_ITERATION:
@@ -85,14 +83,14 @@ class SheetReader(object):
                 if cell_value is not None and cell_value != '':
                     return_row += tmp_row
                     tmp_row = []
-            if self.skip_empty_rows:
+            if self._skip_empty_rows:
                 if len(return_row) < 1:
                     # we by-pass next yeild here
                     # because it is an empty row
                     continue
 
-            if self.row_renderer:
-                return_row = self.row_renderer(return_row)
+            if self._row_renderer:
+                return_row = self._row_renderer(return_row)
             yield return_row
 
 
@@ -106,9 +104,9 @@ class SheetWriter(object):
             sheet_name = name
         else:
             sheet_name = constants.DEFAULT_SHEET_NAME
-        self.native_book = native_book
-        self.native_sheet = native_sheet
-        self.keywords = keywords
+        self._native_book = native_book
+        self._native_sheet = native_sheet
+        self._keywords = keywords
         self.set_sheet_name(sheet_name)
 
     def set_sheet_name(self, name):

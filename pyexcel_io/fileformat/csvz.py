@@ -29,28 +29,29 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         self.content = StringIO()
-        self.writer = csv.writer(self.content, **self.keywords)
+        self.writer = csv.writer(self.content, **self._keywords)
 
     def close(self):
-        file_name = "%s.%s" % (self.native_sheet, self.file_extension)
+        file_name = "%s.%s" % (self._native_sheet, self.file_extension)
         self.content.seek(0)
-        self.native_book.writestr(file_name, self.content.read())
+        self._native_book.writestr(file_name, self.content.read())
         self.content.close()
 
 
 class CSVZipBookReader(BookReader):
     def __init__(self):
         BookReader.__init__(self)
-        self.file_type = FILE_FORMAT_CSVZ
+        self._file_type = FILE_FORMAT_CSVZ
         self.zipfile = None
 
     def open(self, file_name, **keywords):
         BookReader.open(self, file_name, **keywords)
-        self.native_book = self._load_from_file_alike_object(self.file_name)
+        self._native_book = self._load_from_file_alike_object(self._file_name)
 
     def open_stream(self, file_stream, **keywords):
         BookReader.open_stream(self, file_stream, **keywords)
-        self.native_book = self._load_from_file_alike_object(self.file_stream)
+        self._native_book = self._load_from_file_alike_object(
+            self._file_stream)
 
     def read_sheet(self, native_sheet):
         content = self.zipfile.read(native_sheet.payload)
@@ -64,7 +65,7 @@ class CSVZipBookReader(BookReader):
                 native_sheet.name,
                 sheet
             ),
-            **self.keywords
+            **self._keywords
         )
         return reader.to_array()
 
@@ -91,7 +92,7 @@ class CSVZipBookReader(BookReader):
 class CSVZipBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self)
-        self.file_type = FILE_FORMAT_CSVZ
+        self._file_type = FILE_FORMAT_CSVZ
         self.zipfile = None
 
     def open(self, file_name, **keywords):
@@ -105,8 +106,8 @@ class CSVZipBookWriter(BookWriter):
         writer = CSVZipSheetWriter(
             self.zipfile,
             given_name,
-            self.file_type[:3],
-            **self.keywords
+            self._file_type[:3],
+            **self._keywords
         )
         return writer
 

@@ -18,7 +18,7 @@ from ._csv import CSVBookReader, CSVBookWriter
 class TSVBookReader(CSVBookReader):
     def __init__(self):
         CSVBookReader.__init__(self)
-        self.file_type = FILE_FORMAT_TSV
+        self._file_type = FILE_FORMAT_TSV
 
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
@@ -33,7 +33,7 @@ class TSVBookWriter(CSVBookWriter):
 
     def __init__(self):
         CSVBookWriter.__init__(self)
-        self.file_type = FILE_FORMAT_TSV
+        self._file_type = FILE_FORMAT_TSV
 
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT

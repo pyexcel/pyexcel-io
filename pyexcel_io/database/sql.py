@@ -26,25 +26,24 @@ class SQLTableReader(SheetReader):
     """
     def __init__(self, session, table, export_columns=None, **keywords):
         SheetReader.__init__(self, table, **keywords)
-        self.session = session
-        self.table = table
-        self.export_columns = export_columns
+        self.__session = session
+        self.__table = table
+        self.__export_columns = export_columns
 
     def to_array(self):
-        objects = self.session.query(self.table).all()
+        objects = self.__session.query(self.__table).all()
         if len(objects) == 0:
             return []
         else:
-            if self.export_columns:
-                column_names = self.export_columns
+            if self.__export_columns:
+                column_names = self.__export_columns
             else:
                 column_names = sorted([column for column in objects[0].__dict__
                                        if column != '_sa_instance_state'])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
-                column_position = self.skip_column(column_index,
-                                                   self.start_column,
-                                                   self.column_limit)
+                column_position = self._skip_column(
+                    column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
                     continue
                 elif column_position == constants.STOP_ITERATION:
@@ -53,32 +52,32 @@ class SQLTableReader(SheetReader):
                     export_column_names.append(column_name)
 
             return from_query_sets(export_column_names, objects,
-                                   row_renderer=self.row_renderer,
-                                   skip_row_func=self.skip_row,
-                                   start_row=self.start_row,
-                                   row_limit=self.row_limit)
+                                   row_renderer=self._row_renderer,
+                                   skip_row_func=self._skip_row,
+                                   start_row=self._start_row,
+                                   row_limit=self._row_limit)
 
 
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
     def __init__(self, session, table_params, auto_commit=True, **keywords):
-        self.session = session
-        self.table = None
-        self.initializer = None
-        self.mapdict = None
-        self.column_names = None
-        self.auto_commit = auto_commit
-        self.keywords = keywords
+        self.__session = session
+        self.__table = None
+        self.__initializer = None
+        self.__mapdict = None
+        self.__column_names = None
+        self.__auto_commit = auto_commit
+        self._keywords = keywords
         if len(table_params) == 4:
-            (self.table, self.column_names,
-             self.mapdict, self.initializer) = table_params
+            (self.__table, self.__column_names,
+             self.__mapdict, self.__initializer) = table_params
         else:
             raise ValueError(constants.MESSAGE_INVALID_PARAMETERS)
 
-        if isinstance(self.mapdict, list):
-            self.column_names = self.mapdict
-            self.mapdict = None
+        if isinstance(self.__mapdict, list):
+            self.__column_names = self.__mapdict
+            self.__mapdict = None
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -92,25 +91,25 @@ class SQLTableWriter(SheetWriter):
                 print(new_array)
 
     def _write_row(self, array):
-        row = dict(zip(self.column_names, array))
+        row = dict(zip(self.__column_names, array))
         obj = None
-        if self.initializer:
+        if self.__initializer:
             # allow initinalizer to return None
             # if skipping is needed
-            obj = self.initializer(row)
+            obj = self.__initializer(row)
         if obj is None:
-            obj = self.table()
-            for name in self.column_names:
-                if self.mapdict is not None:
-                    key = self.mapdict[name]
+            obj = self.__table()
+            for name in self.__column_names:
+                if self.__mapdict is not None:
+                    key = self.__mapdict[name]
                 else:
                     key = name
                 setattr(obj, key, row[name])
-        self.session.add(obj)
+        self.__session.add(obj)
 
     def close(self):
-        if self.auto_commit:
-            self.session.commit()
+        if self.__auto_commit:
+            self.__session.commit()
 
 
 class SQLTableExportAdapter(NamedContent):
@@ -143,18 +142,18 @@ class SQLBookReader(BookReader):
         raise NotImplementedError()
 
     def open_content(self, file_content, **keywords):
-        self.exporter = file_content
+        self.__exporter = file_content
         self._load_from_tables()
 
     def read_sheet(self, native_sheet):
         reader = SQLTableReader(
-            self.exporter.session,
+            self.__exporter.session,
             native_sheet.table,
             native_sheet.export_columns)
         return reader.to_array()
 
     def _load_from_tables(self):
-        self.native_book = self.exporter.adapters
+        self._native_book = self.__exporter.adapters
 
 
 class SQLTableImportAdapter(SQLTableExportAdapter):
@@ -168,30 +167,30 @@ class SQLTableImportAdapter(SQLTableExportAdapter):
 class SQLTableImporter(object):
     def __init__(self, session):
         self.session = session
-        self.adapters = {}
+        self.__adapters = {}
 
     def append(self, import_adapter):
-        self.adapters[import_adapter.name] = import_adapter
+        self.__adapters[import_adapter.name] = import_adapter
 
     def get(self, name):
-        return self.adapters.get(name, None)
+        return self.__adapters.get(name, None)
 
 
 class SQLBookWriter(BookWriter):
     def open_content(self, file_content, auto_commit=True, **keywords):
-        self.importer = file_content
-        self.auto_commit = auto_commit
+        self.__importer = file_content
+        self.__auto_commit = auto_commit
 
     def create_sheet(self, sheet_name):
         sheet_writer = None
-        adapter = self.importer.get(sheet_name)
+        adapter = self.__importer.get(sheet_name)
         if adapter:
             sheet_writer = SQLTableWriter(
-                self.importer.session,
+                self.__importer.session,
                 (adapter.table, adapter.column_names,
                  adapter.column_name_mapping_dict,
                  adapter.row_initializer),
-                auto_commit=self.auto_commit
+                auto_commit=self.__auto_commit
             )
         return sheet_writer
 

@@ -17,27 +17,27 @@ class ArrayReader(SheetReader):
     @property
     def name(self):
         SheetReader.name
-        return self.native_sheet.name
+        return self._native_sheet.name
 
     def number_of_columns(self):
         SheetReader.number_of_columns(self)
-        return len(self.native_sheet.payload[0])
+        return len(self._native_sheet.payload[0])
 
     def number_of_rows(self):
         SheetReader.number_of_rows(self)
-        return len(self.native_sheet.payload)
+        return len(self._native_sheet.payload)
 
     def cell_value(self, row, column):
         SheetReader.cell_value(self, row, column)
-        return self.native_sheet.payload[row][column]
+        return self._native_sheet.payload[row][column]
 
 
 class ArrayWriter(SheetWriter):
     def set_sheet_name(self, name):
-        self.native_sheet.name = name
+        self._native_sheet.name = name
 
     def write_row(self, array):
-        self.native_sheet.payload.append(array)
+        self._native_sheet.payload.append(array)
 
 
 class TestSheetReader:
@@ -53,7 +53,7 @@ class TestSheetReader:
         class B(SheetReader):
             @property
             def name(self):
-                return self.native_sheet
+                return self._native_sheet
 
             def to_array(self):
                 pass

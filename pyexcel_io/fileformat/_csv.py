@@ -84,34 +84,32 @@ class CSVSheetReader(SheetReader):
                  auto_detect_int=True, auto_detect_datetime=True,
                  **keywords):
         SheetReader.__init__(self, sheet, **keywords)
-        self.encoding = encoding
-        self.auto_detect_int = auto_detect_int
-        self.auto_detect_float = auto_detect_float
-        self.ignore_infinity = ignore_infinity
-        self.auto_detect_datetime = auto_detect_datetime
+        self._encoding = encoding
+        self.__auto_detect_int = auto_detect_int
+        self.__auto_detect_float = auto_detect_float
+        self.__ignore_infinity = ignore_infinity
+        self.__auto_detect_datetime = auto_detect_datetime
 
     def get_file_handle(self):
         raise NotImplementedError("Please implement get_file_handle()")
 
     def to_array(self):
-        reader = csv.reader(self.get_file_handle(), **self.keywords)
+        reader = csv.reader(self.get_file_handle(), **self._keywords)
 
         for row_number, row in enumerate(reader):
             myrow = []
             tmp_row = []
 
-            row_position = self.skip_row(row_number,
-                                         self.start_row,
-                                         self.row_limit)
+            row_position = self._skip_row(
+                row_number, self._start_row, self._row_limit)
             if row_position == constants.SKIP_DATA:
                 continue
             elif row_position == constants.STOP_ITERATION:
                 break
 
             for column_index, element in enumerate(row):
-                column_position = self.skip_column(column_index,
-                                                   self.start_column,
-                                                   self.column_limit)
+                column_position = self._skip_column(
+                    column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
                     continue
                 elif column_position == constants.STOP_ITERATION:
@@ -125,23 +123,23 @@ class CSVSheetReader(SheetReader):
                 if element is not None and element != '':
                     myrow += tmp_row
                     tmp_row = []
-            if self.row_renderer:
-                myrow = self.row_renderer(myrow)
+            if self._row_renderer:
+                myrow = self._row_renderer(myrow)
             yield myrow
 
     def _convert_cell(self, csv_cell_text):
         ret = None
-        if self.auto_detect_int:
+        if self.__auto_detect_int:
             ret = _detect_int_value(csv_cell_text)
-        if ret is None and self.auto_detect_float:
+        if ret is None and self.__auto_detect_float:
             ret = _detect_float_value(csv_cell_text)
             shall_we_ignore_the_conversion = (
                 (ret in [float('inf'), float('-inf')]) and
-                self.ignore_infinity
+                self.__ignore_infinity
             )
             if shall_we_ignore_the_conversion:
                 ret = None
-        if ret is None and self.auto_detect_datetime:
+        if ret is None and self.__auto_detect_datetime:
             ret = _detect_date_value(csv_cell_text)
         if ret is None:
             ret = csv_cell_text
@@ -151,25 +149,25 @@ class CSVSheetReader(SheetReader):
 class CSVFileReader(CSVSheetReader):
     def get_file_handle(self):
         if PY2:
-            f1 = open(self.native_sheet.payload, 'rb')
-            f = UTF8Recorder(f1, self.encoding)
+            f1 = open(self._native_sheet.payload, 'rb')
+            f = UTF8Recorder(f1, self._encoding)
         else:
-            f = open(self.native_sheet.payload, 'r',
-                     encoding=self.encoding)
+            f = open(self._native_sheet.payload, 'r',
+                     encoding=self._encoding)
         return f
 
 
 class CSVinMemoryReader(CSVSheetReader):
     def get_file_handle(self):
         if PY2:
-            f = UTF8Recorder(self.native_sheet.payload,
-                             self.encoding)
+            f = UTF8Recorder(self._native_sheet.payload,
+                             self._encoding)
         else:
-            if isinstance(self.native_sheet.payload, BytesIO):
-                content = self.native_sheet.payload.read()
-                f = StringIO(content.decode(self.encoding))
+            if isinstance(self._native_sheet.payload, BytesIO):
+                content = self._native_sheet.payload.read()
+                f = StringIO(content.decode(self._encoding))
             else:
-                f = self.native_sheet.payload
+                f = self._native_sheet.payload
 
         return f
 
@@ -182,17 +180,18 @@ class CSVSheetWriter(SheetWriter):
     def __init__(self, filename, name,
                  encoding="utf-8", single_sheet_in_book=False,
                  sheet_index=None, **keywords):
-        self.encoding = encoding
-        self.sheet_name = name
-        self.single_sheet_in_book = single_sheet_in_book
-        self.line_terminator = '\r\n'
+        self._encoding = encoding
+        self._sheet_name = name
+        self._single_sheet_in_book = single_sheet_in_book
+        self.__line_terminator = '\r\n'
         if constants.KEYWORD_LINE_TERMINATOR in keywords:
-            self.line_terminator = keywords[constants.KEYWORD_LINE_TERMINATOR]
+            self.__line_terminator = keywords.get(
+                constants.KEYWORD_LINE_TERMINATOR)
         if single_sheet_in_book:
-            self.sheet_name = None
-        self.sheet_index = sheet_index
+            self._sheet_name = None
+        self._sheet_index = sheet_index
         SheetWriter.__init__(self, filename,
-                             self.sheet_name, self.sheet_name,
+                             self._sheet_name, self._sheet_name,
                              **keywords)
 
     def write_row(self, array):
@@ -208,24 +207,24 @@ class CSVFileWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         if name != constants.DEFAULT_SHEET_NAME:
-            names = self.native_book.split(".")
+            names = self._native_book.split(".")
             file_name = "%s%s%s%s%s.%s" % (
                 names[0],
                 DEFAULT_SEPARATOR,
                 name,              # sheet name
                 DEFAULT_SEPARATOR,
-                self.sheet_index,  # sheet index
+                self._sheet_index,  # sheet index
                 names[1])
         else:
-            file_name = self.native_book
+            file_name = self._native_book
         if PY2:
             self.f = open(file_name, "wb")
-            self.writer = UnicodeWriter(self.f, encoding=self.encoding,
-                                        **self.keywords)
+            self.writer = UnicodeWriter(self.f, encoding=self._encoding,
+                                        **self._keywords)
         else:
             self.f = open(file_name, "w", newline="",
-                          encoding=self.encoding)
-            self.writer = csv.writer(self.f, **self.keywords)
+                          encoding=self._encoding)
+            self.writer = csv.writer(self.f, **self._keywords)
 
 
 class CSVMemoryWriter(CSVSheetWriter):
@@ -239,19 +238,19 @@ class CSVMemoryWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         if PY2:
-            self.f = self.native_book
-            self.writer = UnicodeWriter(self.f, encoding=self.encoding,
-                                        **self.keywords)
+            self.f = self._native_book
+            self.writer = UnicodeWriter(self.f, encoding=self._encoding,
+                                        **self._keywords)
         else:
-            self.f = self.native_book
-            self.writer = csv.writer(self.f, **self.keywords)
-        if not self.single_sheet_in_book:
+            self.f = self._native_book
+            self.writer = csv.writer(self.f, **self._keywords)
+        if not self._single_sheet_in_book:
             self.writer.writerow([DEFAULT_CSV_STREAM_FILE_FORMATTER % (
-                self.sheet_name,
+                self._sheet_name,
                 "")])
 
     def close(self):
-        if self.single_sheet_in_book:
+        if self._single_sheet_in_book:
             #  on purpose, the this is not done
             #  because the io stream can be used later
             pass
@@ -263,25 +262,25 @@ class CSVMemoryWriter(CSVSheetWriter):
 class CSVBookReader(BookReader):
     def __init__(self):
         BookReader.__init__(self)
-        self.file_type = constants.FILE_FORMAT_CSV
-        self.load_from_memory_flag = False
-        self.line_terminator = '\r\n'
-        self.sheet_name = None
-        self.sheet_index = None
+        self._file_type = constants.FILE_FORMAT_CSV
+        self.__load_from_memory_flag = False
+        self.__line_terminator = '\r\n'
+        self.__sheet_name = None
+        self.__sheet_index = None
 
     def open(self, file_name, **keywords):
         BookReader.open(self, file_name, **keywords)
-        self.native_book = self._load_from_file()
+        self._native_book = self._load_from_file()
 
     def open_stream(self, file_stream, **keywords):
         BookReader.open_stream(self, file_stream, **keywords)
-        self.native_book = self._load_from_stream()
+        self._native_book = self._load_from_stream()
 
     def read_sheet(self, native_sheet):
-        if self.load_from_memory_flag:
-            reader = CSVinMemoryReader(native_sheet, **self.keywords)
+        if self.__load_from_memory_flag:
+            reader = CSVinMemoryReader(native_sheet, **self._keywords)
         else:
-            reader = CSVFileReader(native_sheet, **self.keywords)
+            reader = CSVFileReader(native_sheet, **self._keywords)
         return reader.to_array()
 
     def _load_from_stream(self):
@@ -290,20 +289,20 @@ class CSVBookReader(BookReader):
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
-        self.line_terminator = self.keywords.get(
+        self.__line_terminator = self._keywords.get(
             constants.KEYWORD_LINE_TERMINATOR,
-            self.line_terminator)
-        self.load_from_memory_flag = True
-        self.file_stream.seek(0)
-        content = self.file_stream.read()
-        separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.line_terminator
+            self.__line_terminator)
+        self.__load_from_memory_flag = True
+        self._file_stream.seek(0)
+        content = self._file_stream.read()
+        separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.__line_terminator
         if separator in content:
             sheets = content.split(separator)
             named_contents = []
             for sheet in sheets:
                 if sheet == '':  # skip empty named sheet
                     continue
-                lines = sheet.split(self.line_terminator)
+                lines = sheet.split(self.__line_terminator)
                 result = re.match(SEPARATOR_MATCHER, lines[0])
                 new_content = '\n'.join(lines[1:])
                 new_sheet = NamedContent(result.group(1),
@@ -311,8 +310,8 @@ class CSVBookReader(BookReader):
                 named_contents.append(new_sheet)
             return named_contents
         else:
-            self.file_stream.seek(0)
-            return [NamedContent(self.file_type, self.file_stream)]
+            self._file_stream.seek(0)
+            return [NamedContent(self._file_type, self._file_stream)]
 
     def _load_from_file(self):
         """Load content from a file
@@ -320,10 +319,10 @@ class CSVBookReader(BookReader):
         :params str filename: an accessible file path
         :returns: a book
         """
-        self.line_terminator = self.keywords.get(
+        self.__line_terminator = self._keywords.get(
             constants.KEYWORD_LINE_TERMINATOR,
-            self.line_terminator)
-        names = self.file_name.split('.')
+            self.__line_terminator)
+        names = self._file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (
             names[0],
             DEFAULT_SEPARATOR,
@@ -331,8 +330,8 @@ class CSVBookReader(BookReader):
             names[1])
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
-            file_parts = os.path.split(self.file_name)
-            return [NamedContent(file_parts[-1], self.file_name)]
+            file_parts = os.path.split(self._file_name)
+            return [NamedContent(file_parts[-1], self._file_name)]
         else:
             matcher = "%s%s(.*)%s(.*).%s" % (
                 names[0],
@@ -353,21 +352,21 @@ class CSVBookReader(BookReader):
 class CSVBookWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self)
-        self.file_type = constants.FILE_FORMAT_CSV
-        self.index = 0
+        self._file_type = constants.FILE_FORMAT_CSV
+        self.__index = 0
 
     def create_sheet(self, name):
         writer_class = None
-        if is_string(type(self.file_alike_object)):
+        if is_string(type(self._file_alike_object)):
             writer_class = CSVFileWriter
         else:
             writer_class = CSVMemoryWriter
         writer = writer_class(
-            self.file_alike_object,
+            self._file_alike_object,
             name,
-            sheet_index=self.index,
-            **self.keywords)
-        self.index = self.index + 1
+            sheet_index=self.__index,
+            **self._keywords)
+        self.__index = self.__index + 1
         return writer
 
 

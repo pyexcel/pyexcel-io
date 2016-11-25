@@ -18,25 +18,24 @@ class DjangoModelReader(SheetReader):
     """
     def __init__(self, model, export_columns=None, **keywords):
         SheetReader.__init__(self, model, **keywords)
-        self.model = model
-        self.export_columns = export_columns
+        self.__model = model
+        self.__export_columns = export_columns
 
     def to_array(self):
-        objects = self.model.objects.all()
+        objects = self.__model.objects.all()
         if len(objects) == 0:
             return []
         else:
-            if self.export_columns:
-                column_names = self.export_columns
+            if self.__export_columns:
+                column_names = self.__export_columns
             else:
                 column_names = sorted(
                     [field.attname
-                     for field in self.model._meta.concrete_fields])
+                     for field in self.__model._meta.concrete_fields])
             export_column_names = []
             for column_index, column_name in enumerate(column_names):
-                column_position = self.skip_column(column_index,
-                                                   self.start_column,
-                                                   self.column_limit)
+                column_position = self._skip_column(
+                    column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
                     continue
                 elif column_position == constants.STOP_ITERATION:
@@ -45,10 +44,10 @@ class DjangoModelReader(SheetReader):
                     export_column_names.append(column_name)
 
             return from_query_sets(export_column_names, objects,
-                                   row_renderer=self.row_renderer,
-                                   skip_row_func=self.skip_row,
-                                   start_row=self.start_row,
-                                   row_limit=self.row_limit)
+                                   row_renderer=self._row_renderer,
+                                   skip_row_func=self._skip_row,
+                                   start_row=self._start_row,
+                                   row_limit=self._row_limit)
 
 
 class DjangoModelWriter(SheetWriter):
@@ -149,7 +148,7 @@ class DjangoBookReader(BookReader):
         return reader.to_array()
 
     def _load_from_django_models(self):
-        self.native_book = self.exporter.adapters
+        self._native_book = self.exporter.adapters
 
 
 class DjangoModelImportAdapter(DjangoModelExportAdapter):
