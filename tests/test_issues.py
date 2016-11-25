@@ -13,7 +13,7 @@ def test_issue_8():
         [3, 4]
     ]
     save_data(test_file, data)
-    written_data = get_data(test_file)
+    written_data = get_data(test_file, skip_empty_rows=False)
     eq_(data, written_data[test_file])
     os.unlink(test_file)
 

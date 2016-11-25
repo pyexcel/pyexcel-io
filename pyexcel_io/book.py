@@ -58,7 +58,6 @@ class BookReader(RWInterface):
         self._file_stream = None
         self._keywords = None
         self._native_book = None
-        self._keywords = None
 
     def open(self, file_name, **keywords):
         """
@@ -136,6 +135,7 @@ class BookWriter(RWInterface):
     """
     def __init__(self):
         self._file_alike_object = None
+        self._keywords = None
 
     def open(self, file_name, **keywords):
         """

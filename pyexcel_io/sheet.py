@@ -49,19 +49,12 @@ class SheetReader(object):
         if skip_column_func:
             self._skip_column = skip_column_func
 
-    def _cell_value(self, row, column):
-        """
-        implement this method if the customer driver
-        provides random access
-        """
-        raise NotImplementedError("Please implement to_array()")
-
     def to_array(self):
         """2 dimentional representation of the content
         """
-        for row in irange(self.number_of_rows()):
+        for row_index, row in enumerate(self._iterate_rows()):
             row_position = self._skip_row(
-                row, self._start_row, self._row_limit)
+                row_index, self._start_row, self._row_limit)
             if row_position == constants.SKIP_DATA:
                 continue
             elif row_position == constants.STOP_ITERATION:
@@ -70,15 +63,15 @@ class SheetReader(object):
             return_row = []
             tmp_row = []
 
-            for column in irange(0, self.number_of_columns()):
+            for column_index, cell_value in enumerate(
+                    self._iterate_columns(row)):
                 column_position = self._skip_column(
-                    column, self._start_column, self._column_limit)
+                    column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
                     continue
                 elif column_position == constants.STOP_ITERATION:
                     break
 
-                cell_value = self._cell_value(row, column)
                 tmp_row.append(cell_value)
                 if cell_value is not None and cell_value != '':
                     return_row += tmp_row
@@ -92,6 +85,20 @@ class SheetReader(object):
             if self._row_renderer:
                 return_row = self._row_renderer(return_row)
             yield return_row
+
+    def _iterate_rows(self):
+        return irange(self.number_of_rows())
+
+    def _iterate_columns(self, row):
+        for column in irange(self.number_of_columns()):
+            yield self._cell_value(row, column)
+
+    def _cell_value(self, row, column):
+        """
+        implement this method if the customer driver
+        provides random access
+        """
+        raise NotImplementedError("Please implement to_array()")
 
 
 class SheetWriter(object):

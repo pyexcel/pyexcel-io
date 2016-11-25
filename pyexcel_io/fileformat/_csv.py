@@ -93,41 +93,18 @@ class CSVSheetReader(SheetReader):
     def get_file_handle(self):
         raise NotImplementedError("Please implement get_file_handle()")
 
-    def to_array(self):
-        reader = csv.reader(self.get_file_handle(), **self._keywords)
+    def _iterate_rows(self):
+        return csv.reader(self.get_file_handle(), **self._keywords)
 
-        for row_number, row in enumerate(reader):
-            myrow = []
-            tmp_row = []
+    def _iterate_columns(self, row):
+        for element in row:
+            if PY2:
+                element = element.decode('utf-8')
+            if element is not None and element != '':
+                element = self.__convert_cell(element)
+            yield element
 
-            row_position = self._skip_row(
-                row_number, self._start_row, self._row_limit)
-            if row_position == constants.SKIP_DATA:
-                continue
-            elif row_position == constants.STOP_ITERATION:
-                break
-
-            for column_index, element in enumerate(row):
-                column_position = self._skip_column(
-                    column_index, self._start_column, self._column_limit)
-                if column_position == constants.SKIP_DATA:
-                    continue
-                elif column_position == constants.STOP_ITERATION:
-                    break
-
-                if PY2:
-                    element = element.decode('utf-8')
-                if element is not None and element != '':
-                    element = self._convert_cell(element)
-                tmp_row.append(element)
-                if element is not None and element != '':
-                    myrow += tmp_row
-                    tmp_row = []
-            if self._row_renderer:
-                myrow = self._row_renderer(myrow)
-            yield myrow
-
-    def _convert_cell(self, csv_cell_text):
+    def __convert_cell(self, csv_cell_text):
         ret = None
         if self.__auto_detect_int:
             ret = _detect_int_value(csv_cell_text)
