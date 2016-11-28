@@ -11,7 +11,7 @@ from ..book import BookReader, BookWriter
 from ..sheet import SheetWriter, NamedContent
 from ..utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
-from ._shared import QuerysetsReader
+from .querysets import QuerysetsReader
 
 
 class PyexcelSQLSkipRowException(Exception):

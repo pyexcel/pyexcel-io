@@ -51,9 +51,10 @@ Here's the actual code to achieve it:
 
 Please note that, the data dict shall have table name as its key. Now let's verify the data:
 
-    >>> from pyexcel_io.utils import from_query_sets
+    >>> from pyexcel_io.database.querysets import QuerysetsReader
     >>> query_sets=mysession.query(Pyexcel).all()
-    >>> results = from_query_sets(data[0], query_sets)
+	>>> reader = QuerysetsReader(query_sets, data[0])
+    >>> results = reader.to_array()
     >>> import json
     >>> json.dumps(list(results))
     '[["birth", "id", "name", "weight"], ["2014-11-11", 0, "Adam", 11.25], ["2014-11-12", 1, "Smith", 12.25]]'
@@ -189,12 +190,14 @@ Here's the code to update both:
 Let's verify what do we have in the database:
 
     >>> query_sets = mysession.query(Category).all()
-    >>> results = from_query_sets(data['Category'][0], query_sets)
+    >>> reader = QuerysetsReader(query_sets, data['Category'][0])
+	>>> results = reader.to_array()
     >>> import json
     >>> json.dumps(list(results))
     '[["id", "name"], [1, "News"], [2, "Sports"]]'
     >>> query_sets = mysession.query(Post).all()
-    >>> results = from_query_sets(["id", "title", "body", "pub_date"], query_sets)
+    >>> reader = QuerysetsReader(query_sets, ["id", "title", "body", "pub_date"])
+	>>> results = reader.to_array()
     >>> json.dumps(list(results))
     '[["id", "title", "body", "pub_date"], [1, "Title A", "formal", "2015-01-20T23:28:29"], [2, "Title B", "informal", "2015-01-20T23:28:30"]]'
 

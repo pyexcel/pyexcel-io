@@ -38,35 +38,6 @@ def _index_filter(current_index, start, limit=-1):
     return out_range
 
 
-def from_query_sets(column_names, query_sets,
-                    row_renderer=None,
-                    skip_row_func=_index_filter, start_row=0, row_limit=-1):
-    """
-    Convert query sets into an array
-    """
-    if start_row == 0:
-        yield column_names
-    for row_index, row in enumerate(query_sets):
-        if skip_row_func is not None:
-            # + 1 means: column_names were counted in as one row
-            row_position = skip_row_func(row_index + 1, start_row, row_limit)
-            if row_position == constants.SKIP_DATA:
-                continue
-            elif row_position == constants.STOP_ITERATION:
-                break
-
-        new_array = []
-        for column_index, column in enumerate(column_names):
-            if '__' in column:
-                value = _get_complex_attribute(row, column)
-            else:
-                value = _get_simple_attribute(row, column)
-            new_array.append(value)
-        if row_renderer:
-            new_array = row_renderer(new_array)
-        yield new_array
-
-
 def _get_complex_attribute(row, attribute):
     attributes = attribute.split('__')
     value = row
