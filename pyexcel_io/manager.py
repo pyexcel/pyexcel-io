@@ -65,9 +65,11 @@ def get_io(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    if file_type in text_stream_types:
+    __file_type = file_type.lower()
+
+    if __file_type in text_stream_types:
         return StringIO()
-    elif file_type in binary_stream_types:
+    elif __file_type in binary_stream_types:
         return BytesIO()
     else:
         return None
@@ -79,9 +81,11 @@ def get_io_type(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    if file_type in text_stream_types:
+    __file_type = file_type.lower()
+    
+    if __file_type in text_stream_types:
         return "string"
-    elif file_type in binary_stream_types:
+    elif __file_type in binary_stream_types:
         return "bytes"
     else:
         return None
@@ -121,7 +125,7 @@ def create_writer(file_type, library=None):
 
 def _get_a_handler(factories, file_type, library):
     if file_type in factories:
-        handler_dict = factories[file_type]
+        handler_dict = factories[file_type.lower()]
         if library is not None:
             handler_class = handler_dict.get(library, None)
             if handler_class is None:

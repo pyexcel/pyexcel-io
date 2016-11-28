@@ -135,8 +135,29 @@ def test_default_csv_format():
     assert result['csv'] == [[1, 2, 3]]
 
 
+def test_case_insentivity():
+    data = [['1', '2', '3']]
+    io = manager.get_io("CSV")
+    # test default format for saving is 'csv'
+    save_data(io, data)
+    io.seek(0)
+    # test default format for reading is 'csv'
+    result = get_data(io)
+    assert result['csv'] == [[1, 2, 3]]
+
+
 def test_file_handle_as_input():
     test_file = "file_handle.csv"
+    with open(test_file, 'w') as f:
+        f.write("1,2,3")
+
+    with open(test_file, 'r') as f:
+        data = get_data(f, 'csv')
+        eq_(data['csv'], [[1, 2, 3]])
+
+
+def test_file_type_case_insensitivity():
+    test_file = "file_handle.CSv"
     with open(test_file, 'w') as f:
         f.write("1,2,3")
 
