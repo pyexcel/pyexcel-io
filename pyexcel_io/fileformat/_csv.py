@@ -16,14 +16,7 @@ import datetime
 
 from pyexcel_io.book import BookReader, BookWriter
 from pyexcel_io.sheet import SheetReader, SheetWriter, NamedContent
-from pyexcel._compact import (
-    is_string,
-    StringIO,
-    BytesIO,
-    PY2,
-    text_type,
-    Iterator
-)
+import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
 
 
@@ -34,7 +27,7 @@ DEFAULT_CSV_STREAM_FILE_FORMATTER = (
     "---%s:" % constants.DEFAULT_NAME + "%s---%s")
 
 
-class UTF8Recorder(Iterator):
+class UTF8Recorder(compact.Iterator):
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8.
     """
@@ -56,13 +49,14 @@ class UnicodeWriter:
 
     def __init__(self, f, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = StringIO()
+        self.queue = compact.StringIO()
         self.writer = csv.writer(self.queue, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def writerow(self, row):
-        self.writer.writerow([text_type(s).encode("utf-8") for s in row])
+        self.writer.writerow([compact.text_type(s).encode("utf-8")
+                              for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
         data = data.decode("utf-8")
@@ -98,7 +92,7 @@ class CSVSheetReader(SheetReader):
 
     def _iterate_columns(self, row):
         for element in row:
-            if PY2:
+            if compact.PY2:
                 element = element.decode('utf-8')
             if element is not None and element != '':
                 element = self.__convert_cell(element)
@@ -125,7 +119,7 @@ class CSVSheetReader(SheetReader):
 
 class CSVFileReader(CSVSheetReader):
     def get_file_handle(self):
-        if PY2:
+        if compact.PY2:
             f1 = open(self._native_sheet.payload, 'rb')
             f = UTF8Recorder(f1, self._encoding)
         else:
@@ -136,13 +130,13 @@ class CSVFileReader(CSVSheetReader):
 
 class CSVinMemoryReader(CSVSheetReader):
     def get_file_handle(self):
-        if PY2:
+        if compact.PY2:
             f = UTF8Recorder(self._native_sheet.payload,
                              self._encoding)
         else:
-            if isinstance(self._native_sheet.payload, BytesIO):
+            if isinstance(self._native_sheet.payload, compact.BytesIO):
                 content = self._native_sheet.payload.read()
-                f = StringIO(content.decode(self._encoding))
+                f = compact.StringIO(content.decode(self._encoding))
             else:
                 f = self._native_sheet.payload
 
@@ -194,7 +188,7 @@ class CSVFileWriter(CSVSheetWriter):
                 names[1])
         else:
             file_name = self._native_book
-        if PY2:
+        if compact.PY2:
             self.f = open(file_name, "wb")
             self.writer = UnicodeWriter(self.f, encoding=self._encoding,
                                         **self._keywords)
@@ -214,7 +208,7 @@ class CSVMemoryWriter(CSVSheetWriter):
                                 sheet_index=sheet_index, **keywords)
 
     def set_sheet_name(self, name):
-        if PY2:
+        if compact.PY2:
             self.f = self._native_book
             self.writer = UnicodeWriter(self.f, encoding=self._encoding,
                                         **self._keywords)
@@ -283,7 +277,7 @@ class CSVBookReader(BookReader):
                 result = re.match(SEPARATOR_MATCHER, lines[0])
                 new_content = '\n'.join(lines[1:])
                 new_sheet = NamedContent(result.group(1),
-                                         StringIO(new_content))
+                                         compact.StringIO(new_content))
                 named_contents.append(new_sheet)
             return named_contents
         else:
@@ -334,7 +328,7 @@ class CSVBookWriter(BookWriter):
 
     def create_sheet(self, name):
         writer_class = None
-        if is_string(type(self._file_alike_object)):
+        if compact.is_string(type(self._file_alike_object)):
             writer_class = CSVFileWriter
         else:
             writer_class = CSVMemoryWriter

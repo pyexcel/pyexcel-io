@@ -7,11 +7,11 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ..book import BookReader, BookWriter
-from ..sheet import SheetWriter, NamedContent
-from ..utils import is_empty_array, swap_empty_string_for_none
+from pyexcel_io.book import BookReader, BookWriter
+from pyexcel_io.sheet import SheetWriter, NamedContent
+from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
-from .querysets import QuerysetsReader
+from pyexcel_io.database.querysets import QuerysetsReader
 
 
 class DjangoModelReader(QuerysetsReader):

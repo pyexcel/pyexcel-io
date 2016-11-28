@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ..constants import (
+from pyexcel_io.constants import (
     FILE_FORMAT_TSVZ,
     KEYWORD_TSV_DIALECT
 )

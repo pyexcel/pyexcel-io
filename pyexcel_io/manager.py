@@ -2,13 +2,13 @@
     pyexcel_io.manager
     ~~~~~~~~~~~~~~~~~~~
 
-    The io interface to file extensions
+    factory for getting readers and writers
 
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from ._compact import StringIO, BytesIO
-from .utils import resolve_missing_readers, resolve_missing_writers
+from pyexcel_io._compact import StringIO, BytesIO
+import pyexcel_io.utils as utils
 
 
 reader_factories = {}
@@ -107,7 +107,7 @@ def create_reader(file_type, library=None):
     reader = _get_a_handler(
         reader_factories, file_type, library)
     if reader is None:
-        resolve_missing_readers(file_type)
+        utils.resolve_missing_readers(file_type)
     return reader
 
 
@@ -115,7 +115,7 @@ def create_writer(file_type, library=None):
     writer = _get_a_handler(
         writer_factories, file_type, library)
     if writer is None:
-        resolve_missing_writers(file_type)
+        utils.resolve_missing_writers(file_type)
     return writer
 
 

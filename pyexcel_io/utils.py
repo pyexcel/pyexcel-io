@@ -1,8 +1,7 @@
 import datetime
 
-from ._compact import PY2
-from ._compact import is_string
-from . import constants
+from pyexcel_io._compact import PY2, is_string
+import pyexcel_io.constants as constants
 
 
 AVAILABLE_READERS = {

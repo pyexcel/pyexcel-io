@@ -7,8 +7,8 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from . import manager
-from ._compact import PY2, OrderedDict, isstream, StringIO
+import pyexcel_io.manager as manager
+from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE

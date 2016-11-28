@@ -10,9 +10,9 @@
 import csv
 import zipfile
 
-from .._compact import StringIO, PY2
-from ..book import BookReader, BookWriter
-from ..constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
+from pyexcel_io._compact import StringIO, PY2
+from pyexcel_io.book import BookReader, BookWriter
+from pyexcel_io.constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
 
 from ._csv import (
     CSVinMemoryReader,
