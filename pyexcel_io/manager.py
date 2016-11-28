@@ -82,7 +82,7 @@ def get_io_type(file_type):
     :returns: a appropriate io stream, None otherwise
     """
     __file_type = file_type.lower()
-    
+
     if __file_type in text_stream_types:
         return "string"
     elif __file_type in binary_stream_types:
