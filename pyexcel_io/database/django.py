@@ -25,7 +25,8 @@ class DjangoModelReader(QuerysetsReader):
             column_names = sorted(
                 [field.attname
                  for field in self.__model._meta.concrete_fields])
-        QuerysetsReader.__init__(self, self.__model.objects.all(), column_names,
+        QuerysetsReader.__init__(self, self.__model.objects.all(),
+                                 column_names,
                                  **keywords)
 
 

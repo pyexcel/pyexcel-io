@@ -8,8 +8,8 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ..book import BookReader, BookWriter
-from ..sheet import SheetReader, SheetWriter, NamedContent
-from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
+from ..sheet import SheetWriter, NamedContent
+from ..utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
 from ._shared import QuerysetsReader
 
