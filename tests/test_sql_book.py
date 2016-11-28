@@ -5,13 +5,13 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import Float, Date, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker
 import datetime
-from pyexcel_io.utils import from_query_sets
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.database.sql import SQLTableReader, SQLTableWriter
 from pyexcel_io.database.sql import PyexcelSQLSkipRowException
 from pyexcel_io.database.sql import (
     SQLBookWriter, SQLTableImporter, SQLTableImportAdapter,
     SQLTableExporter, SQLTableExportAdapter, SQLBookReader)
+from pyexcel_io.database.querysets import QuerysetsReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises, eq_
 import platform
@@ -196,7 +196,8 @@ class TestSingleWrite:
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        reader = QuerysetsReader(query_sets, self.data[0])
+        results = reader.to_array()
         assert list(results) == self.results
         mysession.close()
 
@@ -208,7 +209,7 @@ class TestSingleWrite:
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        results = QuerysetsReader(query_sets, self.data[0]).to_array()
         assert list(results) == self.results
         # update data using custom initializer
         update_data = [
@@ -234,7 +235,7 @@ class TestSingleWrite:
         writer.write_array(update_data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        results = QuerysetsReader(query_sets, self.data[0]).to_array()
         assert list(results) == updated_results
         mysession.close()
 
@@ -246,7 +247,7 @@ class TestSingleWrite:
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        results = QuerysetsReader(query_sets, self.data[0]).to_array()
         assert list(results) == self.results
         # update data using custom initializer
         update_data = [
@@ -264,7 +265,7 @@ class TestSingleWrite:
         writer.write_array(update_data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(self.data[0], query_sets)
+        results = QuerysetsReader(query_sets, self.data[0]).to_array()
         assert list(results) == self.results
         mysession.close()
 
@@ -281,7 +282,7 @@ class TestSingleWrite:
         writer.write_array(data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(data[0], query_sets)
+        results = QuerysetsReader(query_sets, data[0]).to_array()
         assert list(results) == self.results
         mysession.close()
 
@@ -297,7 +298,7 @@ class TestSingleWrite:
         writer.write_array(data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(data[0], query_sets)
+        results = QuerysetsReader(query_sets, data[0]).to_array()
         assert list(results) == [['birth', 'id', 'name', 'weight'],
                                  ['2014-11-11', 0, None, 11.25],
                                  ['2014-11-12', 1, None, 12.25]]
@@ -318,7 +319,7 @@ class TestSingleWrite:
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(mapdict, query_sets)
+        results = QuerysetsReader(query_sets, mapdict).to_array()
         assert list(results) == self.results
         mysession.close()
 
@@ -342,8 +343,9 @@ class TestSingleWrite:
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
-        results = from_query_sets(['birth', 'id', 'name', 'weight'],
-                                  query_sets)
+        results = QuerysetsReader(
+            query_sets,
+            ['birth', 'id', 'name', 'weight']).to_array()
         assert list(results) == self.results
         mysession.close()
 
@@ -434,7 +436,7 @@ class TestMultipleRead:
     def test_foreign_key(self):
         all_posts = self.session.query(Post).all()
         column_names = ['category__name', 'title']
-        data = list(from_query_sets(column_names, all_posts))
+        data = list(QuerysetsReader(all_posts, column_names).to_array())
         eq_(json.dumps(data),
             '[["category__name", "title"], ["News", "Title A"],' +
             ' ["Sports", "Title B"]]')
@@ -483,7 +485,6 @@ class TestDisabledWrite:
         mysession.close()
         mysession2 = Session()
         query_sets = mysession2.query(Pyexcel).all()
-        from_query_sets(self.data[0], query_sets)
         assert len(query_sets) == 0
         mysession2.close()
 

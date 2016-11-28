@@ -76,7 +76,6 @@ class TestSheetWriter:
 
         d = D('t', 'e', 's')
         d.write_row([11, 11])
-        d.set_size(10)
 
     def test_writer(self):
         native_sheet = NamedContent("test", [])

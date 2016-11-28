@@ -122,12 +122,6 @@ class SheetWriter(object):
         """
         pass
 
-    def set_size(self, size):
-        """
-        size of the content will be given
-        """
-        pass
-
     def write_row(self, array):
         """
         write a row into the file
@@ -138,12 +132,6 @@ class SheetWriter(object):
         """
         For standalone usage, write an array
         """
-        if hasattr(table, '__len__'):
-            rows = len(table)
-            if rows < 1:
-                return
-            columns = max([len(row) for row in table])
-            self.set_size((rows, columns))
         for row in table:
             self.write_row(row)
 

@@ -25,12 +25,15 @@ class QuerysetsReader(SheetReader):
 
     def _iterate_columns(self, row):
         if self.__column_names is not None:
-            for column in self.__column_names:
-                try:
+            if isinstance(row, list):
+                for element in row:
+                    yield element
+            else:
+                for column in self.__column_names:
                     if '__' in column:
-                        value = utils._get_complex_attribute(row, column)
+                        value = utils._get_complex_attribute(
+                            row, column)
                     else:
-                        value = utils._get_simple_attribute(row, column)
+                        value = utils._get_simple_attribute(
+                            row, column)
                     yield value
-                except AttributeError:
-                    yield column
