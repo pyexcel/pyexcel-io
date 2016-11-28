@@ -8,46 +8,25 @@
     :license: New BSD License, see LICENSE for more details
 """
 from ..book import BookReader, BookWriter
-from ..sheet import SheetReader, SheetWriter, NamedContent
-from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
+from ..sheet import SheetWriter, NamedContent
+from ..utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
+from ._shared import QuerysetsReader
 
 
-class DjangoModelReader(SheetReader):
+class DjangoModelReader(QuerysetsReader):
     """Read from django model
     """
     def __init__(self, model, export_columns=None, **keywords):
-        SheetReader.__init__(self, model, **keywords)
         self.__model = model
-        self.__export_columns = export_columns
-
-    def to_array(self):
-        objects = self.__model.objects.all()
-        if len(objects) == 0:
-            return []
+        if export_columns:
+            column_names = export_columns
         else:
-            if self.__export_columns:
-                column_names = self.__export_columns
-            else:
-                column_names = sorted(
-                    [field.attname
-                     for field in self.__model._meta.concrete_fields])
-            export_column_names = []
-            for column_index, column_name in enumerate(column_names):
-                column_position = self._skip_column(
-                    column_index, self._start_column, self._column_limit)
-                if column_position == constants.SKIP_DATA:
-                    continue
-                elif column_position == constants.STOP_ITERATION:
-                    break
-                else:
-                    export_column_names.append(column_name)
-
-            return from_query_sets(export_column_names, objects,
-                                   row_renderer=self._row_renderer,
-                                   skip_row_func=self._skip_row,
-                                   start_row=self._start_row,
-                                   row_limit=self._row_limit)
+            column_names = sorted(
+                [field.attname
+                 for field in self.__model._meta.concrete_fields])
+        QuerysetsReader.__init__(self, self.__model.objects.all(), column_names,
+                                 **keywords)
 
 
 class DjangoModelWriter(SheetWriter):

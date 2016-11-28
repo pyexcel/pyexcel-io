@@ -245,7 +245,7 @@ class TestSheet:
         model = FakeDjangoModel()
         reader = DjangoModelReader(model)
         data = reader.to_array()
-        assert data == []
+        eq_(list(data), [[]])
 
 
 class TestMultipleModels:

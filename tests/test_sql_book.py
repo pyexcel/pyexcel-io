@@ -452,9 +452,9 @@ class TestZeroRead:
         mysession = Session()
         sheet = SQLTableReader(mysession, Pyexcel)
         data = sheet.to_array()
-        content = []
+        content = [[]]
         # 'pyexcel'' here is the table name
-        assert data == content
+        assert list(data) == content
         mysession.close()
 
 

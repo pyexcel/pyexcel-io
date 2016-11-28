@@ -11,6 +11,7 @@ from ..book import BookReader, BookWriter
 from ..sheet import SheetReader, SheetWriter, NamedContent
 from ..utils import from_query_sets, is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
+from ._shared import QuerysetsReader
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -21,41 +22,20 @@ class PyexcelSQLSkipRowException(Exception):
     pass
 
 
-class SQLTableReader(SheetReader):
+class SQLTableReader(QuerysetsReader):
     """Read a table
     """
     def __init__(self, session, table, export_columns=None, **keywords):
-        SheetReader.__init__(self, table, **keywords)
-        self.__session = session
-        self.__table = table
-        self.__export_columns = export_columns
-
-    def to_array(self):
-        objects = self.__session.query(self.__table).all()
-        if len(objects) == 0:
-            return []
+        everything = session.query(table).all()
+        column_names = None
+        if export_columns:
+            column_names = export_columns
         else:
-            if self.__export_columns:
-                column_names = self.__export_columns
-            else:
-                column_names = sorted([column for column in objects[0].__dict__
-                                       if column != '_sa_instance_state'])
-            export_column_names = []
-            for column_index, column_name in enumerate(column_names):
-                column_position = self._skip_column(
-                    column_index, self._start_column, self._column_limit)
-                if column_position == constants.SKIP_DATA:
-                    continue
-                elif column_position == constants.STOP_ITERATION:
-                    break
-                else:
-                    export_column_names.append(column_name)
-
-            return from_query_sets(export_column_names, objects,
-                                   row_renderer=self._row_renderer,
-                                   skip_row_func=self._skip_row,
-                                   start_row=self._start_row,
-                                   row_limit=self._row_limit)
+            if len(everything) > 0:
+                column_names = sorted([
+                    column for column in everything[0].__dict__
+                    if column != '_sa_instance_state'])
+        QuerysetsReader.__init__(self, everything, column_names, **keywords)
 
 
 class SQLTableWriter(SheetWriter):
