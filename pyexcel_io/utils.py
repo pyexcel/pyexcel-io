@@ -1,6 +1,6 @@
 import datetime
 
-from pyexcel_io._compact import PY2, is_string
+from pyexcel_io._compact import PY2
 import pyexcel_io.constants as constants
 
 
@@ -72,27 +72,3 @@ def swap_empty_string_for_none(array):
         else:
             return x
     return [swap(x) for x in array]
-
-
-def resolve_missing_readers(extension):
-    return resolve_missing_extensions(extension, AVAILABLE_READERS)
-
-
-def resolve_missing_writers(extension):
-    return resolve_missing_extensions(extension, AVAILABLE_WRITERS)
-
-
-def resolve_missing_extensions(extension, available_list):
-    handler = available_list.get(extension)
-    message = ""
-    if handler:
-        if is_string(type(handler)):
-            message = constants.MESSAGE_LOADING_FORMATTER % (
-                extension, handler)
-        else:
-            merged = "%s or %s" % (handler[0], handler[1])
-            message = constants.MESSAGE_LOADING_FORMATTER % (
-                extension, merged)
-        raise NotImplementedError(message)
-    else:
-        raise NotImplementedError()

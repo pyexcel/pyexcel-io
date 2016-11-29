@@ -8,7 +8,6 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import StringIO, BytesIO
-import pyexcel_io.utils as utils
 from collections import defaultdict
 
 
@@ -122,16 +121,12 @@ def _add_a_handler(factories, file_type, handler, library):
 def create_reader(file_type, library=None):
     reader = _get_a_handler(
         reader_factories, file_type, library)
-    if reader is None:
-        utils.resolve_missing_readers(file_type)
     return reader
 
 
 def create_writer(file_type, library=None):
     writer = _get_a_handler(
         writer_factories, file_type, library)
-    if writer is None:
-        utils.resolve_missing_writers(file_type)
     return writer
 
 
@@ -140,6 +135,7 @@ def _get_a_handler(factories, file_type, library):
     if __file_type in soft_register:
         for path in soft_register[__file_type]:
             dynamic_load_library(__file_type, path)
+        # once loaded, forgot it
         soft_register.pop(__file_type)
 
     if __file_type in factories:
