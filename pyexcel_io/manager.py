@@ -9,14 +9,26 @@
 """
 from pyexcel_io._compact import StringIO, BytesIO
 import pyexcel_io.utils as utils
+from collections import defaultdict
 
 
+soft_register = defaultdict(list)
 reader_factories = {}
 writer_factories = {}
 text_stream_types = []
 binary_stream_types = []
 file_types = ()
 mime_types = {}
+
+
+def pre_register(file_type, library_import_path):
+    soft_register[file_type].append(library_import_path)
+
+
+def dynamic_load_library(file_type, library_import_path):
+    plugin = __import__(library_import_path)
+    submodule = getattr(plugin, file_type)
+    register_readers_and_writers(submodule.exports)
 
 
 def get_writers():
@@ -124,8 +136,14 @@ def create_writer(file_type, library=None):
 
 
 def _get_a_handler(factories, file_type, library):
-    if file_type in factories:
-        handler_dict = factories[file_type.lower()]
+    __file_type = file_type.lower()
+    if __file_type in soft_register:
+        for path in soft_register[__file_type]:
+            dynamic_load_library(__file_type, path)
+        soft_register.pop(__file_type)
+
+    if __file_type in factories:
+        handler_dict = factories[__file_type]
         if library is not None:
             handler_class = handler_dict.get(library, None)
             if handler_class is None:
@@ -135,7 +153,7 @@ def _get_a_handler(factories, file_type, library):
                 handler_class = _handler
                 break
         handler = handler_class()
-        handler.set_type(file_type)
+        handler.set_type(__file_type)
         return handler
 
     raise IOError("No suitable library found for %s" % file_type)

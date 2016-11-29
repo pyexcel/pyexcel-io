@@ -10,6 +10,7 @@
 # flake8: noqa
 from .io import get_data, save_data
 from pyexcel_io.manager import register_readers_and_writers
+from pyexcel_io.manager import pre_register
 from . import fileformat, database
 
 exports = fileformat.exports + database.exports
@@ -27,9 +28,7 @@ for _, module_name, ispkg in iter_modules():
             plugin = __import__(module_name)
             if hasattr(plugin, '__pyexcel_io_plugins__'):
                 for p in plugin.__pyexcel_io_plugins__:
-                    plugin = __import__("%s.%s" % (module_name, p))
-                    submodule = getattr(plugin, p)
-                    exports += submodule.exports
+                    pre_register(p, "%s.%s" % (module_name, p))
         except ImportError:
             continue
 
