@@ -74,7 +74,7 @@ Suppose you have these data::
     ... ]
     >>> importer = DjangoModelImporter()
     >>> adapter = DjangoModelImportAdapter(model)
-    >>> adapter.set_column_names(data[0])
+    >>> adapter.column_names = data[0]
     >>> importer.append(adapter)
     >>> save_data(importer, {adapter.get_name(): data[1:]}, file_type=DB_DJANGO)
     >>> import pprint
@@ -127,9 +127,9 @@ In order to store a dictionary data structure, you need to do some transformatio
 
     >>> importer = DjangoModelImporter()
     >>> adapter1 = DjangoModelImportAdapter(model1)
-    >>> adapter1.set_column_names(data['Sheet1'][0])
+    >>> adapter1.column_names = data['Sheet1'][0]
     >>> adapter2 = DjangoModelImportAdapter(model2)
-    >>> adapter2.set_column_names(data['Sheet2'][0])
+    >>> adapter2.column_names = data['Sheet2'][0]
     >>> importer.append(adapter1)
     >>> importer.append(adapter2)
     >>> to_store = {

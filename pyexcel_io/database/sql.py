@@ -8,10 +8,12 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.book import BookReader, BookWriter
-from pyexcel_io.sheet import SheetWriter, NamedContent
+from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
 from pyexcel_io.database.querysets import QuerysetsReader
+from ._common import TableExportAdapter, TableExporter
+from ._common import TableImporter, TableImportAdapter
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -92,26 +94,19 @@ class SQLTableWriter(SheetWriter):
             self.__session.commit()
 
 
-class SQLTableExportAdapter(NamedContent):
-    def __init__(self, table, export_columns=None):
-        self.table = table
-        self.export_columns = export_columns
-
-    @property
-    def name(self):
-        return self.get_name()
+class SQLTableExportAdapter(TableExportAdapter):
+    def __init__(self, model, export_columns=None):
+        TableExportAdapter.__init__(self, model, export_columns)
+        self.table = model
 
     def get_name(self):
         return getattr(self.table, '__tablename__', None)
 
 
-class SQLTableExporter(object):
+class SQLTableExporter(TableExporter):
     def __init__(self, session):
+        TableExporter.__init__(self)
         self.session = session
-        self.adapters = []
-
-    def append(self, import_adapter):
-        self.adapters.append(import_adapter)
 
 
 class SQLBookReader(BookReader):
@@ -136,24 +131,19 @@ class SQLBookReader(BookReader):
         self._native_book = self.__exporter.adapters
 
 
-class SQLTableImportAdapter(SQLTableExportAdapter):
-    def __init__(self, table):
-        SQLTableExportAdapter.__init__(self, table)
-        self.row_initializer = None
-        self.column_names = None
-        self.column_name_mapping_dict = None
+class SQLTableImportAdapter(TableImportAdapter):
+    def __init__(self, model):
+        TableImportAdapter.__init__(self, model)
+        self.table = model
+
+    def get_name(self):
+        return getattr(self.table, '__tablename__', None)
 
 
-class SQLTableImporter(object):
+class SQLTableImporter(TableImporter):
     def __init__(self, session):
+        TableImporter.__init__(self)
         self.session = session
-        self.__adapters = {}
-
-    def append(self, import_adapter):
-        self.__adapters[import_adapter.name] = import_adapter
-
-    def get(self, name):
-        return self.__adapters.get(name, None)
 
 
 class SQLBookWriter(BookWriter):

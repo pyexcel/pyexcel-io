@@ -25,6 +25,7 @@ DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % constants.DEFAULT_NAME + "%s"
 SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
 DEFAULT_CSV_STREAM_FILE_FORMATTER = (
     "---%s:" % constants.DEFAULT_NAME + "%s---%s")
+DEFAULT_NEWLINE = '\r\n'
 
 
 class UTF8Recorder(compact.Iterator):
@@ -154,7 +155,7 @@ class CSVSheetWriter(SheetWriter):
         self._encoding = encoding
         self._sheet_name = name
         self._single_sheet_in_book = single_sheet_in_book
-        self.__line_terminator = '\r\n'
+        self.__line_terminator = DEFAULT_NEWLINE
         if constants.KEYWORD_LINE_TERMINATOR in keywords:
             self.__line_terminator = keywords.get(
                 constants.KEYWORD_LINE_TERMINATOR)
@@ -235,7 +236,7 @@ class CSVBookReader(BookReader):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
         self.__load_from_memory_flag = False
-        self.__line_terminator = '\r\n'
+        self.__line_terminator = DEFAULT_NEWLINE
         self.__sheet_name = None
         self.__sheet_index = None
 

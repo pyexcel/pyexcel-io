@@ -8,10 +8,12 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.book import BookReader, BookWriter
-from pyexcel_io.sheet import SheetWriter, NamedContent
+from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
 from pyexcel_io.database.querysets import QuerysetsReader
+from ._common import TableExportAdapter, TableExporter
+from ._common import TableImporter, TableImportAdapter
 
 
 class DjangoModelReader(QuerysetsReader):
@@ -55,7 +57,9 @@ class DjangoModelWriter(SheetWriter):
             print(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
-            model_to_be_created = self.initializer(new_array)
+            model_to_be_created = new_array
+            if self.initializer is not None:
+                model_to_be_created = self.initializer(new_array)
             if model_to_be_created:
                 self.objs.append(self.mymodel(**dict(
                     zip(self.column_names, model_to_be_created)
@@ -84,31 +88,18 @@ class DjangoModelWriterNew(DjangoModelWriter):
     def __init__(self, adapter, batch_size=None):
         self.batch_size = batch_size
         self.mymodel = adapter.model
-        self.column_names = adapter.get_column_names()
-        self.mapdict = adapter.get_column_name_mapping_dict()
-        self.initializer = adapter.get_row_initializer()
+        self.column_names = adapter.column_names
+        self.mapdict = adapter.column_name_mapping_dict
+        self.initializer = adapter.row_initializer
         self.objs = []
 
 
-class DjangoModelExportAdapter(NamedContent):
-    def __init__(self, model, export_columns=None):
-        self.model = model
-        self.export_columns = export_columns
-
-    @property
-    def name(self):
-        return self.get_name()
-
-    def get_name(self):
-        return self.model._meta.model_name
+class DjangoModelExportAdapter(TableExportAdapter):
+    pass
 
 
-class DjangoModelExporter(object):
-    def __init__(self):
-        self.adapters = []
-
-    def append(self, import_adapter):
-        self.adapters.append(import_adapter)
+class DjangoModelExporter(TableExporter):
+    pass
 
 
 class DjangoBookReader(BookReader):
@@ -131,66 +122,12 @@ class DjangoBookReader(BookReader):
         self._native_book = self.exporter.adapters
 
 
-class DjangoModelImportAdapter(DjangoModelExportAdapter):
-
-    class InOutParameter(object):
-        def __init__(self):
-            self.output = None
-            self.input = None
-
-    def __init__(self, model):
-        DjangoModelExportAdapter.__init__(self, model)
-        self.column_names = self.InOutParameter()
-        self.column_name_mapping_dict = self.InOutParameter()
-        self.row_initializer = self.InOutParameter()
-
-    def set_row_initializer(self, a_function):
-        self.row_initializer.input = a_function
-        self._process_parameters()
-
-    def set_column_names(self, column_names):
-        self.column_names.input = column_names
-        self._process_parameters()
-
-    def set_column_name_mapping_dict(self, mapping_dict):
-        self.column_name_mapping_dict.input = mapping_dict
-        self._process_parameters()
-
-    def get_row_initializer(self):
-        return self.row_initializer.output
-
-    def get_column_names(self):
-        return self.column_names.output
-
-    def get_column_name_mapping_dict(self):
-        return self.column_name_mapping_dict.output
-
-    def _process_parameters(self):
-        if self.row_initializer.input is None:
-            self.row_initializer.output = lambda row: row
-        else:
-            self.row_initializer.output = self.row_initializer.input
-        if isinstance(self.column_name_mapping_dict.input, list):
-            self.column_names.output = self.column_name_mapping_dict.input
-            self.column_name_mapping_dict.output = None
-        elif isinstance(self.column_name_mapping_dict.input, dict):
-            self.column_names.output = [
-                self.column_name_mapping_dict.input[name]
-                for name in self.column_names.input]
-            self.column_name_mapping_dict.output = None
-        if self.column_names.output is None:
-            self.column_names.output = self.column_names.input
+class DjangoModelImportAdapter(TableImportAdapter):
+    pass
 
 
-class DjangoModelImporter(object):
-    def __init__(self):
-        self.adapters = {}
-
-    def append(self, import_adapter):
-        self.adapters[import_adapter.get_name()] = import_adapter
-
-    def get(self, name):
-        return self.adapters.get(name, None)
+class DjangoModelImporter(TableImporter):
+    pass
 
 
 class DjangoBookWriter(BookWriter):

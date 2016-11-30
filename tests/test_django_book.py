@@ -177,7 +177,7 @@ class TestSheet:
         model = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter = DjangoModelImportAdapter(model)
-        adapter.set_column_names(self.data[0])
+        adapter.column_names = self.data[0]
         importer.append(adapter)
         save_data(importer, {adapter.get_name(): self.data[1:]},
                   file_type=DB_DJANGO)
@@ -191,7 +191,7 @@ class TestSheet:
         model = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter = DjangoModelImportAdapter(model)
-        adapter.set_column_names(self.data[0])
+        adapter.column_names = self.data[0]
         importer.append(adapter)
         save_data(importer, {adapter.get_name(): self.data[1:]},
                   file_type=DB_DJANGO)
@@ -267,9 +267,9 @@ class TestMultipleModels:
         model2 = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter1 = DjangoModelImportAdapter(model1)
-        adapter1.set_column_names(self.content['Sheet1'][0])
+        adapter1.column_names = self.content['Sheet1'][0]
         adapter2 = DjangoModelImportAdapter(model2)
-        adapter2.set_column_names(self.content['Sheet2'][0])
+        adapter2.column_names = self.content['Sheet2'][0]
         importer.append(adapter1)
         importer.append(adapter2)
         to_store = {
@@ -288,9 +288,9 @@ class TestMultipleModels:
         model2 = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter1 = DjangoModelImportAdapter(model1)
-        adapter1.set_column_names(self.content['Sheet1'][0])
+        adapter1.column_names = self.content['Sheet1'][0]
         adapter2 = DjangoModelImportAdapter(model2)
-        adapter2.set_column_names(self.content['Sheet2'][0])
+        adapter2.column_names = self.content['Sheet2'][0]
         importer.append(adapter1)
         importer.append(adapter2)
         to_store = {
@@ -320,7 +320,7 @@ class TestMultipleModels:
         model1 = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter = DjangoModelImportAdapter(model1)
-        adapter.set_column_names(self.content['Sheet1'][0])
+        adapter.column_names = self.content['Sheet1'][0]
         importer.append(adapter)
         to_store = {
             adapter.get_name(): self.content['Sheet1'][1:],
@@ -365,7 +365,7 @@ class TestFilter:
         self.model = FakeDjangoModel()
         importer = DjangoModelImporter()
         adapter = DjangoModelImportAdapter(self.model)
-        adapter.set_column_names(self.data[0])
+        adapter.column_names = self.data[0]
         importer.append(adapter)
         save_data(importer, {adapter.get_name(): self.data[1:]},
                   file_type=DB_DJANGO)
