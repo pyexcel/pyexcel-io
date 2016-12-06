@@ -28,7 +28,7 @@ for _, module_name, ispkg in iter_modules():
             plugin = __import__(module_name)
             if hasattr(plugin, '__pyexcel_io_plugins__'):
                 for p in plugin.__pyexcel_io_plugins__:
-                    pre_register(p, "%s.%s" % (module_name, p))
+                    pre_register(p, module_name)
         except ImportError:
             continue
 

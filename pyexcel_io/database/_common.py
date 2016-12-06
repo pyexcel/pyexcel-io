@@ -1,7 +1,7 @@
 from pyexcel_io.sheet import NamedContent
 
 
-class TableExportAdapter(NamedContent):
+class TableExportAdapter(object):
     def __init__(self, model, export_columns=None):
         self.model = model
         self.export_columns = export_columns
@@ -75,6 +75,7 @@ class TableImportAdapter(TableExportAdapter):
         self._process_parameters()
 
     def _process_parameters(self):
+
         if self.__row_initializer.input is None:
             self.__row_initializer.output = None
         else:
@@ -83,9 +84,10 @@ class TableImportAdapter(TableExportAdapter):
             self.__column_names.output = self.__column_name_mapping_dict.input
             self.__column_name_mapping_dict.output = None
         elif isinstance(self.__column_name_mapping_dict.input, dict):
-            self.__column_names.output = [
-                self.__column_name_mapping_dict.input[name]
-                for name in self.__column_names.input]
-            self.__column_name_mapping_dict.output = None
+            if self.__column_names.input:
+                self.__column_names.output = [
+                    self.__column_name_mapping_dict.input[name]
+                    for name in self.__column_names.input]
+                self.__column_name_mapping_dict.output = None
         if self.__column_names.output is None:
             self.__column_names.output = self.__column_names.input

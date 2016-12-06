@@ -41,7 +41,6 @@ class DjangoModelWriter(SheetWriter):
         self.initializer = None
 
         self.mymodel, self.column_names, self.mapdict, self.initializer = model
-
         if self.initializer is None:
             self.initializer = lambda row: row
         if isinstance(self.mapdict, list):

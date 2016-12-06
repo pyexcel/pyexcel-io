@@ -20,9 +20,11 @@ file_types = ()
 mime_types = {}
 
 
-def pre_register(file_type, library_import_path):
-    soft_register[file_type].append(library_import_path)
-
+def pre_register(library_meta, module_name):
+    library_import_path = "%s.%s" % (module_name, library_meta['file_type'])
+    soft_register[library_meta['file_type']].append(library_import_path)
+    register_stream_type(library_meta['file_type'], library_meta['stream_type'])
+    
 
 def dynamic_load_library(file_type, library_import_path):
     plugin = __import__(library_import_path)
@@ -54,20 +56,16 @@ def register_a_file_type(file_type, stream_type, mime_type):
     global file_types
     file_types += (file_type,)
     stream_type = stream_type
-    if stream_type == 'text':
-        register_file_type_as_text_stream(file_type)
-    elif stream_type == 'binary':
-        register_file_type_as_binary_stream(file_type)
     if mime_type is not None:
         mime_types[file_type] = mime_type
+    register_stream_type(file_type, stream_type)
 
 
-def register_file_type_as_text_stream(file_type):
-    text_stream_types.append(file_type)
-
-
-def register_file_type_as_binary_stream(file_type):
-    binary_stream_types.append(file_type)
+def register_stream_type(file_type, stream_type):
+    if stream_type == 'text':
+        text_stream_types.append(file_type)
+    elif stream_type == 'binary':
+        binary_stream_types.append(file_type)
 
 
 def get_io(file_type):
@@ -76,7 +74,9 @@ def get_io(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    __file_type = file_type.lower()
+    __file_type = None
+    if file_type:
+        __file_type = file_type.lower()
 
     if __file_type in text_stream_types:
         return StringIO()
@@ -92,7 +92,9 @@ def get_io_type(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    __file_type = file_type.lower()
+    __file_type = None
+    if file_type:
+        __file_type = file_type.lower()
 
     if __file_type in text_stream_types:
         return "string"
