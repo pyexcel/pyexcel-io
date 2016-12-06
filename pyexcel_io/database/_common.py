@@ -1,6 +1,3 @@
-from pyexcel_io.sheet import NamedContent
-
-
 class TableExportAdapter(object):
     def __init__(self, model, export_columns=None):
         self.model = model

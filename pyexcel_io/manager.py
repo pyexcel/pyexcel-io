@@ -23,8 +23,9 @@ mime_types = {}
 def pre_register(library_meta, module_name):
     library_import_path = "%s.%s" % (module_name, library_meta['file_type'])
     soft_register[library_meta['file_type']].append(library_import_path)
-    register_stream_type(library_meta['file_type'], library_meta['stream_type'])
-    
+    register_stream_type(
+        library_meta['file_type'], library_meta['stream_type'])
+
 
 def dynamic_load_library(file_type, library_import_path):
     plugin = __import__(library_import_path)
