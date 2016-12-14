@@ -21,19 +21,16 @@ mime_types = {}
 
 
 def pre_register(library_meta, module_name):
-    library_import_path = "%s.%s" % (module_name, library_meta['file_type'])
-    soft_register[library_meta['file_type']].append(library_import_path)
-    register_stream_type(
-        library_meta['file_type'], library_meta['stream_type'])
-    if 'other_types' in library_meta:
-        for file_type in library_meta['other_types']:
-            soft_register[file_type].append(library_import_path)
-            register_stream_type(file_type, library_meta['stream_type'])
+    library_import_path = "%s.%s" % (module_name, library_meta['submodule'])
+    for file_type in library_meta['file_types']:
+        soft_register[file_type].append(
+            (library_import_path, library_meta['submodule']))
+        register_stream_type(file_type, library_meta['stream_type'])
 
 
-def dynamic_load_library(file_type, library_import_path):
-    plugin = __import__(library_import_path)
-    submodule = getattr(plugin, file_type)
+def dynamic_load_library(library_import_path):
+    plugin = __import__(library_import_path[0])
+    submodule = getattr(plugin, library_import_path[1])
     register_readers_and_writers(submodule.exports)
 
 
@@ -141,7 +138,7 @@ def _get_a_handler(factories, file_type, library):
     __file_type = file_type.lower()
     if __file_type in soft_register:
         for path in soft_register[__file_type]:
-            dynamic_load_library(__file_type, path)
+            dynamic_load_library(path)
         # once loaded, forgot it
         soft_register.pop(__file_type)
 
