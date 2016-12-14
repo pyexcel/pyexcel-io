@@ -25,6 +25,10 @@ def pre_register(library_meta, module_name):
     soft_register[library_meta['file_type']].append(library_import_path)
     register_stream_type(
         library_meta['file_type'], library_meta['stream_type'])
+    if 'other_types' in library_meta:
+        for file_type in library_meta['other_types']:
+            soft_register[file_type].append(library_import_path)
+            register_stream_type(file_type, library_meta['stream_type'])
 
 
 def dynamic_load_library(file_type, library_import_path):
