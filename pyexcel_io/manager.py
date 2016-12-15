@@ -134,6 +134,7 @@ def _add_a_handler(factories, file_type, handler, library):
 
 def create_reader(file_type, library=None):
     global reader_factories
+    _preload_a_handler(reader_factories, file_type)
     reader = _get_a_handler(
         reader_factories, file_type, library)
     return reader
@@ -141,12 +142,14 @@ def create_reader(file_type, library=None):
 
 def create_writer(file_type, library=None):
     global writer_factories
+    _preload_a_handler(writer_factories, file_type)
     writer = _get_a_handler(
         writer_factories, file_type, library)
     return writer
 
 
-def _get_a_handler(factories, file_type, library):
+def _preload_a_handler(factories, file_type):
+    global soft_register
     __file_type = file_type.lower()
     if __file_type in soft_register:
         for path in soft_register[__file_type]:
@@ -154,6 +157,9 @@ def _get_a_handler(factories, file_type, library):
         # once loaded, forgot it
         soft_register.pop(__file_type)
 
+
+def _get_a_handler(factories, file_type, library):
+    __file_type = file_type.lower()
     if __file_type in factories:
         handler_dict = factories[__file_type]
         if library is not None:
