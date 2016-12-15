@@ -65,6 +65,7 @@ def register_readers_and_writers(plugins):
 
 
 def register_a_file_type(file_type, stream_type, mime_type):
+    global file_types
     file_types += (file_type,)
     stream_type = stream_type
     if mime_type is not None:
