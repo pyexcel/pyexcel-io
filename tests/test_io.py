@@ -1,12 +1,11 @@
 import os
 import sys
 from unittest import TestCase
-from pyexcel_io.deprecated import load_data, get_writer
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
-from pyexcel_io.io import load_data_new, get_writer_new
+from pyexcel_io.io import load_data, get_writer
 from nose.tools import raises, eq_
 from zipfile import BadZipfile
 
@@ -14,24 +13,14 @@ from zipfile import BadZipfile
 PY2 = sys.version_info[0] == 2
 
 
-@raises(NotImplementedError)
-def test_not_implemented_1():
-    load_data("something")
-
-
-@raises(NotImplementedError)
-def test_not_implemented_2():
-    get_writer("something")
-
-
 @raises(IOError)
 def test_no_valid_parameters():
-    load_data_new()
+    load_data()
 
 
 @raises(IOError)
 def test_no_valid_parameters_2():
-    get_writer_new()
+    get_writer()
 
 
 @raises(IOError)
@@ -46,12 +35,12 @@ def test_wrong_parameter_to_get_data():
 
 @raises(Exception)
 def test_wrong_parameter_to_get_writer():
-    get_writer_new(1)
+    get_writer(1)
 
 
 @raises(NotImplementedError)
 def test_wrong_parameter_to_get_writer2():
-    get_writer_new(1, file_type="csv")
+    get_writer(1, file_type="csv")
 
 
 @raises(IOError)
@@ -99,7 +88,7 @@ def test_write_unknown_data():
 def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
-        writer = get_writer_new(io, file_type="csvz")
+        writer = get_writer(io, file_type="csvz")
         writer.write({'adb': [[2, 3]]})
     else:
         raise NotImplementedError("pass it")
@@ -108,7 +97,7 @@ def test_writer_csvz_data_from_memory():
 @raises(IOError)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
-    get_writer_new(io, file_type="xlsms")
+    get_writer(io, file_type="xlsms")
 
 
 @raises(IOError)
@@ -116,7 +105,7 @@ def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it
     manager.register_stream_type('unknown1', 'text')
-    get_writer_new(io, file_type="unknown1")
+    get_writer(io, file_type="unknown1")
 
 
 def test_get_io():

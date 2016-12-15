@@ -25,15 +25,15 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     if isstream(afile) and file_type is None:
         file_type = constants.FILE_FORMAT_CSV
     if isstream(afile):
-        data = load_data_new(file_stream=afile,
-                             file_type=file_type, **keywords)
+        data = load_data(file_stream=afile,
+                         file_type=file_type, **keywords)
     else:
         if afile is not None and file_type is not None:
-            data = load_data_new(file_content=afile,
-                                 file_type=file_type, **keywords)
+            data = load_data(file_content=afile,
+                             file_type=file_type, **keywords)
         else:
-            data = load_data_new(file_name=afile,
-                                 file_type=file_type, **keywords)
+            data = load_data(file_name=afile,
+                             file_type=file_type, **keywords)
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])
@@ -84,12 +84,12 @@ def store_data(afile, data, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     if isstream(afile):
-        writer = get_writer_new(
+        writer = get_writer(
             file_stream=afile,
             file_type=file_type,
             **keywords)
     else:
-        writer = get_writer_new(
+        writer = get_writer(
             file_name=afile,
             file_type=file_type,
             **keywords)
@@ -97,14 +97,14 @@ def store_data(afile, data, file_type=None, **keywords):
     writer.close()
 
 
-def load_data_new(file_name=None,
-                  file_content=None,
-                  file_stream=None,
-                  file_type=None,
-                  sheet_name=None,
-                  sheet_index=None,
-                  library=None,
-                  **keywords):
+def load_data(file_name=None,
+              file_content=None,
+              file_stream=None,
+              file_type=None,
+              sheet_name=None,
+              sheet_index=None,
+              library=None,
+              **keywords):
     """Load data from any supported excel formats
 
     :param filename: actual file name, a file stream or actual content
@@ -140,8 +140,8 @@ def load_data_new(file_name=None,
     return result
 
 
-def get_writer_new(file_name=None, file_stream=None,
-                   file_type=None, library=None, **keywords):
+def get_writer(file_name=None, file_stream=None,
+               file_type=None, library=None, **keywords):
     number_of_none_inputs = list(filter(lambda x: x is not None,
                                         [file_name, file_stream]))
 
