@@ -21,6 +21,7 @@ mime_types = {}
 
 
 def pre_register(library_meta, module_name):
+    global soft_register
     library_import_path = "%s.%s" % (module_name, library_meta['submodule'])
     for file_type in library_meta['file_types']:
         soft_register[file_type].append(
@@ -56,6 +57,7 @@ def register_readers_and_writers(plugins):
 
 def register_a_file_type(file_type, stream_type, mime_type):
     global file_types
+    global mime_types
     file_types += (file_type,)
     stream_type = stream_type
     if mime_type is not None:
@@ -64,6 +66,8 @@ def register_a_file_type(file_type, stream_type, mime_type):
 
 
 def register_stream_type(file_type, stream_type):
+    global text_stream_types
+    global binary_stream_types
     if stream_type == 'text':
         text_stream_types.append(file_type)
     elif stream_type == 'binary':
@@ -76,6 +80,8 @@ def get_io(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
+    global text_stream_types
+    global binary_stream_types
     __file_type = None
     if file_type:
         __file_type = file_type.lower()
@@ -94,6 +100,8 @@ def get_io_type(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
+    global text_stream_types
+    global binary_stream_types
     __file_type = None
     if file_type:
         __file_type = file_type.lower()
@@ -107,11 +115,13 @@ def get_io_type(file_type):
 
 
 def _register_a_reader(file_type, reader_class, library):
+    global reader_factories
     _add_a_handler(reader_factories,
                    file_type, reader_class, library)
 
 
 def _register_a_writer(file_type, writer_class, library):
+    global writer_factories
     _add_a_handler(writer_factories,
                    file_type, writer_class, library)
 
@@ -123,12 +133,14 @@ def _add_a_handler(factories, file_type, handler, library):
 
 
 def create_reader(file_type, library=None):
+    global reader_factories
     reader = _get_a_handler(
         reader_factories, file_type, library)
     return reader
 
 
 def create_writer(file_type, library=None):
+    global writer_factories
     writer = _get_a_handler(
         writer_factories, file_type, library)
     return writer
