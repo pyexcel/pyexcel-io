@@ -24,7 +24,6 @@ mime_types = {}
 
 
 def pre_register(library_meta, module_name):
-    global soft_register
     library_import_path = "%s.%s" % (module_name, library_meta['submodule'])
     for file_type in library_meta['file_types']:
         soft_register[file_type].append(
@@ -44,7 +43,8 @@ def get_writers():
 
 
 def register_readers_and_writers(plugins):
-    __file_types = []
+    __debug_writer_file_types = []
+    __debug_reader_file_types = []
     for plugin in plugins:
         the_file_type = plugin['file_type']
         register_a_file_type(
@@ -53,18 +53,18 @@ def register_readers_and_writers(plugins):
         if 'reader' in plugin:
             _register_a_reader(
                 the_file_type, plugin['reader'], plugin['library'])
+            __debug_reader_file_types.append(plugin['file_type'])
         if 'writer' in plugin:
             _register_a_writer(
                 the_file_type, plugin['writer'], plugin['library'])
+            __debug_writer_file_types.append(plugin['file_type'])
         # else:
             # ignored for now
-        __file_types.append(plugin['file_type'])
-    log.debug(__file_types)
+    log.debug("register writers for:" + ",".join(__debug_writer_file_types))
+    log.debug("register readers for:" + ",".join(__debug_reader_file_types))
 
 
 def register_a_file_type(file_type, stream_type, mime_type):
-    global file_types
-    global mime_types
     file_types += (file_type,)
     stream_type = stream_type
     if mime_type is not None:
@@ -73,8 +73,6 @@ def register_a_file_type(file_type, stream_type, mime_type):
 
 
 def register_stream_type(file_type, stream_type):
-    global text_stream_types
-    global binary_stream_types
     if stream_type == 'text':
         text_stream_types.append(file_type)
     elif stream_type == 'binary':
@@ -87,8 +85,6 @@ def get_io(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    global text_stream_types
-    global binary_stream_types
     __file_type = None
     if file_type:
         __file_type = file_type.lower()
@@ -107,8 +103,6 @@ def get_io_type(file_type):
     :param file_type: a supported file type
     :returns: a appropriate io stream, None otherwise
     """
-    global text_stream_types
-    global binary_stream_types
     __file_type = None
     if file_type:
         __file_type = file_type.lower()
@@ -122,14 +116,12 @@ def get_io_type(file_type):
 
 
 def _register_a_reader(file_type, reader_class, library):
-    global reader_factories
     log.debug("register reader for " + file_type)
     _add_a_handler(reader_factories,
                    file_type, reader_class, library)
 
 
 def _register_a_writer(file_type, writer_class, library):
-    global writer_factories
     log.debug("register writer for " + file_type)
     _add_a_handler(writer_factories,
                    file_type, writer_class, library)
@@ -142,7 +134,6 @@ def _add_a_handler(factories, file_type, handler, library):
 
 
 def create_reader(file_type, library=None):
-    global reader_factories
     _preload_a_handler(reader_factories, file_type)
     reader = _get_a_handler(
         reader_factories, file_type, library)
@@ -150,7 +141,6 @@ def create_reader(file_type, library=None):
 
 
 def create_writer(file_type, library=None):
-    global writer_factories
     _preload_a_handler(writer_factories, file_type)
     writer = _get_a_handler(
         writer_factories, file_type, library)
@@ -158,7 +148,6 @@ def create_writer(file_type, library=None):
 
 
 def _preload_a_handler(factories, file_type):
-    global soft_register
     __file_type = file_type.lower()
     if __file_type in soft_register:
         log.debug("preload :" + __file_type)
@@ -170,8 +159,6 @@ def _preload_a_handler(factories, file_type):
 
 def _get_a_handler(factories, file_type, library):
     __file_type = file_type.lower()
-    log.debug("current entries: " + ','.join(list(
-        factories.keys())))
     if __file_type in factories:
         handler_dict = factories[__file_type]
         if library is not None:
@@ -185,5 +172,4 @@ def _get_a_handler(factories, file_type, library):
         handler = handler_class()
         handler.set_type(__file_type)
         return handler
-
     raise IOError("No suitable library found for %s" % file_type)
