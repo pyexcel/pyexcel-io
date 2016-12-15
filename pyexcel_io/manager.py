@@ -7,9 +7,12 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import logging
+
 from pyexcel_io._compact import StringIO, BytesIO
 from collections import defaultdict
 
+log = logging.getLogger(__name__)
 
 soft_register = defaultdict(list)
 reader_factories = {}
@@ -27,6 +30,7 @@ def pre_register(library_meta, module_name):
         soft_register[file_type].append(
             (library_import_path, library_meta['submodule']))
         register_stream_type(file_type, library_meta['stream_type'])
+    log.debug("pre-register :" + ','.join(library_meta['file_types']))
 
 
 def dynamic_load_library(library_import_path):
@@ -40,6 +44,7 @@ def get_writers():
 
 
 def register_readers_and_writers(plugins):
+    __file_types = []
     for plugin in plugins:
         the_file_type = plugin['file_type']
         register_a_file_type(
@@ -53,6 +58,8 @@ def register_readers_and_writers(plugins):
                 the_file_type, plugin['writer'], plugin['library'])
         # else:
             # ignored for now
+        __file_types.append(plugin['file_type'])
+    log.debug(__file_types)
 
 
 def register_a_file_type(file_type, stream_type, mime_type):
@@ -116,12 +123,14 @@ def get_io_type(file_type):
 
 def _register_a_reader(file_type, reader_class, library):
     global reader_factories
+    log.debug("register reader for " + file_type)
     _add_a_handler(reader_factories,
                    file_type, reader_class, library)
 
 
 def _register_a_writer(file_type, writer_class, library):
     global writer_factories
+    log.debug("register writer for " + file_type)
     _add_a_handler(writer_factories,
                    file_type, writer_class, library)
 
@@ -152,6 +161,7 @@ def _preload_a_handler(factories, file_type):
     global soft_register
     __file_type = file_type.lower()
     if __file_type in soft_register:
+        log.debug("preload :" + __file_type)
         for path in soft_register[__file_type]:
             dynamic_load_library(path)
         # once loaded, forgot it
@@ -160,6 +170,8 @@ def _preload_a_handler(factories, file_type):
 
 def _get_a_handler(factories, file_type, library):
     __file_type = file_type.lower()
+    log.debug("current entries: " + ','.join(list(
+        factories.keys())))
     if __file_type in factories:
         handler_dict = factories[__file_type]
         if library is not None:

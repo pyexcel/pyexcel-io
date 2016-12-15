@@ -8,6 +8,10 @@
     :license: New BSD License, see LICENSE for more details
 """
 # flake8: noqa
+import logging
+from ._compact import NullHandler
+logging.getLogger(__name__).addHandler(NullHandler())
+
 from .io import get_data, save_data
 from pyexcel_io.manager import register_readers_and_writers
 from pyexcel_io.manager import pre_register
