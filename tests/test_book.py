@@ -21,6 +21,12 @@ def test_book_reader():
 
 
 @raises(IOError)
+def test_book_reader_open_stream():
+    reader = BookReader()
+    reader.open_stream("a string")
+
+
+@raises(IOError)
 def test_book_writer():
     writer = BookWriter()
     writer.open_stream("a string")

@@ -13,3 +13,5 @@ def test_write_empty_array():
     writer = MyWriter(test_string, "somesheet", "somename")
     writer.write_array([])
     eq_(test_string, writer._native_book)
+
+

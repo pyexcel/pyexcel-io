@@ -113,6 +113,15 @@ def test_get_io():
     assert io is None
 
 
+def test_get_io_type():
+    t = manager.get_io_type("hello")
+    assert t is None
+    t = manager.get_io_type("csv")
+    eq_(t, 'string')
+    t = manager.get_io_type("xls")
+    eq_(t, 'bytes')
+
+
 def test_default_csv_format():
     data = [['1', '2', '3']]
     io = manager.get_io("csv")
@@ -187,6 +196,13 @@ def test_library_parameter():
     save_data(io, data, 'csv', library="built-in")
     result = get_data(io.getvalue(), 'csv', library="built-in")
     assert result['csv'] == [[1, 2, 3]]
+
+
+@raises(Exception)
+def test_library_parameter_error_situation():
+    data = [['1', '2', '3']]
+    io = manager.get_io("csv")
+    save_data(io, data, 'csv', library="doesnot-exist")
 
 
 def test_conversion_from_bytes_to_text():
