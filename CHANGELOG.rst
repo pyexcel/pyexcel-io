@@ -1,15 +1,27 @@
 Change log
 ================================================================================
 
-0.3.0 - unreleased
+deferred - unreleased
 --------------------------------------------------------------------------------
 
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__, use cString by default
-#. lazy loading of plugins
-#. make case-insensitive for file type
+#. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__,
+   use cString by default
+
+
+0.3.0 - unreleased
+--------------------------------------------------------------------------------
+
+Added
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. lazy loading of plugins. for example, pyexcel-xls is not entirely loaded
+   until xls format is used at its first attempted reading or writing. Since
+   it is loaded, it will not be loaded in the second io action.
+#. `pyexcel-xls issue 11 <https://github.com/pyexcel/pyexcel-xls/issues/11>`_,
+   make case-insensitive for file type
 
 
 0.24 - 24.11.2016
