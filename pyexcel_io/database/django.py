@@ -7,6 +7,8 @@
     :copyright: (c) 2014-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import logging
+
 from pyexcel_io.book import BookReader, BookWriter
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
@@ -14,6 +16,8 @@ import pyexcel_io.constants as constants
 from pyexcel_io.database.querysets import QuerysetsReader
 from ._common import TableExportAdapter, TableExporter
 from ._common import TableImporter, TableImportAdapter
+
+log = logging.getLogger(__name__)
 
 
 class DjangoModelReader(QuerysetsReader):
@@ -33,23 +37,13 @@ class DjangoModelReader(QuerysetsReader):
 
 
 class DjangoModelWriter(SheetWriter):
-    def __init__(self, model, batch_size=None):
-        self.batch_size = batch_size
-        self.mymodel = None
-        self.column_names = None
-        self.mapdict = None
-        self.initializer = None
-
-        self.mymodel, self.column_names, self.mapdict, self.initializer = model
-        if self.initializer is None:
-            self.initializer = lambda row: row
-        if isinstance(self.mapdict, list):
-            self.column_names = self.mapdict
-            self.mapdict = None
-        elif isinstance(self.mapdict, dict):
-            self.column_names = [self.mapdict[name]
-                                 for name in self.column_names]
-        self.objs = []
+    def __init__(self, adapter, batch_size=None):
+        self.__batch_size = batch_size
+        self.__model = adapter.model
+        self.__column_names = adapter.column_names
+        self.__mapdict = adapter.column_name_mapping_dict
+        self.__initializer = adapter.row_initializer
+        self.__objs = []
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -57,40 +51,30 @@ class DjangoModelWriter(SheetWriter):
         else:
             new_array = swap_empty_string_for_none(array)
             model_to_be_created = new_array
-            if self.initializer is not None:
-                model_to_be_created = self.initializer(new_array)
+            if self.__initializer is not None:
+                model_to_be_created = self.__initializer(new_array)
             if model_to_be_created:
-                self.objs.append(self.mymodel(**dict(
-                    zip(self.column_names, model_to_be_created)
+                self.__objs.append(self.__model(**dict(
+                    zip(self.__column_names, model_to_be_created)
                 )))
             # else
                 # skip the row
 
     def close(self):
         try:
-            self.mymodel.objects.bulk_create(self.objs,
-                                             batch_size=self.batch_size)
+            self.__model.objects.bulk_create(self.__objs,
+                                             batch_size=self.__batch_size)
         except Exception as e:
-            print(constants.MESSAGE_DB_EXCEPTION)
-            print(e)
-            for object in self.objs:
+            log.info(constants.MESSAGE_DB_EXCEPTION)
+            log.info(e)
+            for object in self.__objs:
                 try:
                     object.save()
                 except Exception as e2:
-                    print(constants.MESSAGE_IGNORE_ROW)
-                    print(e2)
-                    print(object)
+                    log.info(constants.MESSAGE_IGNORE_ROW)
+                    log.info(e2)
+                    log.info(object)
                     continue
-
-
-class DjangoModelWriterNew(DjangoModelWriter):
-    def __init__(self, adapter, batch_size=None):
-        self.batch_size = batch_size
-        self.mymodel = adapter.model
-        self.column_names = adapter.column_names
-        self.mapdict = adapter.column_name_mapping_dict
-        self.initializer = adapter.row_initializer
-        self.objs = []
 
 
 class DjangoModelExportAdapter(TableExportAdapter):
@@ -133,12 +117,15 @@ class DjangoBookWriter(BookWriter):
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content
+        self._keywords = keywords
 
     def create_sheet(self, sheet_name):
         sheet_writer = None
         model = self.importer.get(sheet_name)
         if model:
-            sheet_writer = DjangoModelWriterNew(model)
+            sheet_writer = DjangoModelWriter(
+                model,
+                batch_size=self._keywords.get('batch_size', None))
         return sheet_writer
 
 

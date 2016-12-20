@@ -102,12 +102,16 @@ class TestException:
 
     def test_sheet_save_to_django_model(self):
         model = FakeExceptionDjangoModel()
-        writer = DjangoModelWriter([model, self.data[0], None, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        writer = DjangoModelWriter(adapter)
         writer.write_array(self.data[1:])
         writer.close()
         # now raise excpetion
         model = FakeExceptionDjangoModel(raiseException=True)
-        writer = DjangoModelWriter([model, self.data[0], None, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        writer = DjangoModelWriter(adapter)
         writer.write_array(self.data[1:])
         writer.close()
 
@@ -126,10 +130,12 @@ class TestSheet:
 
     def test_sheet_save_to_django_model(self):
         model = FakeDjangoModel()
-        writer = DjangoModelWriter([model, self.data[0], None, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        writer = DjangoModelWriter(adapter)
         writer.write_array(self.data[1:])
         writer.close()
-        assert model.objects.objs == self.result
+        eq_(model.objects.objs, self.result)
 
     def test_sheet_save_to_django_model_with_empty_array(self):
         model = FakeDjangoModel()
@@ -139,7 +145,9 @@ class TestSheet:
             [1, 2, 3],
             [4, 5, 6]
         ]
-        writer = DjangoModelWriter([model, data[0], None, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        writer = DjangoModelWriter(adapter)
         writer.write_array(data[1:])
         writer.close()
         assert model.objects.objs == self.result
@@ -150,7 +158,10 @@ class TestSheet:
         def wrapper(row):
             row[0] = row[0] + 1
             return row
-        writer = DjangoModelWriter([model, self.data[0], None, wrapper])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        adapter.row_initializer = wrapper
+        writer = DjangoModelWriter(adapter)
         writer.write_array(self.data[1:])
         writer.close()
         assert model.objects.objs == [
@@ -166,7 +177,10 @@ class TestSheet:
                 return None
             else:
                 return row
-        writer = DjangoModelWriter([model, self.data[0], None, wrapper])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = self.data[0]
+        adapter.row_initializer = wrapper
+        writer = DjangoModelWriter(adapter)
         writer.write_array(self.data[1:])
         writer.close()
         assert model.objects.objs == [
@@ -217,12 +231,14 @@ class TestSheet:
             [1, 2, 3],
             [4, 5, 6]
         ]
-        mapdict = ["X", "Y", "Z"]
         model = FakeDjangoModel()
-        writer = DjangoModelWriter([model, data2[0], mapdict, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = data2[0]
+        adapter.column_name_mapping_dict = ["X", "Y", "Z"]
+        writer = DjangoModelWriter(adapter)
         writer.write_array(data2[1:])
         writer.close()
-        assert model.objects.objs == self.result
+        eq_(model.objects.objs, self.result)
 
     def test_mapping_dict(self):
         data2 = [
@@ -236,10 +252,13 @@ class TestSheet:
             "B": "Y"
         }
         model = FakeDjangoModel()
-        writer = DjangoModelWriter([model, data2[0], mapdict, None])
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = data2[0]
+        adapter.column_name_mapping_dict = mapdict
+        writer = DjangoModelWriter(adapter)
         writer.write_array(data2[1:])
         writer.close()
-        assert model.objects.objs == self.result
+        eq_(model.objects.objs, self.result)
 
     def test_empty_model(self):
         model = FakeDjangoModel()
