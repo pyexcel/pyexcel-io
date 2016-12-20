@@ -23,7 +23,7 @@ class QuerysetsReader(SheetReader):
         return chain([self.__column_names],
                      self.__query_sets)
 
-    def _iterate_columns(self, row):
+    def _iterate_columns(self, row, ncols):
         if self.__column_names is not None:
             if isinstance(row, list):
                 for element in row:

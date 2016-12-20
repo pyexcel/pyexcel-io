@@ -91,7 +91,7 @@ class CSVSheetReader(SheetReader):
     def _iterate_rows(self):
         return csv.reader(self.get_file_handle(), **self._keywords)
 
-    def _iterate_columns(self, row):
+    def _iterate_columns(self, row, ncols):
         for element in row:
             if compact.PY2:
                 element = element.decode('utf-8')

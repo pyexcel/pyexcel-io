@@ -52,6 +52,7 @@ class SheetReader(object):
     def to_array(self):
         """2 dimentional representation of the content
         """
+        ncols = hasattr(self, 'number_of_columns') and self.number_of_columns()
         for row_index, row in enumerate(self._iterate_rows()):
             row_position = self._skip_row(
                 row_index, self._start_row, self._row_limit)
@@ -64,7 +65,7 @@ class SheetReader(object):
             tmp_row = []
 
             for column_index, cell_value in enumerate(
-                    self._iterate_columns(row)):
+                    self._iterate_columns(row, ncols)):
                 column_position = self._skip_column(
                     column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
@@ -89,8 +90,8 @@ class SheetReader(object):
     def _iterate_rows(self):
         return irange(self.number_of_rows())
 
-    def _iterate_columns(self, row):
-        for column in irange(self.number_of_columns()):
+    def _iterate_columns(self, row, ncols):
+        for column in irange(ncols):
             yield self._cell_value(row, column)
 
     def _cell_value(self, row, column):
