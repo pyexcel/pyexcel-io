@@ -59,6 +59,7 @@ class SheetReader(object):
     def to_array(self):
         """2 dimentional representation of the content
         """
+        num_cols = self.number_of_columns()
         for row in irange(self.number_of_rows()):
             row_position = self.skip_row(row,
                                          self.start_row,
@@ -71,7 +72,7 @@ class SheetReader(object):
             return_row = []
             tmp_row = []
 
-            for column in irange(0, self.number_of_columns()):
+            for column in irange(0, num_cols):
                 column_position = self.skip_column(column,
                                                    self.start_column,
                                                    self.column_limit)
