@@ -117,13 +117,11 @@ def get_io_type(file_type):
 
 
 def _register_a_reader(file_type, reader_class, library):
-    log.debug("register reader for " + file_type)
     _add_a_handler(reader_factories,
                    file_type, reader_class, library)
 
 
 def _register_a_writer(file_type, writer_class, library):
-    log.debug("register writer for " + file_type)
     _add_a_handler(writer_factories,
                    file_type, writer_class, library)
 
