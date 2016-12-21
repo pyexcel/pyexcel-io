@@ -88,10 +88,10 @@ class CSVSheetReader(SheetReader):
     def get_file_handle(self):
         raise NotImplementedError("Please implement get_file_handle()")
 
-    def _iterate_rows(self):
+    def row_iterator(self):
         return csv.reader(self.get_file_handle(), **self._keywords)
 
-    def _iterate_columns(self, row):
+    def column_iterator(self, row):
         for element in row:
             if compact.PY2:
                 element = element.decode('utf-8')

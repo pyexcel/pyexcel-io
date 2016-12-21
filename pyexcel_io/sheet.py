@@ -52,7 +52,7 @@ class SheetReader(object):
     def to_array(self):
         """2 dimentional representation of the content
         """
-        for row_index, row in enumerate(self._iterate_rows()):
+        for row_index, row in enumerate(self.row_iterator()):
             row_position = self._skip_row(
                 row_index, self._start_row, self._row_limit)
             if row_position == constants.SKIP_DATA:
@@ -64,7 +64,7 @@ class SheetReader(object):
             tmp_row = []
 
             for column_index, cell_value in enumerate(
-                    self._iterate_columns(row)):
+                    self.column_iterator(row)):
                 column_position = self._skip_column(
                     column_index, self._start_column, self._column_limit)
                 if column_position == constants.SKIP_DATA:
@@ -86,19 +86,30 @@ class SheetReader(object):
                 return_row = self._row_renderer(return_row)
             yield return_row
 
-    def _iterate_rows(self):
+    def row_iterator(self):
         return irange(self.number_of_rows())
 
-    def _iterate_columns(self, row):
+    def column_iterator(self, row):
         for column in irange(self.number_of_columns()):
-            yield self._cell_value(row, column)
+            yield self.cell_value(row, column)
 
-    def _cell_value(self, row, column):
+    def number_of_rows(self):
         """
-        implement this method if the customer driver
-        provides random access
+        implement this method for easy extension
         """
-        raise NotImplementedError("Please implement to_array()")
+        raise NotImplementedError("Please implement number_of_rows()")
+
+    def number_of_columns(self):
+        """
+        implement this method for easy extension
+        """
+        raise NotImplementedError("Please implement number_of_columns()")
+
+    def cell_value(self, row, column):
+        """
+        implement this method for easy extension
+        """
+        raise NotImplementedError("Please implement cell_value()")
 
 
 class SheetWriter(object):

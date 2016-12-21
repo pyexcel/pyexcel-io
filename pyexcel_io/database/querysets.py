@@ -19,11 +19,11 @@ class QuerysetsReader(SheetReader):
         for element in SheetReader.to_array(self):
             yield element
 
-    def _iterate_rows(self):
+    def row_iterator(self):
         return chain([self.__column_names],
                      self.__query_sets)
 
-    def _iterate_columns(self, row):
+    def column_iterator(self, row):
         if self.__column_names is not None:
             if isinstance(row, list):
                 for element in row:
