@@ -263,6 +263,7 @@ class TestMultipleModels:
                         {'B': 6, 'A': 3, 'C': 9}]
 
     def test_save_to_more_models(self):
+        sample_batch_size = 10
         model1 = FakeDjangoModel()
         model2 = FakeDjangoModel()
         importer = DjangoModelImporter()
@@ -277,11 +278,13 @@ class TestMultipleModels:
             adapter2.get_name(): self.content['Sheet2'][1:]
         }
         writer = DjangoBookWriter()
-        writer.open_content(importer)
+        writer.open_content(importer, batch_size=sample_batch_size)
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == self.result1
         assert model2.objects.objs == self.result2
+        assert model1.objects.batch_size == sample_batch_size
+        assert model2.objects.batch_size == sample_batch_size
 
     def test_reading_from_more_models(self):
         model1 = FakeDjangoModel()

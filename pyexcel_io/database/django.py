@@ -218,12 +218,15 @@ class DjangoBookWriter(BookWriter):
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content
+        self.keywords = keywords
 
     def create_sheet(self, sheet_name):
         sheet_writer = None
         model = self.importer.get(sheet_name)
         if model:
-            sheet_writer = DjangoModelWriterNew(model)
+            sheet_writer = DjangoModelWriterNew(
+                model,
+                batch_size=self.keywords.get('batch_size', None))
         return sheet_writer
 
 
