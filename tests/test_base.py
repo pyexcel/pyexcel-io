@@ -1,9 +1,15 @@
 from pyexcel_io.sheet import (
-    SheetReader,
-    SheetWriter, NamedContent
+    SheetReader, SheetWriter, NamedContent
 )
+from pyexcel_io.book import BookWriter
 from pyexcel_io.utils import is_empty_array
 from nose.tools import raises
+
+
+@raises(NotImplementedError)
+def test_book_writer():
+    book = BookWriter()
+    book.create_sheet("test")
 
 
 def test_is_empty_array():
@@ -46,6 +52,16 @@ class TestSheetReader:
     def test_abstractness(self):
         reader = SheetReader("test")
         reader.cell_value(1, 2)
+
+    @raises(NotImplementedError)
+    def test_number_of_columns(self):
+        reader = SheetReader("test")
+        reader.number_of_columns()
+
+    @raises(NotImplementedError)
+    def test_number_of_rows(self):
+        reader = SheetReader("test")
+        reader.number_of_rows()
 
     def test_to_array(self):
         name = "test"

@@ -137,7 +137,7 @@ class SheetWriter(object):
         """
         write a row into the file
         """
-        raise NotImplementedError("Please implement write_row")
+        raise NotImplementedError("Please implement write_row()")
 
     def write_array(self, table):
         """

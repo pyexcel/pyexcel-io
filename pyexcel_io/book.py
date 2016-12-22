@@ -164,7 +164,10 @@ class BookWriter(RWInterface):
                 sheet_writer.close()
 
     def create_sheet(self, sheet_name):
-        pass
+        """
+        implement this method for easy extension
+        """
+        raise NotImplementedError("Please implement create_sheet()")
 
 
 def _convert_content_to_stream(file_content, file_type):
