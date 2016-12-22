@@ -12,7 +12,7 @@ Updated
    use cString by default
 
 
-0.3.0 - unreleased
+0.3.0 - 22.12.2016
 --------------------------------------------------------------------------------
 
 Added
@@ -23,13 +23,6 @@ Added
    it is loaded, it will not be loaded in the second io action.
 #. `pyexcel-xls issue 11 <https://github.com/pyexcel/pyexcel-xls/issues/11>`_,
    make case-insensitive for file type
-
-
-Updated
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#. `#24 <https://github.com/pyexcel/pyexcel-io/issues/24>`_,
-   pass on batch_size
 
 
 0.26 - 21.12.2016
