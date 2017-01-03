@@ -4,7 +4,7 @@
 
     The lower level csvz file format handler.
 
-    :copyright: (c) 2014-2016 by Onni Software Ltd.
+    :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import csv
