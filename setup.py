@@ -10,7 +10,7 @@ PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -53,9 +53,9 @@ if PY26:
 
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 EXTRAS_REQUIRE = {
-    'xls': ['pyexcel-xls>=0.2.0'],
-    'xlsx': ['pyexcel-xlsx>=0.2.0'],
-    'ods': ['pyexcel-ods3>=0.2.0'],
+    'xls': ['pyexcel-xls>=0.3.0'],
+    'xlsx': ['pyexcel-xlsx>=0.3.0'],
+    'ods': ['pyexcel-ods3>=0.3.0'],
 }
 
 
