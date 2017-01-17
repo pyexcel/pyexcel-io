@@ -10,6 +10,7 @@
 import logging
 
 from pyexcel_io._compact import StringIO, BytesIO
+import pyexcel_io.utils as ioutils
 from collections import defaultdict
 
 log = logging.getLogger(__name__)
@@ -21,6 +22,17 @@ text_stream_types = []
 binary_stream_types = []
 file_types = ()
 mime_types = {}
+
+
+ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
+
+
+class NoSupportingPluginFound(Exception):
+    pass
+
+
+class SupportingPluginAvailableButNotInstalled(Exception):
+    pass
 
 
 def pre_register(library_meta, module_name):
@@ -134,16 +146,42 @@ def _add_a_handler(factories, file_type, handler, library):
 
 def create_reader(file_type, library=None):
     _preload_a_handler(reader_factories, file_type)
-    reader = _get_a_handler(
-        reader_factories, file_type, library)
-    return reader
+    try:
+        reader = _get_a_handler(
+            reader_factories, file_type, library)
+        return reader
+    except NoSupportingPluginFound:
+        plugins = ioutils.AVAILABLE_READERS.get(file_type, None)
+        if plugins:
+            message = "Please install "
+            if len(plugins) > 1:
+                message += ERROR_MESSAGE_FORMATTER % (
+                    'read', file_type, ','.join(plugins))
+            else:
+                message += plugins[0]
+            raise SupportingPluginAvailableButNotInstalled(message)
+        else:
+            raise
 
 
 def create_writer(file_type, library=None):
     _preload_a_handler(writer_factories, file_type)
-    writer = _get_a_handler(
-        writer_factories, file_type, library)
-    return writer
+    try:
+        writer = _get_a_handler(
+            writer_factories, file_type, library)
+        return writer
+    except NoSupportingPluginFound:
+        plugins = ioutils.AVAILABLE_READERS.get(file_type, None)
+        if plugins:
+            message = "Please install "
+            if len(plugins) > 1:
+                message += ERROR_MESSAGE_FORMATTER % (
+                    'write', file_type, ','.join(plugins))
+            else:
+                message += plugins[0]
+            raise SupportingPluginAvailableButNotInstalled(message)
+        else:
+            raise
 
 
 def _preload_a_handler(factories, file_type):
@@ -171,4 +209,5 @@ def _get_a_handler(factories, file_type, library):
         handler = handler_class()
         handler.set_type(__file_type)
         return handler
-    raise IOError("No suitable library found for %s" % file_type)
+    raise NoSupportingPluginFound(
+        "No suitable library found for %s" % file_type)

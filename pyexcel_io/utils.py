@@ -4,26 +4,34 @@ from pyexcel_io._compact import PY2
 import pyexcel_io.constants as constants
 
 
+XLS_PLUGIN = 'pyexcel-xls'
+XLSX_PLUGIN = 'pyexcel-xlsx'
+ODS_PLUGIN = 'pyexcel-ods'
+ODS3_PLUGIN = 'pyexcel-ods3'
+XLSXW_PLUGIN = 'pyexcel-xlsxw'
+IO_ITSELF = 'pyexcel-io'
+
+
 AVAILABLE_READERS = {
-    constants.FILE_FORMAT_XLS: 'pyexcel-xls',
-    constants.FILE_FORMAT_XLSX: ('pyexcel-xls', 'pyexcel-xlsx'),
-    constants.FILE_FORMAT_XLSM: ('pyexcel-xls', 'pyexcel-xlsx'),
-    constants.FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3'),
-    constants.FILE_FORMAT_CSV: 'pyexcel-io',
-    constants.FILE_FORMAT_TSV: 'pyexcel-io',
-    constants.FILE_FORMAT_CSVZ: 'pyexcel-io',
-    constants.FILE_FORMAT_TSVZ: 'pyexcel-io'
+    constants.FILE_FORMAT_XLS: [XLS_PLUGIN],
+    constants.FILE_FORMAT_XLSX: [XLS_PLUGIN, XLSX_PLUGIN],
+    constants.FILE_FORMAT_XLSM: [XLS_PLUGIN, XLSX_PLUGIN],
+    constants.FILE_FORMAT_ODS: [ODS_PLUGIN, ODS3_PLUGIN],
+    constants.FILE_FORMAT_CSV: [IO_ITSELF],
+    constants.FILE_FORMAT_TSV: [IO_ITSELF],
+    constants.FILE_FORMAT_CSVZ: [IO_ITSELF],
+    constants.FILE_FORMAT_TSVZ: [IO_ITSELF]
 }
 
 AVAILABLE_WRITERS = {
-    constants.FILE_FORMAT_XLS: 'pyexcel-xls',
-    constants.FILE_FORMAT_XLSX: 'pyexcel-xlsx',
-    constants.FILE_FORMAT_XLSM: 'pyexcel-xlsx',
-    constants.FILE_FORMAT_ODS: ('pyexcel-ods', 'pyexcel-ods3'),
-    constants.FILE_FORMAT_CSV: 'pyexcel-io',
-    constants.FILE_FORMAT_TSV: 'pyexcel-io',
-    constants.FILE_FORMAT_CSVZ: 'pyexcel-io',
-    constants.FILE_FORMAT_TSVZ: 'pyexcel-io'
+    constants.FILE_FORMAT_XLS: [XLS_PLUGIN],
+    constants.FILE_FORMAT_XLSX: [XLSX_PLUGIN, XLSXW_PLUGIN],
+    constants.FILE_FORMAT_XLSM: [XLSX_PLUGIN],
+    constants.FILE_FORMAT_ODS: [ODS_PLUGIN, ODS3_PLUGIN],
+    constants.FILE_FORMAT_CSV: [IO_ITSELF],
+    constants.FILE_FORMAT_TSV: [IO_ITSELF],
+    constants.FILE_FORMAT_CSVZ: [IO_ITSELF],
+    constants.FILE_FORMAT_TSVZ: [IO_ITSELF]
 }
 
 

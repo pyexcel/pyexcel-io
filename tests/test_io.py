@@ -43,23 +43,42 @@ def test_wrong_parameter_to_get_writer2():
     get_writer(1, file_type="csv")
 
 
-@raises(IOError)
 def test_load_ods_data():
-    get_data("test.ods")
+    msg = "Please install one of these plugins for read data in 'ods': "
+    msg += "pyexcel-ods,pyexcel-ods3"
+    try:
+        get_data("test.ods")
+    except manager.SupportingPluginAvailableButNotInstalled as e:
+        eq_(e.message, msg)
 
 
-@raises(IOError)
 def test_load_ods_data_from_memory():
     io = BytesIO()
-    get_data(io, file_type="ods")
+    msg = "Please install one of these plugins for read data in 'ods': "
+    msg += "pyexcel-ods,pyexcel-ods3"
+    try:
+        get_data(io, file_type="ods")
+    except manager.SupportingPluginAvailableButNotInstalled as e:
+        eq_(e.message, msg)
 
 
-@raises(IOError)
+def test_write_xlsx_data_to_memory():
+    data = {'Sheet': [[1]]}
+    io = BytesIO()
+    msg = "Please install one of these plugins for read data in 'ods': "
+    msg += "pyexcel-xlsx,pyexcel-xlsxw"
+    try:
+        save_data(io, data, file_type="xlsx")
+    except manager.SupportingPluginAvailableButNotInstalled as e:
+        eq_(e.message, msg)
+
+
+@raises(manager.NoSupportingPluginFound)
 def test_load_unknown_data():
     get_data("test.unknown")
 
 
-@raises(IOError)
+@raises(manager.NoSupportingPluginFound)
 def test_load_unknown_data_from_memory():
     io = BytesIO()
     get_data(io, file_type="unknown")
@@ -79,7 +98,7 @@ def test_write_xlsx_data():
     get_data("test.xlsx")
 
 
-@raises(IOError)
+@raises(manager.NoSupportingPluginFound)
 def test_write_unknown_data():
     get_data("test.unknown")
 
@@ -94,13 +113,13 @@ def test_writer_csvz_data_from_memory():
         raise NotImplementedError("pass it")
 
 
-@raises(IOError)
+@raises(manager.NoSupportingPluginFound)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
     get_writer(io, file_type="xlsms")
 
 
-@raises(IOError)
+@raises(manager.NoSupportingPluginFound)
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it

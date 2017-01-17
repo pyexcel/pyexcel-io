@@ -76,20 +76,31 @@ class SheetReader(object):
                 if cell_value is not None and cell_value != '':
                     return_row += tmp_row
                     tmp_row = []
-            if self._skip_empty_rows:
-                if len(return_row) < 1:
-                    # we by-pass next yeild here
-                    # because it is an empty row
-                    continue
+            if self._skip_empty_rows and len(return_row) < 1:
+                # we by-pass next yeild here
+                # because it is an empty row
+                continue
 
             if self._row_renderer:
                 return_row = self._row_renderer(return_row)
             yield return_row
 
     def row_iterator(self):
+        """
+        iterate each row
+
+        override this function in the sitation where
+        number_of_rows() is difficult or costly to implement
+        """
         return irange(self.number_of_rows())
 
     def column_iterator(self, row):
+        """
+        iterate each column of a given row
+
+        override this function in the sitation where
+        number_of_columns() is difficult or costly to implement
+        """
         for column in irange(self.number_of_columns()):
             yield self.cell_value(row, column)
 

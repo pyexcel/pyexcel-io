@@ -10,7 +10,7 @@ Updated
 
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__,
    use cString by default
-
+   
 
 0.3.0 - 22.12.2016
 --------------------------------------------------------------------------------
