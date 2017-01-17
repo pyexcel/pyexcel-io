@@ -32,14 +32,14 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
    Package name      Supported file formats  Dependencies  Python versions
    ================= ======================= ============= ==================
    `pyexcel-io`_     csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3,
-                     tsvz [#f2]_                           3.4, 3.5,
+                     tsvz [#f2]_                           3.4, 3.5, 3.6
                                                            pypy
    `pyexcel-xls`_    xls, xlsx(read only),   `xlrd`_,      same as above
                      xlsm(read only)         `xlwt`_
    `pyexcel-xlsx`_   xlsx                    `openpyxl`_   same as above
    `pyexcel-xlsxw`_  xlsx(write only)        `XlsxWriter`_ same as above
    `pyexcel-ods3`_   ods                     `ezodf`_,     2.6, 2.7, 3.3, 3.4
-                                             lxml          3.5
+                                             lxml          3.5, 3.6
    `pyexcel-ods`_    ods                     `odfpy`_      same as above
    ================= ======================= ============= ==================
 
@@ -114,7 +114,7 @@ In order to update test environment, and documentation, additional setps are
 required:
 
 #. pip install moban
-#. git clone https://github.com/pyexcel/pyexcel-commons.git
+#. git clone https://github.com/pyexcel/pyexcel-commons.git commons
 #. make your changes in `.moban.d` directory, then issue command `moban`
 
 What is rnd_requirements.txt
