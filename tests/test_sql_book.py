@@ -1,3 +1,4 @@
+import sys
 import json
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,6 +16,11 @@ from pyexcel_io.database.querysets import QuerysetsReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises, eq_
 import platform
+
+
+PY3 = sys.version_info[0] == 3
+PY36 = PY3 and sys.version_info[1] == 6
+
 
 engine = None
 if platform.python_implementation() == 'PyPy':
@@ -455,12 +461,12 @@ class TestZeroRead:
         sheet = SQLTableReader(mysession, Pyexcel)
         data = sheet.to_array()
         content = [[]]
-        # 'pyexcel'' here is the table name
+        # 'pyexcel' here is the table name
         assert list(data) == content
         mysession.close()
 
 
-class TestDisabledWrite:
+class TestNoAutoCommit:
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
@@ -476,6 +482,10 @@ class TestDisabledWrite:
         ]
 
     def test_one_table(self):
+        if PY36:
+            # skip the test
+            # beause python 3.6 sqlite give segmentation fault
+            return
         mysession = Session()
         writer = SQLTableWriter(mysession,
                                 [Pyexcel, self.data[0], None, None],
@@ -485,7 +495,7 @@ class TestDisabledWrite:
         mysession.close()
         mysession2 = Session()
         query_sets = mysession2.query(Pyexcel).all()
-        assert len(query_sets) == 0
+        eq_(len(query_sets), 0)
         mysession2.close()
 
 
