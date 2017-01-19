@@ -49,7 +49,7 @@ def test_load_ods_data():
     try:
         get_data("test.ods")
     except manager.SupportingPluginAvailableButNotInstalled as e:
-        eq_(e.message, msg)
+        eq_(str(e), msg)
 
 
 def test_load_ods_data_from_memory():
@@ -59,18 +59,18 @@ def test_load_ods_data_from_memory():
     try:
         get_data(io, file_type="ods")
     except manager.SupportingPluginAvailableButNotInstalled as e:
-        eq_(e.message, msg)
+        eq_(str(e), msg)
 
 
 def test_write_xlsx_data_to_memory():
     data = {'Sheet': [[1]]}
     io = BytesIO()
-    msg = "Please install one of these plugins for read data in 'ods': "
+    msg = "Please install one of these plugins for read data in 'xlsx': "
     msg += "pyexcel-xlsx,pyexcel-xlsxw"
     try:
         save_data(io, data, file_type="xlsx")
     except manager.SupportingPluginAvailableButNotInstalled as e:
-        eq_(e.message, msg)
+        eq_(str(e), msg)
 
 
 @raises(manager.NoSupportingPluginFound)
