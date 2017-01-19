@@ -65,7 +65,7 @@ def test_load_ods_data_from_memory():
 def test_write_xlsx_data_to_memory():
     data = {'Sheet': [[1]]}
     io = BytesIO()
-    msg = "Please install one of these plugins for read data in 'xlsx': "
+    msg = "Please install one of these plugins for write data in 'xlsx': "
     msg += "pyexcel-xlsx,pyexcel-xlsxw"
     try:
         save_data(io, data, file_type="xlsx")

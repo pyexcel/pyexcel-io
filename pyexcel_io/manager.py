@@ -171,7 +171,7 @@ def create_writer(file_type, library=None):
             writer_factories, file_type, library)
         return writer
     except NoSupportingPluginFound:
-        plugins = ioutils.AVAILABLE_READERS.get(file_type, None)
+        plugins = ioutils.AVAILABLE_WRITERS.get(file_type, None)
         if plugins:
             message = "Please install "
             if len(plugins) > 1:
