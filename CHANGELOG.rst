@@ -20,6 +20,13 @@ Added
 
 #. updated versions of extra packages
 
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#23 <https://github.com/pyexcel/pyexcel-io/issues/23>`_, provide helpful
+   message when old pyexcel plugin exists
+#. restored previously available diagnosis message for missing libraries
+   
 
 0.3.0 - 22.12.2016
 --------------------------------------------------------------------------------
