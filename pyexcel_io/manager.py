@@ -25,6 +25,8 @@ mime_types = {}
 
 
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
+UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
+plugin compactibility table."
 
 
 class NoSupportingPluginFound(Exception):
@@ -35,7 +37,14 @@ class SupportingPluginAvailableButNotInstalled(Exception):
     pass
 
 
+class UpgradePlugin(Exception):
+    pass
+
+
 def pre_register(library_meta, module_name):
+    if not isinstance(library_meta, dict):
+        plugin = module_name.replace('_', '-')
+        raise UpgradePlugin(UPGRADE_MESSAGE % plugin)
     library_import_path = "%s.%s" % (module_name, library_meta['submodule'])
     for file_type in library_meta['file_types']:
         soft_register[file_type].append(

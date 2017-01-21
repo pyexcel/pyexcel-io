@@ -40,3 +40,13 @@ def test_issue_23():
         [8204235414504252490, 1.1]
     ]
     eq_(data['issue23.csv'], expected)
+
+
+def test_issue_28():
+    from pyexcel_io.manager import pre_register, UpgradePlugin
+    expected = "Please upgrade the plugin '%s' according to "
+    expected += "plugin compactibility table."
+    try:
+        pre_register('pyexcel_test', 'test')
+    except UpgradePlugin as e:
+        eq_(str(e), expected % 'test')
