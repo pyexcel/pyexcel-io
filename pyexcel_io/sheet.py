@@ -30,7 +30,7 @@ class SheetReader(object):
                  start_row=0, row_limit=-1,
                  start_column=0, column_limit=-1,
                  skip_row_func=None, skip_column_func=None,
-                 skip_empty_rows=True, row_renderer=None,
+                 skip_empty_rows=False, row_renderer=None,
                  **keywords):
         self._native_sheet = sheet
         self._keywords = {}

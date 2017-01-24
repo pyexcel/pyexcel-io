@@ -11,6 +11,14 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__,
    use cString by default
    
+0.3.2 - unreleased
+--------------------------------------------------------------------------------
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#29 <https://github.com/pyexcel/pyexcel-io/issues/29>`_, change
+   skip_empty_rows to False by default
 
 0.3.1 - 21.01.2017
 --------------------------------------------------------------------------------
