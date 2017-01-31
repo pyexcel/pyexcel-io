@@ -196,9 +196,11 @@ def create_writer(file_type, library=None):
 def _preload_a_handler(factories, file_type):
     __file_type = file_type.lower()
     if __file_type in soft_register:
-        log.debug("preload :" + __file_type)
+        debug_path = []
         for path in soft_register[__file_type]:
             dynamic_load_library(path)
+            debug_path.append(path)
+        log.debug("preload :" + __file_type + ":" + ','.join(path))
         # once loaded, forgot it
         soft_register.pop(__file_type)
 
