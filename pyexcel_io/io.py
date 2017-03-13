@@ -20,7 +20,7 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     :param sheet_index: the index of the sheet to be loaded
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
-    :returns: an array if it is a single sheet, an ordered dictionary otherwise
+    :returns: an ordered dictionary
     """
     if isstream(afile) and file_type is None:
         file_type = constants.FILE_FORMAT_CSV
@@ -43,10 +43,10 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
 def save_data(afile, data, file_type=None, **keywords):
     """Save data to an excel file source
 
-    Your data can be an array or an ordered dictionary
+    Your data must be a dictionary
 
     :param filename: actual file name, a file stream or actual content
-    :param data: the data to be saved
+    :param data: a dictionary but an ordered dictionary is preferred
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters that python csv module's
                      `fmtparams <https://docs.python.org/release/3.1.5/
