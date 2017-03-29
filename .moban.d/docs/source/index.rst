@@ -44,25 +44,39 @@ are two plugins for the same file format, e.g. pyexcel-ods3 and pyexcel-ods.
 If you want to choose one, please try pip uninstall the un-wanted one. And if
 you want to have both installed but wanted to use one of them for a function
 call(or file type) and the other for another function call(or file type), you can
-pass on "library" option to get_data and save_data.
+pass on "library" option to get_data and save_data, e.g.
+get_data(.., library='pyexcel-ods')
 
 .. table:: Plugin compatibility table
 
-    ============= ======= ======== ======= ======== ========
-    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `xlsxw`_
-    ============= ======= ======== ======= ======== ========
-    0.3.0         0.3.0   0.3.0    0.3.0   0.3.0    0.3.0
-    0.2.2+        0.2.2+  0.2.2+   0.2.1+  0.2.1+   0.0.1
-    0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0    0.0.1
-    ============= ======= ======== ======= ======== ========
+    ============= ======= ======== ======= ======== ======== ========
+    `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
+    ============= ======= ======== ======= ======== ======== ========
+    0.3.0         0.3.0   0.3.0    0.3.0   0.3.0    0.3.0    0.3.0
+    0.2.2+        0.2.2+  0.2.2+   0.2.1+  0.2.1+            0.0.1
+    0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0             0.0.1
+    ============= ======= ======== ======= ======== ======== ========
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _xls: https://github.com/pyexcel/pyexcel-xls
 .. _xlsx: https://github.com/pyexcel/pyexcel-xlsx
 .. _xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
+.. _odsr: https://github.com/pyexcel/pyexcel-odsr
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
-.. _text: https://github.com/pyexcel/pyexcel-text
+
+Special Note on PyInstaller
+********************************************************************************
+
+When you packaging pyexcel-io with its plugins, please specify the plugins in
+its hidden import options::
+
+    --hidden-import pyexcel_[nick_name] --hidden-import pyexcel_[nick_name].[nick_name]
+
+Nick name here refers to the second part of the package name. Suppose you
+wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
+
+    --hidden-import pyexcel_xls --hidden-import pyexcel_xls.xls
 
 .. note::
    pyexcel-text is no longer a plugin of pyexcel-io but a direct plugin of pyexcel
@@ -70,7 +84,7 @@ pass on "library" option to get_data and save_data.
 
 .. toctree::
    :caption: Migration Note
-   :maxdepth: 2 
+   :maxdepth: 2
 
    migration_from_dot_1_to_dot_2
 
