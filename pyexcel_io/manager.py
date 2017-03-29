@@ -7,11 +7,14 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import pkgutil
 import logging
+from itertools import chain
 
 from pyexcel_io._compact import StringIO, BytesIO
 import pyexcel_io.utils as ioutils
 from collections import defaultdict
+
 
 log = logging.getLogger(__name__)
 
@@ -29,6 +32,43 @@ UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
 
 
+def load_plugins(prefix, path, black_list):
+    module_names = (module_info[1] for module_info in pkgutil.iter_modules()
+                    if module_info[2] and module_info[1].startswith(prefix))
+
+    module_names_from_pyinstaller = load_from_pyinstaller(prefix, path)
+    # loop through modules and find our plug ins
+    for module_name in chain(module_names, module_names_from_pyinstaller):
+
+        if module_name in black_list:
+            continue
+
+        try:
+            plugin = __import__(module_name)
+            if hasattr(plugin, '__pyexcel_io_plugins__'):
+                for plugin_meta in plugin.__pyexcel_io_plugins__:
+                    pre_register(plugin_meta, module_name)
+        except ImportError:
+            continue
+
+
+# load modules to work based with and without pyinstaller
+# from: https://github.com/webcomics/dosage/blob/master/dosagelib/loader.py
+# see: https://github.com/pyinstaller/pyinstaller/issues/1905
+# load modules using iter_modules()
+# (should find all plug ins in normal build, but not pyinstaller)
+def load_from_pyinstaller(prefix, path):
+    # special handling for PyInstaller
+    table_of_content = set()
+    for a_toc in (importer.toc for importer in map(pkgutil.get_importer, path)
+                  if hasattr(importer, 'toc')):
+        table_of_content |= a_toc
+
+    for module_name in table_of_content:
+        if module_name.startswith(prefix) and '.' not in module_name:
+            yield module_name
+
+
 class NoSupportingPluginFound(Exception):
     pass
 
@@ -41,16 +81,16 @@ class UpgradePlugin(Exception):
     pass
 
 
-def pre_register(library_meta, module_name):
-    if not isinstance(library_meta, dict):
+def pre_register(plugin_meta, module_name):
+    if not isinstance(plugin_meta, dict):
         plugin = module_name.replace('_', '-')
         raise UpgradePlugin(UPGRADE_MESSAGE % plugin)
-    library_import_path = "%s.%s" % (module_name, library_meta['submodule'])
-    for file_type in library_meta['file_types']:
+    library_import_path = "%s.%s" % (module_name, plugin_meta['submodule'])
+    for file_type in plugin_meta['file_types']:
         soft_register[file_type].append(
-            (library_import_path, library_meta['submodule']))
-        register_stream_type(file_type, library_meta['stream_type'])
-    log.debug("pre-register :" + ','.join(library_meta['file_types']))
+            (library_import_path, plugin_meta['submodule']))
+        register_stream_type(file_type, plugin_meta['stream_type'])
+    log.debug("pre-register :" + ','.join(plugin_meta['file_types']))
 
 
 def dynamic_load_library(library_import_path):
