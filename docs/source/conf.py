@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+DESCRIPTION = (
+    'A python library to read and write structured data in csv, zipped csv ' +
+    'format and to/from databases' +
+    ''
+)
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
@@ -17,8 +22,8 @@ master_doc = 'index'
 
 project = u'pyexcel-io'
 copyright = u'2015-2017 Onni Software Ltd.'
-version = '0.3.1'
-release = '0.3.2'
+version = '0.3.2'
+release = '0.3.3'
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'default'
@@ -32,15 +37,19 @@ html_static_path = ['_static']
 htmlhelp_basename = 'pyexcel-iodoc'
 latex_elements = {}
 latex_documents = [
-    ('index', 'pyexcel-io.tex', u'pyexcel-io Documentation',
+    ('index', 'pyexcel-io.tex',
+     'pyexcel-io Documentation',
      'Onni Software Ltd.', 'manual'),
 ]
 man_pages = [
-    ('index', 'pyexcel-io', u'pyexcel-io Documentation',
+    ('index', 'pyexcel-io',
+     'pyexcel-io Documentation',
      [u'Onni Software Ltd.'], 1)
 ]
 texinfo_documents = [
-    ('index', 'pyexcel-io', u'pyexcel-io Documentation',
-     'Onni Software Ltd.', 'pyexcel-io', 'One line description of project.',
+    ('index', 'pyexcel-io',
+     'pyexcel-io Documentation',
+     'Onni Software Ltd.', 'pyexcel-io',
+     DESCRIPTION,
      'Miscellaneous'),
 ]
