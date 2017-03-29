@@ -18,8 +18,13 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     :param filename: actual file name, a file stream or actual content
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
+    :param sheets: a list of sheet to be loaded
     :param file_type: used only when filename is not a physial file name
     :param keywords: any other parameters
+
+    if none of sheet_name, sheet_index and sheets were mentioned, all
+    available sheets will be returned
+
     :returns: an ordered dictionary
     """
     if isstream(afile) and file_type is None:
@@ -103,6 +108,7 @@ def load_data(file_name=None,
               file_type=None,
               sheet_name=None,
               sheet_index=None,
+              sheets=None,
               library=None,
               **keywords):
     """Load data from any supported excel formats
@@ -134,6 +140,8 @@ def load_data(file_name=None,
         result = reader.read_sheet_by_name(sheet_name)
     elif sheet_index is not None:
         result = reader.read_sheet_by_index(sheet_index)
+    elif sheets is not None:
+        result = reader.read_many(sheets)
     else:
         result = reader.read_all()
     reader.close()

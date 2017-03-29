@@ -122,6 +122,18 @@ class BookReader(RWInterface):
             result[sheet.name] = self.read_sheet(sheet)
         return result
 
+    def read_many(self, sheets):
+        """
+        read everything from a excel data book
+        """
+        result = OrderedDict()
+        for sheet in sheets:
+            if isinstance(sheet, int):
+                result.update(self.read_sheet_by_index(sheet))
+            else:
+                result.update(self.read_sheet_by_name(sheet))
+        return result
+
     def read_sheet(self, native_sheet):
         """
         Return a context specific sheet from a native sheet
