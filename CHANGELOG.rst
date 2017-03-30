@@ -8,7 +8,7 @@ deferred - unreleased
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`__,
+#. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
 0.3.3 - unreleased
@@ -58,7 +58,7 @@ Added
    make case-insensitive for file type
 
 
-0.26 - 21.12.2016
+0.2.6 - 21.12.2016
 --------------------------------------------------------------------------------
 
 Updated
@@ -67,7 +67,7 @@ Updated
 #. `#24 <https://github.com/pyexcel/pyexcel-io/issues/24>`__, pass on batch_size
 
 
-0.25 - 20.12.2016
+0.2.5 - 20.12.2016
 --------------------------------------------------------------------------------
 
 Updated
@@ -76,7 +76,7 @@ Updated
 #. `#26 <https://github.com/pyexcel/pyexcel-io/issues/26>`__, performance issue
    with getting the number of columns.
 
-0.24 - 24.11.2016
+0.2.4 - 24.11.2016
 --------------------------------------------------------------------------------
 
 Updated
@@ -85,7 +85,7 @@ Updated
 #. `#23 <https://github.com/pyexcel/pyexcel-io/issues/23>`__, Failed to convert
    long integer string in python 2 to its actual value
 
-0.23 - 16.09.2016
+0.2.3 - 16.09.2016
 --------------------------------------------------------------------------------
 
 Added
@@ -96,7 +96,7 @@ Added
 #. `#22 <https://github.com/pyexcel/pyexcel-io/issues/22>`__, custom renderer if
    given `row_renderer` as parameter.
 
-0.22 - 31.08.2016
+0.2.2 - 31.08.2016
 --------------------------------------------------------------------------------
 
 Added

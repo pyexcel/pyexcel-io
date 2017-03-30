@@ -47,12 +47,17 @@ call(or file type) and the other for another function call(or file type), you ca
 pass on "library" option to get_data and save_data, e.g.
 get_data(.., library='pyexcel-ods')
 
+
+.. note::
+   pyexcel-text is no longer a plugin of pyexcel-io but a direct plugin of pyexcel
+
+
 .. table:: Plugin compatibility table
 
     ============= ======= ======== ======= ======== ======== ========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
     ============= ======= ======== ======= ======== ======== ========
-    0.3.0         0.3.0   0.3.0    0.3.0   0.3.0    0.3.0    0.3.0
+    0.3.0+        0.3.0+  0.3.0    0.3.0+  0.3.0+   0.3.0    0.3.0
     0.2.2+        0.2.2+  0.2.2+   0.2.1+  0.2.1+            0.0.1
     0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0             0.0.1
     ============= ======= ======== ======= ======== ======== ========
@@ -77,10 +82,6 @@ Nick name here refers to the second part of the package name. Suppose you
 wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
 
     --hidden-import pyexcel_xls --hidden-import pyexcel_xls.xls
-
-.. note::
-   pyexcel-text is no longer a plugin of pyexcel-io but a direct plugin of pyexcel
-
 
 .. toctree::
    :caption: Migration Note
