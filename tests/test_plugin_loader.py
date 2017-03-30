@@ -8,7 +8,8 @@ def test_load_from_pyinstaller(pkgutil_get_importer):
     pkgutil_get_importer.return_value.toc = sample_toc
     from pyexcel_io.manager import load_from_pyinstaller
     module_names = load_from_pyinstaller('pyexcel_', 'path')
-    eq_(list(module_names), ['pyexcel_io', 'pyexcel_xls'])
+    expected = ['pyexcel_io', 'pyexcel_xls']
+    eq_(sorted(list(module_names)), sorted(expected))
 
 
 @patch('pkgutil.get_importer')
