@@ -8,7 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import isstream, is_generator, PY2
-import pyexcel_io.manager as manager
+import pyexcel_io.plugins as manager
 import pyexcel_io.constants as constants
 
 

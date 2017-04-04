@@ -43,7 +43,8 @@ def test_issue_23():
 
 
 def test_issue_28():
-    from pyexcel_io.manager import iomanager, UpgradePlugin
+    from pyexcel_io.plugins import iomanager
+    from pyexcel_io.exceptions import UpgradePlugin
     expected = "Please upgrade the plugin '%s' according to "
     expected += "plugin compactibility table."
     try:
