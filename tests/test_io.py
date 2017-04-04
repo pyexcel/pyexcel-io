@@ -123,7 +123,7 @@ def test_writer_xlsm_data_from_memory2():
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it
-    manager.register_stream_type('unknown1', 'text')
+    manager.iomanager.register_stream_type('unknown1', 'text')
     get_writer(io, file_type="unknown1")
 
 
