@@ -48,6 +48,6 @@ def test_issue_28():
     expected = "Please upgrade the plugin '%s' according to "
     expected += "plugin compactibility table."
     try:
-        iomanager.plugin_first('pyexcel_test', 'test')
+        iomanager.load_me_later('pyexcel_test', 'test')
     except UpgradePlugin as e:
         eq_(str(e), expected % 'test')

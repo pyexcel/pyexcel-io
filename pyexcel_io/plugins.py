@@ -14,8 +14,9 @@ from lml.plugin import scan_plugins
 from lml.manager import PluginManager, register_class
 
 import pyexcel_io.utils as ioutils
-import pyexcel_io.manager as iotypes
+import pyexcel_io.manager as manager
 import pyexcel_io.exceptions as exceptions
+import pyexcel_io.constants as constants
 
 
 log = logging.getLogger(__name__)
@@ -23,32 +24,6 @@ log = logging.getLogger(__name__)
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
-
-
-class Factory(object):
-    def __init__(self):
-        self.registry = defaultdict(dict)
-
-    def register_a_plugin(self, file_type, plugin, library):
-        self.registry[file_type][library] = plugin
-
-    def get_a_plugin(self, file_type, library):
-        __file_type = file_type.lower()
-        if __file_type in self.registry:
-            handler_dict = self.registry[__file_type]
-            if library is not None:
-                handler_class = handler_dict.get(library, None)
-                if handler_class is None:
-                    raise Exception("%s is not installed" % library)
-            else:
-                for _, _handler in handler_dict.items():
-                    handler_class = _handler
-                    break
-            handler = handler_class()
-            handler.set_type(__file_type)
-            return handler
-        raise exceptions.NoSupportingPluginFound(
-            "No suitable library found for %s" % file_type)
 
 
 class IOManager(PluginManager):
@@ -59,7 +34,7 @@ class IOManager(PluginManager):
         self.text_stream_types = []
         self.binary_stream_types = []
 
-    def plugin_first(self, plugin_meta, module_name):
+    def load_me_later(self, plugin_meta, module_name):
         if not isinstance(plugin_meta, dict):
             plugin = module_name.replace('_', '-')
             raise exceptions.UpgradePlugin(UPGRADE_MESSAGE % plugin)
@@ -67,11 +42,10 @@ class IOManager(PluginManager):
         for file_type in plugin_meta['file_types']:
             self.registry[file_type].append(
                 (library_import_path, plugin_meta['submodule']))
-            iotypes.register_stream_type(file_type, plugin_meta['stream_type'])
+            manager.register_stream_type(file_type, plugin_meta['stream_type'])
             log.debug("pre-register :" + ','.join(plugin_meta['file_types']))
 
-
-    def load_me_later(self, file_type):
+    def load_me_now(self, file_type):
         __file_type = file_type.lower()
         if __file_type in self.registry:
             debug_path = []
@@ -85,46 +59,49 @@ class IOManager(PluginManager):
 
 iomanager = IOManager()
 register_class(iomanager)
-readers = Factory()
-writers = Factory()
 
 
-def create_reader(file_type, library=None):
-    iomanager.load_me_later(file_type)
-    try:
-        reader = readers.get_a_plugin(file_type, library)
-        return reader
-    except exceptions.NoSupportingPluginFound:
-        plugins = ioutils.AVAILABLE_READERS.get(file_type, None)
+class Factory(object):
+    def __init__(self, action, known_plugins):
+        self.registry = defaultdict(dict)
+        self.action = action
+        self.known_plugins = known_plugins
+
+    def register_a_plugin(self, file_type, plugin, library):
+        self.registry[file_type][library] = plugin
+
+    def get_a_plugin(self, file_type, library):
+        __file_type = file_type.lower()
+        iomanager.load_me_now(__file_type)
+        if __file_type in self.registry:
+            handler_dict = self.registry[__file_type]
+            if library is not None:
+                handler_class = handler_dict.get(library, None)
+                if handler_class is None:
+                    raise Exception("%s is not installed" % library)
+            else:
+                for _, _handler in handler_dict.items():
+                    handler_class = _handler
+                    break
+            handler = handler_class()
+            handler.set_type(__file_type)
+            return handler
+        plugins = self.known_plugins.get(file_type, None)
         if plugins:
             message = "Please install "
             if len(plugins) > 1:
                 message += ERROR_MESSAGE_FORMATTER % (
-                    'read', file_type, ','.join(plugins))
+                    self.action, file_type, ','.join(plugins))
             else:
                 message += plugins[0]
             raise exceptions.SupportingPluginAvailableButNotInstalled(message)
         else:
-            raise
+            raise exceptions.NoSupportingPluginFound(
+                "No suitable library found for %s" % file_type)
 
 
-def create_writer(file_type, library=None):
-    iomanager.load_me_later(file_type)
-    try:
-        writer = writers.get_a_plugin(file_type, library)
-        return writer
-    except exceptions.NoSupportingPluginFound:
-        plugins = ioutils.AVAILABLE_WRITERS.get(file_type, None)
-        if plugins:
-            message = "Please install "
-            if len(plugins) > 1:
-                message += ERROR_MESSAGE_FORMATTER % (
-                    'write', file_type, ','.join(plugins))
-            else:
-                message += plugins[0]
-            raise exceptions.SupportingPluginAvailableButNotInstalled(message)
-        else:
-            raise
+readers = Factory('read', ioutils.AVAILABLE_READERS)
+writers = Factory('write', ioutils.AVAILABLE_WRITERS)
 
 
 def dynamic_load_library(library_import_path):
@@ -138,7 +115,7 @@ def register_readers_and_writers(plugins):
     __debug_reader_file_types = []
     for plugin in plugins:
         the_file_type = plugin['file_type']
-        iotypes.register_a_file_type(
+        manager.register_a_file_type(
             the_file_type, plugin.get('stream_type', None),
             plugin.get('mime_type', None))
         if 'reader' in plugin:
@@ -160,4 +137,6 @@ def get_writers():
 
 
 def load_plugins(prefix, path, black_list):
-    scan_plugins(prefix, '__pyexcel_io_plugins__', path, black_list)
+    scan_plugins(
+        prefix, constants.DEFAULT_PLUGIN_NAME,
+        path, black_list)

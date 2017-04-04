@@ -2,6 +2,7 @@ import os
 import sys
 from unittest import TestCase
 import pyexcel_io.manager as manager
+import pyexcel_io.exceptions as exceptions
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data, get_data
@@ -48,7 +49,7 @@ def test_load_ods_data():
     msg += "pyexcel-ods,pyexcel-ods3"
     try:
         get_data("test.ods")
-    except manager.SupportingPluginAvailableButNotInstalled as e:
+    except exceptions.SupportingPluginAvailableButNotInstalled as e:
         eq_(str(e), msg)
 
 
@@ -58,7 +59,7 @@ def test_load_ods_data_from_memory():
     msg += "pyexcel-ods,pyexcel-ods3"
     try:
         get_data(io, file_type="ods")
-    except manager.SupportingPluginAvailableButNotInstalled as e:
+    except exceptions.SupportingPluginAvailableButNotInstalled as e:
         eq_(str(e), msg)
 
 
@@ -69,16 +70,16 @@ def test_write_xlsx_data_to_memory():
     msg += "pyexcel-xlsx,pyexcel-xlsxw"
     try:
         save_data(io, data, file_type="xlsx")
-    except manager.SupportingPluginAvailableButNotInstalled as e:
+    except exceptions.SupportingPluginAvailableButNotInstalled as e:
         eq_(str(e), msg)
 
 
-@raises(manager.NoSupportingPluginFound)
+@raises(exceptions.NoSupportingPluginFound)
 def test_load_unknown_data():
     get_data("test.unknown")
 
 
-@raises(manager.NoSupportingPluginFound)
+@raises(exceptions.NoSupportingPluginFound)
 def test_load_unknown_data_from_memory():
     io = BytesIO()
     get_data(io, file_type="unknown")
@@ -98,7 +99,7 @@ def test_write_xlsx_data():
     get_data("test.xlsx")
 
 
-@raises(manager.NoSupportingPluginFound)
+@raises(exceptions.NoSupportingPluginFound)
 def test_write_unknown_data():
     get_data("test.unknown")
 
@@ -113,17 +114,17 @@ def test_writer_csvz_data_from_memory():
         raise NotImplementedError("pass it")
 
 
-@raises(manager.NoSupportingPluginFound)
+@raises(exceptions.NoSupportingPluginFound)
 def test_writer_xlsm_data_from_memory2():
     io = BytesIO()
     get_writer(io, file_type="xlsms")
 
 
-@raises(manager.NoSupportingPluginFound)
+@raises(exceptions.NoSupportingPluginFound)
 def test_writer_unknown_data_from_memory2():
     io = BytesIO()
     # mock it
-    manager.iomanager.register_stream_type('unknown1', 'text')
+    manager.register_stream_type('unknown1', 'text')
     get_writer(io, file_type="unknown1")
 
 
