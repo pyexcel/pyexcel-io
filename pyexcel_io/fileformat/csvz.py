@@ -70,7 +70,8 @@ class CSVZipBookReader(BookReader):
         return reader.to_array()
 
     def close(self):
-        self.zipfile.close()
+        if self.zipfile:
+            self.zipfile.close()
 
     def _load_from_file_alike_object(self, file_alike_object):
         try:
