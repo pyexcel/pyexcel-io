@@ -10,6 +10,7 @@
 # flake8: noqa
 DEFAULT_NAME = 'pyexcel'
 DEFAULT_SHEET_NAME = '%s_sheet1' % DEFAULT_NAME
+DEFAULT_PLUGIN_NAME = '__%s_io_plugins__' % DEFAULT_NAME
 
 MESSAGE_INVALID_PARAMETERS = "Invalid parameters"
 MESSAGE_ERROR_02 = "No content, file name. Nothing is given"

@@ -8,37 +8,46 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import isstream, is_generator, PY2
-import pyexcel_io.manager as manager
+from pyexcel_io.plugins import iomanager
 import pyexcel_io.constants as constants
 
 
 def get_data(afile, file_type=None, streaming=False, **keywords):
     """Get data from an excel file source
 
-    :param filename: actual file name, a file stream or actual content
+    :param afile: a file name, a file stream or actual content
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
     :param sheets: a list of sheet to be loaded
     :param file_type: used only when filename is not a physial file name
-    :param keywords: any other parameters
-
-    if none of sheet_name, sheet_index and sheets were mentioned, all
-    available sheets will be returned
-
+    :param streaming: toggles the type of returned data. The values of the
+                      returned dictionary remain as generator if it is set
+                      to True. Default is False.
+    :param library: explicitly name a library for use.
+                    e.g. library='pyexcel-ods'
+    :param auto_detect_float: defaults to True
+    :param auto_detect_int: defaults to True
+    :param auto_detect_datetime: defaults to True
+    :param ignore_infinity: defaults to True
+    :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
     if isstream(afile) and file_type is None:
         file_type = constants.FILE_FORMAT_CSV
     if isstream(afile):
-        data = load_data(file_stream=afile,
-                         file_type=file_type, **keywords)
+        keywords.update(dict(
+            file_stream=afile,
+            file_type=file_type))
     else:
         if afile is not None and file_type is not None:
-            data = load_data(file_content=afile,
-                             file_type=file_type, **keywords)
+            keywords.update(dict(
+                file_content=afile,
+                file_type=file_type))
         else:
-            data = load_data(file_name=afile,
-                             file_type=file_type, **keywords)
+            keywords.update(dict(
+                file_name=afile,
+                file_type=file_type))
+    data = load_data(**keywords)
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])
@@ -53,10 +62,11 @@ def save_data(afile, data, file_type=None, **keywords):
     :param filename: actual file name, a file stream or actual content
     :param data: a dictionary but an ordered dictionary is preferred
     :param file_type: used only when filename is not a physial file name
+    :param library: explicitly name a library for use.
+                    e.g. library='pyexcel-ods'
     :param keywords: any other parameters that python csv module's
-                     `fmtparams <https://docs.python.org/release/3.1.5/
-                      library/csv.html#dialects-and-formatting-parameters>`_
-    """
+                     `fmtparams <https://docs.python.org/release/3.1.5/library/csv.html#dialects-and-formatting-parameters>`_
+    """  # noqa
     to_store = data
     if isinstance(data, list) or is_generator(data):
         single_sheet_in_book = True
@@ -89,17 +99,17 @@ def store_data(afile, data, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     if isstream(afile):
-        writer = get_writer(
+        keywords.update(dict(
             file_stream=afile,
-            file_type=file_type,
-            **keywords)
+            file_type=file_type
+        ))
     else:
-        writer = get_writer(
+        keywords.update(dict(
             file_name=afile,
-            file_type=file_type,
-            **keywords)
-    writer.write(data)
-    writer.close()
+            file_type=file_type
+        ))
+    with get_writer(**keywords) as writer:
+        writer.write(data)
 
 
 def load_data(file_name=None,
@@ -129,22 +139,21 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
-    reader = manager.create_reader(file_type, library)
-    if file_name:
-        reader.open(file_name, **keywords)
-    elif file_content:
-        reader.open_content(file_content, **keywords)
-    elif file_stream:
-        reader.open_stream(file_stream, **keywords)
-    if sheet_name:
-        result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index is not None:
-        result = reader.read_sheet_by_index(sheet_index)
-    elif sheets is not None:
-        result = reader.read_many(sheets)
-    else:
-        result = reader.read_all()
-    reader.close()
+    with iomanager.get_a_plugin('read', file_type, library) as reader:
+        if file_name:
+            reader.open(file_name, **keywords)
+        elif file_content:
+            reader.open_content(file_content, **keywords)
+        elif file_stream:
+            reader.open_stream(file_stream, **keywords)
+        if sheet_name:
+            result = reader.read_sheet_by_name(sheet_name)
+        elif sheet_index is not None:
+            result = reader.read_sheet_by_index(sheet_index)
+        elif sheets is not None:
+            result = reader.read_many(sheets)
+        else:
+            result = reader.read_all()
     return result
 
 
@@ -163,7 +172,7 @@ def get_writer(file_name=None, file_stream=None,
             raise Exception("file_name should be a string type")
         file_type_given = False
 
-    writer = manager.create_writer(file_type, library)
+    writer = iomanager.get_a_plugin('write', file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)

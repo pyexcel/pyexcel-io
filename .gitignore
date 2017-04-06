@@ -5,3 +5,4 @@ pyexcel*-info
 build
 dist
 tmp.db
+.idea/*

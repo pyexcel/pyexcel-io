@@ -1,6 +1,6 @@
 """
     pyexcel_io.fileformat.tsv
-    ~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level tsv file format handler.
 

@@ -1,6 +1,6 @@
 """
     pyexcel_io.database.sql
-    ~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level handler for database import and export
 

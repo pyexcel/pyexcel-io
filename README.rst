@@ -28,26 +28,28 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 
 .. table:: A list of file formats supported by external plugins
 
-   ================= ======================= ============= ==================
-   Package name      Supported file formats  Dependencies  Python versions
-   ================= ======================= ============= ==================
-   `pyexcel-io`_     csv, csvz [#f1]_, tsv,                2.6, 2.7, 3.3,
-                     tsvz [#f2]_                           3.4, 3.5, 3.6
-                                                           pypy
-   `pyexcel-xls`_    xls, xlsx(read only),   `xlrd`_,      same as above
-                     xlsm(read only)         `xlwt`_
-   `pyexcel-xlsx`_   xlsx                    `openpyxl`_   same as above
-   `pyexcel-xlsxw`_  xlsx(write only)        `XlsxWriter`_ same as above
-   `pyexcel-ods3`_   ods                     `ezodf`_,     2.6, 2.7, 3.3, 3.4
-                                             lxml          3.5, 3.6
-   `pyexcel-ods`_    ods                     `odfpy`_      same as above
-   ================= ======================= ============= ==================
+   ======================== ======================= =============== ==================
+   Package name              Supported file formats  Dependencies   Python versions
+   ======================== ======================= =============== ==================
+   `pyexcel-io`_            csv, csvz [#f1]_, tsv,                  2.6, 2.7, 3.3,
+                            tsvz [#f2]_                             3.4, 3.5, 3.6
+                                                                    pypy
+   `pyexcel-xls`_           xls, xlsx(read only),   `xlrd`_,        same as above
+                            xlsm(read only)         `xlwt`_
+   `pyexcel-xlsx`_          xlsx                    `openpyxl`_     same as above
+   `pyexcel-xlsxw`_         xlsx(write only)        `XlsxWriter`_   same as above
+   `pyexcel-ods3`_          ods                     `ezodf`_,       2.6, 2.7, 3.3, 3.4
+                                                    lxml            3.5, 3.6
+   `pyexcel-ods`_           ods                     `odfpy`_        same as above
+   `pyexcel-odsr`_          ods(read only)          lxml            same as above
+   ======================== ======================= =============== ==================
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
 .. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
 .. _pyexcel-ods: https://github.com/pyexcel/pyexcel-ods
 .. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
+.. _pyexcel-odsr: https://github.com/pyexcel/pyexcel-odsr
 .. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
 
 .. _xlrd: https://github.com/python-excel/xlrd
@@ -101,7 +103,7 @@ Development steps for code changes
 
 Upgrade your setup tools and pip. They are needed for development and testing only:
 
-#. pip install --upgrade setuptools "pip==7.1"
+#. pip install --upgrade setuptools pip
 
 Then install relevant development requirements:
 
@@ -110,7 +112,7 @@ Then install relevant development requirements:
 #. pip install -r tests/requirements.txt
 
 
-In order to update test environment, and documentation, additional setps are
+In order to update test environment, and documentation, additional steps are
 required:
 
 #. pip install moban
@@ -139,11 +141,12 @@ Although `nose` and `doctest` are both used in code testing, it is adviable that
 
 On Linux/Unix systems, please launch your tests like this::
 
-    $ make test
+    $ make
 
 On Windows systems, please issue this command::
 
     > test.bat
+
 
 License
 ================================================================================
