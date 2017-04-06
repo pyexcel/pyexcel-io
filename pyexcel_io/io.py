@@ -34,15 +34,19 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     if isstream(afile) and file_type is None:
         file_type = constants.FILE_FORMAT_CSV
     if isstream(afile):
-        data = load_data(file_stream=afile,
-                         file_type=file_type, **keywords)
+        keywords.update(dict(
+            file_stream=afile,
+            file_type=file_type))
     else:
         if afile is not None and file_type is not None:
-            data = load_data(file_content=afile,
-                             file_type=file_type, **keywords)
+            keywords.update(dict(
+                file_content=afile,
+                file_type=file_type))
         else:
-            data = load_data(file_name=afile,
-                             file_type=file_type, **keywords)
+            keywords.update(dict(
+                file_name=afile,
+                file_type=file_type))
+    data = load_data(**keywords)
     if streaming is False:
         for key in data.keys():
             data[key] = list(data[key])
@@ -94,17 +98,17 @@ def store_data(afile, data, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     if isstream(afile):
-        writer = get_writer(
+        keywords.update(dict(
             file_stream=afile,
-            file_type=file_type,
-            **keywords)
+            file_type=file_type
+        ))
     else:
-        writer = get_writer(
+        keywords.update(dict(
             file_name=afile,
-            file_type=file_type,
-            **keywords)
-    writer.write(data)
-    writer.close()
+            file_type=file_type
+        ))
+    with get_writer(**keywords) as writer:
+        writer.write(data)
 
 
 def load_data(file_name=None,
@@ -133,20 +137,19 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
-    reader = iomanager.get_a_plugin('read', file_type, library)
-    if file_name:
-        reader.open(file_name, **keywords)
-    elif file_content:
-        reader.open_content(file_content, **keywords)
-    elif file_stream:
-        reader.open_stream(file_stream, **keywords)
-    if sheet_name:
-        result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index is not None:
-        result = reader.read_sheet_by_index(sheet_index)
-    else:
-        result = reader.read_all()
-    reader.close()
+    with iomanager.get_a_plugin('read', file_type, library) as reader:
+        if file_name:
+            reader.open(file_name, **keywords)
+        elif file_content:
+            reader.open_content(file_content, **keywords)
+        elif file_stream:
+            reader.open_stream(file_stream, **keywords)
+        if sheet_name:
+            result = reader.read_sheet_by_name(sheet_name)
+        elif sheet_index is not None:
+            result = reader.read_sheet_by_index(sheet_index)
+        else:
+            result = reader.read_all()
     return result
 
 

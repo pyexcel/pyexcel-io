@@ -1,5 +1,5 @@
 """
-    pyexcel_io.manager
+    pyexcel_io.plugins
     ~~~~~~~~~~~~~~~~~~~
 
     factory for getting readers and writers
@@ -34,21 +34,8 @@ class IOManager(PluginManager):
         self.loaded_reader_registry = defaultdict(dict)
         self.loaded_writer_registry = defaultdict(dict)
 
-    def get_all_reader_formats(self):
-        all_formats = set(list(self.loaded_reader_registry.keys()) +
-                          list(ioutils.AVAILABLE_READERS.keys()))
-        all_formats = all_formats.difference(set([constants.DB_SQL,
-                                                  constants.DB_DJANGO]))
-        return all_formats
-
-    def get_all_writer_formats(self):
-        all_formats = set(list(self.loaded_writer_registry.keys()) +
-                          list(ioutils.AVAILABLE_WRITERS.keys()))
-        all_formats = all_formats.difference(set([constants.DB_SQL,
-                                                  constants.DB_DJANGO]))
-        return all_formats
-
     def load_me_later(self, plugin_meta, module_name):
+        PluginManager.load_me_later(self, plugin_meta, module_name)
         if not isinstance(plugin_meta, dict):
             plugin = module_name.replace('_', '-')
             raise exceptions.UpgradePlugin(UPGRADE_MESSAGE % plugin)
@@ -57,20 +44,20 @@ class IOManager(PluginManager):
             self.registry[file_type].append(
                 (library_import_path, plugin_meta['submodule']))
             manager.register_stream_type(file_type, plugin_meta['stream_type'])
-            self._logger.debug(
-                "pre-register :" + ','.join(plugin_meta['file_types']))
 
-    def load_me_now(self, file_type):
-        __file_type = file_type.lower()
-        if __file_type in self.registry:
-            debug_path = []
-            for path in self.registry[__file_type]:
-                dynamic_load_library(path)
-                debug_path.append(path)
-            self._logger.debug(
-                "preload :" + __file_type + ":" + ','.join(path))
+    def load_me_now(self, key, **keywords):
+        PluginManager.load_me_now(self, key, **keywords)
+        __key = key.lower()
+        if __key in self.registry:
+            for path in self.registry[__key]:
+                self.dynamic_load_library(path)
             # once loaded, forgot it
-            self.registry.pop(__file_type)
+            self.registry.pop(__key)
+
+    def dynamic_load_library(self, library_import_path):
+        plugin = PluginManager.dynamic_load_library(self, library_import_path)
+        register_readers_and_writers(plugin.exports)
+        return plugin
 
     def register_a_plugin(self, action, file_type, plugin, library):
         registry = self.loaded_reader_registry
@@ -114,14 +101,22 @@ class IOManager(PluginManager):
             raise exceptions.NoSupportingPluginFound(
                 "No suitable library found for %s" % file_type)
 
+    def get_all_reader_formats(self):
+        all_formats = set(list(self.loaded_reader_registry.keys()) +
+                          list(ioutils.AVAILABLE_READERS.keys()))
+        all_formats = all_formats.difference(set([constants.DB_SQL,
+                                                  constants.DB_DJANGO]))
+        return all_formats
+
+    def get_all_writer_formats(self):
+        all_formats = set(list(self.loaded_writer_registry.keys()) +
+                          list(ioutils.AVAILABLE_WRITERS.keys()))
+        all_formats = all_formats.difference(set([constants.DB_SQL,
+                                                  constants.DB_DJANGO]))
+        return all_formats
+
 
 iomanager = IOManager()
-
-
-def dynamic_load_library(library_import_path):
-    plugin = __import__(library_import_path[0])
-    submodule = getattr(plugin, library_import_path[1])
-    register_readers_and_writers(submodule.exports)
 
 
 def register_readers_and_writers(plugins):
@@ -142,11 +137,11 @@ def register_readers_and_writers(plugins):
             __debug_writer_file_types.append(plugin['file_type'])
         # else:
             # ignored for now
-    log.debug("register writers for:" + ",".join(__debug_writer_file_types))
-    log.debug("register readers for:" + ",".join(__debug_reader_file_types))
+    log.debug("imported writers for:" + ",".join(__debug_writer_file_types))
+    log.debug("imported readers for:" + ",".join(__debug_reader_file_types))
 
 
-def load_plugins(prefix, path, black_list):
+def load_plugins(prefix, path, black_list, white_list):
     scan_plugins(
         prefix, constants.DEFAULT_PLUGIN_NAME,
-        path, black_list)
+        path, black_list, white_list)

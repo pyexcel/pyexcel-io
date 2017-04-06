@@ -1,4 +1,17 @@
-from . import django
-from . import sql
+from pyexcel_io.constants import DB_DJANGO, DB_SQL
 
-exports = django.exports + sql.exports
+
+__pyexcel_io_plugins__ = [
+    {
+        'plugin_type': 'pyexcel io plugin',
+        'submodule': 'django',
+        'file_types': [DB_DJANGO],
+        'stream_type': None
+    },
+    {
+        'plugin_type': 'pyexcel io plugin',
+        'submodule': 'sql',
+        'file_types': [DB_SQL],
+        'stream_type': 'string'
+    }
+]

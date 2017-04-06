@@ -1,5 +1,5 @@
 """
-    pyexcel_io._csv
+    pyexcel_io.file_format._csv
     ~~~~~~~~~~~~~~~~~~~
 
     The lower level csv file format handler.

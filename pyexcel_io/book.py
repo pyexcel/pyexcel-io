@@ -1,5 +1,5 @@
 """
-    pyexcel_io.base
+    pyexcel_io.book
     ~~~~~~~~~~~~~~~~~~~
 
     The io interface to file extensions
@@ -47,6 +47,13 @@ class RWInterface(object):
         close the file handle if necessary
         """
         pass
+
+    # implement context manager
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
 
 
 class BookReader(RWInterface):

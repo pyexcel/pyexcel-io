@@ -12,17 +12,11 @@ from ._compact import NullHandler
 logging.getLogger(__name__).addHandler(NullHandler())  # noqa
 
 from .io import get_data, save_data  # noqa
-from pyexcel_io.plugins import register_readers_and_writers
 from pyexcel_io.plugins import load_plugins
-from . import fileformat, database
-
-exports = fileformat.exports + database.exports
 
 
 black_list = [__name__, 'pyexcel_webio', 'pyexcel_text']
-
+white_list = ['pyexcel_io.fileformat', 'pyexcel_io.database']
 prefix = 'pyexcel_'
 
-load_plugins(prefix, __path__, black_list)
-
-register_readers_and_writers(exports)
+load_plugins(prefix, __path__, black_list, white_list)

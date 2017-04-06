@@ -1,6 +1,6 @@
 """
     pyexcel_io.database.django
-    ~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level handler for django import and export
 
