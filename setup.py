@@ -46,6 +46,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
+    'lml',
 ]
 
 if PY26:

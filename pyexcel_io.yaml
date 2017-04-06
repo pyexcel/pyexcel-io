@@ -5,6 +5,7 @@ version: 0.3.3
 release: 0.3.3
 dependencies:
   - ordereddict;python_version<"2.7"
+  - lml
 extra_dependencies:
   - xls:
     - pyexcel-xls>=0.3.0
