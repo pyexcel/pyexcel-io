@@ -7,6 +7,8 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from lml import Plugin
+
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
@@ -15,10 +17,12 @@ from .constants import (
 )
 
 
-class RWInterface(object):
+class RWInterface(Plugin):
     """
     The common methods for book reader and writer
     """
+    plugin_type = 'pyexcel io plugin'
+
     def __init__(self):
         self._file_type = None
 
