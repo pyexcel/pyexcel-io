@@ -7,7 +7,6 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import logging
 from collections import defaultdict
 
 from lml.plugin import scan_plugins
@@ -19,7 +18,6 @@ import pyexcel_io.exceptions as exceptions
 import pyexcel_io.constants as constants
 
 
-log = logging.getLogger(__name__)
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
@@ -54,12 +52,19 @@ class IOManager(PluginManager):
             # once loaded, forgot it
             self.registry.pop(__key)
 
-    def dynamic_load_library(self, library_import_path):
-        plugin = PluginManager.dynamic_load_library(self, library_import_path)
-        register_readers_and_writers(plugin.exports)
-        return plugin
+    def register_a_plugin(self, cls):
+        if hasattr(cls, 'file_types'):
+            PluginManager.register_a_plugin(self, cls)
+            for file_type in cls.file_types:
+                self._register_a_plugin(
+                    cls.action, file_type, cls, cls.library)
+                manager.register_a_file_type(
+                    file_type, cls.stream_type, None)
+        else:
+            self._logger.debug(
+                "not register abstract interface %s" % cls.__name__)
 
-    def register_a_plugin(self, action, file_type, plugin, library):
+    def _register_a_plugin(self, action, file_type, plugin, library):
         registry = self.loaded_reader_registry
         if action == 'write':
             registry = self.loaded_writer_registry
@@ -75,6 +80,7 @@ class IOManager(PluginManager):
             known_plugins = ioutils.AVAILABLE_WRITERS
 
         self.load_me_now(__file_type)
+
         if __file_type in registry:
             handler_dict = registry[__file_type]
             if library is not None:
@@ -117,28 +123,6 @@ class IOManager(PluginManager):
 
 
 iomanager = IOManager()
-
-
-def register_readers_and_writers(plugins):
-    __debug_writer_file_types = []
-    __debug_reader_file_types = []
-    for plugin in plugins:
-        the_file_type = plugin['file_type']
-        manager.register_a_file_type(
-            the_file_type, plugin.get('stream_type', None),
-            plugin.get('mime_type', None))
-        if 'reader' in plugin:
-            iomanager.register_a_plugin(
-                'read', the_file_type, plugin['reader'], plugin['library'])
-            __debug_reader_file_types.append(plugin['file_type'])
-        if 'writer' in plugin:
-            iomanager.register_a_plugin(
-                'write', the_file_type, plugin['writer'], plugin['library'])
-            __debug_writer_file_types.append(plugin['file_type'])
-        # else:
-            # ignored for now
-    log.debug("imported writers for:" + ",".join(__debug_writer_file_types))
-    log.debug("imported readers for:" + ",".join(__debug_reader_file_types))
 
 
 def load_plugins(prefix, path, black_list, white_list):

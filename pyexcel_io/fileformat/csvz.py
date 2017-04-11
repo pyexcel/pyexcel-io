@@ -39,6 +39,9 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
 
 class CSVZipBookReader(BookReader):
+    file_types = [FILE_FORMAT_CSVZ]
+    stream_type = "binary"
+
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ
@@ -91,6 +94,9 @@ class CSVZipBookReader(BookReader):
 
 
 class CSVZipBookWriter(BookWriter):
+    file_types = [FILE_FORMAT_CSVZ]
+    stream_type = "binary"
+
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ
@@ -114,15 +120,3 @@ class CSVZipBookWriter(BookWriter):
 
     def close(self):
         self.zipfile.close()
-
-
-_registry = {
-    "file_type": FILE_FORMAT_CSVZ,
-    "reader": CSVZipBookReader,
-    "writer": CSVZipBookWriter,
-    "stream_type": "binary",
-    "mime_type": "application/zip",
-    "library": "built-in"
-}
-
-exports = (_registry,)

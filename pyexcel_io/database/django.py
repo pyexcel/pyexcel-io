@@ -86,6 +86,8 @@ class DjangoModelExporter(TableExporter):
 
 
 class DjangoBookReader(BookReader):
+    file_types = [constants.DB_DJANGO]
+
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 
@@ -114,6 +116,7 @@ class DjangoModelImporter(TableImporter):
 
 
 class DjangoBookWriter(BookWriter):
+    file_types = [constants.DB_DJANGO]
 
     def open_content(self, file_content, **keywords):
         self.importer = file_content
@@ -127,14 +130,3 @@ class DjangoBookWriter(BookWriter):
                 model,
                 batch_size=self._keywords.get('batch_size', None))
         return sheet_writer
-
-
-_registry = {
-    "file_type": constants.DB_DJANGO,
-    "reader": DjangoBookReader,
-    "writer": DjangoBookWriter,
-    "stream_type": "special",
-    "library": "built-in"
-}
-
-exports = (_registry,)

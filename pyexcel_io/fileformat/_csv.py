@@ -1,6 +1,6 @@
 """
     pyexcel_io.file_format._csv
-    ~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level csv file format handler.
 
@@ -232,6 +232,9 @@ class CSVMemoryWriter(CSVSheetWriter):
 
 
 class CSVBookReader(BookReader):
+    file_types = [constants.FILE_FORMAT_CSV]
+    stream_type = "text"
+
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
@@ -322,6 +325,9 @@ class CSVBookReader(BookReader):
 
 
 class CSVBookWriter(BookWriter):
+    file_types = [constants.FILE_FORMAT_CSV]
+    stream_type = "text"
+
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
@@ -385,15 +391,3 @@ def _detect_int_value(csv_cell_text):
         return int(csv_cell_text)
     except ValueError:
         return None
-
-
-_registry = {
-    "file_type": constants.FILE_FORMAT_CSV,
-    "reader": CSVBookReader,
-    "writer": CSVBookWriter,
-    "stream_type": "text",
-    "mime_type": "text/csv",
-    "library": "built-in"
-}
-
-exports = (_registry,)

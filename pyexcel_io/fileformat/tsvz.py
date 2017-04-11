@@ -1,6 +1,6 @@
 """
     pyexcel_io.fileformat.tsvz
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~AA
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level tsvz file format handler.
 
@@ -16,6 +16,7 @@ from .csvz import CSVZipBookReader, CSVZipBookWriter
 
 
 class TSVZipBookReader(CSVZipBookReader):
+    file_types = [FILE_FORMAT_TSVZ]
 
     def __init__(self):
         CSVZipBookReader.__init__(self)
@@ -31,6 +32,7 @@ class TSVZipBookReader(CSVZipBookReader):
 
 
 class TSVZipBookWriter(CSVZipBookWriter):
+    file_types = [FILE_FORMAT_TSVZ]
 
     def __init__(self):
         CSVZipBookWriter.__init__(self)
@@ -39,15 +41,3 @@ class TSVZipBookWriter(CSVZipBookWriter):
     def open(self, file_name, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVZipBookWriter.open(self, file_name, **keywords)
-
-
-_registry = {
-    "file_type": FILE_FORMAT_TSVZ,
-    "reader": TSVZipBookReader,
-    "writer": TSVZipBookWriter,
-    "stream_type": "binary",
-    "mime_type": "application/zip",
-    "library": "built-in"
-}
-
-exports = (_registry,)

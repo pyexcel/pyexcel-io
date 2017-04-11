@@ -7,6 +7,8 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from lml.manager import Plugin, with_metaclass
+
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
@@ -15,10 +17,14 @@ from .constants import (
 )
 
 
-class RWInterface(object):
+class RWInterface(with_metaclass(Plugin, object)):
     """
     The common methods for book reader and writer
     """
+    plugin_type = "pyexcel io plugin"
+    library = "built-in"
+    stream_type = None
+
     def __init__(self):
         self._file_type = None
 
@@ -60,6 +66,8 @@ class BookReader(RWInterface):
     """
     Standard book reader
     """
+    action = "read"
+
     def __init__(self):
         self._file_name = None
         self._file_stream = None
@@ -152,6 +160,8 @@ class BookWriter(RWInterface):
     """
     Standard book writer
     """
+    action = "write"
+
     def __init__(self):
         self._file_alike_object = None
         self._keywords = None
