@@ -110,6 +110,8 @@ class SQLTableExporter(TableExporter):
 
 
 class SQLBookReader(BookReader):
+    file_types = [constants.DB_SQL]
+
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 
@@ -147,6 +149,8 @@ class SQLTableImporter(TableImporter):
 
 
 class SQLBookWriter(BookWriter):
+    file_types = [constants.DB_SQL]
+
     def open_content(self, file_content, auto_commit=True, **keywords):
         self.__importer = file_content
         self.__auto_commit = auto_commit
@@ -163,14 +167,3 @@ class SQLBookWriter(BookWriter):
                 auto_commit=self.__auto_commit
             )
         return sheet_writer
-
-
-_registry = {
-    "file_type": constants.DB_SQL,
-    "reader": SQLBookReader,
-    "writer": SQLBookWriter,
-    "stream_type": "special",
-    "library": "built-in"
-}
-
-exports = (_registry,)
