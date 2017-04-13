@@ -2,15 +2,14 @@
 pyexcel-io - Let you focus on data, instead of file formats
 ================================================================================
 
+.. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
+   :target: https://www.patreon.com/pyexcel
+
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-io
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-io/coverage.png
    :target: https://codecov.io/github/pyexcel/pyexcel-io
-
-.. image:: https://s3.amazonaws.com/patreon_public_assets/toolbox/patreon.png
-   :height: 20px
-   :target: https://www.patreon.com/pyexcel
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
    :target: http://pyexcel-io.readthedocs.org/en/latest/
