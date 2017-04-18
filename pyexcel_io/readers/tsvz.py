@@ -12,7 +12,7 @@ from pyexcel_io.constants import (
     KEYWORD_TSV_DIALECT
 )
 
-from .csvz import CSVZipBookReader, CSVZipBookWriter
+from .csvz import CSVZipBookReader
 
 
 class TSVZipBookReader(CSVZipBookReader):
@@ -29,15 +29,3 @@ class TSVZipBookReader(CSVZipBookReader):
     def open_stream(self, file_content, **keywords):
         keywords['dialect'] = KEYWORD_TSV_DIALECT
         CSVZipBookReader.open_stream(self, file_content, **keywords)
-
-
-class TSVZipBookWriter(CSVZipBookWriter):
-    file_types = [FILE_FORMAT_TSVZ]
-
-    def __init__(self):
-        CSVZipBookWriter.__init__(self)
-        self._file_type = FILE_FORMAT_TSVZ
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = KEYWORD_TSV_DIALECT
-        CSVZipBookWriter.open(self, file_name, **keywords)

@@ -3,8 +3,10 @@ from unittest import TestCase
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io import save_data
 import pyexcel_io.manager as manager
-from pyexcel_io.fileformat.csvz import CSVZipBookReader, CSVZipBookWriter
-from pyexcel_io.fileformat.tsvz import TSVZipBookReader, TSVZipBookWriter
+from pyexcel_io.readers.csvz import CSVZipBookReader
+from pyexcel_io.writers.csvz import CSVZipBookWriter
+from pyexcel_io.readers.tsvz import TSVZipBookReader
+from pyexcel_io.writers.tsvz import TSVZipBookWriter
 import zipfile
 from nose.tools import raises
 import sys

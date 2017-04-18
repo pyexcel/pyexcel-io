@@ -7,35 +7,16 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import csv
 import zipfile
 
 from pyexcel_io._compact import StringIO, PY2
-from pyexcel_io.book import BookReader, BookWriter
-from pyexcel_io.constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
+from pyexcel_io.book import BookReader
+from pyexcel_io.constants import FILE_FORMAT_CSVZ
 
-from ._csv import (
+from .csvr import (
     CSVinMemoryReader,
-    NamedContent,
-    CSVSheetWriter
+    NamedContent
 )
-
-
-class CSVZipSheetWriter(CSVSheetWriter):
-    def __init__(self, zipfile, sheetname, file_extension, **keywords):
-        self.file_extension = file_extension
-        keywords['single_sheet_in_book'] = False
-        CSVSheetWriter.__init__(self, zipfile, sheetname, **keywords)
-
-    def set_sheet_name(self, name):
-        self.content = StringIO()
-        self.writer = csv.writer(self.content, **self._keywords)
-
-    def close(self):
-        file_name = "%s.%s" % (self._native_sheet, self.file_extension)
-        self.content.seek(0)
-        self._native_book.writestr(file_name, self.content.read())
-        self.content.close()
 
 
 class CSVZipBookReader(BookReader):
@@ -91,32 +72,3 @@ class CSVZipBookReader(BookReader):
         len_of_csv_word = 3
         name_len = len(filename) - len_of_a_dot - len_of_csv_word
         return filename[:name_len]
-
-
-class CSVZipBookWriter(BookWriter):
-    file_types = [FILE_FORMAT_CSVZ]
-    stream_type = "binary"
-
-    def __init__(self):
-        BookWriter.__init__(self)
-        self._file_type = FILE_FORMAT_CSVZ
-        self.zipfile = None
-
-    def open(self, file_name, **keywords):
-        BookWriter.open(self, file_name, **keywords)
-        self.zipfile = zipfile.ZipFile(file_name, 'w', zipfile.ZIP_DEFLATED)
-
-    def create_sheet(self, name):
-        given_name = name
-        if given_name is None:
-            given_name = DEFAULT_SHEET_NAME
-        writer = CSVZipSheetWriter(
-            self.zipfile,
-            given_name,
-            self._file_type[:3],
-            **self._keywords
-        )
-        return writer
-
-    def close(self):
-        self.zipfile.close()

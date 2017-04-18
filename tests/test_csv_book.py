@@ -7,10 +7,12 @@ from textwrap import dedent
 from nose.tools import raises, eq_
 import pyexcel_io.manager as manager
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.fileformat._csv import (
+from pyexcel_io.readers.csvr import (
     CSVSheetReader,
     CSVFileReader,
-    CSVinMemoryReader,
+    CSVinMemoryReader
+)
+from pyexcel_io.writers.csvw import (
     CSVFileWriter,
     CSVMemoryWriter
 )

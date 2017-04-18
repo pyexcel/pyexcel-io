@@ -213,8 +213,8 @@ def test_text_file_content():
 def test_library_parameter():
     data = [['1', '2', '3']]
     io = manager.get_io("csv")
-    save_data(io, data, 'csv', library="built-in")
-    result = get_data(io.getvalue(), 'csv', library="built-in")
+    save_data(io, data, 'csv', library="pyexcel-io")
+    result = get_data(io.getvalue(), 'csv', library="pyexcel-io")
     assert result['csv'] == [[1, 2, 3]]
 
 

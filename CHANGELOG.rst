@@ -11,6 +11,21 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
+0.4.0 - unreleased
+--------------------------------------------------------------------------------
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#. library='built-in' as parameter to invoke pyexcel-io's built-in csv, tsv,
+   csvz, tsvz, django and sql won't work. It is renamed to 'pyexcel-io'.
+#. built-in csv, tsv, csvz, tsvz, django and sql are lazy loaded. 
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#31 <https://github.com/pyexcel/pyexcel-io/issues/31>`_, support pyinstaller
+
+
 0.3.3 - 30.03.2017
 --------------------------------------------------------------------------------
 

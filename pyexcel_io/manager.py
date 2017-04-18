@@ -10,17 +10,17 @@
 from pyexcel_io._compact import StringIO, BytesIO
 
 
-mime_types = {}
-file_types = ()
-text_stream_types = []
-binary_stream_types = []
+MIME_TYPES = {}
+FILE_TYPES = ()
+TEXT_STREAM_TYPES = []
+BINARY_STREAM_TYPES = []
 
 
 def register_stream_type(file_type, stream_type):
     if stream_type == 'text':
-        text_stream_types.append(file_type)
+        TEXT_STREAM_TYPES.append(file_type)
     elif stream_type == 'binary':
-        binary_stream_types.append(file_type)
+        BINARY_STREAM_TYPES.append(file_type)
 
 
 def get_io(file_type):
@@ -33,9 +33,9 @@ def get_io(file_type):
     if file_type:
         __file_type = file_type.lower()
 
-    if __file_type in text_stream_types:
+    if __file_type in TEXT_STREAM_TYPES:
         return StringIO()
-    elif __file_type in binary_stream_types:
+    elif __file_type in BINARY_STREAM_TYPES:
         return BytesIO()
     else:
         return None
@@ -51,18 +51,18 @@ def get_io_type(file_type):
     if file_type:
         __file_type = file_type.lower()
 
-    if __file_type in text_stream_types:
+    if __file_type in TEXT_STREAM_TYPES:
         return "string"
-    elif __file_type in binary_stream_types:
+    elif __file_type in BINARY_STREAM_TYPES:
         return "bytes"
     else:
         return None
 
 
 def register_a_file_type(file_type, stream_type, mime_type):
-    global file_types
-    file_types += (file_type,)
+    global FILE_TYPES
+    FILE_TYPES += (file_type,)
     stream_type = stream_type
     if mime_type is not None:
-        mime_types[file_type] = mime_type
+        MIME_TYPES[file_type] = mime_type
     register_stream_type(file_type, stream_type)

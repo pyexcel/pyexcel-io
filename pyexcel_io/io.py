@@ -8,7 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import isstream, is_generator, PY2
-from pyexcel_io.plugins import iomanager
+from pyexcel_io.plugins import readers, writers
 import pyexcel_io.constants as constants
 
 
@@ -81,7 +81,8 @@ def save_data(afile, data, file_type=None, **keywords):
         else:
             single_sheet_in_book = False
 
-    if isstream(afile) and file_type is None:
+    no_file_type = isstream(afile) and file_type is None
+    if no_file_type:
         file_type = constants.FILE_FORMAT_CSV
 
     store_data(afile, to_store,
@@ -139,7 +140,7 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
-    with iomanager.get_a_plugin('read', file_type, library) as reader:
+    with readers.get_a_plugin('read', file_type, library) as reader:
         if file_name:
             reader.open(file_name, **keywords)
         elif file_content:
@@ -159,8 +160,9 @@ def load_data(file_name=None,
 
 def get_writer(file_name=None, file_stream=None,
                file_type=None, library=None, **keywords):
-    number_of_none_inputs = list(filter(lambda x: x is not None,
-                                        [file_name, file_stream]))
+    """find a suitable writer"""
+    inputs = [file_name, file_stream]
+    number_of_none_inputs = [x for x in inputs if x is not None]
 
     if len(number_of_none_inputs) != 1:
         raise IOError(constants.MESSAGE_ERROR_02)
@@ -172,7 +174,7 @@ def get_writer(file_name=None, file_stream=None,
             raise Exception("file_name should be a string type")
         file_type_given = False
 
-    writer = iomanager.get_a_plugin('write', file_type, library)
+    writer = writers.get_a_plugin('write', file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)

@@ -7,11 +7,17 @@ from sqlalchemy import Float, Date, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker
 import datetime
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.database.sql import SQLTableReader, SQLTableWriter
-from pyexcel_io.database.sql import PyexcelSQLSkipRowException
-from pyexcel_io.database.sql import (
-    SQLBookWriter, SQLTableImporter, SQLTableImportAdapter,
-    SQLTableExporter, SQLTableExportAdapter, SQLBookReader)
+from pyexcel_io.database.exporters.sqlalchemy import (
+    SQLTableReader,
+    SQLTableExporter,
+    SQLTableExportAdapter,
+    SQLBookReader)
+from pyexcel_io.database.importers.sqlalchemy import (
+    PyexcelSQLSkipRowException,
+    SQLTableWriter,
+    SQLBookWriter,
+    SQLTableImporter,
+    SQLTableImportAdapter)
 from pyexcel_io.database.querysets import QuerysetsReader
 from sqlalchemy.orm import relationship, backref
 from nose.tools import raises, eq_

@@ -43,11 +43,11 @@ def test_issue_23():
 
 
 def test_issue_28():
-    from pyexcel_io.plugins import iomanager
+    from pyexcel_io.plugins import readers
     from pyexcel_io.exceptions import UpgradePlugin
     expected = "Please upgrade the plugin '%s' according to "
     expected += "plugin compactibility table."
     try:
-        iomanager.load_me_later('pyexcel_test', 'test')
+        readers.load_me_later('pyexcel_test', 'test')
     except UpgradePlugin as e:
         eq_(str(e), expected % 'test')

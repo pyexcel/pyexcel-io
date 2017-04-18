@@ -8,23 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
-from ._csv import CSVBookReader, CSVBookWriter
-
-
-class TSVBookReader(CSVBookReader):
-    file_types = [constants.FILE_FORMAT_TSV]
-
-    def __init__(self):
-        CSVBookReader.__init__(self)
-        self._file_type = constants.FILE_FORMAT_TSV
-
-    def open(self, file_name, **keywords):
-        keywords['dialect'] = constants.KEYWORD_TSV_DIALECT
-        CSVBookReader.open(self, file_name, **keywords)
-
-    def open_stream(self, file_content, **keywords):
-        keywords['dialect'] = constants.KEYWORD_TSV_DIALECT
-        CSVBookReader.open_stream(self, file_content, **keywords)
+from .csvw import CSVBookWriter
 
 
 class TSVBookWriter(CSVBookWriter):

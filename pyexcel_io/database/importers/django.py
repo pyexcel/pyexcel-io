@@ -9,31 +9,13 @@
 """
 import logging
 
-from pyexcel_io.book import BookReader, BookWriter
+from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
-from pyexcel_io.database.querysets import QuerysetsReader
-from ._common import TableExportAdapter, TableExporter
-from ._common import TableImporter, TableImportAdapter
+from pyexcel_io.database._common import TableImporter, TableImportAdapter
 
 log = logging.getLogger(__name__)
-
-
-class DjangoModelReader(QuerysetsReader):
-    """Read from django model
-    """
-    def __init__(self, model, export_columns=None, **keywords):
-        self.__model = model
-        if export_columns:
-            column_names = export_columns
-        else:
-            column_names = sorted(
-                [field.attname
-                 for field in self.__model._meta.concrete_fields])
-        QuerysetsReader.__init__(self, self.__model.objects.all(),
-                                 column_names,
-                                 **keywords)
 
 
 class DjangoModelWriter(SheetWriter):
@@ -75,36 +57,6 @@ class DjangoModelWriter(SheetWriter):
                     log.info(e2)
                     log.info(object)
                     continue
-
-
-class DjangoModelExportAdapter(TableExportAdapter):
-    pass
-
-
-class DjangoModelExporter(TableExporter):
-    pass
-
-
-class DjangoBookReader(BookReader):
-    file_types = [constants.DB_DJANGO]
-
-    def open(self, file_name, **keywords):
-        raise NotImplementedError()
-
-    def open_stream(self, file_stream, **keywords):
-        raise NotImplementedError()
-
-    def open_content(self, file_content, **keywords):
-        self.exporter = file_content
-        self._load_from_django_models()
-
-    def read_sheet(self, native_sheet):
-        reader = DjangoModelReader(native_sheet.model,
-                                   native_sheet.export_columns)
-        return reader.to_array()
-
-    def _load_from_django_models(self):
-        self._native_book = self.exporter.adapters
 
 
 class DjangoModelImportAdapter(TableImportAdapter):

@@ -16,7 +16,7 @@ import pyexcel_io.plugins as plugins
 
 
 black_list = [__name__, 'pyexcel_webio', 'pyexcel_text']
-white_list = ['pyexcel_io.fileformat', 'pyexcel_io.database']
+white_list = ['pyexcel_io.readers', 'pyexcel_io.writers']
 prefix = 'pyexcel_'
 
 plugins.load_plugins(prefix, __path__, black_list, white_list)

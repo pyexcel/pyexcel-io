@@ -4,8 +4,10 @@ from textwrap import dedent
 from nose.tools import raises
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.fileformat._csv import CSVBookReader, CSVBookWriter
-from pyexcel_io.fileformat.tsv import TSVBookReader, TSVBookWriter
+from pyexcel_io.readers.csvr import CSVBookReader
+from pyexcel_io.readers.tsv import TSVBookReader
+from pyexcel_io.writers.csvw import CSVBookWriter
+from pyexcel_io.writers.tsv import TSVBookWriter
 
 
 class TestCSVReaders(TestCase):
