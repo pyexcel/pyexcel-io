@@ -68,7 +68,7 @@ class BookReader(with_metaclass(Plugin, RWInterface)):
     action = "read"
 
     def __init__(self):
-        RWInterface.__init__(self)
+        super(BookReader, self).__init__()
         self._file_name = None
         self._file_stream = None
         self._keywords = None
@@ -164,7 +164,7 @@ class BookWriter(with_metaclass(Plugin, RWInterface)):
     action = "write"
 
     def __init__(self):
-        RWInterface.__init__(self)
+        super(BookWriter, self).__init__()
         self._file_alike_object = None
         self._keywords = None
 

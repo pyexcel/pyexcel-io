@@ -1,8 +1,8 @@
 """
-    pyexcel_io.file_format._csv
+    pyexcel_io.readers.csvr
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level csv file format handler.
+    csv file reader
 
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details

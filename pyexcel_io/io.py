@@ -68,7 +68,8 @@ def save_data(afile, data, file_type=None, **keywords):
                      `fmtparams <https://docs.python.org/release/3.1.5/library/csv.html#dialects-and-formatting-parameters>`_
     """  # noqa
     to_store = data
-    if isinstance(data, list) or is_generator(data):
+    is_list = isinstance(data, list) or is_generator(data)
+    if is_list:
         single_sheet_in_book = True
         to_store = {constants.DEFAULT_SHEET_NAME: data}
     else:

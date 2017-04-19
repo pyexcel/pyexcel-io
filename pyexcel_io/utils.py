@@ -1,6 +1,5 @@
 import datetime
 
-from pyexcel_io._compact import PY2
 import pyexcel_io.constants as constants
 
 
@@ -67,10 +66,8 @@ def is_empty_array(array):
     """
     Check if an array is an array of '' or not
     """
-    if PY2:
-        return len(filter(lambda element: element != '', array)) == 0
-    else:
-        return len(list(filter(lambda element: element != '', array))) == 0
+    empty_array = [element for element in array if element != '']
+    return len(empty_array) == 0
 
 
 def swap_empty_string_for_none(array):

@@ -10,7 +10,7 @@
 from collections import defaultdict
 
 from lml.plugin import scan_plugins
-from lml.manager import PluginManager
+from lml.manager import PluginManager, PluginList, PluginInfo
 
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
@@ -21,9 +21,18 @@ import pyexcel_io.constants as constants
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
+READER_PLUGIN = 'pyexcel-io reader'
+WRITER_PLUGIN = 'pyexcel-io writer'
 
-text_stream_types = []
-binary_stream_types = []
+
+class IORegistry(PluginList):
+    def add_a_reader(self, submodule=None, file_types=None, stream_type=None):
+        return self.add_a_plugin(READER_PLUGIN, submodule,
+                                 file_types, stream_type)
+
+    def add_a_writer(self, submodule=None, file_types=None, stream_type=None):
+        return self.add_a_plugin(WRITER_PLUGIN, submodule,
+                                 file_types, stream_type)
 
 
 class IOManager(PluginManager):
@@ -32,16 +41,16 @@ class IOManager(PluginManager):
         self.loaded_registry = defaultdict(dict)
         self.known_plugins = known_list
 
-    def load_me_later(self, plugin_meta, module_name):
-        PluginManager.load_me_later(self, plugin_meta, module_name)
-        if not isinstance(plugin_meta, dict):
+    def load_me_later(self, plugin_info, module_name):
+        PluginManager.load_me_later(self, plugin_info, module_name)
+        if not isinstance(plugin_info, PluginInfo):
             pypi_name = _get_me_pypi_package_name(module_name)
             raise exceptions.UpgradePlugin(UPGRADE_MESSAGE % pypi_name)
-        library_import_path = "%s.%s" % (module_name, plugin_meta['submodule'])
-        for file_type in plugin_meta['file_types']:
+        library_import_path = "%s.%s" % (module_name, plugin_info.submodule)
+        for file_type in plugin_info.file_types:
             self.registry[file_type].append(
-                (library_import_path, plugin_meta['submodule']))
-            manager.register_stream_type(file_type, plugin_meta['stream_type'])
+                (library_import_path, plugin_info.submodule))
+            manager.register_stream_type(file_type, plugin_info.stream_type)
 
     def load_me_now(self, key, **keywords):
         PluginManager.load_me_now(self, key, **keywords)
@@ -113,8 +122,8 @@ def _get_me_pypi_package_name(module_name):
     return root_module_name.replace('_', '-')
 
 
-readers = IOManager('pyexcel-io reader', ioutils.AVAILABLE_READERS)
-writers = IOManager('pyexcel-io writer', ioutils.AVAILABLE_WRITERS)
+readers = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
+writers = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 
 
 def load_plugins(prefix, path, black_list, white_list):
