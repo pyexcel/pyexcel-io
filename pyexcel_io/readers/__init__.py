@@ -10,20 +10,20 @@
 from pyexcel_io.plugins import IORegistry
 
 
-__pyexcel_io_plugins__ = IORegistry(__name__).add_a_reader(
-    submodule='csvr',
+IORegistry(__name__).add_a_reader(
+    submodule='csvr.CSVBookReader',
     file_types=['csv'],
     stream_type='text'
 ).add_a_reader(
-    submodule='tsv',
+    submodule='tsv.TSVBookReader',
     file_types=['tsv'],
     stream_type='text'
 ).add_a_reader(
-    submodule='csvz',
+    submodule='csvz.CSVZipBookReader',
     file_types=['csvz'],
     stream_type='binary'
 ).add_a_reader(
-    submodule='tsvz',
-    file_types=['csvz'],
+    submodule='tsvz.TSVZipBookReader',
+    file_types=['tsvz'],
     stream_type='binary'
 )

@@ -16,8 +16,6 @@ from .csvz import CSVZipBookReader
 
 
 class TSVZipBookReader(CSVZipBookReader):
-    file_types = [FILE_FORMAT_TSVZ]
-
     def __init__(self):
         CSVZipBookReader.__init__(self)
         self._file_type = FILE_FORMAT_TSVZ

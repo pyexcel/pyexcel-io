@@ -10,20 +10,20 @@
 from pyexcel_io.plugins import IORegistry
 
 
-__pyexcel_io_plugins__ = IORegistry(__name__).add_a_writer(
-    submodule='csvw',
+IORegistry(__name__).add_a_writer(
+    submodule='csvw.CSVBookWriter',
     file_types=['csv'],
     stream_type='text'
 ).add_a_writer(
-    submodule='tsv',
+    submodule='tsv.TSVBookWriter',
     file_types=['tsv'],
     stream_type='text'
 ).add_a_writer(
-    submodule='csvz',
+    submodule='csvz.CSVZipBookWriter',
     file_types=['csvz'],
     stream_type='binary'
 ).add_a_writer(
-    submodule='tsvz',
+    submodule='tsvz.TSVZipBookWriter',
     file_types=['tsvz'],
     stream_type='binary'
 )

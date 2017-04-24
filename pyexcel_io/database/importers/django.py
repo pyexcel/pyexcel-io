@@ -68,8 +68,6 @@ class DjangoModelImporter(TableImporter):
 
 
 class DjangoBookWriter(BookWriter):
-    file_types = [constants.DB_DJANGO]
-
     def open_content(self, file_content, **keywords):
         self.importer = file_content
         self._keywords = keywords

@@ -20,9 +20,6 @@ from .csvr import (
 
 
 class CSVZipBookReader(BookReader):
-    file_types = [FILE_FORMAT_CSVZ]
-    stream_type = "binary"
-
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ

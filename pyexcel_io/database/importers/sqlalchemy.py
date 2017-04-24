@@ -92,8 +92,6 @@ class SQLTableImporter(TableImporter):
 
 
 class SQLBookWriter(BookWriter):
-    file_types = [constants.DB_SQL]
-
     def open_content(self, file_content, auto_commit=True, **keywords):
         self.__importer = file_content
         self.__auto_commit = auto_commit

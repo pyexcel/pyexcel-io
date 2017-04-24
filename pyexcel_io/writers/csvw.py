@@ -143,9 +143,6 @@ class CSVMemoryWriter(CSVSheetWriter):
 
 
 class CSVBookWriter(BookWriter):
-    file_types = [constants.FILE_FORMAT_CSV]
-    stream_type = "text"
-
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV

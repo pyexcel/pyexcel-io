@@ -10,7 +10,6 @@
 import logging
 
 from pyexcel_io.book import BookReader
-import pyexcel_io.constants as constants
 from pyexcel_io.database.querysets import QuerysetsReader
 from pyexcel_io.database._common import TableExportAdapter, TableExporter
 
@@ -43,8 +42,6 @@ class DjangoModelExporter(TableExporter):
 
 
 class DjangoBookReader(BookReader):
-    file_types = [constants.DB_DJANGO]
-
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 

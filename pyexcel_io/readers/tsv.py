@@ -12,8 +12,6 @@ from .csvr import CSVBookReader
 
 
 class TSVBookReader(CSVBookReader):
-    file_types = [constants.FILE_FORMAT_TSV]
-
     def __init__(self):
         CSVBookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_TSV

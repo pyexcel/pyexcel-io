@@ -8,7 +8,6 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.book import BookReader
-import pyexcel_io.constants as constants
 from pyexcel_io.database.querysets import QuerysetsReader
 from pyexcel_io.database._common import TableExportAdapter, TableExporter
 
@@ -45,8 +44,6 @@ class SQLTableExporter(TableExporter):
 
 
 class SQLBookReader(BookReader):
-    file_types = [constants.DB_SQL]
-
     def open(self, file_name, **keywords):
         raise NotImplementedError()
 

@@ -16,8 +16,6 @@ from .csvz import CSVZipBookWriter
 
 
 class TSVZipBookWriter(CSVZipBookWriter):
-    file_types = [FILE_FORMAT_TSVZ]
-
     def __init__(self):
         CSVZipBookWriter.__init__(self)
         self._file_type = FILE_FORMAT_TSVZ

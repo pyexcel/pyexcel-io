@@ -12,8 +12,6 @@ from .csvw import CSVBookWriter
 
 
 class TSVBookWriter(CSVBookWriter):
-    file_types = [constants.FILE_FORMAT_TSV]
-
     def __init__(self):
         CSVBookWriter.__init__(self)
         self._file_type = constants.FILE_FORMAT_TSV

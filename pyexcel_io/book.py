@@ -7,8 +7,6 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from lml.manager import Plugin, with_metaclass
-
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
 from .constants import (
@@ -60,13 +58,10 @@ class RWInterface(object):
         self.close()
 
 
-class BookReader(with_metaclass(Plugin, RWInterface)):
+class BookReader(RWInterface):
     """
     Standard book reader
     """
-    plugin_type = "pyexcel-io reader"
-    action = "read"
-
     def __init__(self):
         super(BookReader, self).__init__()
         self._file_name = None
@@ -156,13 +151,10 @@ class BookReader(with_metaclass(Plugin, RWInterface)):
         raise NotImplementedError("Please implement this method")
 
 
-class BookWriter(with_metaclass(Plugin, RWInterface)):
+class BookWriter(RWInterface):
     """
     Standard book writer
     """
-    plugin_type = "pyexcel-io writer"
-    action = "write"
-
     def __init__(self):
         super(BookWriter, self).__init__()
         self._file_alike_object = None
