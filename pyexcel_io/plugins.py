@@ -48,47 +48,41 @@ class IOManager(PluginManager):
     def __init__(self, plugin_type, known_list):
         PluginManager.__init__(self, plugin_type)
         self.known_plugins = known_list
+        self.action = 'read'
+        if self.plugin_name == WRITER_PLUGIN:
+            self.action = 'write'
 
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
         for file_type in plugin_info.keywords():
             manager.register_stream_type(file_type, plugin_info.stream_type)
+            manager.register_a_file_type(
+                file_type, plugin_info.stream_type, None)
 
     def register_a_plugin(self, cls, plugin_info):
+        """ for dynamically loaded plugin """
         PluginManager.register_a_plugin(self, cls)
         for file_type in plugin_info.keywords():
-            self.loaded_registry[file_type].append(cls)
+            self.registry[file_type].append(cls)
+            manager.register_stream_type(file_type, plugin_info.stream_type)
             manager.register_a_file_type(
                 file_type, cls.stream_type, None)
 
-    def get_a_plugin(self, action=None, file_type=None, library=None):
-        PluginManager.get_a_plugin(self, action=action,
-                                   file_type=file_type, library=library)
+    def get_a_plugin(self, file_type=None, library=None):
+        PluginManager.get_a_plugin(self, file_type=file_type, library=library)
         __file_type = file_type.lower()
-        registry = self.loaded_registry
+        plugin = self.load_me_now(__file_type, library=library)
+        handler = plugin()
+        handler.set_type(__file_type)
+        return handler
 
-        self.load_me_now(__file_type)
-
-        if __file_type in registry:
-            if library is not None:
-                for handler_cls in registry[__file_type]:
-                    module_name = _get_me_pypi_package_name(
-                        handler_cls.__module__)
-                    if module_name == library:
-                        break
-                else:
-                    raise Exception("%s is not installed" % library)
-            else:
-                handler_cls = registry[__file_type][0]
-            handler = handler_cls()
-            handler.set_type(__file_type)
-            return handler
+    def raise_exception(self, file_type):
         plugins = self.known_plugins.get(file_type, None)
         if plugins:
             message = "Please install "
             if len(plugins) > 1:
                 message += ERROR_MESSAGE_FORMATTER % (
-                    action, file_type, ','.join(plugins))
+                    self.action, file_type, ','.join(plugins))
             else:
                 message += plugins[0]
             raise exceptions.SupportingPluginAvailableButNotInstalled(message)
@@ -97,7 +91,7 @@ class IOManager(PluginManager):
                 "No suitable library found for %s" % file_type)
 
     def get_all_formats(self):
-        all_formats = set(list(self.loaded_registry.keys()) +
+        all_formats = set(list(self.registry.keys()) +
                           list(self.known_plugins.keys()))
         all_formats = all_formats.difference(set([constants.DB_SQL,
                                                   constants.DB_DJANGO]))

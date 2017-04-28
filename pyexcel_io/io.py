@@ -141,7 +141,7 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
-    with readers.get_a_plugin('read', file_type, library) as reader:
+    with readers.get_a_plugin(file_type, library) as reader:
         if file_name:
             reader.open(file_name, **keywords)
         elif file_content:
@@ -175,7 +175,7 @@ def get_writer(file_name=None, file_stream=None,
             raise Exception("file_name should be a string type")
         file_type_given = False
 
-    writer = writers.get_a_plugin('write', file_type, library)
+    writer = writers.get_a_plugin(file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)
