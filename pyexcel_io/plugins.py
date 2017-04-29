@@ -63,7 +63,6 @@ class IOManager(PluginManager):
         """ for dynamically loaded plugin """
         PluginManager.register_a_plugin(self, cls)
         for file_type in plugin_info.keywords():
-            self.registry[file_type].append(cls)
             manager.register_stream_type(file_type, plugin_info.stream_type)
             manager.register_a_file_type(
                 file_type, cls.stream_type, None)
