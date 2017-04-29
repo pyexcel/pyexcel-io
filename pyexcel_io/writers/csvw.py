@@ -1,8 +1,8 @@
 """
-    pyexcel_io.file_format._csv
+    pyexcel_io.writers.csvw
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level csv file format handler.
+    The lower level csv file format writer
 
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
@@ -14,14 +14,6 @@ from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-
-
-DEFAULT_SEPARATOR = '__'
-DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % constants.DEFAULT_NAME + "%s"
-SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
-DEFAULT_CSV_STREAM_FILE_FORMATTER = (
-    "---%s:" % constants.DEFAULT_NAME + "%s---%s")
-DEFAULT_NEWLINE = '\r\n'
 
 
 class UnicodeWriter:
@@ -66,7 +58,7 @@ class CSVSheetWriter(SheetWriter):
         self._encoding = encoding
         self._sheet_name = name
         self._single_sheet_in_book = single_sheet_in_book
-        self.__line_terminator = DEFAULT_NEWLINE
+        self.__line_terminator = constants.DEFAULT_CSV_NEWLINE
         if constants.KEYWORD_LINE_TERMINATOR in keywords:
             self.__line_terminator = keywords.get(
                 constants.KEYWORD_LINE_TERMINATOR)
@@ -93,9 +85,9 @@ class CSVFileWriter(CSVSheetWriter):
             names = self._native_book.split(".")
             file_name = "%s%s%s%s%s.%s" % (
                 names[0],
-                DEFAULT_SEPARATOR,
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 name,              # sheet name
-                DEFAULT_SEPARATOR,
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 self._sheet_index,  # sheet index
                 names[1])
         else:
@@ -128,9 +120,10 @@ class CSVMemoryWriter(CSVSheetWriter):
             self.f = self._native_book
             self.writer = csv.writer(self.f, **self._keywords)
         if not self._single_sheet_in_book:
-            self.writer.writerow([DEFAULT_CSV_STREAM_FILE_FORMATTER % (
-                self._sheet_name,
-                "")])
+            self.writer.writerow(
+                [constants.DEFAULT_CSV_STREAM_FILE_FORMATTER % (
+                    self._sheet_name, "")]
+            )
 
     def close(self):
         if self._single_sheet_in_book:
@@ -139,7 +132,7 @@ class CSVMemoryWriter(CSVSheetWriter):
             pass
         else:
             self.writer.writerow(
-                [DEFAULT_SHEET_SEPARATOR_FORMATTER % ""])
+                [constants.SEPARATOR_FORMATTER % ""])
 
 
 class CSVBookWriter(BookWriter):

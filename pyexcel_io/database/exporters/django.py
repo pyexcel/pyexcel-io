@@ -7,14 +7,9 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import logging
-
 from pyexcel_io.book import BookReader
 from pyexcel_io.database.querysets import QuerysetsReader
 from pyexcel_io.database._common import TableExportAdapter, TableExporter
-
-
-log = logging.getLogger(__name__)
 
 
 class DjangoModelReader(QuerysetsReader):

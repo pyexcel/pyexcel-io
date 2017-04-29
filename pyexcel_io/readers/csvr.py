@@ -20,14 +20,6 @@ import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
 
 
-DEFAULT_SEPARATOR = '__'
-DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % constants.DEFAULT_NAME + "%s"
-SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
-DEFAULT_CSV_STREAM_FILE_FORMATTER = (
-    "---%s:" % constants.DEFAULT_NAME + "%s---%s")
-DEFAULT_NEWLINE = '\r\n'
-
-
 class UTF8Recorder(compact.Iterator):
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8.
@@ -118,7 +110,7 @@ class CSVBookReader(BookReader):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
         self.__load_from_memory_flag = False
-        self.__line_terminator = DEFAULT_NEWLINE
+        self.__line_terminator = constants.DEFAULT_CSV_NEWLINE
         self.__sheet_name = None
         self.__sheet_index = None
 
@@ -149,7 +141,7 @@ class CSVBookReader(BookReader):
         self.__load_from_memory_flag = True
         self._file_stream.seek(0)
         content = self._file_stream.read()
-        separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.__line_terminator
+        separator = constants.SEPARATOR_FORMATTER % self.__line_terminator
         if separator in content:
             sheets = content.split(separator)
             named_contents = []
@@ -157,7 +149,7 @@ class CSVBookReader(BookReader):
                 if sheet == '':  # skip empty named sheet
                     continue
                 lines = sheet.split(self.__line_terminator)
-                result = re.match(SEPARATOR_MATCHER, lines[0])
+                result = re.match(constants.SEPARATOR_MATCHER, lines[0])
                 new_content = '\n'.join(lines[1:])
                 new_sheet = NamedContent(result.group(1),
                                          compact.StringIO(new_content))
@@ -179,8 +171,8 @@ class CSVBookReader(BookReader):
         names = self._file_name.split('.')
         filepattern = "%s%s*%s*.%s" % (
             names[0],
-            DEFAULT_SEPARATOR,
-            DEFAULT_SEPARATOR,
+            constants.DEFAULT_MULTI_CSV_SEPARATOR,
+            constants.DEFAULT_MULTI_CSV_SEPARATOR,
             names[1])
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
@@ -189,8 +181,8 @@ class CSVBookReader(BookReader):
         else:
             matcher = "%s%s(.*)%s(.*).%s" % (
                 names[0],
-                DEFAULT_SEPARATOR,
-                DEFAULT_SEPARATOR,
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 names[1])
             tmp_file_list = []
             for filen in filelist:
