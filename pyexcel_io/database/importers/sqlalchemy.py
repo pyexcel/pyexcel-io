@@ -24,23 +24,10 @@ class PyexcelSQLSkipRowException(Exception):
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
-    def __init__(self, session, table_params, auto_commit=True, **keywords):
-        self.__session = session
-        self.__table = None
-        self.__initializer = None
-        self.__mapdict = None
-        self.__column_names = None
+    def __init__(self, importer, adapter, auto_commit=True, **keywords):
+        SheetWriter.__init__(self, importer, adapter,
+                             adapter.get_name(), **keywords)
         self.__auto_commit = auto_commit
-        self._keywords = keywords
-        if len(table_params) == 4:
-            (self.__table, self.__column_names,
-             self.__mapdict, self.__initializer) = table_params
-        else:
-            raise ValueError(constants.MESSAGE_INVALID_PARAMETERS)
-
-        if isinstance(self.__mapdict, list):
-            self.__column_names = self.__mapdict
-            self.__mapdict = None
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -54,28 +41,34 @@ class SQLTableWriter(SheetWriter):
                 print(new_array)
 
     def _write_row(self, array):
-        row = dict(zip(self.__column_names, array))
+        row = dict(zip(self._native_sheet.column_names, array))
         obj = None
-        if self.__initializer:
+        if self._native_sheet.row_initializer:
             # allow initinalizer to return None
             # if skipping is needed
-            obj = self.__initializer(row)
+            obj = self._native_sheet.row_initializer(row)
         if obj is None:
-            obj = self.__table()
-            for name in self.__column_names:
-                if self.__mapdict is not None:
-                    key = self.__mapdict[name]
+            obj = self._native_sheet.table()
+            for name in self._native_sheet.column_names:
+                if self._native_sheet.column_name_mapping_dict is not None:
+                    key = self._native_sheet.column_name_mapping_dict[name]
                 else:
                     key = name
                 setattr(obj, key, row[name])
-        self.__session.add(obj)
+        self._native_book.session.add(obj)
 
     def close(self):
         if self.__auto_commit:
-            self.__session.commit()
+            self._native_book.session.commit()
 
 
 class SQLBookWriter(BookWriter):
+    """ write data into database tables via sqlalchemy """
+    def __init__(self):
+        BookWriter.__init__(self)
+        self.__importer = None
+        self.__auto_commit = True
+
     def open_content(self, file_content, auto_commit=True, **keywords):
         self.__importer = file_content
         self.__auto_commit = auto_commit
@@ -85,10 +78,7 @@ class SQLBookWriter(BookWriter):
         adapter = self.__importer.get(sheet_name)
         if adapter:
             sheet_writer = SQLTableWriter(
-                self.__importer.session,
-                (adapter.table, adapter.column_names,
-                 adapter.column_name_mapping_dict,
-                 adapter.row_initializer),
+                self.__importer, adapter,
                 auto_commit=self.__auto_commit
             )
         return sheet_writer

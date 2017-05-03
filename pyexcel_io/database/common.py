@@ -11,6 +11,7 @@ from pyexcel_io.book import BookReader
 
 
 class DbExporter(BookReader):
+    """ Transcode the book reader interface to db interface """
     def open(self, file_name, **keywords):
         self.export_tables(self, file_name, **keywords)
 
@@ -21,6 +22,7 @@ class DbExporter(BookReader):
         self.export_tables(file_content, **keywords)
 
     def export_tables(self, exporter, **keywords):
+        """ read database tables """
         raise NotImplementedError("Please implement this method")
 
 
@@ -43,6 +45,7 @@ class DjangoModelExportAdapter(object):
 class DjangoModelImportAdapter(DjangoModelExportAdapter):
     """ parameter holder for django data import """
     class InOutParameter(object):
+        """ local class to manipulate variable io """
         def __init__(self):
             self.output = None
             self.input = None
@@ -88,7 +91,6 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
         self._process_parameters()
 
     def _process_parameters(self):
-
         if self.__row_initializer.input is None:
             self.__row_initializer.output = None
         else:

@@ -59,18 +59,12 @@ class IOManager(PluginManager):
 
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
-        self._do_additional_registration(plugin_info)
+        _do_additional_registration(plugin_info)
 
     def register_a_plugin(self, cls, plugin_info):
         """ for dynamically loaded plugin """
         PluginManager.register_a_plugin(self, cls, plugin_info)
-        self._do_additional_registration(plugin_info)
-
-    def _do_additional_registration(self, plugin_info):
-        for file_type in plugin_info.keywords():
-            manager.register_stream_type(file_type, plugin_info.stream_type)
-            manager.register_a_file_type(
-                file_type, plugin_info.stream_type, None)
+        _do_additional_registration(plugin_info)
 
     def get_a_plugin(self, file_type=None, library=None, **keywords):
         PluginManager.get_a_plugin(self, file_type=file_type, library=library)
@@ -106,6 +100,13 @@ class IOManager(PluginManager):
 def _get_me_pypi_package_name(module_name):
     root_module_name = module_name.split('.')[0]
     return root_module_name.replace('_', '-')
+
+
+def _do_additional_registration(plugin_info):
+    for file_type in plugin_info.keywords():
+        manager.register_stream_type(file_type, plugin_info.stream_type)
+        manager.register_a_file_type(
+            file_type, plugin_info.stream_type, None)
 
 
 READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)

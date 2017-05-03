@@ -7,8 +7,6 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import datetime
-
 import pyexcel_io.constants as constants
 
 
@@ -53,24 +51,6 @@ def _index_filter(current_index, start, limit=-1):
     return out_range
 
 
-def _get_complex_attribute(row, attribute):
-    attributes = attribute.split('__')
-    value = row
-    try:
-        for attributee in attributes:
-            value = _get_simple_attribute(value, attributee)
-    except AttributeError:
-        value = None
-    return value
-
-
-def _get_simple_attribute(row, attribute):
-    value = getattr(row, attribute)
-    if isinstance(value, (datetime.date, datetime.time)):
-        value = value.isoformat()
-    return value
-
-
 def is_empty_array(array):
     """
     Check if an array is an array of '' or not
@@ -82,6 +62,7 @@ def is_empty_array(array):
 def swap_empty_string_for_none(array):
     """ replace empty string fields with None """
     def swap(value):
+        """ change empty string to None """
         if value == '':
             return None
         else:

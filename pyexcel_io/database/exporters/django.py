@@ -28,6 +28,11 @@ class DjangoModelReader(QuerysetsReader):
 
 
 class DjangoBookReader(DbExporter):
+    """ read django models """
+    def __init__(self):
+        DbExporter.__init__(self)
+        self.exporter = None
+
     def export_tables(self, file_content, **keywords):
         self.exporter = file_content
         self._load_from_django_models()

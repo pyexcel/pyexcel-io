@@ -204,8 +204,10 @@ class TestSingleWrite:
 
     def test_one_table(self):
         mysession = Session()
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, self.data[0], None, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -217,8 +219,10 @@ class TestSingleWrite:
     def test_update_existing_row(self):
         mysession = Session()
         # write existing data
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, self.data[0], None, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -243,8 +247,11 @@ class TestSingleWrite:
             for name in row.keys():
                 setattr(an_instance, name, row[name])
             return an_instance
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, update_data[0], None, row_updater])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = update_data[0]
+        adapter.row_initializer = row_updater
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(update_data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -255,8 +262,10 @@ class TestSingleWrite:
     def test_skipping_rows_if_data_exist(self):
         mysession = Session()
         # write existing data
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, self.data[0], None, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -273,8 +282,11 @@ class TestSingleWrite:
             an_instance = mysession.query(Pyexcel).get(row['id'])
             if an_instance is not None:
                 raise PyexcelSQLSkipRowException()
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, update_data[0], None, row_updater])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = update_data[0]
+        adapter.row_initializer = row_updater
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(update_data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -290,8 +302,10 @@ class TestSingleWrite:
             [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
             [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
         ]
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, data[0], None, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = data[0]
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -306,8 +320,10 @@ class TestSingleWrite:
             [datetime.date(2014, 11, 11), 0, '', 11.25],
             [datetime.date(2014, 11, 12), 1, '', 12.25]
         ]
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, data[0], None, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = data[0]
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -326,9 +342,11 @@ class TestSingleWrite:
         ]
         mapdict = ['birth', 'id', 'name', 'weight']
 
-        writer = SQLTableWriter(
-            mysession,
-            [Pyexcel, self.data[0], mapdict, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        adapter.column_name_mapping_dict = mapdict
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -350,9 +368,11 @@ class TestSingleWrite:
             "Weight": 'weight'
         }
 
-        writer = SQLTableWriter(
-            mysession,
-            [Pyexcel, self.data[0], mapdict, None])
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        adapter.column_name_mapping_dict = mapdict
+        writer = SQLTableWriter(importer, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         query_sets = mysession.query(Pyexcel).all()
@@ -360,25 +380,6 @@ class TestSingleWrite:
             query_sets,
             ['birth', 'id', 'name', 'weight']).to_array()
         assert list(results) == self.results
-        mysession.close()
-
-    @raises(ValueError)
-    def test_invalid_parameters(self):
-        mysession = Session()
-        self.data = [
-            ["Birth Date", "Id", "Name", "Weight"],
-            [datetime.date(2014, 11, 11), 0, 'Adam', 11.25],
-            [datetime.date(2014, 11, 12), 1, 'Smith', 12.25]
-        ]
-        mapdict = {
-            "Birth Date": 'birth',
-            "Id": 'id',
-            "Name": 'name',
-            "Weight": 'weight'
-        }
-
-        SQLTableWriter(mysession,
-                       [Pyexcel, self.data[0], mapdict, None, None])
         mysession.close()
 
 
@@ -494,8 +495,10 @@ class TestNoAutoCommit:
             # beause python 3.6 sqlite give segmentation fault
             return
         mysession = Session()
-        writer = SQLTableWriter(mysession,
-                                [Pyexcel, self.data[0], None, None],
+        importer = SQLTableImporter(mysession)
+        adapter = SQLTableImportAdapter(Pyexcel)
+        adapter.column_names = self.data[0]
+        writer = SQLTableWriter(importer, adapter,
                                 auto_commit=False)
         writer.write_array(self.data[1:])
         writer.close()
@@ -516,3 +519,10 @@ def test_not_implemented_method():
 def test_not_implemented_method_2():
     reader = SQLBookReader()
     reader.open_stream("afile")
+
+
+def test_sql_table_import_adapter():
+    adapter = SQLTableImportAdapter(Pyexcel)
+    adapter.column_names = ['a']
+    adapter.row_initializer = "abc"
+    eq_(adapter.row_initializer, "abc")

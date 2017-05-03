@@ -8,6 +8,11 @@
     :license: New BSD License, see LICENSE for more details
 """
 # flake8: noqa
+# pylint: disable=import-error
+# pylint: disable=invalid-name
+# pylint: disable=too-few-public-methods
+# pylint: disable=ungrouped-imports
+# pylint: disable=redefined-variable-type
 import sys
 import types
 import logging
@@ -27,11 +32,6 @@ except ImportError:
         def emit(self, record):
             pass
 
-
-def is_generator(struct):
-    return isinstance(struct, types.GeneratorType)
-
-
 if PY2:
     from StringIO import StringIO
     from StringIO import StringIO as BytesIO
@@ -48,7 +48,9 @@ else:
     Iterator = object
     irange = range
 
+
 def isstream(instance):
+    """ check if a instance is a stream """
     return hasattr(instance, 'read')
 
 

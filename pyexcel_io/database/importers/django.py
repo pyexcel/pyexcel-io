@@ -61,15 +61,20 @@ class DjangoModelWriter(SheetWriter):
 
 
 class DjangoBookWriter(BookWriter):
+    """ write data into django models """
+    def __init__(self):
+        BookWriter.__init__(self)
+        self.__importer = None
+
     def open_content(self, file_content, **keywords):
-        self.importer = file_content
+        self.__importer = file_content
         self._keywords = keywords
 
     def create_sheet(self, sheet_name):
         sheet_writer = None
-        model = self.importer.get(sheet_name)
+        model = self.__importer.get(sheet_name)
         if model:
             sheet_writer = DjangoModelWriter(
-                self.importer, model,
+                self.__importer, model,
                 batch_size=self._keywords.get('batch_size', None))
         return sheet_writer

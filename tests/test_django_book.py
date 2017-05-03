@@ -424,3 +424,10 @@ class TestFilter:
         data = reader.to_array()
         expected = [['Y'], [2], [5]]
         eq_(list(data), expected)
+
+
+def test_django_model_import_adapter():
+    adapter = DjangoModelImportAdapter(FakeDjangoModel)
+    adapter.column_names = ['a']
+    adapter.row_initializer = "abc"
+    eq_(adapter.row_initializer, "abc")

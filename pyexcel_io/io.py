@@ -7,7 +7,9 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io._compact import isstream, is_generator, PY2
+from types import GeneratorType
+
+from pyexcel_io._compact import isstream, PY2
 from pyexcel_io.plugins import READERS, WRITERS
 import pyexcel_io.constants as constants
 
@@ -68,7 +70,8 @@ def save_data(afile, data, file_type=None, **keywords):
                      `fmtparams <https://docs.python.org/release/3.1.5/library/csv.html#dialects-and-formatting-parameters>`_
     """  # noqa
     to_store = data
-    is_list = isinstance(data, list) or is_generator(data)
+
+    is_list = isinstance(data, (list, GeneratorType))
     if is_list:
         single_sheet_in_book = True
         to_store = {constants.DEFAULT_SHEET_NAME: data}
