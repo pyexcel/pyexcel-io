@@ -104,14 +104,14 @@ def test_write_unknown_data():
     get_data("test.unknown")
 
 
-@raises(NotImplementedError)
+@raises(Exception)
 def test_writer_csvz_data_from_memory():
     if not PY2:
         io = StringIO()
         writer = get_writer(io, file_type="csvz")
         writer.write({'adb': [[2, 3]]})
     else:
-        raise NotImplementedError("pass it")
+        raise Exception("pass it")
 
 
 @raises(exceptions.NoSupportingPluginFound)
