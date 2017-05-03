@@ -2,16 +2,18 @@ from nose.tools import raises, eq_
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
-from pyexcel_io.database.importers.django import (
-    DjangoModelWriter,
+from pyexcel_io.database.common import (
     DjangoModelImporter,
     DjangoModelImportAdapter,
+    DjangoModelExporter,
+    DjangoModelExportAdapter
+)
+from pyexcel_io.database.importers.django import (
+    DjangoModelWriter,
     DjangoBookWriter
 )
 from pyexcel_io.database.exporters.django import (
     DjangoModelReader,
-    DjangoModelExporter,
-    DjangoModelExportAdapter,
     DjangoBookReader
 )
 
@@ -110,14 +112,14 @@ class TestException:
         model = FakeExceptionDjangoModel()
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         # now raise excpetion
         model = FakeExceptionDjangoModel(raiseException=True)
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
 
@@ -138,7 +140,7 @@ class TestSheet:
         model = FakeDjangoModel()
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         eq_(model.objects.objs, self.result)
@@ -153,7 +155,7 @@ class TestSheet:
         ]
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(data[1:])
         writer.close()
         assert model.objects.objs == self.result
@@ -167,7 +169,7 @@ class TestSheet:
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
         adapter.row_initializer = wrapper
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         assert model.objects.objs == [
@@ -186,7 +188,7 @@ class TestSheet:
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
         adapter.row_initializer = wrapper
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
         assert model.objects.objs == [
@@ -241,7 +243,7 @@ class TestSheet:
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = data2[0]
         adapter.column_name_mapping_dict = ["X", "Y", "Z"]
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(data2[1:])
         writer.close()
         eq_(model.objects.objs, self.result)
@@ -261,7 +263,7 @@ class TestSheet:
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = data2[0]
         adapter.column_name_mapping_dict = mapdict
-        writer = DjangoModelWriter(adapter)
+        writer = DjangoModelWriter(None, adapter)
         writer.write_array(data2[1:])
         writer.close()
         eq_(model.objects.objs, self.result)
@@ -366,13 +368,13 @@ class TestMultipleModels:
         assert list(data['Sheet1']) == self.content['Sheet1']
 
 
-@raises(NotImplementedError)
+@raises(TypeError)
 def test_not_implemented_method():
     reader = DjangoBookReader()
     reader.open("afile")
 
 
-@raises(NotImplementedError)
+@raises(TypeError)
 def test_not_implemented_method_2():
     reader = DjangoBookReader()
     reader.open_stream("afile")

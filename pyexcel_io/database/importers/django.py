@@ -13,13 +13,14 @@ from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
-from pyexcel_io.database._common import TableImporter, TableImportAdapter
 
 log = logging.getLogger(__name__)
 
 
 class DjangoModelWriter(SheetWriter):
-    def __init__(self, adapter, batch_size=None):
+    """ import data into a django model """
+    def __init__(self, importer, adapter, batch_size=None):
+        SheetWriter.__init__(self, importer, adapter, adapter.name)
         self.__batch_size = batch_size
         self.__model = adapter.model
         self.__column_names = adapter.column_names
@@ -44,27 +45,19 @@ class DjangoModelWriter(SheetWriter):
 
     def close(self):
         try:
-            self.__model.objects.bulk_create(self.__objs,
-                                             batch_size=self.__batch_size)
-        except Exception as e:
+            self.__model.objects.bulk_create(
+                self.__objs, batch_size=self.__batch_size)
+        except Exception as bulk_create_exception:
             log.info(constants.MESSAGE_DB_EXCEPTION)
-            log.info(e)
-            for object in self.__objs:
+            log.info(bulk_create_exception)
+            for an_object in self.__objs:
                 try:
-                    object.save()
-                except Exception as e2:
+                    an_object.save()
+                except Exception as single_save_exception:
                     log.info(constants.MESSAGE_IGNORE_ROW)
-                    log.info(e2)
-                    log.info(object)
+                    log.info(single_save_exception)
+                    log.info(an_object)
                     continue
-
-
-class DjangoModelImportAdapter(TableImportAdapter):
-    pass
-
-
-class DjangoModelImporter(TableImporter):
-    pass
 
 
 class DjangoBookWriter(BookWriter):
@@ -77,6 +70,6 @@ class DjangoBookWriter(BookWriter):
         model = self.importer.get(sheet_name)
         if model:
             sheet_writer = DjangoModelWriter(
-                model,
+                self.importer, model,
                 batch_size=self._keywords.get('batch_size', None))
         return sheet_writer

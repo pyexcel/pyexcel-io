@@ -8,7 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import isstream, is_generator, PY2
-from pyexcel_io.plugins import readers, writers
+from pyexcel_io.plugins import READERS, WRITERS
 import pyexcel_io.constants as constants
 
 
@@ -77,10 +77,7 @@ def save_data(afile, data, file_type=None, **keywords):
             keys = data.keys()
         else:
             keys = list(data.keys())
-        if len(keys) == 1:
-            single_sheet_in_book = True
-        else:
-            single_sheet_in_book = False
+        single_sheet_in_book = len(keys) == 1
 
     no_file_type = isstream(afile) and file_type is None
     if no_file_type:
@@ -141,7 +138,7 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
-    with readers.get_a_plugin(file_type, library) as reader:
+    with READERS.get_a_plugin(file_type, library) as reader:
         if file_name:
             reader.open(file_name, **keywords)
         elif file_content:
@@ -175,7 +172,7 @@ def get_writer(file_name=None, file_stream=None,
             raise Exception("file_name should be a string type")
         file_type_given = False
 
-    writer = writers.get_a_plugin(file_type, library)
+    writer = WRITERS.get_a_plugin(file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)

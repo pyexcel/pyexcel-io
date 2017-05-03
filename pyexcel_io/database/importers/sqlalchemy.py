@@ -11,7 +11,6 @@ from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
-from pyexcel_io.database._common import TableImporter, TableImportAdapter
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -74,21 +73,6 @@ class SQLTableWriter(SheetWriter):
     def close(self):
         if self.__auto_commit:
             self.__session.commit()
-
-
-class SQLTableImportAdapter(TableImportAdapter):
-    def __init__(self, model):
-        TableImportAdapter.__init__(self, model)
-        self.table = model
-
-    def get_name(self):
-        return getattr(self.table, '__tablename__', None)
-
-
-class SQLTableImporter(TableImporter):
-    def __init__(self, session):
-        TableImporter.__init__(self)
-        self.session = session
 
 
 class SQLBookWriter(BookWriter):

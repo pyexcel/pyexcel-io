@@ -7,9 +7,8 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.book import BookReader
+from pyexcel_io.database.common import DbExporter
 from pyexcel_io.database.querysets import QuerysetsReader
-from pyexcel_io.database._common import TableExportAdapter, TableExporter
 
 
 class DjangoModelReader(QuerysetsReader):
@@ -28,22 +27,8 @@ class DjangoModelReader(QuerysetsReader):
                                  **keywords)
 
 
-class DjangoModelExportAdapter(TableExportAdapter):
-    pass
-
-
-class DjangoModelExporter(TableExporter):
-    pass
-
-
-class DjangoBookReader(BookReader):
-    def open(self, file_name, **keywords):
-        raise NotImplementedError()
-
-    def open_stream(self, file_stream, **keywords):
-        raise NotImplementedError()
-
-    def open_content(self, file_content, **keywords):
+class DjangoBookReader(DbExporter):
+    def export_tables(self, file_content, **keywords):
         self.exporter = file_content
         self._load_from_django_models()
 

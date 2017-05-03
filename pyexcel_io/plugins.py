@@ -59,20 +59,20 @@ class IOManager(PluginManager):
 
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
+        self._do_additional_registration(plugin_info)
+
+    def register_a_plugin(self, cls, plugin_info):
+        """ for dynamically loaded plugin """
+        PluginManager.register_a_plugin(self, cls, plugin_info)
+        self._do_additional_registration(plugin_info)
+
+    def _do_additional_registration(self, plugin_info):
         for file_type in plugin_info.keywords():
             manager.register_stream_type(file_type, plugin_info.stream_type)
             manager.register_a_file_type(
                 file_type, plugin_info.stream_type, None)
 
-    def register_a_plugin(self, cls, plugin_info):
-        """ for dynamically loaded plugin """
-        PluginManager.register_a_plugin(self, cls)
-        for file_type in plugin_info.keywords():
-            manager.register_stream_type(file_type, plugin_info.stream_type)
-            manager.register_a_file_type(
-                file_type, cls.stream_type, None)
-
-    def get_a_plugin(self, file_type=None, library=None):
+    def get_a_plugin(self, file_type=None, library=None, **keywords):
         PluginManager.get_a_plugin(self, file_type=file_type, library=library)
         __file_type = file_type.lower()
         plugin = self.load_me_now(__file_type, library=library)
@@ -95,6 +95,7 @@ class IOManager(PluginManager):
                 "No suitable library found for %s" % file_type)
 
     def get_all_formats(self):
+        """ return all supported formats """
         all_formats = set(list(self.registry.keys()) +
                           list(self.known_plugins.keys()))
         all_formats = all_formats.difference(set([constants.DB_SQL,
@@ -107,8 +108,8 @@ def _get_me_pypi_package_name(module_name):
     return root_module_name.replace('_', '-')
 
 
-readers = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
-writers = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
+READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
+WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 
 
 def load_plugins(prefix, path, black_list, white_list):

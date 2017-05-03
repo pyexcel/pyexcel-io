@@ -61,8 +61,8 @@ Let's suppose we have a django model:
 
     >>> from pyexcel_io import save_data
     >>> from pyexcel_io.constants import DB_DJANGO, DEFAULT_SHEET_NAME
-    >>> from pyexcel_io.database.importers.django import DjangoModelImporter, DjangoModelImportAdapter
-    >>> from pyexcel_io.database.exporters.django import DjangoModelExporter, DjangoModelExportAdapter
+    >>> from pyexcel_io.database.common import DjangoModelImporter, DjangoModelImportAdapter
+    >>> from pyexcel_io.database.common import DjangoModelExporter, DjangoModelExportAdapter
     >>> model = FakeDjangoModel()
 
 Suppose you have these data::

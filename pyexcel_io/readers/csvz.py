@@ -62,15 +62,16 @@ class CSVZipBookReader(BookReader):
     def _load_from_file_alike_object(self, file_alike_object):
         try:
             self.zipfile = zipfile.ZipFile(file_alike_object, 'r')
-            sheets = [NamedContent(self._get_sheet_name(name), name)
+            sheets = [NamedContent(_get_sheet_name(name), name)
                       for name in self.zipfile.namelist()]
             return sheets
         except zipfile.BadZipfile:
             print("StringIO instance was passed by any chance?")
             raise
 
-    def _get_sheet_name(self, filename):
-        len_of_a_dot = 1
-        len_of_csv_word = 3
-        name_len = len(filename) - len_of_a_dot - len_of_csv_word
-        return filename[:name_len]
+
+def _get_sheet_name(filename):
+    len_of_a_dot = 1
+    len_of_csv_word = 3
+    name_len = len(filename) - len_of_a_dot - len_of_csv_word
+    return filename[:name_len]

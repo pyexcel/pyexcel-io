@@ -1,3 +1,12 @@
+"""
+    pyexcel_io.utils
+    ~~~~~~~~~~~~~~~~~~~
+
+    utility functions
+
+    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :license: New BSD License, see LICENSE for more details
+"""
 import datetime
 
 import pyexcel_io.constants as constants
@@ -71,6 +80,7 @@ def is_empty_array(array):
 
 
 def swap_empty_string_for_none(array):
+    """ replace empty string fields with None """
     def swap(value):
         if value == '':
             return None

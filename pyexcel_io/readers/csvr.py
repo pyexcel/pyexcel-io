@@ -35,6 +35,7 @@ class UTF8Recorder(compact.Iterator):
 
 
 class CSVSheetReader(SheetReader):
+    """ generic csv file reader"""
     def __init__(self, sheet, encoding="utf-8",
                  auto_detect_float=True, ignore_infinity=True,
                  auto_detect_int=True, auto_detect_datetime=True,
@@ -47,6 +48,7 @@ class CSVSheetReader(SheetReader):
         self.__auto_detect_datetime = auto_detect_datetime
 
     def get_file_handle(self):
+        """ return me unicde reader for csv """
         raise NotImplementedError("Please implement get_file_handle()")
 
     def row_iterator(self):

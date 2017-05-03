@@ -7,9 +7,8 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.book import BookReader
+from pyexcel_io.database.common import DbExporter
 from pyexcel_io.database.querysets import QuerysetsReader
-from pyexcel_io.database._common import TableExportAdapter, TableExporter
 
 
 class SQLTableReader(QuerysetsReader):
@@ -28,29 +27,13 @@ class SQLTableReader(QuerysetsReader):
         QuerysetsReader.__init__(self, everything, column_names, **keywords)
 
 
-class SQLTableExportAdapter(TableExportAdapter):
-    def __init__(self, model, export_columns=None):
-        TableExportAdapter.__init__(self, model, export_columns)
-        self.table = model
+class SQLBookReader(DbExporter):
+    """ read a table via sqlalchemy """
+    def __init__(self):
+        DbExporter.__init__(self)
+        self.__exporter = None
 
-    def get_name(self):
-        return getattr(self.table, '__tablename__', None)
-
-
-class SQLTableExporter(TableExporter):
-    def __init__(self, session):
-        TableExporter.__init__(self)
-        self.session = session
-
-
-class SQLBookReader(BookReader):
-    def open(self, file_name, **keywords):
-        raise NotImplementedError()
-
-    def open_stream(self, file_stream, **keywords):
-        raise NotImplementedError()
-
-    def open_content(self, file_content, **keywords):
+    def export_tables(self, file_content, **keywords):
         self.__exporter = file_content
         self._load_from_tables()
 

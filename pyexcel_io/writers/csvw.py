@@ -69,9 +69,9 @@ class CSVSheetWriter(SheetWriter):
         self._sheet_index = sheet_index
         self.writer = None
         self.file_handle = None
-        SheetWriter.__init__(self, filename,
-                             self._sheet_name, self._sheet_name,
-                             **keywords)
+        SheetWriter.__init__(
+            self, filename, self._sheet_name, self._sheet_name,
+            **keywords)
 
     def write_row(self, array):
         """
