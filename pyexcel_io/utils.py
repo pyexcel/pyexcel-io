@@ -71,9 +71,9 @@ def is_empty_array(array):
 
 
 def swap_empty_string_for_none(array):
-    def swap(x):
-        if x == '':
+    def swap(value):
+        if value == '':
             return None
         else:
-            return x
+            return value
     return [swap(x) for x in array]

@@ -18,6 +18,7 @@ from .csvw import CSVSheetWriter
 
 
 class CSVZipSheetWriter(CSVSheetWriter):
+    """ handle the zipfile interface """
     def __init__(self, zipfile, sheetname, file_extension, **keywords):
         self.file_extension = file_extension
         keywords['single_sheet_in_book'] = False
@@ -35,6 +36,13 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
 
 class CSVZipBookWriter(BookWriter):
+    """
+    csvz writer
+
+    It is better to store csv files as a csvz as it saves your disk space.
+    Pyexcel-io had the facility to unzip it for you or you could use
+    any other unzip software.
+    """
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ

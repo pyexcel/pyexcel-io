@@ -16,6 +16,10 @@ from .csvz import CSVZipBookWriter
 
 
 class TSVZipBookWriter(CSVZipBookWriter):
+    """ write zipped tsv file
+
+    It is similiar to CSVZipBookWriter, but support tab separated values
+    """
     def __init__(self):
         CSVZipBookWriter.__init__(self)
         self._file_type = FILE_FORMAT_TSVZ

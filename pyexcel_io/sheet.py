@@ -107,19 +107,19 @@ class SheetReader(object):
         """
         implement this method for easy extension
         """
-        raise NotImplementedError("Please implement number_of_rows()")
+        raise Exception("Please implement number_of_rows()")
 
     def number_of_columns(self):
         """
         implement this method for easy extension
         """
-        raise NotImplementedError("Please implement number_of_columns()")
+        raise Exception("Please implement number_of_columns()")
 
     def cell_value(self, row, column):
         """
         implement this method for easy extension
         """
-        raise NotImplementedError("Please implement cell_value()")
+        raise Exception("Please implement cell_value()")
 
 
 class SheetWriter(object):

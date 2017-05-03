@@ -179,6 +179,10 @@ class BookWriter(RWInterface):
             raise IOError(MESSAGE_ERROR_03)
         self.open(file_stream, **keywords)
 
+    def open_content(self, file_stream, **keywords):
+        """open a file content for read or write"""
+        raise Exception("Normal writer would not need this interface")
+
     def write(self, incoming_dict):
         """
         write a dictionary into an excel file

@@ -39,7 +39,7 @@ def test_wrong_parameter_to_get_writer():
     get_writer(1)
 
 
-@raises(NotImplementedError)
+@raises(Exception)
 def test_wrong_parameter_to_get_writer2():
     get_writer(1, file_type="csv")
 

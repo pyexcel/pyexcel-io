@@ -17,6 +17,9 @@ BINARY_STREAM_TYPES = []
 
 
 def register_stream_type(file_type, stream_type):
+    """
+    keep track of stream type for different file formats
+    """
     if stream_type == 'text':
         TEXT_STREAM_TYPES.append(file_type)
     elif stream_type == 'binary':
@@ -60,6 +63,9 @@ def get_io_type(file_type):
 
 
 def register_a_file_type(file_type, stream_type, mime_type):
+    """
+    keep track of file format supports by this library
+    """
     global FILE_TYPES
     FILE_TYPES += (file_type,)
     stream_type = stream_type

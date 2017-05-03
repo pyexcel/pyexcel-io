@@ -20,6 +20,11 @@ from .csvr import (
 
 
 class CSVZipBookReader(BookReader):
+    """csvz reader
+
+    Read zipped csv file that was zipped up by pyexcel-io. It support
+    single csv file and multiple csv files.
+    """
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ

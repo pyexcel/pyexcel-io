@@ -80,32 +80,38 @@ class CSVSheetReader(SheetReader):
 
 
 class CSVFileReader(CSVSheetReader):
+    """ read csv from phyical file """
     def get_file_handle(self):
+        unicode_reader = None
         if compact.PY2:
-            f1 = open(self._native_sheet.payload, 'rb')
-            f = UTF8Recorder(f1, self._encoding)
+            file_handle = open(self._native_sheet.payload, 'rb')
+            unicode_reader = UTF8Recorder(file_handle, self._encoding)
         else:
-            f = open(self._native_sheet.payload, 'r',
-                     encoding=self._encoding)
-        return f
+            unicode_reader = open(self._native_sheet.payload, 'r',
+                                  encoding=self._encoding)
+        return unicode_reader
 
 
 class CSVinMemoryReader(CSVSheetReader):
+    """ read csv file from memory """
     def get_file_handle(self):
+        unicode_reader = None
         if compact.PY2:
-            f = UTF8Recorder(self._native_sheet.payload,
-                             self._encoding)
+            unicode_reader = UTF8Recorder(self._native_sheet.payload,
+                                          self._encoding)
         else:
             if isinstance(self._native_sheet.payload, compact.BytesIO):
                 content = self._native_sheet.payload.read()
-                f = compact.StringIO(content.decode(self._encoding))
+                unicode_reader = compact.StringIO(
+                    content.decode(self._encoding))
             else:
-                f = self._native_sheet.payload
+                unicode_reader = self._native_sheet.payload
 
-        return f
+        return unicode_reader
 
 
 class CSVBookReader(BookReader):
+    """ read csv file """
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV

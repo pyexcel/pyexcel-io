@@ -16,20 +16,21 @@ import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
 
 
-class UnicodeWriter:
+class UnicodeWriter(object):
     """
     A CSV writer which will write rows to CSV file "f",
     which is encoded in the given encoding.
     """
 
-    def __init__(self, f, encoding="utf-8", **kwds):
+    def __init__(self, file_handle, encoding="utf-8", **kwds):
         # Redirect output to a queue
         self.queue = compact.StringIO()
         self.writer = csv.writer(self.queue, **kwds)
-        self.stream = f
+        self.stream = file_handle
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def writerow(self, row):
+        """ write row into the csv file """
         self.writer.writerow([compact.text_type(s).encode("utf-8")
                               for s in row])
         # Fetch UTF-8 output from the queue ...
@@ -43,6 +44,7 @@ class UnicodeWriter:
         self.queue.truncate(0)
 
     def writerows(self, rows):
+        """ write multiple rows into csv file """
         for row in rows:
             self.writerow(row)
 
@@ -65,6 +67,8 @@ class CSVSheetWriter(SheetWriter):
         if single_sheet_in_book:
             self._sheet_name = None
         self._sheet_index = sheet_index
+        self.writer = None
+        self.file_handle = None
         SheetWriter.__init__(self, filename,
                              self._sheet_name, self._sheet_name,
                              **keywords)
@@ -77,8 +81,9 @@ class CSVSheetWriter(SheetWriter):
 
 
 class CSVFileWriter(CSVSheetWriter):
+    """ Write csv to a physical file """
     def close(self):
-        self.f.close()
+        self.file_handle.close()
 
     def set_sheet_name(self, name):
         if name != constants.DEFAULT_SHEET_NAME:
@@ -93,16 +98,18 @@ class CSVFileWriter(CSVSheetWriter):
         else:
             file_name = self._native_book
         if compact.PY2:
-            self.f = open(file_name, "wb")
-            self.writer = UnicodeWriter(self.f, encoding=self._encoding,
+            self.file_handle = open(file_name, "wb")
+            self.writer = UnicodeWriter(self.file_handle,
+                                        encoding=self._encoding,
                                         **self._keywords)
         else:
-            self.f = open(file_name, "w", newline="",
-                          encoding=self._encoding)
-            self.writer = csv.writer(self.f, **self._keywords)
+            self.file_handle = open(file_name, "w", newline="",
+                                    encoding=self._encoding)
+            self.writer = csv.writer(self.file_handle, **self._keywords)
 
 
 class CSVMemoryWriter(CSVSheetWriter):
+    """ Write csv to a memory stream """
     def __init__(self, filename, name,
                  encoding="utf-8", single_sheet_in_book=False,
                  sheet_index=None, **keywords):
@@ -113,12 +120,13 @@ class CSVMemoryWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         if compact.PY2:
-            self.f = self._native_book
-            self.writer = UnicodeWriter(self.f, encoding=self._encoding,
+            self.file_handle = self._native_book
+            self.writer = UnicodeWriter(self.file_handle,
+                                        encoding=self._encoding,
                                         **self._keywords)
         else:
-            self.f = self._native_book
-            self.writer = csv.writer(self.f, **self._keywords)
+            self.file_handle = self._native_book
+            self.writer = csv.writer(self.file_handle, **self._keywords)
         if not self._single_sheet_in_book:
             self.writer.writerow(
                 [constants.DEFAULT_CSV_STREAM_FILE_FORMATTER % (
@@ -136,6 +144,7 @@ class CSVMemoryWriter(CSVSheetWriter):
 
 
 class CSVBookWriter(BookWriter):
+    """ write csv with unicode support """
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV

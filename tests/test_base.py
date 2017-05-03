@@ -48,17 +48,17 @@ class ArrayWriter(SheetWriter):
 
 class TestSheetReader:
 
-    @raises(NotImplementedError)
+    @raises(Exception)
     def test_abstractness(self):
         reader = SheetReader("test")
         reader.cell_value(1, 2)
 
-    @raises(NotImplementedError)
+    @raises(Exception)
     def test_number_of_columns(self):
         reader = SheetReader("test")
         reader.number_of_columns()
 
-    @raises(NotImplementedError)
+    @raises(Exception)
     def test_number_of_rows(self):
         reader = SheetReader("test")
         reader.number_of_rows()

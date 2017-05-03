@@ -25,19 +25,23 @@ WRITER_PLUGIN = 'pyexcel-io writer'
 
 
 class IOPluginInfo(PluginInfo):
+    """Pyexcel-io plugin info description"""
     def keywords(self):
         for file_type in self.file_types:
             yield file_type
 
 
 class IORegistry(PluginList):
+    """provide custom functions to add a reader and a writer """
     def add_a_reader(self, submodule=None, file_types=None, stream_type=None):
+        """ add pyexcle-io reader plugin info """
         return self._add_a_plugin(
             IOPluginInfo(READER_PLUGIN, self._get_abs_path(submodule),
                          file_types=file_types,
                          stream_type=stream_type))
 
     def add_a_writer(self, submodule=None, file_types=None, stream_type=None):
+        """ add pyexcle-io writer plugin info """
         return self._add_a_plugin(
             IOPluginInfo(WRITER_PLUGIN, self._get_abs_path(submodule),
                          file_types=file_types,
@@ -45,6 +49,7 @@ class IORegistry(PluginList):
 
 
 class IOManager(PluginManager):
+    """Manage pyexcel-io plugins"""
     def __init__(self, plugin_type, known_list):
         PluginManager.__init__(self, plugin_type)
         self.known_plugins = known_list
@@ -107,6 +112,7 @@ writers = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 
 
 def load_plugins(prefix, path, black_list, white_list):
+    """Try to discover all pyexcel-io plugins"""
     scan_plugins(
         prefix,  # constants.DEFAULT_PLUGIN_NAME,
         path, black_list, white_list)

@@ -1,4 +1,16 @@
+"""
+    pyexcel_io.database._common
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Common classes shared among database importers and exporters
+
+    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :license: New BSD License, see LICENSE for more details
+"""
+
+
 class TableExportAdapter(object):
+    """ Generic export parameter holder """
     def __init__(self, model, export_columns=None):
         self.model = model
         self.export_columns = export_columns

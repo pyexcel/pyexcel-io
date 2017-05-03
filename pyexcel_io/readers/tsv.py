@@ -1,5 +1,5 @@
 """
-    pyexcel_io.fileformat.tsv
+    pyexcel_io.readers.tsv
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level tsv file format handler.
@@ -12,6 +12,7 @@ from .csvr import CSVBookReader
 
 
 class TSVBookReader(CSVBookReader):
+    """ Read tab separated values """
     def __init__(self):
         CSVBookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_TSV

@@ -16,6 +16,10 @@ from .csvz import CSVZipBookReader
 
 
 class TSVZipBookReader(CSVZipBookReader):
+    """ read zipped tab separated value file
+
+    it supports single tsv file and mulitple tsv files
+    """
     def __init__(self):
         CSVZipBookReader.__init__(self)
         self._file_type = FILE_FORMAT_TSVZ

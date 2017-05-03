@@ -12,6 +12,7 @@ from .csvw import CSVBookWriter
 
 
 class TSVBookWriter(CSVBookWriter):
+    """ write tsv """
     def __init__(self):
         CSVBookWriter.__init__(self)
         self._file_type = constants.FILE_FORMAT_TSV
