@@ -8,13 +8,14 @@
     :license: New BSD License, see LICENSE for more details
 """
 from types import GeneratorType
+import warnings
 
 from pyexcel_io._compact import isstream, PY2
 from pyexcel_io.plugins import READERS, WRITERS
 import pyexcel_io.constants as constants
 
 
-def get_data(afile, file_type=None, streaming=False, **keywords):
+def iget_data(afile, file_type=None, **keywords):
     """Get data from an excel file source
 
     :param afile: a file name, a file stream or actual content
@@ -34,8 +35,40 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
+    data, reader = _get_data(
+        afile, file_type=file_type, streaming=True, **keywords)
+    return data, reader
+
+
+def get_data(afile, file_type=None, streaming=None, **keywords):
+    """Get data from an excel file source
+
+    :param afile: a file name, a file stream or actual content
+    :param sheet_name: the name of the sheet to be loaded
+    :param sheet_index: the index of the sheet to be loaded
+    :param file_type: used only when filename is not a physial file name
+    :param streaming: toggles the type of returned data. The values of the
+                      returned dictionary remain as generator if it is set
+                      to True. Default is False.
+    :param library: explicitly name a library for use.
+                    e.g. library='pyexcel-ods'
+    :param auto_detect_float: defaults to True
+    :param auto_detect_int: defaults to True
+    :param auto_detect_datetime: defaults to True
+    :param ignore_infinity: defaults to True
+    :param keywords: any other library specific parameters
+    :returns: an ordered dictionary
+    """
+    if streaming is not None and streaming is True:
+        warnings.warn('Please use iget_data instead')
+    data, _ = _get_data(afile, file_type=file_type, streaming=False, **keywords)
+    return data
+
+
+def _get_data(afile, file_type=None, **keywords):
     if isstream(afile) and file_type is None:
         file_type = constants.FILE_FORMAT_CSV
+
     if isstream(afile):
         keywords.update(dict(
             file_stream=afile,
@@ -49,11 +82,7 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
             keywords.update(dict(
                 file_name=afile,
                 file_type=file_type))
-    data = load_data(**keywords)
-    if streaming is False:
-        for key in data.keys():
-            data[key] = list(data[key])
-    return data
+    return load_data(**keywords)
 
 
 def save_data(afile, data, file_type=None, **keywords):
@@ -122,6 +151,7 @@ def load_data(file_name=None,
               sheet_index=None,
               sheets=None,
               library=None,
+              streaming=False,
               **keywords):
     """Load data from any supported excel formats
 
@@ -141,6 +171,7 @@ def load_data(file_name=None,
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
+
     with READERS.get_a_plugin(file_type, library) as reader:
         if file_name:
             reader.open(file_name, **keywords)
@@ -156,7 +187,13 @@ def load_data(file_name=None,
             result = reader.read_many(sheets)
         else:
             result = reader.read_all()
-    return result
+        if streaming is False:
+            for key in result.keys():
+                result[key] = list(result[key])
+            reader.close()
+            reader = None
+
+    return result, reader
 
 
 def get_writer(file_name=None, file_stream=None,

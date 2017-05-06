@@ -11,7 +11,7 @@ import logging
 from ._compact import NullHandler
 logging.getLogger(__name__).addHandler(NullHandler())  # noqa
 
-from .io import get_data, save_data  # noqa
+from .io import get_data, iget_data, save_data  # noqa
 import pyexcel_io.plugins as plugins
 
 
