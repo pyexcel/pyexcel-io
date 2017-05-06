@@ -61,7 +61,8 @@ def get_data(afile, file_type=None, streaming=None, **keywords):
     """
     if streaming is not None and streaming is True:
         warnings.warn('Please use iget_data instead')
-    data, _ = _get_data(afile, file_type=file_type, streaming=False, **keywords)
+    data, _ = _get_data(afile, file_type=file_type,
+                        streaming=False, **keywords)
     return data
 
 

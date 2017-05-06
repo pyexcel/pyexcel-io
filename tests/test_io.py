@@ -1,11 +1,12 @@
 import os
 import sys
+import types
 from unittest import TestCase
 import pyexcel_io.manager as manager
 import pyexcel_io.exceptions as exceptions
 from pyexcel_io._compact import StringIO, BytesIO, is_string
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io import save_data, get_data
+from pyexcel_io import save_data, get_data, iget_data
 from pyexcel_io.io import load_data, get_writer
 from nose.tools import raises, eq_
 from zipfile import BadZipfile
@@ -243,11 +244,10 @@ def test_is_string():
         assert is_string(type('a')) is True
 
 
-@raises(TypeError)
 def test_generator_is_obtained():
-    data = get_data(os.path.join("tests", "fixtures", "test.csv"),
-                    streaming=True)
-    len(data['test.csv'])
+    data, reader = iget_data(os.path.join("tests", "fixtures", "test.csv"))
+    assert isinstance(data['test.csv'], types.GeneratorType)
+    reader.close()
 
 
 def test_generator_can_be_written():
