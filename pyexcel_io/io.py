@@ -173,26 +173,26 @@ def load_data(file_name=None,
         except AttributeError:
             raise Exception("file_name should be a string type")
 
-    with READERS.get_a_plugin(file_type, library) as reader:
-        if file_name:
-            reader.open(file_name, **keywords)
-        elif file_content:
-            reader.open_content(file_content, **keywords)
-        elif file_stream:
-            reader.open_stream(file_stream, **keywords)
-        if sheet_name:
-            result = reader.read_sheet_by_name(sheet_name)
-        elif sheet_index is not None:
-            result = reader.read_sheet_by_index(sheet_index)
-        elif sheets is not None:
-            result = reader.read_many(sheets)
-        else:
-            result = reader.read_all()
-        if streaming is False:
-            for key in result.keys():
-                result[key] = list(result[key])
-            reader.close()
-            reader = None
+    reader = READERS.get_a_plugin(file_type, library)
+    if file_name:
+        reader.open(file_name, **keywords)
+    elif file_content:
+        reader.open_content(file_content, **keywords)
+    elif file_stream:
+        reader.open_stream(file_stream, **keywords)
+    if sheet_name:
+        result = reader.read_sheet_by_name(sheet_name)
+    elif sheet_index is not None:
+        result = reader.read_sheet_by_index(sheet_index)
+    elif sheets is not None:
+        result = reader.read_many(sheets)
+    else:
+        result = reader.read_all()
+    if streaming is False:
+        for key in result.keys():
+            result[key] = list(result[key])
+        reader.close()
+        reader = None
 
     return result, reader
 
