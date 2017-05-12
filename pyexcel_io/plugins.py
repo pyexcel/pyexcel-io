@@ -67,7 +67,6 @@ class IOManager(PluginManager):
         _do_additional_registration(plugin_info)
 
     def get_a_plugin(self, file_type=None, library=None, **keywords):
-        PluginManager.get_a_plugin(self, file_type=file_type, library=library)
         __file_type = file_type.lower()
         plugin = self.load_me_now(__file_type, library=library)
         handler = plugin()
