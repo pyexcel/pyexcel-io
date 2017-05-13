@@ -13,7 +13,10 @@ import types
 import logging
 
 PY2 = sys.version_info[0] == 2
+PY3_ABOVE = sys.version_info[0] >= 3
 PY26 = PY2 and sys.version_info[1] < 7
+PY27 = PY2 and sys.version_info[1] == 7
+PY27_ABOVE = PY27 or PY3_ABOVE
 
 if PY26:
     from ordereddict import OrderedDict

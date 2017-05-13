@@ -132,8 +132,11 @@ class CSVFileReader(CSVSheetReader):
 class CSVinMemoryReader(CSVSheetReader):
     def get_file_handle(self):
         if compact.PY2:
-            f = UTF8Recorder(self._native_sheet.payload,
-                             self._encoding)
+            if hasattr(self._native_sheet.payload, 'read'):
+                f = UTF8Recorder(self._native_sheet.payload,
+                                 self._encoding)
+            else:
+                f = self._native_sheet.payload
         else:
             if isinstance(self._native_sheet.payload, compact.BytesIO):
                 content = self._native_sheet.payload.read()
@@ -252,12 +255,15 @@ class CSVBookReader(BookReader):
         self._native_book = self._load_from_stream()
 
     def open_content(self, file_content, multiple_sheets=False, **keywords):
-        if not compact.PY26:
+        if compact.PY27_ABOVE:
             import mmap
             if isinstance(file_content, mmap.mmap):
                 # load from mmap
-                self._file_stream = iter(
-                    lambda: file_content.read().decode('utf-8'), '')
+                if compact.PY3_ABOVE:
+                    self._file_stream = iter(
+                        lambda: file_content.readline().decode('utf-8'), '')
+                else:
+                    self._file_stream = iter(file_content.readline, '')
                 self._keywords = keywords
                 self._native_book = self._load_from_stream()
             else:
