@@ -17,6 +17,11 @@ Updated
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#. `#33 <https://github.com/pyexcel/pyexcel-io/issues/33>`_, handle mmap object
+   differently given as file content. This issue has put in a priority to single
+   sheet csv over multiple sheets in a single memory stream. The latter format
+   is pyexcel own creation but is rarely used. In latter case, m
+   ultiple_sheet=True should be passed along get_data.
 #. `#34 <https://github.com/pyexcel/pyexcel-io/issues/34>`_, treat mmap object
    as a file content.
 

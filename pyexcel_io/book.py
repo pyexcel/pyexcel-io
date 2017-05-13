@@ -8,7 +8,8 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.manager as manager
-from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
+from pyexcel_io._compact import PY2, PY26
+from pyexcel_io._compact import OrderedDict, isstream, StringIO
 from .constants import (
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE
@@ -87,7 +88,12 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        file_stream = _convert_content_to_stream(file_content, self._file_type)
+        import mmap
+        if not PY26 and isinstance(file_content, mmap.mmap):
+            file_stream = file_content
+        else:
+            file_stream = _convert_content_to_stream(
+                file_content, self._file_type)
         self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):

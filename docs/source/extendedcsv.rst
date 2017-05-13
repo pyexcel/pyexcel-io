@@ -65,7 +65,7 @@ Continue from previous example::
     >>> # This is just an illustration
     >>> # In reality, you might deal with csv file upload
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
-    >>> data = get_data(io)
+    >>> data = get_data(io, multiple_sheets=True)
     >>> print(json.dumps(data))
     {"Sheet 1": [[1, 2, 3], [4, 5, 6]], "Sheet 2": [[7, 8, 9], [10, 11, 12]]}
 

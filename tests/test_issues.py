@@ -19,18 +19,14 @@ def test_issue_8():
 
 
 def test_issue_20():
-    test_file = os.path.join("tests",
-                             "fixtures",
-                             "issue20.csv")
+    test_file = get_fixture("issue20.csv")
     data = get_data(test_file)
     expected = [[u'to', u'infinity', u'and', u'beyond']]
     eq_(data['issue20.csv'], expected)
 
 
 def test_issue_23():
-    test_file = os.path.join("tests",
-                             "fixtures",
-                             "issue23.csv")
+    test_file = get_fixture("issue23.csv")
     data = get_data(test_file)
     expected = [
         [8204235414504252, u'inf'],
@@ -50,3 +46,7 @@ def test_issue_28():
         pre_register('pyexcel_test', 'test')
     except UpgradePlugin as e:
         eq_(str(e), expected % 'test')
+
+
+def get_fixture(file_name):
+    return os.path.join("tests", "fixtures", file_name)

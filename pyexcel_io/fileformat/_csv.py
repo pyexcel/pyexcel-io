@@ -235,17 +235,20 @@ class CSVBookReader(BookReader):
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
+        self._file_content = None
         self.__load_from_memory_flag = False
         self.__line_terminator = DEFAULT_NEWLINE
         self.__sheet_name = None
         self.__sheet_index = None
+        self.__multiple_sheets = False
 
     def open(self, file_name, **keywords):
         BookReader.open(self, file_name, **keywords)
         self._native_book = self._load_from_file()
 
-    def open_stream(self, file_stream, **keywords):
+    def open_stream(self, file_stream, multiple_sheets=False, **keywords):
         BookReader.open_stream(self, file_stream, **keywords)
+        self.__multiple_sheets = multiple_sheets
         self._native_book = self._load_from_stream()
 
     def read_sheet(self, native_sheet):
@@ -261,14 +264,15 @@ class CSVBookReader(BookReader):
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
+        self.__load_from_memory_flag = True
         self.__line_terminator = self._keywords.get(
             constants.KEYWORD_LINE_TERMINATOR,
             self.__line_terminator)
-        self.__load_from_memory_flag = True
-        self._file_stream.seek(0)
-        content = self._file_stream.read()
         separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.__line_terminator
-        if separator in content:
+        if self.__multiple_sheets:
+            # will be slow for large files
+            self._file_stream.seek(0)
+            content = self._file_stream.read()
             sheets = content.split(separator)
             named_contents = []
             for sheet in sheets:
