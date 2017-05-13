@@ -48,8 +48,13 @@ else:
     Iterator = object
     irange = range
 
+
 def isstream(instance):
-    return hasattr(instance, 'read')
+    i_am_not_mmap_obj = True
+    if not PY26:
+        import mmap
+        i_am_not_mmap_obj = not isinstance(instance, mmap.mmap)
+    return hasattr(instance, 'read') and i_am_not_mmap_obj
 
 
 def is_string(atype):

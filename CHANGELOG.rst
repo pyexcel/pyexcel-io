@@ -11,6 +11,15 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
+0.3.4 - unreleased
+--------------------------------------------------------------------------------
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#34 <https://github.com/pyexcel/pyexcel-io/issues/34>`_, treat mmap object
+   as a file content.
+
 0.3.3 - 30.03.2017
 --------------------------------------------------------------------------------
 
