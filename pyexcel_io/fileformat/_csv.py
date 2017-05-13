@@ -251,6 +251,24 @@ class CSVBookReader(BookReader):
         self.__multiple_sheets = multiple_sheets
         self._native_book = self._load_from_stream()
 
+    def open_content(self, file_content, multiple_sheets=False, **keywords):
+        if not compact.PY26:
+            import mmap
+            if isinstance(file_content, mmap.mmap):
+                # load from mmap
+                self._file_stream = iter(
+                    lambda: file_content.read().decode('utf-8'), '')
+                self._keywords = keywords
+                self._native_book = self._load_from_stream()
+            else:
+                BookReader.open_content(
+                    self, file_content,
+                    multiple_sheets=multiple_sheets, **keywords)
+        else:
+            BookReader.open_content(
+                self, file_content,
+                multiple_sheets=multiple_sheets, **keywords)
+
     def read_sheet(self, native_sheet):
         if self.__load_from_memory_flag:
             reader = CSVinMemoryReader(native_sheet, **self._keywords)
@@ -286,7 +304,8 @@ class CSVBookReader(BookReader):
                 named_contents.append(new_sheet)
             return named_contents
         else:
-            self._file_stream.seek(0)
+            if hasattr(self._file_stream, 'seek'):
+                self._file_stream.seek(0)
             return [NamedContent(self._file_type, self._file_stream)]
 
     def _load_from_file(self):

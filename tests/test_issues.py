@@ -1,6 +1,7 @@
 import os
 from nose.tools import eq_
 from pyexcel_io import get_data, save_data
+from pyexcel_io._compact import PY26
 
 
 def test_issue_8():
@@ -46,6 +47,20 @@ def test_issue_28():
         pre_register('pyexcel_test', 'test')
     except UpgradePlugin as e:
         eq_(str(e), expected % 'test')
+
+
+def test_issue_33_34():
+    if PY26:
+        pass
+    else:
+        import mmap
+        test_file = get_fixture("issue20.csv")
+        with open(test_file, 'r+b') as f:
+            memory_mapped_file = mmap.mmap(
+                f.fileno(), 0, access=mmap.ACCESS_READ)
+            data = get_data(memory_mapped_file, file_type='csv')
+            expected = [[u'to', u'infinity', u'and', u'beyond']]
+            eq_(data['csv'], expected)
 
 
 def get_fixture(file_name):
