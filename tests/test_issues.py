@@ -5,7 +5,6 @@ import os
 from nose.tools import eq_
 from pyexcel_io import get_data, save_data
 from pyexcel_io._compact import PY26
-import binascii
 
 
 def test_issue_8():
