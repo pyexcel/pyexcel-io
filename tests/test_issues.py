@@ -1,7 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 from nose.tools import eq_
 from pyexcel_io import get_data, save_data
 from pyexcel_io._compact import PY26
+import binascii
 
 
 def test_issue_8():
@@ -61,6 +65,18 @@ def test_issue_33_34():
             data = get_data(memory_mapped_file, file_type='csv')
             expected = [[u'to', u'infinity', u'and', u'beyond']]
             eq_(data['csv'], expected)
+
+
+def test_issue_30_utf8_BOM_header():
+    content = [[u'人有悲歡離合', u'月有陰晴圓缺']]
+    test_file = "test-utf8-BOM.csv"
+    save_data(test_file, content, encoding="utf-8-sig", lineterminator="\n")
+    custom_encoded_content = get_data(test_file, encoding="utf-8-sig")
+    assert custom_encoded_content[test_file] == content
+    with open(test_file, "rb") as f:
+        content = f.read()
+        assert content[0:3] == b'\xef\xbb\xbf'
+    os.unlink(test_file)
 
 
 def get_fixture(file_name):
