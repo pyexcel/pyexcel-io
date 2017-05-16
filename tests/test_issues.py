@@ -85,11 +85,39 @@ def test_issue_33_34_utf32_encoded_file():
         check_mmap_encoding('utf-32')
 
 
+def test_issue_33_34_utf32be_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-32-be')
+
+
+def test_issue_33_34_utf32le_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-32-le')
+
+
 def test_issue_33_34_utf16_encoded_file():
     if PY26:
         pass
     else:
         check_mmap_encoding('utf-16')
+
+
+def test_issue_33_34_utf16be_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-16-be')
+
+
+def test_issue_33_34_utf16le_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-16-le')
 
 
 def test_issue_33_34_utf8_encoded_file():

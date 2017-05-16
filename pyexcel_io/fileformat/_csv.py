@@ -38,18 +38,27 @@ class CSVMemoryMapIterator(compact.Iterator):
         self.__encoding = encoding
         self.__count = 0
         self.__endian = LITTLE_ENDIAN
-        if encoding.startswith('utf-8'):
+        if encoding == 'utf-8':
             # ..\r\x00\n
             # \x00\x..
             self.__zeros_left_in_2_row = 0
-        elif encoding.startswith('utf-16'):
+        elif encoding == 'utf-16':
             # ..\r\x00\n
             # \x00\x..
             self.__zeros_left_in_2_row = 1
-        elif encoding.startswith('utf-32'):
+        elif encoding == 'utf-32':
             # \r\x00\x00\x00\n
             # \x00\x00\x00\x..
             self.__zeros_left_in_2_row = 3
+        elif encoding == 'utf-32-be' or encoding == 'utf-16-be':
+            self.__zeros_left_in_2_row = 0
+            self.__endian = BIG_ENDIAN
+        elif encoding == 'utf-32-le':
+            self.__zeros_left_in_2_row = 3
+            self.__endian = LITTLE_ENDIAN
+        elif encoding == 'utf-16-le':
+            self.__zeros_left_in_2_row = 1
+            self.__endian = LITTLE_ENDIAN
         else:
             raise Exception("Encoding %s is not supported" % encoding)
 
@@ -59,15 +68,16 @@ class CSVMemoryMapIterator(compact.Iterator):
     def __next__(self):
         line = self.__mmap_obj.readline()
         if self.__count == 0:
-            utf_16_32 = (self.__encoding.startswith('utf-16') or
-                         self.__encoding.startswith('utf-32'))
+            utf_16_32 = (self.__encoding == 'utf-16' or
+                         self.__encoding == 'utf-32')
             if utf_16_32:
                 bom_header = line[:2]
                 if bom_header == BOM_BIG_ENDIAN:
                     self.__endian = BIG_ENDIAN
         elif self.__endian == LITTLE_ENDIAN:
             line = line[self.__zeros_left_in_2_row:]
-        line = line.rstrip()
+        if self.__endian == LITTLE_ENDIAN:
+            line = line.rstrip()
         line = line.decode(self.__encoding)
         self.__count += 1
         if line == '':
