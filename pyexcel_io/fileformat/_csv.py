@@ -28,6 +28,41 @@ DEFAULT_CSV_STREAM_FILE_FORMATTER = (
 DEFAULT_NEWLINE = '\r\n'
 
 
+class CSVMemoryMapIterator(object):
+    def __init__(self, mmap_obj, encoding):
+        self.__mmap_obj = mmap_obj
+        self.__encoding = encoding
+        self.__count = 0
+        if encoding.startswith('utf-8'):
+            # ..\r\x00\n
+            # \x00\x..
+            self.__zeros_left_in_2_row = 0
+        elif encoding.startswith('utf-16'):
+            # ..\r\x00\n
+            # \x00\x..
+            self.__zeros_left_in_2_row = 1
+        elif encoding.startswith('utf-32'):
+            # \r\x00\x00\x00\n
+            # \x00\x00\x00\x..
+            self.__zeros_left_in_2_row = 3
+        else:
+            raise Exception("Encoding %s is not supported" % encoding)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        line = self.__mmap_obj.readline()
+        if self.__count != 0:
+            line = line[self.__zeros_left_in_2_row:]
+        line = line.rstrip()
+        line = line.decode(self.__encoding)
+        self.__count += 1
+        if line == '':
+            raise StopIteration
+        return line
+
+
 class UTF8Recorder(compact.Iterator):
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8.
@@ -254,26 +289,23 @@ class CSVBookReader(BookReader):
         self.__multiple_sheets = multiple_sheets
         self._native_book = self._load_from_stream()
 
-    def open_content(self, file_content, multiple_sheets=False, **keywords):
+    def open_content(self, file_content, **keywords):
         if compact.PY27_ABOVE:
             import mmap
             if isinstance(file_content, mmap.mmap):
                 # load from mmap
-                if compact.PY3_ABOVE:
-                    self._file_stream = iter(
-                        lambda: file_content.readline().decode('utf-8'), '')
-                else:
-                    self._file_stream = iter(file_content.readline, '')
+                self.__multiple_sheets = keywords.get('multiple_sheets', False)
+                encoding = keywords.get('encoding', 'utf-8')
+                self._file_stream = CSVMemoryMapIterator(
+                    file_content, encoding)
                 self._keywords = keywords
                 self._native_book = self._load_from_stream()
             else:
                 BookReader.open_content(
-                    self, file_content,
-                    multiple_sheets=multiple_sheets, **keywords)
+                    self, file_content, **keywords)
         else:
             BookReader.open_content(
-                self, file_content,
-                multiple_sheets=multiple_sheets, **keywords)
+                self, file_content, **keywords)
 
     def read_sheet(self, native_sheet):
         if self.__load_from_memory_flag:

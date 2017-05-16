@@ -68,3 +68,4 @@ def is_string(atype):
         if atype == unicode:
             return True
     return False
+        

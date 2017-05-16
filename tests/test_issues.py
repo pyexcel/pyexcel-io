@@ -78,5 +78,41 @@ def test_issue_30_utf8_BOM_header():
     os.unlink(test_file)
 
 
+def test_issue_33_34_utf32_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-32')
+
+
+def test_issue_33_34_utf16_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-16')
+
+
+def test_issue_33_34_utf8_encoded_file():
+    if PY26:
+        pass
+    else:
+        check_mmap_encoding('utf-8')
+
+
+def check_mmap_encoding(encoding):
+    import mmap
+    content = [
+        [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot'],
+        [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot']]
+    test_file = "test-%s-encoding-in-mmap-file.csv" % encoding
+    save_data(test_file, content, encoding=encoding)
+    with open(test_file, 'r+b') as f:
+        memory_mapped_file = mmap.mmap(
+            f.fileno(), 0, access=mmap.ACCESS_READ)
+        data = get_data(memory_mapped_file,
+                        file_type='csv', encoding=encoding)
+        eq_(data['csv'], content)
+
+
 def get_fixture(file_name):
     return os.path.join("tests", "fixtures", file_name)
