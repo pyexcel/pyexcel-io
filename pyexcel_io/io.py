@@ -31,17 +31,16 @@ def get_data(afile, file_type=None, streaming=False, **keywords):
     :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
-    if isstream(afile) and file_type is None:
-        file_type = constants.FILE_FORMAT_CSV
     if isstream(afile):
         data = load_data(file_stream=afile,
-                         file_type=file_type, **keywords)
+                         file_type=file_type or constants.FILE_FORMAT_CSV,
+                         **keywords)
     else:
-        if afile is not None and file_type is not None:
-            data = load_data(file_content=afile,
+        if afile is None or file_type is None:
+            data = load_data(file_name=afile,
                              file_type=file_type, **keywords)
         else:
-            data = load_data(file_name=afile,
+            data = load_data(file_content=afile,
                              file_type=file_type, **keywords)
     if streaming is False:
         for key in data.keys():
