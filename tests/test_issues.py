@@ -113,6 +113,8 @@ def check_mmap_encoding(encoding):
                         file_type='csv', encoding=encoding)
         eq_(data['csv'], content)
 
+    os.unlink(test_file)
+
 
 def get_fixture(file_name):
     return os.path.join("tests", "fixtures", file_name)

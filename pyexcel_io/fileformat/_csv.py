@@ -26,13 +26,18 @@ SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
 DEFAULT_CSV_STREAM_FILE_FORMATTER = (
     "---%s:" % constants.DEFAULT_NAME + "%s---%s")
 DEFAULT_NEWLINE = '\r\n'
+BOM_LITTLE_ENDIAN = b'\xff\xfe'
+BOM_BIG_ENDIAN = b'\xfe\ff'
+LITTLE_ENDIAN = 0
+BIG_ENDIAN = 1
 
 
-class CSVMemoryMapIterator(object):
+class CSVMemoryMapIterator(compact.Iterator):
     def __init__(self, mmap_obj, encoding):
         self.__mmap_obj = mmap_obj
         self.__encoding = encoding
         self.__count = 0
+        self.__endian = LITTLE_ENDIAN
         if encoding.startswith('utf-8'):
             # ..\r\x00\n
             # \x00\x..
@@ -53,13 +58,23 @@ class CSVMemoryMapIterator(object):
 
     def __next__(self):
         line = self.__mmap_obj.readline()
-        if self.__count != 0:
+        if self.__count == 0:
+            utf_16_32 = (self.__encoding.startswith('utf-16') or
+                         self.__encoding.startswith('utf-32'))
+            if utf_16_32:
+                bom_header = line[:2]
+                if bom_header == BOM_BIG_ENDIAN:
+                    self.__endian = BIG_ENDIAN
+        elif self.__endian == LITTLE_ENDIAN:
             line = line[self.__zeros_left_in_2_row:]
         line = line.rstrip()
         line = line.decode(self.__encoding)
         self.__count += 1
         if line == '':
             raise StopIteration
+        if compact.PY2:
+            # python 2 requires utf-8 encoded string for reading
+            line = line.encode('utf-8')
         return line
 
 
@@ -74,7 +89,9 @@ class UTF8Recorder(compact.Iterator):
         return self
 
     def __next__(self):
-        return next(self.reader).encode('utf-8')
+        # python 2 requires utf-8 encoded string for reading
+        line = next(self.reader).encode('utf-8')
+        return line
 
 
 class UnicodeWriter:
