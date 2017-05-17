@@ -97,7 +97,7 @@ class CSVZipBookWriter(BookWriter):
 
     def open(self, file_name, **keywords):
         BookWriter.open(self, file_name, **keywords)
-        self.zipfile = zipfile.ZipFile(file_name, 'w')
+        self.zipfile = zipfile.ZipFile(file_name, 'w',  zipfile.ZIP_DEFLATED)
 
     def create_sheet(self, name):
         given_name = name
