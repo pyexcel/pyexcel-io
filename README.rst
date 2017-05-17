@@ -2,11 +2,14 @@
 pyexcel-io - Let you focus on data, instead of file formats
 ================================================================================
 
+.. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
+   :target: https://www.patreon.com/pyexcel
+
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-io
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-io/coverage.png
-    :target: https://codecov.io/github/pyexcel/pyexcel-io
+   :target: https://codecov.io/github/pyexcel/pyexcel-io
 
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
    :target: http://pyexcel-io.readthedocs.org/en/latest/
@@ -87,7 +90,7 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/pyexcel/pyexcel-io.git
+    $ git clone https://github.com/pyexcel/pyexcel-io.git
     $ cd pyexcel-io
     $ python setup.py install
 
@@ -152,3 +155,10 @@ License
 ================================================================================
 
 New BSD License
+
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please `support me on patreon <https://www.patreon.com/pyexcel>`_ to
+maintain the project and develop it further.
