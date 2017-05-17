@@ -80,7 +80,7 @@ class BookReader(RWInterface):
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
 
-    def open_content(self, file_content, **keywords):
+    def open_content(self, file_content, encoding='utf-8', **keywords):
         """
         read file content as if it is a file stream with
         unlimited keywords for reading
@@ -88,7 +88,7 @@ class BookReader(RWInterface):
         keywords are passed on to individual readers
         """
         file_stream = _convert_content_to_stream(
-            file_content, self._file_type)
+            file_content, self._file_type, encoding=encoding)
         self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
@@ -171,13 +171,13 @@ class BookWriter(RWInterface):
         raise NotImplementedError("Please implement create_sheet()")
 
 
-def _convert_content_to_stream(file_content, file_type):
+def _convert_content_to_stream(file_content, file_type, encoding='utf-8'):
     io = manager.get_io(file_type)
     if PY2:
-        io.write(file_content)
+        io.write(file_content.decode(encoding))
     else:
         if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
-            content = file_content.decode('utf-8')
+            content = file_content.decode(encoding)
         else:
             content = file_content
         io.write(content)

@@ -144,5 +144,20 @@ def check_mmap_encoding(encoding):
     os.unlink(test_file)
 
 
+def test_issue_35_encoding_for_file_content():
+    encoding = 'utf-8'
+    content = [
+        [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot'],
+        [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot']]
+    test_file = "test-%s-encoding-in-mmap-file.csv" % encoding
+    save_data(test_file, content, encoding=encoding)
+    with open(test_file, 'r+b') as f:
+        csv_content = f.read()
+        data = get_data(csv_content, file_type='csv', encoding=encoding)
+        eq_(data['csv'], content)
+
+    os.unlink(test_file)
+
+
 def get_fixture(file_name):
     return os.path.join("tests", "fixtures", file_name)
