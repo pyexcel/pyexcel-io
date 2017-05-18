@@ -200,7 +200,7 @@ def test_binary_file_content():
     io = manager.get_io("csvz")
     save_data(io, data, 'csvz')
     result = get_data(io.getvalue(), 'csvz')
-    assert result['pyexcel_sheet1'] == [[1, 2, 3]]
+    eq_(result['pyexcel_sheet1'], [[1, 2, 3]])
 
 
 def test_text_file_content():
@@ -208,7 +208,7 @@ def test_text_file_content():
     io = manager.get_io("csv")
     save_data(io, data, 'csv')
     result = get_data(io.getvalue(), 'csv')
-    assert result['csv'] == [[1, 2, 3]]
+    eq_(result['csv'], [[1, 2, 3]])
 
 
 def test_library_parameter():
@@ -216,7 +216,7 @@ def test_library_parameter():
     io = manager.get_io("csv")
     save_data(io, data, 'csv', library="pyexcel-io")
     result = get_data(io.getvalue(), 'csv', library="pyexcel-io")
-    assert result['csv'] == [[1, 2, 3]]
+    eq_(result['csv'], [[1, 2, 3]])
 
 
 @raises(Exception)

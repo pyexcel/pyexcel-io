@@ -53,7 +53,7 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/pyexcel/pyexcel-io.git
+    $ git clone https://github.com/pyexcel/pyexcel-io.git
     $ cd pyexcel-io
     $ python setup.py install
 

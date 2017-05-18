@@ -18,7 +18,10 @@ import types
 import logging
 
 PY2 = sys.version_info[0] == 2
+PY3_ABOVE = sys.version_info[0] >= 3
 PY26 = PY2 and sys.version_info[1] < 7
+PY27 = PY2 and sys.version_info[1] == 7
+PY27_ABOVE = PY27 or PY3_ABOVE
 
 if PY26:
     from ordereddict import OrderedDict
@@ -51,7 +54,11 @@ else:
 
 def isstream(instance):
     """ check if a instance is a stream """
-    return hasattr(instance, 'read')
+    i_am_not_mmap_obj = True
+    if not PY26:
+        import mmap
+        i_am_not_mmap_obj = not isinstance(instance, mmap.mmap)
+    return hasattr(instance, 'read') and i_am_not_mmap_obj
 
 
 def is_string(atype):

@@ -67,21 +67,18 @@ def get_data(afile, file_type=None, streaming=None, **keywords):
 
 
 def _get_data(afile, file_type=None, **keywords):
-    if isstream(afile) and file_type is None:
-        file_type = constants.FILE_FORMAT_CSV
-
     if isstream(afile):
         keywords.update(dict(
             file_stream=afile,
-            file_type=file_type))
+            file_type=file_type or constants.FILE_FORMAT_CSV))
     else:
-        if afile is not None and file_type is not None:
+        if afile is None or file_type is None:
             keywords.update(dict(
-                file_content=afile,
+                file_name=afile,
                 file_type=file_type))
         else:
             keywords.update(dict(
-                file_name=afile,
+                file_content=afile,
                 file_type=file_type))
     return load_data(**keywords)
 

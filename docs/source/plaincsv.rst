@@ -122,9 +122,54 @@ Continue from previous example:
     {"csv": [[1, 2, 3], [4, 5, 6]]}
 
 
+Encoding parameter
+--------------------------------------------------------------------------------
+
+In general, if you would like to save your csv file into a custom encoding, you
+can specify 'encoding' parameter. Here is how you write verses of
+a finnish song, "Aurinko laskee länteen"[#f1]_ into a csv file
+
+.. code-block:: python
+
+    >>> content = [[u'Aurinko laskee länteen', u'Näin sen ja ymmärsin sen', u'Poissa aika on rakkauden Kun aurinko laskee länteen']]
+    >>> test_file = "test-utf16-encoding.csv"
+	>>> save_data(test_file, content, encoding="utf-16", lineterminator="\n")
+
+In the reverse direction, if you would like to read your csv file with custom
+encoding back, you do the same to get_data:
+
+.. code-block:: python
+
+    >>> custom_encoded_content = get_data(test_file, encoding="utf-16")
+	>>> assert custom_encoded_content[test_file] == content
+
+.. [#f1] A finnish song that was entered in Eurovision in 1965. You can check out its lyrics at `diggiloo.net <http://www.diggiloo.net/?1965fi>`_
+
+Byte order mark (BOM) in csv file
+--------------------------------------------------------------------------------
+
+By passing **encoding="utf-8-sig", You can write UTF-8 BOM header into your csv file.
+Here is an example to write a sentence of "Shui Dial Getou"[#f2] into a csv file:
+
+.. code-block:: python
+
+    >>> content = [[u'人有悲歡離合', u'月有陰晴圓缺']]
+    >>> test_file = "test-utf8-BOM.csv"
+	>>> save_data(test_file, content, encoding="utf-8-sig", lineterminator="\n")
+
+When you read it back you will have to specify encoding too.
+
+.. code-block:: python
+
+    >>> custom_encoded_content = get_data(test_file, encoding="utf-8-sig")
+	>>> assert custom_encoded_content[test_file] == content
+
+
+.. [#f2] One of Su shi's most famous poem. Here is the `wiki link <https://en.wikipedia.org/wiki/Shuidiao_Getou>`_
+
 .. testcode::
    :hide:
 
    >>> import os
    >>> os.unlink("your_file.csv")
-
+   >>> os.unlink(test_file)

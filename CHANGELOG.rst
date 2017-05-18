@@ -20,10 +20,22 @@ Updated
    csvz, tsvz, django and sql won't work. It is renamed to 'pyexcel-io'.
 #. built-in csv, tsv, csvz, tsvz, django and sql are lazy loaded. 
 
+
+0.3.4 - 18.05.2017
+--------------------------------------------------------------------------------
+
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#. `#31 <https://github.com/pyexcel/pyexcel-io/issues/31>`_, support pyinstaller
+#. `#33 <https://github.com/pyexcel/pyexcel-io/issues/33>`_, handle mmap object
+   differently given as file content. This issue has put in a priority to single
+   sheet csv over multiple sheets in a single memory stream. The latter format
+   is pyexcel own creation but is rarely used. In latter case,
+   multiple_sheet=True should be passed along get_data.
+#. `#34 <https://github.com/pyexcel/pyexcel-io/issues/34>`_, treat mmap object
+   as a file content.
+#. `#35 <https://github.com/pyexcel/pyexcel-io/issues/35>`_, encoding parameter
+   take no effect when given along with file content
+#. use ZIP_DEFALTED to really do the compression
 
 
 0.3.3 - 30.03.2017

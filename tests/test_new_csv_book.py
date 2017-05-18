@@ -253,7 +253,7 @@ class TestWriteMultipleSheets(TestCase):
         w.write(self.sheets)
         w.close()
         reader = self.reader_class()
-        reader.open_stream(io, lineterminator='\n')
+        reader.open_stream(io, lineterminator='\n', multiple_sheets=True)
         sheets = reader.read_all()
         for sheet in sheets:
             sheets[sheet] = list(sheets[sheet])
