@@ -9,7 +9,7 @@
 """
 from lml.loader import scan_plugins
 from lml.plugin import PluginManager
-from lml.registry import PluginList, PluginInfo
+from lml.registry import PluginInfoList, PluginInfo
 
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
@@ -31,18 +31,18 @@ class IOPluginInfo(PluginInfo):
             yield file_type
 
 
-class IORegistry(PluginList):
+class IORegistry(PluginInfoList):
     """provide custom functions to add a reader and a writer """
     def add_a_reader(self, submodule=None, file_types=None, stream_type=None):
         """ add pyexcle-io reader plugin info """
-        return self._add_a_plugin(
+        return self.add_a_plugin_instance(
             IOPluginInfo(READER_PLUGIN, self._get_abs_path(submodule),
                          file_types=file_types,
                          stream_type=stream_type))
 
     def add_a_writer(self, submodule=None, file_types=None, stream_type=None):
         """ add pyexcle-io writer plugin info """
-        return self._add_a_plugin(
+        return self.add_a_plugin_instance(
             IOPluginInfo(WRITER_PLUGIN, self._get_abs_path(submodule),
                          file_types=file_types,
                          stream_type=stream_type))
