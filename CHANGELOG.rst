@@ -11,7 +11,7 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
-0.3.4 - unreleased
+0.3.4 - 18.05.2017
 --------------------------------------------------------------------------------
 
 Updated
