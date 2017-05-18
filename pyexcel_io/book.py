@@ -8,7 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.manager as manager
-from pyexcel_io._compact import PY2, OrderedDict, isstream, StringIO
+from pyexcel_io._compact import OrderedDict, isstream
 from .constants import (
     MESSAGE_ERROR_03,
     MESSAGE_WRONG_IO_INSTANCE
@@ -80,7 +80,7 @@ class BookReader(RWInterface):
         else:
             raise IOError(MESSAGE_WRONG_IO_INSTANCE)
 
-    def open_content(self, file_content, encoding='utf-8', **keywords):
+    def open_content(self, file_content, **keywords):
         """
         read file content as if it is a file stream with
         unlimited keywords for reading
@@ -88,7 +88,7 @@ class BookReader(RWInterface):
         keywords are passed on to individual readers
         """
         file_stream = _convert_content_to_stream(
-            file_content, self._file_type, encoding=encoding)
+            file_content, self._file_type)
         self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
@@ -171,15 +171,8 @@ class BookWriter(RWInterface):
         raise NotImplementedError("Please implement create_sheet()")
 
 
-def _convert_content_to_stream(file_content, file_type, encoding='utf-8'):
+def _convert_content_to_stream(file_content, file_type):
     io = manager.get_io(file_type)
-    if PY2:
-        io.write(file_content.decode(encoding))
-    else:
-        if (isinstance(io, StringIO) and isinstance(file_content, bytes)):
-            content = file_content.decode(encoding)
-        else:
-            content = file_content
-        io.write(content)
+    io.write(file_content)
     io.seek(0)
     return io

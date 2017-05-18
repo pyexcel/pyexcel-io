@@ -145,7 +145,7 @@ def check_mmap_encoding(encoding):
 
 
 def test_issue_35_encoding_for_file_content():
-    encoding = 'utf-8'
+    encoding = 'utf-16'
     content = [
         [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot'],
         [u'Äkkilähdöt', u'Matkakirjoituksia', u'Matkatoimistot']]
