@@ -9,7 +9,7 @@
 """
 from lml.loader import scan_plugins
 from lml.plugin import PluginManager
-from lml.registry import PluginInfoList, PluginInfo
+from lml.plugin import PluginInfoChain, PluginInfo
 
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
@@ -26,26 +26,32 @@ WRITER_PLUGIN = 'pyexcel-io writer'
 
 class IOPluginInfo(PluginInfo):
     """Pyexcel-io plugin info description"""
-    def keywords(self):
+    def tags(self):
         for file_type in self.file_types:
             yield file_type
 
 
-class IORegistry(PluginInfoList):
+class IOPluginInfoChain(PluginInfoChain):
     """provide custom functions to add a reader and a writer """
-    def add_a_reader(self, submodule=None, file_types=None, stream_type=None):
+    def add_a_reader(self, relative_plugin_class_path=None,
+                     file_types=None, stream_type=None):
         """ add pyexcle-io reader plugin info """
-        return self.add_a_plugin_instance(
-            IOPluginInfo(READER_PLUGIN, self._get_abs_path(submodule),
-                         file_types=file_types,
-                         stream_type=stream_type))
+        a_plugin_info = IOPluginInfo(
+                READER_PLUGIN,
+                self._get_abs_path(relative_plugin_class_path),
+                file_types=file_types,
+                stream_type=stream_type)
+        return self.add_a_plugin_instance(a_plugin_info)
 
-    def add_a_writer(self, submodule=None, file_types=None, stream_type=None):
+    def add_a_writer(self, relative_plugin_class_path=None,
+                     file_types=None, stream_type=None):
         """ add pyexcle-io writer plugin info """
-        return self.add_a_plugin_instance(
-            IOPluginInfo(WRITER_PLUGIN, self._get_abs_path(submodule),
-                         file_types=file_types,
-                         stream_type=stream_type))
+        a_plugin_info = IOPluginInfo(
+            WRITER_PLUGIN,
+            self._get_abs_path(relative_plugin_class_path),
+            file_types=file_types,
+            stream_type=stream_type)
+        return self.add_a_plugin_instance(a_plugin_info)
 
 
 class IOManager(PluginManager):
@@ -102,7 +108,7 @@ def _get_me_pypi_package_name(module_name):
 
 
 def _do_additional_registration(plugin_info):
-    for file_type in plugin_info.keywords():
+    for file_type in plugin_info.tags():
         manager.register_stream_type(file_type, plugin_info.stream_type)
         manager.register_a_file_type(
             file_type, plugin_info.stream_type, None)
