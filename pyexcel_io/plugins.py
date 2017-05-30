@@ -102,11 +102,6 @@ class IOManager(PluginManager):
         return all_formats
 
 
-def _get_me_pypi_package_name(module_name):
-    root_module_name = module_name.split('.')[0]
-    return root_module_name.replace('_', '-')
-
-
 def _do_additional_registration(plugin_info):
     for file_type in plugin_info.tags():
         manager.register_stream_type(file_type, plugin_info.stream_type)
