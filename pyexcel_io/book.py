@@ -110,7 +110,6 @@ class BookReader(RWInterface):
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
         else:
-            self.close()
             raise ValueError("Cannot find sheet %s" % sheet_name)
 
     def read_sheet_by_index(self, sheet_index):

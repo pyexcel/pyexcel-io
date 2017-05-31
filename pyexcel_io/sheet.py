@@ -121,6 +121,9 @@ class SheetReader(object):
         """
         raise Exception("Please implement cell_value()")
 
+    def close(self):
+        pass
+
 
 class SheetWriter(object):
     """

@@ -92,8 +92,12 @@ class UTF8Recorder(compact.Iterator):
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8.
     """
-    def __init__(self, f, encoding):
-        self.reader = codecs.getreader(encoding)(f)
+    def __init__(self, file_handle, encoding):
+        self.__file_handle = file_handle
+        self.reader = codecs.getreader(encoding)(file_handle)
+
+    def close(self):
+        self.__file_handle.close()
 
     def __iter__(self):
         return self
@@ -116,13 +120,15 @@ class CSVSheetReader(SheetReader):
         self.__auto_detect_float = auto_detect_float
         self.__ignore_infinity = ignore_infinity
         self.__auto_detect_datetime = auto_detect_datetime
+        self.__file_handle = None
 
     def get_file_handle(self):
         """ return me unicde reader for csv """
         raise NotImplementedError("Please implement get_file_handle()")
 
     def row_iterator(self):
-        return csv.reader(self.get_file_handle(), **self._keywords)
+        self.__file_handle = self.get_file_handle()
+        return csv.reader(self.__file_handle, **self._keywords)
 
     def column_iterator(self, row):
         for element in row:
@@ -149,6 +155,12 @@ class CSVSheetReader(SheetReader):
         if ret is None:
             ret = csv_cell_text
         return ret
+
+    def close(self):
+        if self.__file_handle:
+            self.__file_handle.close()
+        # else: means the generator has been run
+        # yes, no run, no file open.
 
 
 class CSVFileReader(CSVSheetReader):
@@ -200,6 +212,7 @@ class CSVBookReader(BookReader):
         self.__sheet_name = None
         self.__sheet_index = None
         self.__multiple_sheets = False
+        self.__readers = []
 
     def open(self, file_name, **keywords):
         BookReader.open(self, file_name, **keywords)
@@ -237,7 +250,12 @@ class CSVBookReader(BookReader):
             reader = CSVinMemoryReader(native_sheet, **self._keywords)
         else:
             reader = CSVFileReader(native_sheet, **self._keywords)
+            self.__readers.append(reader)
         return reader.to_array()
+
+    def close(self):
+        for reader in self.__readers:
+            reader.close()
 
     def _load_from_stream(self):
         """Load content from memory
