@@ -297,11 +297,17 @@ class TestReadMultipleSheets(TestCase):
 
     def test_sheet_name(self):
         sheets = get_data(self.merged_book_file, sheet_name="sheet1")
-        self.assertEqual(sheets['sheet1'], self.expected_sheets['sheet1'])
+        eq_(sheets['sheet1'], self.expected_sheets['sheet1'])
 
     def test_sheet_index(self):
         sheets = get_data(self.merged_book_file, sheet_index=1)
-        self.assertEqual(sheets['sheet2'], self.expected_sheets['sheet2'])
+        eq_(sheets['sheet2'], self.expected_sheets['sheet2'])
+
+    def test_read_many(self):
+        sheets = get_data(self.merged_book_file, sheets=['sheet1', 2])
+        eq_(sheets['sheet1'], self.expected_sheets['sheet1'])
+        eq_(sheets['sheet3'], self.expected_sheets['sheet3'])
+        assert 'sheet2' not in sheets
 
     def tearDown(self):
         index = 0
