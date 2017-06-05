@@ -16,10 +16,19 @@ Updated
 
 Updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#. library='built-in' as parameter to invoke pyexcel-io's built-in csv, tsv,
-   csvz, tsvz, django and sql won't work. It is renamed to 'pyexcel-io'.
-#. built-in csv, tsv, csvz, tsvz, django and sql are lazy loaded. 
+#. 'built-in' as the value to the parameter 'library' as parameter to invoke
+   pyexcel-io's built-in csv, tsv, csvz, tsvz, django and sql won't work.
+   It is renamed to 'pyexcel-io'.
+#. built-in csv, tsv, csvz, tsvz, django and sql are lazy loaded.
+#. pyexcel-io plugin interface has been updated. v0.3.x plugins won't work.
+#. `#32 <https://github.com/pyexcel/pyexcel-io/issues/32>`_, csv and csvz file
+   handle are made sure to be closed. File close mechanism is enfored.
+#. iget_data function is introduced to cope with dangling file handle issue.
 
+Removed
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. Removed plugin loading code and lml is used instead
 
 0.3.4 - 18.05.2017
 --------------------------------------------------------------------------------
