@@ -70,24 +70,12 @@ get_data(.., library='pyexcel-ods')
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 
-Special Note on PyInstaller
-********************************************************************************
-
-When you packaging pyexcel-io with its plugins, please specify the plugins in
-its hidden import options::
-
-    --hidden-import pyexcel_[nick_name] --hidden-import pyexcel_[nick_name].[nick_name]
-
-Nick name here refers to the second part of the package name. Suppose you
-wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
-
-    --hidden-import pyexcel_xls --hidden-import pyexcel_xls.xls
 
 .. toctree::
    :caption: Migration Note
    :maxdepth: 2
 
-   migration_from_dot_1_to_dot_2
+   pyinstaller
 
 .. toctree::
    :caption: Tutorial
@@ -105,6 +93,10 @@ wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
 
 API
 --------------------------------------------------
+
+.. toctree::
+   :maxdepth: 2
+   common_parameters
 
 .. currentmodule:: pyexcel_io
 
