@@ -46,7 +46,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'lml',
+    'lml==0.0.1',
 ]
 
 if PY26:
@@ -54,9 +54,9 @@ if PY26:
 
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 EXTRAS_REQUIRE = {
-    'xls': ['pyexcel-xls>=0.3.0'],
-    'xlsx': ['pyexcel-xlsx>=0.3.0'],
-    'ods': ['pyexcel-ods3>=0.3.0'],
+    'xls': ['pyexcel-xls>=0.4.0'],
+    'xlsx': ['pyexcel-xlsx>=0.4.0'],
+    'ods': ['pyexcel-ods3>=0.4.0'],
 }
 
 

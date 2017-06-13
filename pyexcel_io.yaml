@@ -5,12 +5,12 @@ version: 0.4.0
 release: 0.3.4
 dependencies:
   - ordereddict;python_version<"2.7"
-  - lml
+  - lml==0.0.1
 extra_dependencies:
   - xls:
-    - pyexcel-xls>=0.3.0
+    - pyexcel-xls>=0.4.0
   - xlsx:
-    - pyexcel-xlsx>=0.3.0
+    - pyexcel-xlsx>=0.4.0
   - ods:
-    - pyexcel-ods3>=0.3.0
+    - pyexcel-ods3>=0.4.0
 description: A python library to read and write structured data in csv, zipped csv format and to/from databases
