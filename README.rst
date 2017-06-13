@@ -63,6 +63,13 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 .. _odfpy: https://github.com/eea/odfpy
 
 
+In order to manage the list of plugins installed, you need to use pip to add or remove
+a plugin. When you use virtualenv, you can have different plugins per virtual
+environment. In the situation where you have multiple plugins that does the same thing
+in your environment, you need to tell pyexcel which plugin to use per function call.
+For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
+You need to append get_array(..., library='pyexcel-odsr').
+
 .. rubric:: Footnotes
 
 .. [#f1] zipped csv file

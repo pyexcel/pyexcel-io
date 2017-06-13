@@ -96,6 +96,13 @@ For individual excel file formats, please install them as you wish:
 .. _odfpy: https://github.com/eea/odfpy
 
 
+In order to manage the list of plugins installed, you need to use pip to add or remove
+a plugin. When you use virtualenv, you can have different plugins per virtual
+environment. In the situation where you have multiple plugins that does the same thing
+in your environment, you need to tell pyexcel which plugin to use per function call.
+For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
+You need to append get_array(..., library='pyexcel-odsr').
+
 .. rubric:: Footnotes
 
 .. [#f1] zipped csv file
@@ -132,24 +139,12 @@ get_data(.., library='pyexcel-ods')
 .. _ods: https://github.com/pyexcel/pyexcel-ods
 .. _ods3: https://github.com/pyexcel/pyexcel-ods3
 
-Special Note on PyInstaller
-********************************************************************************
-
-When you packaging pyexcel-io with its plugins, please specify the plugins in
-its hidden import options::
-
-    --hidden-import pyexcel_[nick_name] --hidden-import pyexcel_[nick_name].[nick_name]
-
-Nick name here refers to the second part of the package name. Suppose you
-wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
-
-    --hidden-import pyexcel_xls --hidden-import pyexcel_xls.xls
 
 .. toctree::
    :caption: Migration Note
    :maxdepth: 2
 
-   migration_from_dot_1_to_dot_2
+   pyinstaller
 
 .. toctree::
    :caption: Tutorial
@@ -167,6 +162,11 @@ wanted to package pyexcel-xls with pyexcel-io, the options to pyinstaller are::
 
 API
 --------------------------------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   common_parameters
 
 .. currentmodule:: pyexcel_io
 

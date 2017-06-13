@@ -96,6 +96,7 @@ API
 
 .. toctree::
    :maxdepth: 2
+
    common_parameters
 
 .. currentmodule:: pyexcel_io
