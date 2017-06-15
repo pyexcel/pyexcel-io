@@ -33,6 +33,12 @@ BIG_ENDIAN = 1
 
 
 class CSVMemoryMapIterator(compact.Iterator):
+    """
+    Wrapper class for mmap object
+
+    mmap object does not handle encoding at all. This class
+    provide the necessary transcoding for utf-8, utf-16 and utf-32
+    """
     def __init__(self, mmap_obj, encoding):
         self.__mmap_obj = mmap_obj
         self.__encoding = encoding

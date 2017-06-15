@@ -37,10 +37,10 @@ class IOPluginInfoChain(PluginInfoChain):
                      file_types=None, stream_type=None):
         """ add pyexcle-io reader plugin info """
         a_plugin_info = IOPluginInfo(
-                READER_PLUGIN,
-                self._get_abs_path(relative_plugin_class_path),
-                file_types=file_types,
-                stream_type=stream_type)
+            READER_PLUGIN,
+            self._get_abs_path(relative_plugin_class_path),
+            file_types=file_types,
+            stream_type=stream_type)
         return self.add_a_plugin_instance(a_plugin_info)
 
     def add_a_writer(self, relative_plugin_class_path=None,
