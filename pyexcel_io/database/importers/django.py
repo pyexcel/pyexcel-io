@@ -19,7 +19,8 @@ log = logging.getLogger(__name__)
 
 class DjangoModelWriter(SheetWriter):
     """ import data into a django model """
-    def __init__(self, importer, adapter, batch_size=None):
+    def __init__(self, importer, adapter, batch_size=None,
+                 bulk_save=True):
         SheetWriter.__init__(self, importer, adapter, adapter.name)
         self.__batch_size = batch_size
         self.__model = adapter.model
@@ -27,6 +28,7 @@ class DjangoModelWriter(SheetWriter):
         self.__mapdict = adapter.column_name_mapping_dict
         self.__initializer = adapter.row_initializer
         self.__objs = []
+        self.__bulk_save = bulk_save
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -44,20 +46,23 @@ class DjangoModelWriter(SheetWriter):
                 # skip the row
 
     def close(self):
-        try:
-            self.__model.objects.bulk_create(
-                self.__objs, batch_size=self.__batch_size)
-        except Exception as bulk_create_exception:
-            log.info(constants.MESSAGE_DB_EXCEPTION)
-            log.info(bulk_create_exception)
+        if self.__bulk_save:
+            try:
+                self.__model.objects.bulk_create(
+                    self.__objs, batch_size=self.__batch_size)
+            except Exception as bulk_create_exception:
+                log.info(constants.MESSAGE_DB_EXCEPTION)
+                log.exception(bulk_create_exception)
+                raise
+
+        else:
             for an_object in self.__objs:
                 try:
                     an_object.save()
                 except Exception as single_save_exception:
                     log.info(constants.MESSAGE_IGNORE_ROW)
-                    log.info(single_save_exception)
-                    log.info(an_object)
-                    continue
+                    log.exception(single_save_exception)
+                    raise
 
 
 class DjangoBookWriter(BookWriter):
