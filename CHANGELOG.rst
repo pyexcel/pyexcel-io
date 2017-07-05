@@ -11,6 +11,17 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
+
+0.4.2 - 05.07.2017
+--------------------------------------------------------------------------------
+
+Updated
+********************************************************************************
+
+#. `#37 <https://github.com/pyexcel/pyexcel-io/issues/37>`_, permanently fix
+   the residue folder pyexcel by release all future releases in a clean clone.
+
+
 0.4.1 - 29.06.2017
 --------------------------------------------------------------------------------
 

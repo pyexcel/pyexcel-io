@@ -11,6 +11,9 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://codecov.io/github/pyexcel/pyexcel-io/coverage.png
    :target: https://codecov.io/github/pyexcel/pyexcel-io
 
+.. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
+   :target: https://gitter.im/pyexcel/Lobby
+
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
    :target: http://pyexcel-io.readthedocs.org/en/latest/
 
