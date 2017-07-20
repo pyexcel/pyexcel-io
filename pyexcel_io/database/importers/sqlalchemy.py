@@ -24,10 +24,13 @@ class PyexcelSQLSkipRowException(Exception):
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
-    def __init__(self, importer, adapter, auto_commit=True, **keywords):
+    def __init__(self, importer, adapter, auto_commit=True,
+                 bulk_size=1000, **keywords):
         SheetWriter.__init__(self, importer, adapter,
                              adapter.get_name(), **keywords)
         self.__auto_commit = auto_commit
+        self.__count = 0
+        self.__bulk_size = bulk_size
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -56,6 +59,10 @@ class SQLTableWriter(SheetWriter):
                     key = name
                 setattr(obj, key, row[name])
         self._native_book.session.add(obj)
+        if self.__auto_commit and self.__bulk_size != float('inf'):
+            self.__count += 1
+            if self.__count % self.__bulk_size == 0:
+                self._native_book.session.commit()
 
     def close(self):
         if self.__auto_commit:
