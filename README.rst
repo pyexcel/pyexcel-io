@@ -8,8 +8,8 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-io
 
-.. image:: https://codecov.io/github/pyexcel/pyexcel-io/coverage.png
-   :target: https://codecov.io/github/pyexcel/pyexcel-io
+.. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/pyexcel/pyexcel-io
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
@@ -17,11 +17,28 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://readthedocs.org/projects/pyexcel-io/badge/?version=latest
    :target: http://pyexcel-io.readthedocs.org/en/latest/
 
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please `support me on patreon <https://www.patreon.com/bePatron?u=5537627>`_ to
+maintain the project and develop it further.
+
+If you are an individual, you are welcome to support me too on patreon and for however long
+you feel like to. As a patreon, you will receive
+`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
+
+With your financial support, I will be able to invest
+a little bit more time in coding, documentation and writing interesting posts.
+
+
 Known constraints
 ==================
 
 Fonts, colors and charts are not supported.
 
+Introduction
+================================================================================
 
 **pyexcel-io** provides **one** application programming interface(API) to read
 and write the data in excel format, import the data into and export the data
@@ -48,6 +65,7 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
                                                     lxml            3.5, 3.6
    `pyexcel-ods`_           ods                     `odfpy`_        same as above
    `pyexcel-odsr`_          ods(read only)          lxml            same as above
+   `pyexcel-htmlr`_         html(read only)         lxml,html5lib   same as above
    ======================== ======================= =============== ==================
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
@@ -57,6 +75,7 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 .. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _pyexcel-odsr: https://github.com/pyexcel/pyexcel-odsr
 .. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
+.. _pyexcel-htmlr: https://github.com/pyexcel/pyexcel-htmlr
 
 .. _xlrd: https://github.com/python-excel/xlrd
 .. _xlwt: https://github.com/python-excel/xlwt
@@ -104,21 +123,6 @@ or clone it and install it:
     $ cd pyexcel-io
     $ python setup.py install
 
-
-
-Support the project
-================================================================================
-
-If your company has embedded pyexcel and its components into a revenue generating
-product, please `support me on patreon <https://www.patreon.com/bePatron?u=5537627>`_ to
-maintain the project and develop it further.
-
-If you are an individual, you are welcome to support me too on patreon and for however long
-you feel like to. As a patreon, you will receive
-`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
-
-With your financial support, I will be able to invest
-a little bit more time in coding, documentation and writing interesting posts.
 
 
 Development guide
@@ -190,6 +194,7 @@ Acceptance criteria
 #. Passes all Travis CI builds
 #. Has fair amount of documentation if your change is complex
 #. Agree on NEW BSD License for your contribution
+
 
 
 
