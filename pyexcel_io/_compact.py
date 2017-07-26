@@ -54,10 +54,13 @@ else:
 
 def isstream(instance):
     """ check if a instance is a stream """
-    i_am_not_mmap_obj = True
-    if not PY26:
+    try:
         import mmap
         i_am_not_mmap_obj = not isinstance(instance, mmap.mmap)
+    except ImportError:
+        # Python 2.6 or Google App Engine
+        i_am_not_mmap_obj = True
+
     return hasattr(instance, 'read') and i_am_not_mmap_obj
 
 
