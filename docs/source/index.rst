@@ -10,6 +10,7 @@
 :Source code: http://github.com/pyexcel/pyexcel-io.git
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
+:Development: |release|
 :Released: |version|
 :Generated: |today|
 
@@ -76,7 +77,7 @@ For individual excel file formats, please install them as you wish:
    `pyexcel-ods3`_          ods                     `ezodf`_,       2.6, 2.7, 3.3, 3.4
                                                     lxml            3.5, 3.6
    `pyexcel-ods`_           ods                     `odfpy`_        same as above
-   `pyexcel-odsr`_          ods(read only)          lxml            same as above
+   `pyexcel-odsr`_          read only for ods, fods lxml            same as above
    `pyexcel-htmlr`_         html(read only)         lxml,html5lib   same as above
    ======================== ======================= =============== ==================
 
