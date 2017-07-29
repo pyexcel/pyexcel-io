@@ -19,7 +19,7 @@ DESCRIPTION = (
     ''
 )
 URL = 'https://github.com/pyexcel/pyexcel-io'
-DOWNLOAD_URL = '%s/archive/0.4.2.tar.gz' % URL
+DOWNLOAD_URL = '%s/archive/0.4.3.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'API',
