@@ -81,4 +81,6 @@ class SQLBookWriter(BookWriter):
                 self.__importer, adapter,
                 auto_commit=self.__auto_commit
             )
+        else:
+            raise Exception("No suitable database adapter found!")
         return sheet_writer

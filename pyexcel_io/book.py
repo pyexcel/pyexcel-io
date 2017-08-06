@@ -192,6 +192,8 @@ class BookWriter(RWInterface):
             if sheet_writer:
                 sheet_writer.write_array(incoming_dict[sheet_name])
                 sheet_writer.close()
+            else:
+                raise Exception("Cannot create a sheet writer!")
 
     def create_sheet(self, sheet_name):
         """

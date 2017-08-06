@@ -345,6 +345,7 @@ class TestMultipleModels:
             data[key] = list(data[key])
         assert data == self.content
 
+    @raises(Exception)
     def test_special_case_where_only_one_model_used(self):
         model1 = FakeDjangoModel()
         importer = DjangoModelImporter()
