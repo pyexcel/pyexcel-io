@@ -11,7 +11,40 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
-0.4.0 - unreleased
+
+0.4.3 - 29.07.2017
+--------------------------------------------------------------------------------
+
+Updated
+********************************************************************************
+
+#. `#41 <https://github.com/pyexcel/pyexcel-io/issues/41>`_, walk away gracefully
+   when mmap is not available.
+
+0.4.2 - 05.07.2017
+--------------------------------------------------------------------------------
+
+Updated
+********************************************************************************
+
+#. `#37 <https://github.com/pyexcel/pyexcel-io/issues/37>`_, permanently fix
+   the residue folder pyexcel by release all future releases in a clean clone.
+
+
+0.4.1 - 29.06.2017
+--------------------------------------------------------------------------------
+
+Updated
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. `#39 <https://github.com/pyexcel/pyexcel-io/issues/39>`_, raise exception
+   when bulk save in django fails. Please `bulk_save=False` if you as the
+   developer choose to save the records one by one if bulk_save cannot be
+   used. However, exception in one-by-one save case will be raised as well.
+   This change is made to raise exception in the first place so that you as
+   the developer will be suprised when it was deployed in production.
+
+0.4.0 - 19.06.2017
 --------------------------------------------------------------------------------
 
 Updated
@@ -29,6 +62,7 @@ Removed
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #. Removed plugin loading code and lml is used instead
+
 
 0.3.4 - 18.05.2017
 --------------------------------------------------------------------------------

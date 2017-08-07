@@ -108,14 +108,17 @@ class TestException:
             {'Y': 5, 'X': 4, 'Z': 6}
         ]
 
-    def test_sheet_save_to_django_model(self):
+    @raises(Exception)
+    def test_bulk_save_to_django_model_with_exception(self):
         model = FakeExceptionDjangoModel()
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]
         writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
-        # now raise excpetion
+
+    @raises(Exception)
+    def test_single_save_to_django_model_with_exception(self):
         model = FakeExceptionDjangoModel(raiseException=True)
         adapter = DjangoModelImportAdapter(model)
         adapter.column_names = self.data[0]

@@ -73,6 +73,6 @@ pyexcel-odsr
 In order to package pyexcel-odsr, you need to specify::
 
     --hidden-import pyexcel_odsr
-    --hidden-import pyexcel_ods4.odsr
+    --hidden-import pyexcel_odsr.odsr
 
 
