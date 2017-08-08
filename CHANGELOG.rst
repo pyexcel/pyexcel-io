@@ -11,6 +11,14 @@ Updated
 #. `#19 <https://github.com/pyexcel/pyexcel-io/issues/19>`_,
    use cString by default
 
+0.4.4 - 08.08.2017
+--------------------------------------------------------------------------------
+
+Updated
+********************************************************************************
+#. `#42 <https://github.com/pyexcel/pyexcel-io/issues/42>`_, raise exception
+   if database table name does not match the sheet name
+
 
 0.4.3 - 29.07.2017
 --------------------------------------------------------------------------------
