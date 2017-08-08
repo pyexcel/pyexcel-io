@@ -82,4 +82,6 @@ class DjangoBookWriter(BookWriter):
             sheet_writer = DjangoModelWriter(
                 self.__importer, model,
                 batch_size=self._keywords.get('batch_size', None))
+        else:
+            raise Exception("No django model found!")
         return sheet_writer
