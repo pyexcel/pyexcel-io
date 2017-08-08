@@ -526,3 +526,16 @@ def test_sql_table_import_adapter():
     adapter.column_names = ['a']
     adapter.row_initializer = "abc"
     eq_(adapter.row_initializer, "abc")
+
+
+@raises(Exception)
+def test_unknown_sheet(self):
+    importer = SQLTableImporter(None)
+    category_adapter = SQLTableImportAdapter(Category)
+    category_adapter.column_names = ['']
+    importer.append(category_adapter)
+    writer = SQLBookWriter()
+    writer.open_content(importer)
+    to_store = OrderedDict()
+    to_store.update({'you do not see me': [[]]})
+    writer.write(to_store)
