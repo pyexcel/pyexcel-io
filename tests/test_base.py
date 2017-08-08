@@ -19,25 +19,6 @@ def test_is_empty_array():
     assert is_empty_array(b) is False
 
 
-class ArrayReader(SheetReader):
-    @property
-    def name(self):
-        SheetReader.name
-        return self._native_sheet.name
-
-    def number_of_columns(self):
-        SheetReader.number_of_columns(self)
-        return len(self._native_sheet.payload[0])
-
-    def number_of_rows(self):
-        SheetReader.number_of_rows(self)
-        return len(self._native_sheet.payload)
-
-    def cell_value(self, row, column):
-        SheetReader.cell_value(self, row, column)
-        return self._native_sheet.payload[row][column]
-
-
 class ArrayWriter(SheetWriter):
     def set_sheet_name(self, name):
         self._native_sheet.name = name
