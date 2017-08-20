@@ -14,4 +14,12 @@ extra_dependencies:
     - pyexcel-xlsx>=0.4.0
   - ods:
     - pyexcel-ods3>=0.4.0
+keywords:
+  - API
+  - tsv
+  - tsvz
+  - csv
+  - csvz
+  - django
+  - sqlalchemy
 description: A python library to read and write structured data in csv, zipped csv format and to/from databases

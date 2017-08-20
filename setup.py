@@ -24,9 +24,11 @@ FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'API',
     'tsv',
-    'tsvz'
+    'tsvz',
     'csv',
-    'csvz'
+    'csvz',
+    'django',
+    'sqlalchemy',
     'python'
 ]
 
@@ -35,7 +37,6 @@ CLASSIFIERS = [
     'Topic :: Utilities',
     'Topic :: Software Development :: Libraries',
     'Programming Language :: Python',
-    'License :: OSI Approved :: BSD License',
     'Intended Audience :: Developers',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
@@ -43,6 +44,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'License :: OSI Approved :: BSD License',
     'Programming Language :: Python :: Implementation :: PyPy'
 ]
 

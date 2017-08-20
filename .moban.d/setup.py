@@ -1,17 +1,9 @@
-{% extends 'setup.py.jj2' %}
+{% extends 'pyexcel-setup.py.jj2' %}
 
 {%block platform_block%}
 {%endblock%}
 
-{%block additional_keywords%}
-    'API',
-    'tsv',
-    'tsvz'
-    'csv',
-    'csvz'
-{%endblock %}
-
-{%block additional_classifiers%}
+{%block pyexcel_extra_classifiers%}
     'Programming Language :: Python :: Implementation :: PyPy'
 {%endblock%}}
 
