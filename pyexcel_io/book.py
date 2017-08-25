@@ -178,7 +178,9 @@ class BookWriter(RWInterface):
         if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
         if PY2:
-            if not hasattr(file_stream, 'seek'):
+            if hasattr(file_stream, 'seek'):
+                file_stream.seek(0)
+            else:
                 # python 2
                 # Hei zipfile in odfpy would do a seek
                 # but stream from urlib cannot do seek
