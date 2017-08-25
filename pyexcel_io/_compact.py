@@ -36,8 +36,8 @@ except ImportError:
             pass
 
 if PY2:
-    from StringIO import StringIO
-    from StringIO import StringIO as BytesIO
+    from cStringIO import StringIO
+    from cStringIO import StringIO as BytesIO
     text_type = unicode
     irange = xrange
 
