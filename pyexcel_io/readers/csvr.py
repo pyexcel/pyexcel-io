@@ -12,12 +12,12 @@ import os
 import csv
 import glob
 import codecs
-import datetime
 
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader, NamedContent
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
+import pyexcel_io.service as service
 
 
 DEFAULT_SEPARATOR = '__'
@@ -147,9 +147,9 @@ class CSVSheetReader(SheetReader):
     def __convert_cell(self, csv_cell_text):
         ret = None
         if self.__auto_detect_int:
-            ret = _detect_int_value(csv_cell_text)
+            ret = service.detect_int_value(csv_cell_text)
         if ret is None and self.__auto_detect_float:
-            ret = _detect_float_value(csv_cell_text)
+            ret = service.detect_float_value(csv_cell_text)
             shall_we_ignore_the_conversion = (
                 (ret in [float('inf'), float('-inf')]) and
                 self.__ignore_infinity
@@ -157,7 +157,7 @@ class CSVSheetReader(SheetReader):
             if shall_we_ignore_the_conversion:
                 ret = None
         if ret is None and self.__auto_detect_datetime:
-            ret = _detect_date_value(csv_cell_text)
+            ret = service.detect_date_value(csv_cell_text)
         if ret is None:
             ret = csv_cell_text
         return ret
@@ -329,48 +329,3 @@ class CSVBookReader(BookReader):
                                                    key=lambda row: row[1]):
                 ret.append(NamedContent(lsheetname, filen))
             return ret
-
-
-def _detect_date_value(csv_cell_text):
-    """
-    Read the date formats that were written by csv.writer
-    """
-    ret = None
-    try:
-        if len(csv_cell_text) == 10:
-            ret = datetime.datetime.strptime(
-                csv_cell_text,
-                "%Y-%m-%d")
-            ret = ret.date()
-        elif len(csv_cell_text) == 19:
-            ret = datetime.datetime.strptime(
-                csv_cell_text,
-                "%Y-%m-%d %H:%M:%S")
-        elif len(csv_cell_text) > 19:
-            ret = datetime.datetime.strptime(
-                csv_cell_text[0:26],
-                "%Y-%m-%d %H:%M:%S.%f")
-    except ValueError:
-        pass
-    return ret
-
-
-def _detect_float_value(csv_cell_text):
-    try:
-        if csv_cell_text.startswith('0'):
-            # do not convert if a number starts with 0
-            # e.g. 014325
-            return None
-        else:
-            return float(csv_cell_text)
-    except ValueError:
-        return None
-
-
-def _detect_int_value(csv_cell_text):
-    if csv_cell_text.startswith('0') and len(csv_cell_text) > 1:
-        return None
-    try:
-        return int(csv_cell_text)
-    except ValueError:
-        return None
