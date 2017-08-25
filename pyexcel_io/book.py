@@ -7,6 +7,8 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from io import UnsupportedOperation
+
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import OrderedDict, isstream
 from .constants import (
@@ -177,6 +179,18 @@ class BookWriter(RWInterface):
         """
         if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
+        if not hasattr(file_stream, 'seek'):
+            # python 2
+            # Hei zipfile in odfpy would do a seek
+            # but stream from urlib cannot do seek
+            file_stream = _convert_content_to_stream(
+                file_stream.read(), self._file_type)
+        try:
+            file_stream.seek(0)
+        except UnsupportedOperation:
+            # python 3
+            file_stream = _convert_content_to_stream(
+                file_stream.read(), self._file_type)
         self.open(file_stream, **keywords)
 
     def open_content(self, file_stream, **keywords):

@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+from nose import SkipTest
 from nose.tools import eq_
 from pyexcel_io import get_data, save_data
 from pyexcel_io._compact import PY26
+import pyexcel as p
+
+IN_TRAVIS = 'TRAVIS' in os.environ
 
 
 def test_issue_8():
@@ -158,6 +162,12 @@ def test_issue_35_encoding_for_file_content():
         eq_(data['csv'], content)
 
     os.unlink(test_file)
+
+
+def test_issue_43():
+    #if not IN_TRAVIS:
+    #    raise SkipTest()
+    p.get_book(url="https://github.com/pyexcel/pyexcel-xls/raw/master/tests/fixtures/file_with_an_empty_sheet.xls");  # flake8: noqa
 
 
 def get_fixture(file_name):
