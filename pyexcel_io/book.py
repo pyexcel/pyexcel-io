@@ -85,6 +85,25 @@ class BookReader(RWInterface):
         keywords are passed on to individual readers
         """
         if isstream(file_stream):
+            if PY2:
+                if hasattr(file_stream, 'seek'):
+                    file_stream.seek(0)
+                else:
+                    # python 2
+                    # Hei zipfile in odfpy would do a seek
+                    # but stream from urlib cannot do seek
+                    file_stream = _convert_content_to_stream(
+                        file_stream.read(), self._file_type)
+            else:
+                from io import UnsupportedOperation
+    
+                try:
+                    file_stream.seek(0)
+                except UnsupportedOperation:
+                    # python 3
+                    file_stream = _convert_content_to_stream(
+                        file_stream.read(), self._file_type)
+
             self._file_stream = file_stream
             self._keywords = keywords
         else:
@@ -177,24 +196,6 @@ class BookWriter(RWInterface):
         """
         if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
-        if PY2:
-            if hasattr(file_stream, 'seek'):
-                file_stream.seek(0)
-            else:
-                # python 2
-                # Hei zipfile in odfpy would do a seek
-                # but stream from urlib cannot do seek
-                file_stream = _convert_content_to_stream(
-                    file_stream.read(), self._file_type)
-        else:
-            from io import UnsupportedOperation
-
-            try:
-                file_stream.seek(0)
-            except UnsupportedOperation:
-                # python 3
-                file_stream = _convert_content_to_stream(
-                    file_stream.read(), self._file_type)
         self.open(file_stream, **keywords)
 
     def open_content(self, file_stream, **keywords):
