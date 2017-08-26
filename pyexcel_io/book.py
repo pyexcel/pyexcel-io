@@ -96,7 +96,7 @@ class BookReader(RWInterface):
                         file_stream.read(), self._file_type)
             else:
                 from io import UnsupportedOperation
-    
+
                 try:
                     file_stream.seek(0)
                 except UnsupportedOperation:
