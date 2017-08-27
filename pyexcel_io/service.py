@@ -125,8 +125,11 @@ def boolean_value(value):
     """get bolean value"""
     if value == "true":
         ret = True
-    else:
+    elif value == "false":
         ret = False
+    else:
+        # needed for pyexcel-ods3
+        ret = value
     return ret
 
 
