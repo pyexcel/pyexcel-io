@@ -10,7 +10,6 @@
 :Source code: http://github.com/pyexcel/pyexcel-io.git
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
-:Development: |release|
 :Released: |version|
 :Generated: |today|
 
@@ -128,7 +127,8 @@ get_data(.., library='pyexcel-ods')
     ============= ======= ======== ======= ======== ======== ========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
     ============= ======= ======== ======= ======== ======== ========
-    0.4.0         0.4.0   0.4.0    0.4.0   0.4.0    0.4.0    0.4.0
+    0.5.0         0.5.0   0.5.0    0.5.0   0.5.0    0.5.0    0.5.0
+    0.4.x         0.4.x   0.4.x    0.4.x   0.4.x    0.4.x    0.4.x
     0.3.0+        0.3.0+  0.3.0    0.3.0+  0.3.0+   0.3.0    0.3.0
     0.2.2+        0.2.2+  0.2.2+   0.2.1+  0.2.1+            0.0.1
     0.2.0+        0.2.0+  0.2.0+   0.2.0   0.2.0             0.0.1
