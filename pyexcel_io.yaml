@@ -1,19 +1,19 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-io"
 nick_name: io
-version: 0.5.0
-current_version: 0.5.0
-release: 0.5.0
+version: 0.5.1
+current_version: 0.5.1
+release: 0.5.1
 dependencies:
   - ordereddict;python_version<"2.7"
   - lml==0.0.1
 extra_dependencies:
   - xls:
-    - pyexcel-xls>=0.4.0
+    - pyexcel-xls>=0.5.0
   - xlsx:
-    - pyexcel-xlsx>=0.4.0
+    - pyexcel-xlsx>=0.5.0
   - ods:
-    - pyexcel-ods3>=0.4.0
+    - pyexcel-ods3>=0.5.0
 keywords:
   - API
   - tsv

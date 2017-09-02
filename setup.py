@@ -10,7 +10,7 @@ PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -19,7 +19,7 @@ DESCRIPTION = (
     ''
 )
 URL = 'https://github.com/pyexcel/pyexcel-io'
-DOWNLOAD_URL = '%s/archive/0.5.0.tar.gz' % URL
+DOWNLOAD_URL = '%s/archive/0.5.1.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'API',
@@ -57,9 +57,9 @@ if PY26:
 
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 EXTRAS_REQUIRE = {
-    'xls': ['pyexcel-xls>=0.4.0'],
-    'xlsx': ['pyexcel-xlsx>=0.4.0'],
-    'ods': ['pyexcel-ods3>=0.4.0'],
+    'xls': ['pyexcel-xls>=0.5.0'],
+    'xlsx': ['pyexcel-xlsx>=0.5.0'],
+    'ods': ['pyexcel-ods3>=0.5.0'],
 }
 
 
