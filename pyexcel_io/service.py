@@ -11,7 +11,7 @@ import re
 import math
 import datetime
 
-from pyexcel._compact import PY2
+from pyexcel_io._compact import PY2
 
 
 def has_no_digits_in_float(value):
