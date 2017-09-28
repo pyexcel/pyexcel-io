@@ -72,13 +72,21 @@ For individual excel file formats, please install them as you wish:
    `pyexcel-xls`_           xls, xlsx(read only),   `xlrd`_,          same as above
                             xlsm(read only)         `xlwt`_
    `pyexcel-xlsx`_          xlsx                    `openpyxl`_       same as above
-   `pyexcel-xlsxw`_         xlsx(write only)        `XlsxWriter`_     same as above
    `pyexcel-ods3`_          ods                     `pyexcel-ezodf`_, 2.6, 2.7, 3.3, 3.4
                                                     lxml              3.5, 3.6
    `pyexcel-ods`_           ods                     `odfpy`_          same as above
+   ======================== ======================= ================= ==================
+
+.. table:: Dedicated file reader and writers
+
+   ======================== ======================= ================= ==================
+   Package name              Supported file formats  Dependencies     Python versions
+   ======================== ======================= ================= ==================
+   `pyexcel-xlsxw`_         xlsx(write only)        `XlsxWriter`_     Python 2 and 3
    `pyexcel-odsr`_          read only for ods, fods lxml              same as above
    `pyexcel-htmlr`_         html(read only)         lxml,html5lib     same as above
    ======================== ======================= ================= ==================
+
 
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
@@ -127,7 +135,7 @@ get_data(.., library='pyexcel-ods')
     ============= ======= ======== ======= ======== ======== ========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
     ============= ======= ======== ======= ======== ======== ========
-    0.5.0         0.5.0   0.5.0    0.5.0   0.5.0    0.5.0    0.5.0
+    0.5.1         0.5.0   0.5.0    0.5.0   0.5.0    0.5.0    0.5.0
     0.4.x         0.4.x   0.4.x    0.4.x   0.4.x    0.4.x    0.4.x
     0.3.0+        0.3.0+  0.3.0    0.3.0+  0.3.0+   0.3.0    0.3.0
     0.2.2+        0.2.2+  0.2.2+   0.2.1+  0.2.1+            0.0.1
