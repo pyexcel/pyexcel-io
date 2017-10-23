@@ -65,7 +65,9 @@ PUBLISH_COMMAND = '{0} setup.py sdist bdist_wheel upload -r pypi'.format(
     sys.executable)
 GS_COMMAND = ('gs pyexcel-io v0.5.3 ' +
               "Find 0.5.3 in changelog for more details")
-here = os.path.abspath(os.path.dirname(__file__))
+NO_GS_MESSAGE = ('Automatic github release is disabled. ' +
+                 'Please install gease to enable it.')
+HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 class PublishCommand(Command):
@@ -88,7 +90,7 @@ class PublishCommand(Command):
     def run(self):
         try:
             self.status('Removing previous builds...')
-            rmtree(os.path.join(here, 'dist'))
+            rmtree(os.path.join(HERE, 'dist'))
         except OSError:
             pass
 
