@@ -41,7 +41,8 @@ as of 2014. They are invented and supported by `pyexcel-io`_.
 Installation
 --------------------------------------------------------------------------------
 
-You can install it via pip:
+
+You can install pyexcel-io via pip:
 
 .. code-block:: bash
 

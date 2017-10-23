@@ -1,15 +1,15 @@
 # Template by setupmobans
 import os
+import sys
 import codecs
 from shutil import rmtree
 from setuptools import setup, find_packages, Command
-import sys
 PY2 = sys.version_info[0] == 2
 PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
-VERSION = '0.5.2'
+VERSION = '0.5.3'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -18,7 +18,7 @@ DESCRIPTION = (
     ''
 )
 URL = 'https://github.com/pyexcel/pyexcel-io'
-DOWNLOAD_URL = '%s/archive/0.5.2.tar.gz' % URL
+DOWNLOAD_URL = '%s/archive/0.5.3.tar.gz' % URL
 FILES = ['README.rst',  'CHANGELOG.rst']
 KEYWORDS = [
     'API',
@@ -60,10 +60,11 @@ EXTRAS_REQUIRE = {
     'xlsx': ['pyexcel-xlsx>=0.5.0'],
     'ods': ['pyexcel-ods3>=0.5.0'],
 }
+# You do not need to read beyond this line
 PUBLISH_COMMAND = '{0} setup.py sdist bdist_wheel upload -r pypi'.format(
     sys.executable)
-GS_COMMAND = ('gs pyexcel-io v0.5.2 ' +
-              "Find 0.5.2 in changelog for more details")
+GS_COMMAND = ('gs pyexcel-io v0.5.3 ' +
+              "Find 0.5.3 in changelog for more details")
 here = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -86,16 +87,34 @@ class PublishCommand(Command):
 
     def run(self):
         try:
-            self.status('Removing previous builds…')
+            self.status('Removing previous builds...')
             rmtree(os.path.join(here, 'dist'))
         except OSError:
             pass
 
-        self.status('Building Source and Wheel (universal) distribution…')
-        if os.system(GS_COMMAND) == 0:
+        self.status('Building Source and Wheel (universal) distribution...')
+        run_status = True
+        if has_gease():
+            run_status = os.system(GS_COMMAND) == 0
+        else:
+            self.status(NO_GS_MESSAGE)
+        if run_status:
             os.system(PUBLISH_COMMAND)
 
         sys.exit()
+
+
+def has_gease():
+    """
+    test if github release command is installed
+
+    visit http://github.com/moremoban/gease for more info
+    """
+    try:
+        import gease  # noqa
+        return True
+    except ImportError:
+        return False
 
 
 def read_files(*files):
@@ -158,7 +177,6 @@ if __name__ == '__main__':
         include_package_data=True,
         zip_safe=False,
         classifiers=CLASSIFIERS,
-        setup_requires=['gease'],
         cmdclass={
             'publish': PublishCommand,
         }
