@@ -7,14 +7,13 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import csv
 import zipfile
 
 from pyexcel_io._compact import StringIO
 from pyexcel_io.book import BookWriter
 from pyexcel_io.constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
 
-from .csvw import CSVSheetWriter
+from .csvw import CSVSheetWriter, UnicodeWriter
 
 
 class CSVZipSheetWriter(CSVSheetWriter):
@@ -26,7 +25,11 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         self.content = StringIO()
-        self.writer = csv.writer(self.content, **self._keywords)
+        self.writer = UnicodeWriter(
+            self.content,
+            encoding=self._encoding,
+            **self._keywords
+        )
 
     def close(self):
         file_name = "%s.%s" % (self._native_sheet, self.file_extension)
