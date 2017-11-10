@@ -31,8 +31,8 @@ class UnicodeWriter(object):
 
     def writerow(self, row):
         """ write row into the csv file """
-        self.writer.writerow([compact.text_type(s).encode("utf-8")
-                              for s in row])
+        self.writer.writerow(
+            [compact.text_type(s).encode("utf-8") for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
         data = data.decode("utf-8")
