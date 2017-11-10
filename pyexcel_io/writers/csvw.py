@@ -35,8 +35,7 @@ class UnicodeWriter(object):
                               for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
-        if compact.PY2:
-            data = data.decode("utf-8")
+        data = data.decode("utf-8")
         # ... and reencode it into the target encoding
         data = self.encoder.encode(data)
         # write to the target stream

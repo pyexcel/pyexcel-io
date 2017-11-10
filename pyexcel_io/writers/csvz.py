@@ -9,7 +9,7 @@
 """
 import zipfile
 
-from pyexcel_io._compact import StringIO
+from pyexcel_io._compact import StringIO, PY2
 from pyexcel_io.book import BookWriter
 from pyexcel_io.constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
 
@@ -25,11 +25,15 @@ class CSVZipSheetWriter(CSVSheetWriter):
 
     def set_sheet_name(self, name):
         self.content = StringIO()
-        self.writer = UnicodeWriter(
-            self.content,
-            encoding=self._encoding,
-            **self._keywords
-        )
+        if PY2:
+            self.writer = UnicodeWriter(
+                self.content,
+                encoding=self._encoding,
+                **self._keywords
+            )
+        else:
+            import csv
+            self.writer = csv.writer(self.content, **self._keywords)
 
     def close(self):
         file_name = "%s.%s" % (self._native_sheet, self.file_extension)
