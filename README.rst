@@ -71,6 +71,7 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
    Package name              Supported file formats  Dependencies     Python versions
    ======================== ======================= ================= ==================
    `pyexcel-xlsxw`_         xlsx(write only)        `XlsxWriter`_     Python 2 and 3
+   `pyexcel-xlsxr`_         xlsx(read only)         lxml              same as above
    `pyexcel-odsr`_          read only for ods, fods lxml              same as above
    `pyexcel-htmlr`_         html(read only)         lxml,html5lib     same as above
    ======================== ======================= ================= ==================
@@ -83,6 +84,7 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 .. _pyexcel-ods3: https://github.com/pyexcel/pyexcel-ods3
 .. _pyexcel-odsr: https://github.com/pyexcel/pyexcel-odsr
 .. _pyexcel-xlsxw: https://github.com/pyexcel/pyexcel-xlsxw
+.. _pyexcel-xlsxr: https://github.com/pyexcel/pyexcel-xlsxr
 .. _pyexcel-htmlr: https://github.com/pyexcel/pyexcel-htmlr
 
 .. _xlrd: https://github.com/python-excel/xlrd
