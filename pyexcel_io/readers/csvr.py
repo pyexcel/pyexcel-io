@@ -230,7 +230,7 @@ class CSVBookReader(BookReader):
         self._native_book = self._load_from_stream()
 
     def open_content(self, file_content, **keywords):
-        if compact.PY27_ABOVE:
+        try:
             import mmap
             encoding = keywords.get('encoding', 'utf-8')
             if isinstance(file_content, mmap.mmap):
@@ -247,7 +247,8 @@ class CSVBookReader(BookReader):
                 # else python 2.7 does not care about bytes nor str
                 BookReader.open_content(
                     self, file_content, **keywords)
-        else:
+        except ImportError:
+            # python 2.6 or Google app engine
             BookReader.open_content(
                 self, file_content, **keywords)
 
