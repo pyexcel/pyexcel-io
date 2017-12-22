@@ -5,7 +5,7 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
    :target: https://www.patreon.com/pyexcel
 
-.. image:: https://api.travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
+.. image:: https://travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-io
 
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg

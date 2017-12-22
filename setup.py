@@ -9,7 +9,7 @@ PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
-VERSION = '0.5.4'
+VERSION = '0.5.5'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
