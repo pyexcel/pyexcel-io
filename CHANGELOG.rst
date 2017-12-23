@@ -1,12 +1,22 @@
 Change log
 ================================================================================
 
+0.5.5 - 23.12.2017
+--------------------------------------------------------------------------------
+
+Christmas gift
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#. Issue `#45 <https://github.com/pyexcel/pyexcel-io/issues/45>`_, csv reader
+   throws exception because google app engine does not support mmap. People who
+   are not working with google app engine, need not to take this update. Enjoy
+   your Christmas break.
+
 0.5.4 - 10.11.2017
 --------------------------------------------------------------------------------
 
 updated
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#. PR `#44 <https://github.com/pyexcel/pyexcel-io/issues/44>`_, use unicodewriter
+#. PR `#44 <https://github.com/pyexcel/pyexcel-io/pull/44>`_, use unicodewriter
    for csvz writers.
 
 0.5.3 - 23.10.2017
