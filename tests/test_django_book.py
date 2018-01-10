@@ -315,6 +315,27 @@ class TestMultipleModels:
         assert model2.objects.objs == self.result2
         assert model1.objects.batch_size == sample_size
 
+    def test_bulk_save_flag(self):
+        sample_size = 10
+        model1 = FakeDjangoModel()
+        model2 = FakeDjangoModel()
+        importer = DjangoModelImporter()
+        adapter1 = DjangoModelImportAdapter(model1)
+        adapter1.column_names = self.content['Sheet1'][0]
+        adapter2 = DjangoModelImportAdapter(model2)
+        adapter2.column_names = self.content['Sheet2'][0]
+        importer.append(adapter1)
+        importer.append(adapter2)
+        to_store = {
+            adapter1.get_name(): self.content['Sheet1'][1:],
+            adapter2.get_name(): self.content['Sheet2'][1:]
+        }
+        writer = DjangoBookWriter()
+        writer.open_content(importer, batch_size=sample_size, bulk_save=False)
+        writer.write(to_store)
+        writer.close()
+        assert model1.objects.objs == []
+
     def test_reading_from_more_models(self):
         model1 = FakeDjangoModel()
         model2 = FakeDjangoModel()
