@@ -6,7 +6,7 @@
 `pyexcel-io` - Let you focus on data, instead of file formats
 ================================================================================
 
-:Author: C.W.
+:Author: C. Wang
 :Source code: http://github.com/pyexcel/pyexcel-io.git
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License

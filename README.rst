@@ -28,6 +28,8 @@ If you are an individual, you are welcome to support me too on patreon and for h
 you feel like. As a patreon, you will receive
 `early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
 
+And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
+
 With your financial support, I will be able to invest
 a little bit more time in coding, documentation and writing interesting posts.
 

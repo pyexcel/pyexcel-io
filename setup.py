@@ -8,14 +8,13 @@ PY2 = sys.version_info[0] == 2
 PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
-AUTHOR = 'C.W.'
+AUTHOR = 'C. Wang'
 VERSION = '0.5.5'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
-    'A python library to read and write structured data in csv, zipped csv ' +
-    'format and to/from databases' +
-    ''
+    'A python library to read and write structured data in csv, zipped csv' +
+    'format and to/from databases'
 )
 URL = 'https://github.com/pyexcel/pyexcel-io'
 DOWNLOAD_URL = '%s/archive/0.5.5.tar.gz' % URL

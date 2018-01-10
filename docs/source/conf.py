@@ -19,7 +19,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'pyexcel-io'
-copyright = u'2015-2017 Onni Software Ltd.'
+copyright = u'2015-2018 Onni Software Ltd.'
 version = '0.5.5'
 release = '0.5.5'
 exclude_patterns = []

@@ -17,3 +17,6 @@ targets:
   - test.bat: test.script.jj2
   - README.rst: README.rst
   - "docs/source/index.rst": "docs/source/index.rst"
+  - output: CHANGELOG.rst
+    configuration: changelog.yml
+    template: CHANGELOG.rst.jj2

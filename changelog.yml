@@ -1,0 +1,207 @@
+name: pyexcel-io
+organisation: pyexcel
+releases:
+- changes:
+  - action: fixed
+    details:
+    - '`#46`, expose `bulk_save` to developer'
+  date: unreleased
+  version: 0.5.6
+- changes:
+  - action: fixed
+    details:
+    - Issue `#45`, csv reader  throws exception because google app engine does not
+      support mmap. People who  are not working with google app engine, need not to
+      take this update. Enjoy  your Christmas break.
+  date: 23.12.2017
+  version: 0.5.5
+- changes:
+  - action: updated
+    details:
+    - PR `PR#44`, use unicodewriter  for csvz writers.
+  date: 10.11.2017
+  version: 0.5.4
+- changes:
+  - action: updated
+    details:
+    - pyexcel `pyexcel#105`, remove gease  from setup_requires, introduced by 0.5.2.
+    - remove python2.6 test support
+  date: 23.10.2017
+  version: 0.5.3
+- changes:
+  - action: added
+    details:
+    - '`pyexcel#103`, include LICENSE file  in MANIFEST.in, meaning LICENSE file will
+      appear in the released tar ball.'
+  date: 20.10.2017
+  version: 0.5.2
+- changes:
+  - action: Fixed
+    details:
+    - '`pyexcel-ods#25`,  Unwanted dependency on pyexcel.'
+  date: 02.09.2017
+  version: 0.5.1
+- changes:
+  - action: Added
+    details:
+    - Collect all data type conversion codes as service.py.
+  - action: Updated
+    details:
+    - '`#19`,  use cString by default. For python, it will be a performance boost'
+  date: 30.08.2017
+  version: 0.5.0
+- changes:
+  - action: Updated
+    details:
+    - '`#42`, raise exception  if database table name does not match the sheet name'
+  date: 08.08.2017
+  version: 0.4.4
+- changes:
+  - action: Updated
+    details:
+    - '`#41`, walk away gracefully  when mmap is not available.'
+  date: 29.07.2017
+  version: 0.4.3
+- changes:
+  - action: Updated
+    details:
+    - '`#37`, permanently fix  the residue folder pyexcel by release all future releases
+      in a clean clone.'
+  date: 05.07.2017
+  version: 0.4.2
+- changes:
+  - action: Updated
+    details:
+    - '`#39`, raise exception  when bulk save in django fails. Please `bulk_save=False`
+      if you as the  developer choose to save the records one by one if bulk_save
+      cannot be  used. However, exception in one-by-one save case will be raised as
+      well.  This change is made to raise exception in the first place so that you
+      as  the developer will be suprised when it was deployed in production.'
+  date: 29.06.2017
+  version: 0.4.1
+- changes:
+  - action: Updated
+    details:
+    - '''built-in'' as the value to the parameter ''library'' as parameter to invoke  pyexcel-io''s
+      built-in csv, tsv, csvz, tsvz, django and sql won''t work.  It is renamed to
+      ''pyexcel-io''.'
+    - built-in csv, tsv, csvz, tsvz, django and sql are lazy loaded.
+    - pyexcel-io plugin interface has been updated. v0.3.x plugins won't work.
+    - '`#32`, csv and csvz file  handle are made sure to be closed. File close mechanism
+      is enfored.'
+    - iget_data function is introduced to cope with dangling file handle issue.
+  - action: Removed
+    details:
+    - Removed plugin loading code and lml is used instead
+  date: 19.06.2017
+  version: 0.4.0
+- changes:
+  - action: Updated
+    details:
+    - '`#33`, handle mmap object  differently given as file content. This issue has
+      put in a priority to single  sheet csv over multiple sheets in a single memory
+      stream. The latter format  is pyexcel own creation but is rarely used. In latter
+      case,  multiple_sheet=True should be passed along get_data.'
+    - '`#34`, treat mmap object  as a file content.'
+    - '`#35`, encoding parameter  take no effect when given along with file content'
+    - use ZIP_DEFALTED to really do the compression
+  date: 18.05.2017
+  version: 0.3.4
+- changes:
+  - action: Updated
+    details:
+    - '`#31`, support pyinstaller'
+  date: 30.03.2017
+  version: 0.3.3
+- changes:
+  - action: Updated
+    details:
+    - '`#29`, change  skip_empty_rows to False by default'
+  date: 26.01.2017
+  version: 0.3.2
+- changes:
+  - action: Added
+    details:
+    - updated versions of extra packages
+  - action: Updated
+    details:
+    - '`#23`, provide helpful  message when old pyexcel plugin exists'
+    - restored previously available diagnosis message for missing libraries
+  date: 21.01.2017
+  version: 0.3.1
+- changes:
+  - action: Added
+    details:
+    - lazy loading of plugins. for example, pyexcel-xls is not entirely loaded  until
+      xls format is used at its first attempted reading or writing. Since  it is loaded,
+      it will not be loaded in the second io action.
+    - '`pyexcel-xls#11`,  make case-insensitive for file type'
+  date: 22.12.2016
+  version: 0.3.0
+- changes:
+  - action: Updated
+    details:
+    - '`#24`_, pass on batch_size'
+  date: 21.12.2016
+  version: 0.2.6
+- changes:
+  - action: Updated
+    details:
+    - '`#26`_, performance issue  with getting the number of columns.'
+  date: 20.12.2016
+  version: 0.2.5
+- changes:
+  - action: Updated
+    details:
+    - '`#23`_, Failed to convert  long integer string in python 2 to its actual value'
+  date: 24.11.2016
+  version: 0.2.4
+- changes:
+  - action: Added
+    details:
+    - '`#21`_, choose subset from  data base tables for export'
+    - '`#22`_, custom renderer if  given `row_renderer` as parameter.'
+  date: 16.09.2016
+  version: 0.2.3
+- changes:
+  - action: Added
+    details:
+    - 'support pagination. two pairs: start_row, row_limit and start_column,  column_limit
+      help you deal with large files.'
+    - '`skip_empty_rows=True` was introduced. To include empty rows, put it to False.'
+  - action: Updated
+    details:
+    - '`#20`_, pyexcel-io attempts  to parse cell contents of ''infinity'' as a float/int,
+      crashes'
+  date: 31.08.2016
+  version: 0.2.2
+- changes:
+  - action: Added
+    details:
+    - 'csv format: handle utf-16 encoded csv files. Potentially being able to decode  other
+      formats if correct "encoding" is provided'
+    - 'csv format: write utf-16 encoded files. Potentially other encoding is also  supported'
+    - support stdin as input stream and stdout as output stream
+  - action: Updated
+    details:
+    - 'Attention, user of pyexcel-io! No longer io stream validation is performed  in
+      python 3. The guideline is: io.StringIO for csv, tsv only, otherwise  BytesIO
+      for xlsx, xls, ods. You can use RWManager.get_io to produce a correct  stream
+      type for you.'
+    - '`#15`_, support foreign  django/sql foreign key'
+  date: 11.07.2016
+  version: 0.2.1
+- changes:
+  - action: Added
+    details:
+    - autoload of pyexcel-io plugins
+    - auto detect `datetime`, `float` and `int`. Detection can be switched off by  `auto_detect_datetime`,
+      `auto_detect_float`, `auto_detect_int`
+  date: 01.06.2016
+  version: 0.2.0
+- changes:
+  - action: Added
+    details:
+    - yield key word to return generator as content
+  date: 17.01.2016
+  version: 0.1.0
