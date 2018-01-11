@@ -5,7 +5,7 @@ releases:
   - action: fixed
     details:
     - '`#46`, expose `bulk_save` to developer'
-  date: unreleased
+  date: 11.01.2017
   version: 0.5.6
 - changes:
   - action: fixed
