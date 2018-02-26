@@ -305,7 +305,7 @@ class CSVBookReader(BookReader):
         self.__line_terminator = self._keywords.get(
             constants.KEYWORD_LINE_TERMINATOR,
             self.__line_terminator)
-        names = self._file_name.split('.')
+        names = self._file_name.rsplit('.', 1)
         filepattern = "%s%s*%s*.%s" % (
             names[0],
             constants.DEFAULT_MULTI_CSV_SEPARATOR,
