@@ -89,5 +89,7 @@ class SQLBookWriter(BookWriter):
                 auto_commit=self.__auto_commit
             )
         else:
-            raise Exception("No suitable database adapter found!")
+            raise Exception(
+                "Sheet: %s does not match any given tables." % sheet_name +
+                "Please be aware of case sensitivity.")
         return sheet_writer

@@ -74,5 +74,7 @@ class DjangoBookWriter(BookWriter):
                 bulk_save=self._keywords.get('bulk_save', True)
             )
         else:
-            raise Exception("No django model found!")
+            raise Exception(
+                "Sheet: %s does not match any given models." % sheet_name +
+                "Please be aware of case sensitivity.")
         return sheet_writer
