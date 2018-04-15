@@ -31,22 +31,29 @@ else:
 try:
     from logging import NullHandler
 except ImportError:
+
     class NullHandler(logging.Handler):
+
         def emit(self, record):
             pass
+
 
 if PY2:
     from cStringIO import StringIO
     from cStringIO import StringIO as BytesIO
+
     text_type = unicode
     irange = xrange
 
     class Iterator(object):
+
         def next(self):
             return type(self).__next__(self)
 
+
 else:
     from io import StringIO, BytesIO
+
     text_type = str
     Iterator = object
     irange = range
@@ -56,19 +63,22 @@ def isstream(instance):
     """ check if a instance is a stream """
     try:
         import mmap
+
         i_am_not_mmap_obj = not isinstance(instance, mmap.mmap)
     except ImportError:
         # Python 2.6 or Google App Engine
         i_am_not_mmap_obj = True
 
-    return hasattr(instance, 'read') and i_am_not_mmap_obj
+    return hasattr(instance, "read") and i_am_not_mmap_obj
 
 
 def is_string(atype):
     """find out if a type is str or not"""
     if atype == str:
         return True
+
     elif PY2:
         if atype == unicode:
             return True
+
     return False

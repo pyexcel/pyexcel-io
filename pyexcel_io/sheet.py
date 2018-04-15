@@ -16,6 +16,7 @@ class NamedContent(object):
     """
     Helper class for content that does not have a name
     """
+
     def __init__(self, name, payload):
         self.name = name
         self.payload = payload
@@ -25,12 +26,20 @@ class SheetReader(object):
     """
     Generic sheet reader
     """
-    def __init__(self, sheet,
-                 start_row=0, row_limit=-1,
-                 start_column=0, column_limit=-1,
-                 skip_row_func=None, skip_column_func=None,
-                 skip_empty_rows=False, row_renderer=None,
-                 **keywords):
+
+    def __init__(
+        self,
+        sheet,
+        start_row=0,
+        row_limit=-1,
+        start_column=0,
+        column_limit=-1,
+        skip_row_func=None,
+        skip_column_func=None,
+        skip_empty_rows=False,
+        row_renderer=None,
+        **keywords
+    ):
         self._native_sheet = sheet
         self._keywords = {}
         self._keywords.update(keywords)
@@ -53,9 +62,11 @@ class SheetReader(object):
         """
         for row_index, row in enumerate(self.row_iterator()):
             row_position = self._skip_row(
-                row_index, self._start_row, self._row_limit)
+                row_index, self._start_row, self._row_limit
+            )
             if row_position == constants.SKIP_DATA:
                 continue
+
             elif row_position == constants.STOP_ITERATION:
                 break
 
@@ -63,16 +74,19 @@ class SheetReader(object):
             tmp_row = []
 
             for column_index, cell_value in enumerate(
-                    self.column_iterator(row)):
+                self.column_iterator(row)
+            ):
                 column_position = self._skip_column(
-                    column_index, self._start_column, self._column_limit)
+                    column_index, self._start_column, self._column_limit
+                )
                 if column_position == constants.SKIP_DATA:
                     continue
+
                 elif column_position == constants.STOP_ITERATION:
                     break
 
                 tmp_row.append(cell_value)
-                if cell_value is not None and cell_value != '':
+                if cell_value is not None and cell_value != "":
                     return_row += tmp_row
                     tmp_row = []
             if self._skip_empty_rows and len(return_row) < 1:

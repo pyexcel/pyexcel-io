@@ -26,18 +26,14 @@ def detect_date_value(cell_text):
     ret = None
     try:
         if len(cell_text) == 10:
-            ret = datetime.datetime.strptime(
-                cell_text,
-                "%Y-%m-%d")
+            ret = datetime.datetime.strptime(cell_text, "%Y-%m-%d")
             ret = ret.date()
         elif len(cell_text) == 19:
-            ret = datetime.datetime.strptime(
-                cell_text,
-                "%Y-%m-%d %H:%M:%S")
+            ret = datetime.datetime.strptime(cell_text, "%Y-%m-%d %H:%M:%S")
         elif len(cell_text) > 19:
             ret = datetime.datetime.strptime(
-                cell_text[0:26],
-                "%Y-%m-%d %H:%M:%S.%f")
+                cell_text[0:26], "%Y-%m-%d %H:%M:%S.%f"
+            )
     except ValueError:
         pass
     return ret
@@ -45,28 +41,34 @@ def detect_date_value(cell_text):
 
 def detect_float_value(cell_text):
     try:
-        should_we_skip_it = (cell_text.startswith('0') and
-                             cell_text.startswith('0.') is False)
+        should_we_skip_it = (
+            cell_text.startswith("0") and cell_text.startswith("0.") is False
+        )
         if should_we_skip_it:
             # do not convert if a number starts with 0
             # e.g. 014325
             return None
+
         else:
             return float(cell_text)
+
     except ValueError:
         return None
 
 
 def detect_int_value(cell_text):
-    if cell_text.startswith('0') and len(cell_text) > 1:
+    if cell_text.startswith("0") and len(cell_text) > 1:
         return None
+
     try:
         return int(cell_text)
+
     except ValueError:
-        pattern = '([0-9]+,)*[0-9]+$'
+        pattern = "([0-9]+,)*[0-9]+$"
         if re.match(pattern, cell_text):
-            integer_string = cell_text.replace(',', '')
+            integer_string = cell_text.replace(",", "")
             return int(integer_string)
+
         else:
             return None
 
@@ -83,29 +85,27 @@ def date_value(value):
     try:
         # catch strptime exceptions only
         if len(value) == 10:
-            ret = datetime.datetime.strptime(
-                value,
-                "%Y-%m-%d")
+            ret = datetime.datetime.strptime(value, "%Y-%m-%d")
             ret = ret.date()
         elif len(value) == 19:
-            ret = datetime.datetime.strptime(
-                value,
-                "%Y-%m-%dT%H:%M:%S")
+            ret = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         elif len(value) > 19:
             ret = datetime.datetime.strptime(
-                value[0:26],
-                "%Y-%m-%dT%H:%M:%S.%f")
+                value[0:26], "%Y-%m-%dT%H:%M:%S.%f"
+            )
     except ValueError:
         pass
     if ret == "invalid":
         raise Exception("Bad date value %s" % value)
+
     return ret
 
 
 def time_value(value):
     """convert to time value accroding the specification"""
     import re
-    results = re.match('PT(\d+)H(\d+)M(\d+)S', value)
+
+    results = re.match("PT(\d+)H(\d+)M(\d+)S", value)
     if results and len(results.groups()) == 3:
         hour = int(results.group(1))
         minute = int(results.group(2))
@@ -113,9 +113,9 @@ def time_value(value):
         if hour < 24:
             ret = datetime.time(hour, minute, second)
         else:
-            ret = datetime.timedelta(hours=hour,
-                                     minutes=minute,
-                                     seconds=second)
+            ret = datetime.timedelta(
+                hours=hour, minutes=minute, seconds=second
+            )
     else:
         ret = None
     return ret
@@ -137,10 +137,10 @@ ODS_FORMAT_CONVERSION = {
     "float": float,
     "date": datetime.date,
     "time": datetime.time,
-    'timedelta': datetime.timedelta,
+    "timedelta": datetime.timedelta,
     "boolean": bool,
     "percentage": float,
-    "currency": float
+    "currency": float,
 }
 
 
@@ -151,7 +151,7 @@ ODS_WRITE_FORMAT_COVERSION = {
     datetime.date: "date",
     datetime.time: "time",
     datetime.timedelta: "timedelta",
-    bool: "boolean"
+    bool: "boolean",
 }
 
 if PY2:
@@ -163,7 +163,7 @@ VALUE_CONVERTERS = {
     "time": time_value,
     "timedelta": time_value,
     "boolean": boolean_value,
-    "percentage": float_value
+    "percentage": float_value,
 }
 
 
@@ -179,6 +179,7 @@ def ods_bool_value(value):
     """convert a boolean value to text"""
     if value is True:
         return "true"
+
     else:
         return "false"
 
@@ -195,7 +196,7 @@ ODS_VALUE_CONVERTERS = {
     "date": ods_date_value,
     "time": ods_time_value,
     "boolean": ods_bool_value,
-    "timedelta": ods_timedelta_value
+    "timedelta": ods_timedelta_value,
 }
 
 
@@ -206,5 +207,5 @@ VALUE_TOKEN = {
     "boolean": "boolean-value",
     "percentage": "value",
     "currency": "value",
-    "timedelta": "time-value"
+    "timedelta": "time-value",
 }

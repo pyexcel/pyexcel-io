@@ -14,6 +14,7 @@ from pyexcel_io.database.querysets import QuerysetsReader
 class SQLTableReader(QuerysetsReader):
     """Read a table
     """
+
     def __init__(self, session, table, export_columns=None, **keywords):
         everything = session.query(table).all()
         column_names = None
@@ -21,14 +22,19 @@ class SQLTableReader(QuerysetsReader):
             column_names = export_columns
         else:
             if len(everything) > 0:
-                column_names = sorted([
-                    column for column in everything[0].__dict__
-                    if column != '_sa_instance_state'])
+                column_names = sorted(
+                    [
+                        column
+                        for column in everything[0].__dict__
+                        if column != "_sa_instance_state"
+                    ]
+                )
         QuerysetsReader.__init__(self, everything, column_names, **keywords)
 
 
 class SQLBookReader(DbExporter):
     """ read a table via sqlalchemy """
+
     def __init__(self):
         DbExporter.__init__(self)
         self.__exporter = None
@@ -41,7 +47,8 @@ class SQLBookReader(DbExporter):
         reader = SQLTableReader(
             self.__exporter.session,
             native_sheet.table,
-            native_sheet.export_columns)
+            native_sheet.export_columns,
+        )
         return reader.to_array()
 
     def _load_from_tables(self):

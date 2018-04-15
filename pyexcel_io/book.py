@@ -9,10 +9,7 @@
 """
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import OrderedDict, isstream, PY2
-from .constants import (
-    MESSAGE_ERROR_03,
-    MESSAGE_WRONG_IO_INSTANCE
-)
+from .constants import MESSAGE_ERROR_03, MESSAGE_WRONG_IO_INSTANCE
 
 
 class RWInterface(object):
@@ -51,6 +48,7 @@ class RWInterface(object):
         pass
 
     # implement context manager
+
     def __enter__(self):
         return self
 
@@ -62,6 +60,7 @@ class BookReader(RWInterface):
     """
     Standard book reader
     """
+
     def __init__(self):
         super(BookReader, self).__init__()
         self._file_name = None
@@ -86,14 +85,15 @@ class BookReader(RWInterface):
         """
         if isstream(file_stream):
             if PY2:
-                if hasattr(file_stream, 'seek'):
+                if hasattr(file_stream, "seek"):
                     file_stream.seek(0)
                 else:
                     # python 2
                     # Hei zipfile in odfpy would do a seek
                     # but stream from urlib cannot do seek
                     file_stream = _convert_content_to_stream(
-                        file_stream.read(), self._file_type)
+                        file_stream.read(), self._file_type
+                    )
             else:
                 from io import UnsupportedOperation
 
@@ -102,7 +102,8 @@ class BookReader(RWInterface):
                 except UnsupportedOperation:
                     # python 3
                     file_stream = _convert_content_to_stream(
-                        file_stream.read(), self._file_type)
+                        file_stream.read(), self._file_type
+                    )
 
             self._file_stream = file_stream
             self._keywords = keywords
@@ -116,18 +117,21 @@ class BookReader(RWInterface):
 
         keywords are passed on to individual readers
         """
-        file_stream = _convert_content_to_stream(
-            file_content, self._file_type)
+        file_stream = _convert_content_to_stream(file_content, self._file_type)
         self.open_stream(file_stream, **keywords)
 
     def read_sheet_by_name(self, sheet_name):
         """
         read a named sheet from a excel data book
         """
-        named_contents = [content for content in self._native_book
-                          if content.name == sheet_name]
+        named_contents = [
+            content
+            for content in self._native_book
+            if content.name == sheet_name
+        ]
         if len(named_contents) == 1:
             return {named_contents[0].name: self.read_sheet(named_contents[0])}
+
         else:
             raise ValueError("Cannot find sheet %s" % sheet_name)
 
@@ -138,6 +142,7 @@ class BookReader(RWInterface):
         try:
             sheet = self._native_book[sheet_index]
             return {sheet.name: self.read_sheet(sheet)}
+
         except IndexError:
             self.close()
             raise
@@ -174,6 +179,7 @@ class BookWriter(RWInterface):
     """
     Standard book writer
     """
+
     def __init__(self):
         super(BookWriter, self).__init__()
         self._file_alike_object = None
@@ -196,6 +202,7 @@ class BookWriter(RWInterface):
         """
         if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
+
         self.open(file_stream, **keywords)
 
     def open_content(self, file_stream, **keywords):

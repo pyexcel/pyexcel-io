@@ -20,14 +20,15 @@ import pyexcel_io.constants as constants
 import pyexcel_io.service as service
 
 
-DEFAULT_SEPARATOR = '__'
-DEFAULT_SHEET_SEPARATOR_FORMATTER = '---%s---' % constants.DEFAULT_NAME + "%s"
+DEFAULT_SEPARATOR = "__"
+DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"
 SEPARATOR_MATCHER = "---%s:(.*)---" % constants.DEFAULT_NAME
 DEFAULT_CSV_STREAM_FILE_FORMATTER = (
-    "---%s:" % constants.DEFAULT_NAME + "%s---%s")
-DEFAULT_NEWLINE = '\r\n'
-BOM_LITTLE_ENDIAN = b'\xff\xfe'
-BOM_BIG_ENDIAN = b'\xfe\ff'
+    "---%s:" % constants.DEFAULT_NAME + "%s---%s"
+)
+DEFAULT_NEWLINE = "\r\n"
+BOM_LITTLE_ENDIAN = b"\xff\xfe"
+BOM_BIG_ENDIAN = b"\xfe\ff"
 LITTLE_ENDIAN = 0
 BIG_ENDIAN = 1
 
@@ -39,30 +40,31 @@ class CSVMemoryMapIterator(compact.Iterator):
     mmap object does not handle encoding at all. This class
     provide the necessary transcoding for utf-8, utf-16 and utf-32
     """
+
     def __init__(self, mmap_obj, encoding):
         self.__mmap_obj = mmap_obj
         self.__encoding = encoding
         self.__count = 0
         self.__endian = LITTLE_ENDIAN
-        if encoding == 'utf-8':
+        if encoding == "utf-8":
             # ..\r\x00\n
             # \x00\x..
             self.__zeros_left_in_2_row = 0
-        elif encoding == 'utf-16':
+        elif encoding == "utf-16":
             # ..\r\x00\n
             # \x00\x..
             self.__zeros_left_in_2_row = 1
-        elif encoding == 'utf-32':
+        elif encoding == "utf-32":
             # \r\x00\x00\x00\n
             # \x00\x00\x00\x..
             self.__zeros_left_in_2_row = 3
-        elif encoding == 'utf-32-be' or encoding == 'utf-16-be':
+        elif encoding == "utf-32-be" or encoding == "utf-16-be":
             self.__zeros_left_in_2_row = 0
             self.__endian = BIG_ENDIAN
-        elif encoding == 'utf-32-le':
+        elif encoding == "utf-32-le":
             self.__zeros_left_in_2_row = 3
             self.__endian = LITTLE_ENDIAN
-        elif encoding == 'utf-16-le':
+        elif encoding == "utf-16-le":
             self.__zeros_left_in_2_row = 1
             self.__endian = LITTLE_ENDIAN
         else:
@@ -74,8 +76,9 @@ class CSVMemoryMapIterator(compact.Iterator):
     def __next__(self):
         line = self.__mmap_obj.readline()
         if self.__count == 0:
-            utf_16_32 = (self.__encoding == 'utf-16' or
-                         self.__encoding == 'utf-32')
+            utf_16_32 = (
+                self.__encoding == "utf-16" or self.__encoding == "utf-32"
+            )
             if utf_16_32:
                 bom_header = line[:2]
                 if bom_header == BOM_BIG_ENDIAN:
@@ -86,11 +89,12 @@ class CSVMemoryMapIterator(compact.Iterator):
             line = line.rstrip()
         line = line.decode(self.__encoding)
         self.__count += 1
-        if line == '':
+        if line == "":
             raise StopIteration
+
         if compact.PY2:
             # python 2 requires utf-8 encoded string for reading
-            line = line.encode('utf-8')
+            line = line.encode("utf-8")
         return line
 
 
@@ -98,6 +102,7 @@ class UTF8Recorder(compact.Iterator):
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8.
     """
+
     def __init__(self, file_handle, encoding):
         self.__file_handle = file_handle
         self.reader = codecs.getreader(encoding)(file_handle)
@@ -110,16 +115,23 @@ class UTF8Recorder(compact.Iterator):
 
     def __next__(self):
         # python 2 requires utf-8 encoded string for reading
-        line = next(self.reader).encode('utf-8')
+        line = next(self.reader).encode("utf-8")
         return line
 
 
 class CSVSheetReader(SheetReader):
     """ generic csv file reader"""
-    def __init__(self, sheet, encoding="utf-8",
-                 auto_detect_float=True, ignore_infinity=True,
-                 auto_detect_int=True, auto_detect_datetime=True,
-                 **keywords):
+
+    def __init__(
+        self,
+        sheet,
+        encoding="utf-8",
+        auto_detect_float=True,
+        ignore_infinity=True,
+        auto_detect_int=True,
+        auto_detect_datetime=True,
+        **keywords
+    ):
         SheetReader.__init__(self, sheet, **keywords)
         self._encoding = encoding
         self.__auto_detect_int = auto_detect_int
@@ -139,8 +151,8 @@ class CSVSheetReader(SheetReader):
     def column_iterator(self, row):
         for element in row:
             if compact.PY2:
-                element = element.decode('utf-8')
-            if element is not None and element != '':
+                element = element.decode("utf-8")
+            if element is not None and element != "":
                 element = self.__convert_cell(element)
             yield element
 
@@ -151,8 +163,8 @@ class CSVSheetReader(SheetReader):
         if ret is None and self.__auto_detect_float:
             ret = service.detect_float_value(csv_cell_text)
             shall_we_ignore_the_conversion = (
-                (ret in [float('inf'), float('-inf')]) and
-                self.__ignore_infinity
+                (ret in [float("inf"), float("-inf")])
+                and self.__ignore_infinity
             )
             if shall_we_ignore_the_conversion:
                 ret = None
@@ -165,31 +177,37 @@ class CSVSheetReader(SheetReader):
     def close(self):
         if self.__file_handle:
             self.__file_handle.close()
-        # else: means the generator has been run
-        # yes, no run, no file open.
+
+
+# else: means the generator has been run
+# yes, no run, no file open.
 
 
 class CSVFileReader(CSVSheetReader):
     """ read csv from phyical file """
+
     def get_file_handle(self):
         unicode_reader = None
         if compact.PY2:
-            file_handle = open(self._native_sheet.payload, 'rb')
+            file_handle = open(self._native_sheet.payload, "rb")
             unicode_reader = UTF8Recorder(file_handle, self._encoding)
         else:
-            unicode_reader = open(self._native_sheet.payload, 'r',
-                                  encoding=self._encoding)
+            unicode_reader = open(
+                self._native_sheet.payload, "r", encoding=self._encoding
+            )
         return unicode_reader
 
 
 class CSVinMemoryReader(CSVSheetReader):
     """ read csv file from memory """
+
     def get_file_handle(self):
         unicode_reader = None
         if compact.PY2:
-            if hasattr(self._native_sheet.payload, 'read'):
-                unicode_reader = UTF8Recorder(self._native_sheet.payload,
-                                              self._encoding)
+            if hasattr(self._native_sheet.payload, "read"):
+                unicode_reader = UTF8Recorder(
+                    self._native_sheet.payload, self._encoding
+                )
             else:
                 unicode_reader = self._native_sheet.payload
         else:
@@ -200,7 +218,8 @@ class CSVinMemoryReader(CSVSheetReader):
                 # comes at a cost.
                 content = self._native_sheet.payload.read()
                 unicode_reader = compact.StringIO(
-                    content.decode(self._encoding))
+                    content.decode(self._encoding)
+                )
             else:
                 unicode_reader = self._native_sheet.payload
 
@@ -209,6 +228,7 @@ class CSVinMemoryReader(CSVSheetReader):
 
 class CSVBookReader(BookReader):
     """ read csv file """
+
     def __init__(self):
         BookReader.__init__(self)
         self._file_type = constants.FILE_FORMAT_CSV
@@ -232,12 +252,14 @@ class CSVBookReader(BookReader):
     def open_content(self, file_content, **keywords):
         try:
             import mmap
-            encoding = keywords.get('encoding', 'utf-8')
+
+            encoding = keywords.get("encoding", "utf-8")
             if isinstance(file_content, mmap.mmap):
                 # load from mmap
-                self.__multiple_sheets = keywords.get('multiple_sheets', False)
+                self.__multiple_sheets = keywords.get("multiple_sheets", False)
                 self._file_stream = CSVMemoryMapIterator(
-                    file_content, encoding)
+                    file_content, encoding
+                )
                 self._keywords = keywords
                 self._native_book = self._load_from_stream()
             else:
@@ -245,12 +267,10 @@ class CSVBookReader(BookReader):
                     if isinstance(file_content, bytes):
                         file_content = file_content.decode(encoding)
                 # else python 2.7 does not care about bytes nor str
-                BookReader.open_content(
-                    self, file_content, **keywords)
+                BookReader.open_content(self, file_content, **keywords)
         except ImportError:
             # python 2.6 or Google app engine
-            BookReader.open_content(
-                self, file_content, **keywords)
+            BookReader.open_content(self, file_content, **keywords)
 
     def read_sheet(self, native_sheet):
         if self.__load_from_memory_flag:
@@ -272,8 +292,8 @@ class CSVBookReader(BookReader):
         """
         self.__load_from_memory_flag = True
         self.__line_terminator = self._keywords.get(
-            constants.KEYWORD_LINE_TERMINATOR,
-            self.__line_terminator)
+            constants.KEYWORD_LINE_TERMINATOR, self.__line_terminator
+        )
         separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.__line_terminator
         if self.__multiple_sheets:
             # will be slow for large files
@@ -282,17 +302,20 @@ class CSVBookReader(BookReader):
             sheets = content.split(separator)
             named_contents = []
             for sheet in sheets:
-                if sheet == '':  # skip empty named sheet
+                if sheet == "":  # skip empty named sheet
                     continue
+
                 lines = sheet.split(self.__line_terminator)
                 result = re.match(constants.SEPARATOR_MATCHER, lines[0])
-                new_content = '\n'.join(lines[1:])
-                new_sheet = NamedContent(result.group(1),
-                                         compact.StringIO(new_content))
+                new_content = "\n".join(lines[1:])
+                new_sheet = NamedContent(
+                    result.group(1), compact.StringIO(new_content)
+                )
                 named_contents.append(new_sheet)
             return named_contents
+
         else:
-            if hasattr(self._file_stream, 'seek'):
+            if hasattr(self._file_stream, "seek"):
                 self._file_stream.seek(0)
             return [NamedContent(self._file_type, self._file_stream)]
 
@@ -303,30 +326,34 @@ class CSVBookReader(BookReader):
         :returns: a book
         """
         self.__line_terminator = self._keywords.get(
-            constants.KEYWORD_LINE_TERMINATOR,
-            self.__line_terminator)
-        names = self._file_name.split('.')
+            constants.KEYWORD_LINE_TERMINATOR, self.__line_terminator
+        )
+        names = self._file_name.split(".")
         filepattern = "%s%s*%s*.%s" % (
             names[0],
             constants.DEFAULT_MULTI_CSV_SEPARATOR,
             constants.DEFAULT_MULTI_CSV_SEPARATOR,
-            names[1])
+            names[1],
+        )
         filelist = glob.glob(filepattern)
         if len(filelist) == 0:
             file_parts = os.path.split(self._file_name)
             return [NamedContent(file_parts[-1], self._file_name)]
+
         else:
             matcher = "%s%s(.*)%s(.*).%s" % (
                 names[0],
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                names[1])
+                names[1],
+            )
             tmp_file_list = []
             for filen in filelist:
                 result = re.match(matcher, filen)
                 tmp_file_list.append((result.group(1), result.group(2), filen))
             ret = []
-            for lsheetname, index, filen in sorted(tmp_file_list,
-                                                   key=lambda row: row[1]):
+            for lsheetname, index, filen in sorted(
+                tmp_file_list, key=lambda row: row[1]
+            ):
                 ret.append(NamedContent(lsheetname, filen))
             return ret

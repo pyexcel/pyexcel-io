@@ -10,12 +10,12 @@
 import pyexcel_io.constants as constants
 
 
-XLS_PLUGIN = 'pyexcel-xls'
-XLSX_PLUGIN = 'pyexcel-xlsx'
-ODS_PLUGIN = 'pyexcel-ods'
-ODS3_PLUGIN = 'pyexcel-ods3'
-XLSXW_PLUGIN = 'pyexcel-xlsxw'
-IO_ITSELF = 'pyexcel-io'
+XLS_PLUGIN = "pyexcel-xls"
+XLSX_PLUGIN = "pyexcel-xlsx"
+ODS_PLUGIN = "pyexcel-ods"
+ODS3_PLUGIN = "pyexcel-ods3"
+XLSXW_PLUGIN = "pyexcel-xlsxw"
+IO_ITSELF = "pyexcel-io"
 
 
 AVAILABLE_READERS = {
@@ -26,7 +26,7 @@ AVAILABLE_READERS = {
     constants.FILE_FORMAT_CSV: [IO_ITSELF],
     constants.FILE_FORMAT_TSV: [IO_ITSELF],
     constants.FILE_FORMAT_CSVZ: [IO_ITSELF],
-    constants.FILE_FORMAT_TSVZ: [IO_ITSELF]
+    constants.FILE_FORMAT_TSVZ: [IO_ITSELF],
 }
 
 AVAILABLE_WRITERS = {
@@ -37,7 +37,7 @@ AVAILABLE_WRITERS = {
     constants.FILE_FORMAT_CSV: [IO_ITSELF],
     constants.FILE_FORMAT_TSV: [IO_ITSELF],
     constants.FILE_FORMAT_CSVZ: [IO_ITSELF],
-    constants.FILE_FORMAT_TSVZ: [IO_ITSELF]
+    constants.FILE_FORMAT_TSVZ: [IO_ITSELF],
 }
 
 
@@ -55,16 +55,19 @@ def is_empty_array(array):
     """
     Check if an array is an array of '' or not
     """
-    empty_array = [element for element in array if element != '']
+    empty_array = [element for element in array if element != ""]
     return len(empty_array) == 0
 
 
 def swap_empty_string_for_none(array):
     """ replace empty string fields with None """
+
     def swap(value):
         """ change empty string to None """
-        if value == '':
+        if value == "":
             return None
+
         else:
             return value
+
     return [swap(x) for x in array]

@@ -12,6 +12,7 @@ from pyexcel_io.book import BookReader
 
 class DbExporter(BookReader):
     """ Transcode the book reader interface to db interface """
+
     def open(self, file_name, **keywords):
         self.export_tables(self, file_name, **keywords)
 
@@ -28,6 +29,7 @@ class DbExporter(BookReader):
 
 class DjangoModelExportAdapter(object):
     """ django export parameter holder """
+
     def __init__(self, model, export_columns=None):
         self.model = model
         self.export_columns = export_columns
@@ -44,8 +46,10 @@ class DjangoModelExportAdapter(object):
 
 class DjangoModelImportAdapter(DjangoModelExportAdapter):
     """ parameter holder for django data import """
+
     class InOutParameter(object):
         """ local class to manipulate variable io """
+
         def __init__(self):
             self.output = None
             self.input = None
@@ -102,7 +106,8 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
             if self.__column_names.input:
                 self.__column_names.output = [
                     self.__column_name_mapping_dict.input[name]
-                    for name in self.__column_names.input]
+                    for name in self.__column_names.input
+                ]
                 self.__column_name_mapping_dict.output = None
         if self.__column_names.output is None:
             self.__column_names.output = self.__column_names.input
@@ -110,6 +115,7 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
 class DjangoModelExporter(object):
     """ public interface for django model export """
+
     def __init__(self):
         self.adapters = []
 
@@ -120,6 +126,7 @@ class DjangoModelExporter(object):
 
 class DjangoModelImporter(object):
     """ public interface for django model import """
+
     def __init__(self):
         self.__adapters = {}
 
@@ -134,26 +141,29 @@ class DjangoModelImporter(object):
 
 class SQLTableExportAdapter(DjangoModelExportAdapter):
     """ parameter holder for sql table data export """
+
     def __init__(self, model, export_columns=None):
         DjangoModelExportAdapter.__init__(self, model, export_columns)
         self.table = model
 
     def get_name(self):
-        return getattr(self.table, '__tablename__', None)
+        return getattr(self.table, "__tablename__", None)
 
 
 class SQLTableImportAdapter(DjangoModelImportAdapter):
     """ parameter holder for sqlalchemy table import """
+
     def __init__(self, model):
         DjangoModelImportAdapter.__init__(self, model)
         self.table = model
 
     def get_name(self):
-        return getattr(self.table, '__tablename__', None)
+        return getattr(self.table, "__tablename__", None)
 
 
 class SQLTableExporter(DjangoModelExporter):
     """ public interface for sql table export """
+
     def __init__(self, session):
         DjangoModelExporter.__init__(self)
         self.session = session
@@ -161,6 +171,7 @@ class SQLTableExporter(DjangoModelExporter):
 
 class SQLTableImporter(DjangoModelImporter):
     """ public interface to do data import via sqlalchemy """
+
     def __init__(self, session):
         DjangoModelImporter.__init__(self)
         self.session = session

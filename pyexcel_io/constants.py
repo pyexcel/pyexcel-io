@@ -8,9 +8,9 @@
     :license: New BSD License
 """
 # flake8: noqa
-DEFAULT_NAME = 'pyexcel'
-DEFAULT_SHEET_NAME = '%s_sheet1' % DEFAULT_NAME
-DEFAULT_PLUGIN_NAME = '__%s_io_plugins__' % DEFAULT_NAME
+DEFAULT_NAME = "pyexcel"
+DEFAULT_SHEET_NAME = "%s_sheet1" % DEFAULT_NAME
+DEFAULT_PLUGIN_NAME = "__%s_io_plugins__" % DEFAULT_NAME
 
 MESSAGE_INVALID_PARAMETERS = "Invalid parameters"
 MESSAGE_ERROR_02 = "No content, file name. Nothing is given"
@@ -26,27 +26,26 @@ MESSAGE_IGNORE_ROW = "One row is ignored"
 MESSAGE_DB_EXCEPTION = """
 Warning: Bulk insertion got below exception. Trying to do it one by one slowly."""
 
-FILE_FORMAT_CSV = 'csv'
-FILE_FORMAT_TSV = 'tsv'
-FILE_FORMAT_CSVZ = 'csvz'
-FILE_FORMAT_TSVZ = 'tsvz'
-FILE_FORMAT_ODS = 'ods'
-FILE_FORMAT_XLS = 'xls'
-FILE_FORMAT_XLSX = 'xlsx'
-FILE_FORMAT_XLSM = 'xlsm'
-DB_SQL = 'sql'
-DB_DJANGO = 'django'
-KEYWORD_TSV_DIALECT = 'excel-tab'
-KEYWORD_LINE_TERMINATOR = 'lineterminator'
+FILE_FORMAT_CSV = "csv"
+FILE_FORMAT_TSV = "tsv"
+FILE_FORMAT_CSVZ = "csvz"
+FILE_FORMAT_TSVZ = "tsvz"
+FILE_FORMAT_ODS = "ods"
+FILE_FORMAT_XLS = "xls"
+FILE_FORMAT_XLSX = "xlsx"
+FILE_FORMAT_XLSM = "xlsm"
+DB_SQL = "sql"
+DB_DJANGO = "django"
+KEYWORD_TSV_DIALECT = "excel-tab"
+KEYWORD_LINE_TERMINATOR = "lineterminator"
 
 SKIP_DATA = -1
 TAKE_DATA = 0
 STOP_ITERATION = 1
 
 
-DEFAULT_MULTI_CSV_SEPARATOR = '__'
-SEPARATOR_FORMATTER = '---%s---' % DEFAULT_NAME + "%s"
+DEFAULT_MULTI_CSV_SEPARATOR = "__"
+SEPARATOR_FORMATTER = "---%s---" % DEFAULT_NAME + "%s"
 SEPARATOR_MATCHER = "---%s:(.*)---" % DEFAULT_NAME
-DEFAULT_CSV_STREAM_FILE_FORMATTER = (
-    "---%s:" % DEFAULT_NAME + "%s---%s")
-DEFAULT_CSV_NEWLINE = '\r\n'
+DEFAULT_CSV_STREAM_FILE_FORMATTER = ("---%s:" % DEFAULT_NAME + "%s---%s")
+DEFAULT_CSV_NEWLINE = "\r\n"

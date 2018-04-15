@@ -24,10 +24,13 @@ class PyexcelSQLSkipRowException(Exception):
 class SQLTableWriter(SheetWriter):
     """Write to a table
     """
-    def __init__(self, importer, adapter, auto_commit=True,
-                 bulk_size=1000, **keywords):
-        SheetWriter.__init__(self, importer, adapter,
-                             adapter.get_name(), **keywords)
+
+    def __init__(
+        self, importer, adapter, auto_commit=True, bulk_size=1000, **keywords
+    ):
+        SheetWriter.__init__(
+            self, importer, adapter, adapter.get_name(), **keywords
+        )
         self.__auto_commit = auto_commit
         self.__count = 0
         self.__bulk_size = bulk_size
@@ -59,7 +62,7 @@ class SQLTableWriter(SheetWriter):
                     key = name
                 setattr(obj, key, row[name])
         self._native_book.session.add(obj)
-        if self.__auto_commit and self.__bulk_size != float('inf'):
+        if self.__auto_commit and self.__bulk_size != float("inf"):
             self.__count += 1
             if self.__count % self.__bulk_size == 0:
                 self._native_book.session.commit()
@@ -71,6 +74,7 @@ class SQLTableWriter(SheetWriter):
 
 class SQLBookWriter(BookWriter):
     """ write data into database tables via sqlalchemy """
+
     def __init__(self):
         BookWriter.__init__(self)
         self.__importer = None
@@ -85,11 +89,13 @@ class SQLBookWriter(BookWriter):
         adapter = self.__importer.get(sheet_name)
         if adapter:
             sheet_writer = SQLTableWriter(
-                self.__importer, adapter,
-                auto_commit=self.__auto_commit
+                self.__importer, adapter, auto_commit=self.__auto_commit
             )
         else:
             raise Exception(
-                "Sheet: %s does not match any given tables." % sheet_name +
-                "Please be aware of case sensitivity.")
+                "Sheet: %s does not match any given tables."
+                % sheet_name
+                + "Please be aware of case sensitivity."
+            )
+
         return sheet_writer

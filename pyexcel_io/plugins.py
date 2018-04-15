@@ -20,12 +20,13 @@ import pyexcel_io.constants as constants
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
-READER_PLUGIN = 'pyexcel-io reader'
-WRITER_PLUGIN = 'pyexcel-io writer'
+READER_PLUGIN = "pyexcel-io reader"
+WRITER_PLUGIN = "pyexcel-io writer"
 
 
 class IOPluginInfo(PluginInfo):
     """Pyexcel-io plugin info description"""
+
     def tags(self):
         for file_type in self.file_types:
             yield file_type
@@ -33,35 +34,47 @@ class IOPluginInfo(PluginInfo):
 
 class IOPluginInfoChain(PluginInfoChain):
     """provide custom functions to add a reader and a writer """
-    def add_a_reader(self, relative_plugin_class_path=None,
-                     file_types=None, stream_type=None):
+
+    def add_a_reader(
+        self,
+        relative_plugin_class_path=None,
+        file_types=None,
+        stream_type=None,
+    ):
         """ add pyexcle-io reader plugin info """
         a_plugin_info = IOPluginInfo(
             READER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
             file_types=file_types,
-            stream_type=stream_type)
+            stream_type=stream_type,
+        )
         return self.add_a_plugin_instance(a_plugin_info)
 
-    def add_a_writer(self, relative_plugin_class_path=None,
-                     file_types=None, stream_type=None):
+    def add_a_writer(
+        self,
+        relative_plugin_class_path=None,
+        file_types=None,
+        stream_type=None,
+    ):
         """ add pyexcle-io writer plugin info """
         a_plugin_info = IOPluginInfo(
             WRITER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
             file_types=file_types,
-            stream_type=stream_type)
+            stream_type=stream_type,
+        )
         return self.add_a_plugin_instance(a_plugin_info)
 
 
 class IOManager(PluginManager):
     """Manage pyexcel-io plugins"""
+
     def __init__(self, plugin_type, known_list):
         PluginManager.__init__(self, plugin_type)
         self.known_plugins = known_list
-        self.action = 'read'
+        self.action = "read"
         if self.plugin_name == WRITER_PLUGIN:
-            self.action = 'write'
+            self.action = "write"
 
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
@@ -85,28 +98,32 @@ class IOManager(PluginManager):
             message = "Please install "
             if len(plugins) > 1:
                 message += ERROR_MESSAGE_FORMATTER % (
-                    self.action, file_type, ','.join(plugins))
+                    self.action, file_type, ",".join(plugins)
+                )
             else:
                 message += plugins[0]
             raise exceptions.SupportingPluginAvailableButNotInstalled(message)
+
         else:
             raise exceptions.NoSupportingPluginFound(
-                "No suitable library found for %s" % file_type)
+                "No suitable library found for %s" % file_type
+            )
 
     def get_all_formats(self):
         """ return all supported formats """
-        all_formats = set(list(self.registry.keys()) +
-                          list(self.known_plugins.keys()))
-        all_formats = all_formats.difference(set([constants.DB_SQL,
-                                                  constants.DB_DJANGO]))
+        all_formats = set(
+            list(self.registry.keys()) + list(self.known_plugins.keys())
+        )
+        all_formats = all_formats.difference(
+            set([constants.DB_SQL, constants.DB_DJANGO])
+        )
         return all_formats
 
 
 def _do_additional_registration(plugin_info):
     for file_type in plugin_info.tags():
         manager.register_stream_type(file_type, plugin_info.stream_type)
-        manager.register_a_file_type(
-            file_type, plugin_info.stream_type, None)
+        manager.register_a_file_type(file_type, plugin_info.stream_type, None)
 
 
 READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
@@ -116,5 +133,5 @@ WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 def load_plugins(prefix, path, black_list, white_list):
     """Try to discover all pyexcel-io plugins"""
     scan_plugins(
-        prefix,  # constants.DEFAULT_PLUGIN_NAME,
-        path, black_list, white_list)
+        prefix, path, black_list, white_list  # constants.DEFAULT_PLUGIN_NAME,
+    )

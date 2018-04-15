@@ -36,7 +36,8 @@ def iget_data(afile, file_type=None, **keywords):
     :returns: an ordered dictionary
     """
     data, reader = _get_data(
-        afile, file_type=file_type, streaming=True, **keywords)
+        afile, file_type=file_type, streaming=True, **keywords
+    )
     return data, reader
 
 
@@ -60,26 +61,26 @@ def get_data(afile, file_type=None, streaming=None, **keywords):
     :returns: an ordered dictionary
     """
     if streaming is not None and streaming is True:
-        warnings.warn('Please use iget_data instead')
-    data, _ = _get_data(afile, file_type=file_type,
-                        streaming=False, **keywords)
+        warnings.warn("Please use iget_data instead")
+    data, _ = _get_data(
+        afile, file_type=file_type, streaming=False, **keywords
+    )
     return data
 
 
 def _get_data(afile, file_type=None, **keywords):
     if isstream(afile):
-        keywords.update(dict(
-            file_stream=afile,
-            file_type=file_type or constants.FILE_FORMAT_CSV))
+        keywords.update(
+            dict(
+                file_stream=afile,
+                file_type=file_type or constants.FILE_FORMAT_CSV,
+            )
+        )
     else:
         if afile is None or file_type is None:
-            keywords.update(dict(
-                file_name=afile,
-                file_type=file_type))
+            keywords.update(dict(file_name=afile, file_type=file_type))
         else:
-            keywords.update(dict(
-                file_content=afile,
-                file_type=file_type))
+            keywords.update(dict(file_content=afile, file_type=file_type))
     return load_data(**keywords)
 
 
@@ -113,10 +114,13 @@ def save_data(afile, data, file_type=None, **keywords):
     if no_file_type:
         file_type = constants.FILE_FORMAT_CSV
 
-    store_data(afile, to_store,
-               file_type=file_type,
-               single_sheet_in_book=single_sheet_in_book,
-               **keywords)
+    store_data(
+        afile,
+        to_store,
+        file_type=file_type,
+        single_sheet_in_book=single_sheet_in_book,
+        **keywords
+    )
 
 
 def store_data(afile, data, file_type=None, **keywords):
@@ -128,29 +132,25 @@ def store_data(afile, data, file_type=None, **keywords):
     :param keywords: any other parameters
     """
     if isstream(afile):
-        keywords.update(dict(
-            file_stream=afile,
-            file_type=file_type
-        ))
+        keywords.update(dict(file_stream=afile, file_type=file_type))
     else:
-        keywords.update(dict(
-            file_name=afile,
-            file_type=file_type
-        ))
+        keywords.update(dict(file_name=afile, file_type=file_type))
     with get_writer(**keywords) as writer:
         writer.write(data)
 
 
-def load_data(file_name=None,
-              file_content=None,
-              file_stream=None,
-              file_type=None,
-              sheet_name=None,
-              sheet_index=None,
-              sheets=None,
-              library=None,
-              streaming=False,
-              **keywords):
+def load_data(
+    file_name=None,
+    file_content=None,
+    file_stream=None,
+    file_type=None,
+    sheet_name=None,
+    sheet_index=None,
+    sheets=None,
+    library=None,
+    streaming=False,
+    **keywords
+):
     """Load data from any supported excel formats
 
     :param filename: actual file name, a file stream or actual content
@@ -164,6 +164,7 @@ def load_data(file_name=None,
     number_of_none_inputs = [x for x in inputs if x is not None]
     if len(number_of_none_inputs) != 1:
         raise IOError(constants.MESSAGE_ERROR_02)
+
     if file_type is None:
         try:
             file_type = file_name.split(".")[-1]
@@ -194,20 +195,23 @@ def load_data(file_name=None,
     return result, reader
 
 
-def get_writer(file_name=None, file_stream=None,
-               file_type=None, library=None, **keywords):
+def get_writer(
+    file_name=None, file_stream=None, file_type=None, library=None, **keywords
+):
     """find a suitable writer"""
     inputs = [file_name, file_stream]
     number_of_none_inputs = [x for x in inputs if x is not None]
 
     if len(number_of_none_inputs) != 1:
         raise IOError(constants.MESSAGE_ERROR_02)
+
     file_type_given = True
     if file_type is None and file_name:
         try:
             file_type = file_name.split(".")[-1]
         except AttributeError:
             raise Exception("file_name should be a string type")
+
         file_type_given = False
 
     writer = WRITERS.get_a_plugin(file_type, library)

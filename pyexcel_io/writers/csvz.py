@@ -18,21 +18,21 @@ from .csvw import CSVSheetWriter, UnicodeWriter
 
 class CSVZipSheetWriter(CSVSheetWriter):
     """ handle the zipfile interface """
+
     def __init__(self, zipfile, sheetname, file_extension, **keywords):
         self.file_extension = file_extension
-        keywords['single_sheet_in_book'] = False
+        keywords["single_sheet_in_book"] = False
         CSVSheetWriter.__init__(self, zipfile, sheetname, **keywords)
 
     def set_sheet_name(self, name):
         self.content = StringIO()
         if PY2:
             self.writer = UnicodeWriter(
-                self.content,
-                encoding=self._encoding,
-                **self._keywords
+                self.content, encoding=self._encoding, **self._keywords
             )
         else:
             import csv
+
             self.writer = csv.writer(self.content, **self._keywords)
 
     def close(self):
@@ -50,6 +50,7 @@ class CSVZipBookWriter(BookWriter):
     Pyexcel-io had the facility to unzip it for you or you could use
     any other unzip software.
     """
+
     def __init__(self):
         BookWriter.__init__(self)
         self._file_type = FILE_FORMAT_CSVZ
@@ -57,17 +58,14 @@ class CSVZipBookWriter(BookWriter):
 
     def open(self, file_name, **keywords):
         BookWriter.open(self, file_name, **keywords)
-        self.zipfile = zipfile.ZipFile(file_name, 'w', zipfile.ZIP_DEFLATED)
+        self.zipfile = zipfile.ZipFile(file_name, "w", zipfile.ZIP_DEFLATED)
 
     def create_sheet(self, name):
         given_name = name
         if given_name is None:
             given_name = DEFAULT_SHEET_NAME
         writer = CSVZipSheetWriter(
-            self.zipfile,
-            given_name,
-            self._file_type[:3],
-            **self._keywords
+            self.zipfile, given_name, self._file_type[:3], **self._keywords
         )
         return writer
 

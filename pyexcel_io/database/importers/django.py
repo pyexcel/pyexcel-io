@@ -19,8 +19,8 @@ log = logging.getLogger(__name__)
 
 class DjangoModelWriter(SheetWriter):
     """ import data into a django model """
-    def __init__(self, importer, adapter, batch_size=None,
-                 bulk_save=True):
+
+    def __init__(self, importer, adapter, batch_size=None, bulk_save=True):
         SheetWriter.__init__(self, importer, adapter, adapter.name)
         self.__batch_size = batch_size
         self.__model = adapter.model
@@ -39,16 +39,20 @@ class DjangoModelWriter(SheetWriter):
             if self.__initializer is not None:
                 model_to_be_created = self.__initializer(new_array)
             if model_to_be_created:
-                self.__objs.append(self.__model(**dict(
-                    zip(self.__column_names, model_to_be_created)
-                )))
-            # else
-                # skip the row
+                self.__objs.append(
+                    self.__model(
+                        **dict(zip(self.__column_names, model_to_be_created))
+                    )
+                )
+
+    # else
+    # skip the row
 
     def close(self):
         if self.__bulk_save:
             self.__model.objects.bulk_create(
-                self.__objs, batch_size=self.__batch_size)
+                self.__objs, batch_size=self.__batch_size
+            )
         else:
             for an_object in self.__objs:
                 an_object.save()
@@ -56,6 +60,7 @@ class DjangoModelWriter(SheetWriter):
 
 class DjangoBookWriter(BookWriter):
     """ write data into django models """
+
     def __init__(self):
         BookWriter.__init__(self)
         self.__importer = None
@@ -69,12 +74,16 @@ class DjangoBookWriter(BookWriter):
         model = self.__importer.get(sheet_name)
         if model:
             sheet_writer = DjangoModelWriter(
-                self.__importer, model,
-                batch_size=self._keywords.get('batch_size', None),
-                bulk_save=self._keywords.get('bulk_save', True)
+                self.__importer,
+                model,
+                batch_size=self._keywords.get("batch_size", None),
+                bulk_save=self._keywords.get("bulk_save", True),
             )
         else:
             raise Exception(
-                "Sheet: %s does not match any given models." % sheet_name +
-                "Please be aware of case sensitivity.")
+                "Sheet: %s does not match any given models."
+                % sheet_name
+                + "Please be aware of case sensitivity."
+            )
+
         return sheet_writer
