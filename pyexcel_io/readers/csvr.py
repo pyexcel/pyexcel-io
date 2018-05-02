@@ -332,8 +332,8 @@ class CSVBookReader(BookReader):
         self.__line_terminator = self._keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, self.__line_terminator
         )
-        names = self._file_name.split(".")
-        filepattern = "%s%s*%s*.%s" % (
+        names = os.path.splitext(self._file_name)
+        filepattern = "%s%s*%s*%s" % (
             names[0],
             constants.DEFAULT_MULTI_CSV_SEPARATOR,
             constants.DEFAULT_MULTI_CSV_SEPARATOR,
@@ -345,7 +345,7 @@ class CSVBookReader(BookReader):
             return [NamedContent(file_parts[-1], self._file_name)]
 
         else:
-            matcher = "%s%s(.*)%s(.*).%s" % (
+            matcher = "%s%s(.*)%s(.*)%s" % (
                 names[0],
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
