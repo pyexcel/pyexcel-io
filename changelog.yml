@@ -5,13 +5,14 @@ releases:
   - action: fixed
     details:
     - '`#48`, turn off pep 0515'
-  date: unreleased
+    - '`#47`, csv reader cannot handle relative file names'
+  date: 02.05.2018
   version: 0.5.7
 - changes:
   - action: fixed
     details:
     - '`#46`, expose `bulk_save` to developer'
-  date: 11.01.2017
+  date: 11.01.2018
   version: 0.5.6
 - changes:
   - action: fixed
