@@ -130,6 +130,7 @@ class CSVSheetReader(SheetReader):
         ignore_infinity=True,
         auto_detect_int=True,
         auto_detect_datetime=True,
+        pep_0515_off=True,
         **keywords
     ):
         SheetReader.__init__(self, sheet, **keywords)
@@ -139,6 +140,7 @@ class CSVSheetReader(SheetReader):
         self.__ignore_infinity = ignore_infinity
         self.__auto_detect_datetime = auto_detect_datetime
         self.__file_handle = None
+        self.__pep_0515_off = pep_0515_off
 
     def get_file_handle(self):
         """ return me unicde reader for csv """
@@ -159,9 +161,11 @@ class CSVSheetReader(SheetReader):
     def __convert_cell(self, csv_cell_text):
         ret = None
         if self.__auto_detect_int:
-            ret = service.detect_int_value(csv_cell_text)
+            ret = service.detect_int_value(csv_cell_text, self.__pep_0515_off)
         if ret is None and self.__auto_detect_float:
-            ret = service.detect_float_value(csv_cell_text)
+            ret = service.detect_float_value(
+                csv_cell_text, self.__pep_0515_off
+            )
             shall_we_ignore_the_conversion = (
                 (ret in [float("inf"), float("-inf")])
                 and self.__ignore_infinity

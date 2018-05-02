@@ -39,26 +39,34 @@ def detect_date_value(cell_text):
     return ret
 
 
-def detect_float_value(cell_text):
-    try:
-        should_we_skip_it = (
-            cell_text.startswith("0") and cell_text.startswith("0.") is False
-        )
-        if should_we_skip_it:
-            # do not convert if a number starts with 0
-            # e.g. 014325
+def detect_float_value(cell_text, pep_0515_off=True):
+    should_we_skip_it = (
+        cell_text.startswith("0") and cell_text.startswith("0.") is False
+    )
+    if should_we_skip_it:
+        # do not convert if a number starts with 0
+        # e.g. 014325
+        return None
+
+    if pep_0515_off:
+        pattern = "([0-9]+_)+[0-9]+.[0-9]*$"
+        if re.match(pattern, cell_text):
             return None
 
-        else:
-            return float(cell_text)
-
+    try:
+        return float(cell_text)
     except ValueError:
         return None
 
 
-def detect_int_value(cell_text):
+def detect_int_value(cell_text, pep_0515_off=True):
     if cell_text.startswith("0") and len(cell_text) > 1:
         return None
+
+    if pep_0515_off:
+        pattern = "([0-9]+_)+[0-9]+$"
+        if re.match(pattern, cell_text):
+            return None
 
     try:
         return int(cell_text)

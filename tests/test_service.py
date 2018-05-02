@@ -1,5 +1,7 @@
 from nose.tools import eq_, raises
 from pyexcel_io.service import date_value, time_value
+from pyexcel_io.service import detect_int_value
+from pyexcel_io.service import detect_float_value
 
 
 def test_date_util_parse():
@@ -49,4 +51,26 @@ def test_fake_date_time_20():
 
 def test_issue_1_error():
     result = time_value('PT1111')
+    eq_(result, None)
+
+
+def test_detect_int_value():
+    result = detect_int_value('123')
+    eq_(result, 123)
+
+
+def test_detect_float_value():
+    result = detect_float_value('123.1')
+    eq_(result, 123.1)
+
+
+def test_suppression_of_pep_0515_int():
+    result = detect_int_value('123_123')
+    eq_(result, None)
+
+
+def test_suppression_of_pep_0515_float():
+    result = detect_float_value('123_123.')
+    eq_(result, None)
+    result = detect_float_value('123_123.1')
     eq_(result, None)

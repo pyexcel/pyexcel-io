@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: fixed
     details:
+    - '`#48`, turn off pep 0515'
+  date: unreleased
+  version: 0.5.7
+- changes:
+  - action: fixed
+    details:
     - '`#46`, expose `bulk_save` to developer'
   date: 11.01.2017
   version: 0.5.6

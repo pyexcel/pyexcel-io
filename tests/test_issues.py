@@ -170,5 +170,14 @@ def test_issue_43():
     p.get_book(url="https://github.com/pyexcel/pyexcel-xls/raw/master/tests/fixtures/file_with_an_empty_sheet.xls");  # flake8: noqa
 
 
+def test_pyexcel_issue_138():
+    array = [['123_122', '123_1.', '123_1.0']]
+    save_data('test.csv', array)
+    data = get_data('test.csv')
+    expected = [['123_122', '123_1.', '123_1.0']]
+    eq_(data['test.csv'], expected)
+    os.unlink('test.csv')
+
+
 def get_fixture(file_name):
     return os.path.join("tests", "fixtures", file_name)
