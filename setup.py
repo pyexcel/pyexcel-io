@@ -8,8 +8,8 @@ PY2 = sys.version_info[0] == 2
 PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
-AUTHOR = 'C. Wang'
-VERSION = '0.5.6'
+AUTHOR = 'C.W.'
+VERSION = '0.5.7'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -18,7 +18,7 @@ DESCRIPTION = (
 )
 URL = 'https://github.com/pyexcel/pyexcel-io'
 DOWNLOAD_URL = '%s/archive/0.5.6.tar.gz' % URL
-FILES = ['README.rst',  'CHANGELOG.rst']
+FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'API',
     'tsv',
@@ -49,6 +49,7 @@ CLASSIFIERS = [
 INSTALL_REQUIRES = [
     'lml==0.0.1',
 ]
+SETUP_COMMANDS = {}
 
 if PY26:
     INSTALL_REQUIRES.append('ordereddict')
@@ -92,6 +93,8 @@ class PublishCommand(Command):
         try:
             self.status('Removing previous builds...')
             rmtree(os.path.join(HERE, 'dist'))
+            rmtree(os.path.join(HERE, 'build'))
+            rmtree(os.path.join(HERE, 'pyexcel_io.egg-info'))
         except OSError:
             pass
 
@@ -106,6 +109,11 @@ class PublishCommand(Command):
                 self.status(UPLOAD_FAILED_MSG % PUBLISH_COMMAND)
 
         sys.exit()
+
+
+SETUP_COMMANDS.update({
+    'publish': PublishCommand
+})
 
 
 def has_gease():
@@ -181,7 +189,5 @@ if __name__ == '__main__':
         include_package_data=True,
         zip_safe=False,
         classifiers=CLASSIFIERS,
-        cmdclass={
-            'publish': PublishCommand,
-        }
+        cmdclass=SETUP_COMMANDS
     )
