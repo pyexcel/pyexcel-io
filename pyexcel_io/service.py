@@ -39,7 +39,10 @@ def detect_date_value(cell_text):
     return ret
 
 
-def detect_float_value(cell_text, pep_0515_off=True):
+def detect_float_value(
+        cell_text, pep_0515_off=True,
+        ignore_nan_text=False,
+        default_float_nan=None):
     should_we_skip_it = (
         cell_text.startswith("0") and cell_text.startswith("0.") is False
     )
@@ -54,7 +57,19 @@ def detect_float_value(cell_text, pep_0515_off=True):
             return None
 
     try:
-        return float(cell_text)
+        if ignore_nan_text:
+            if cell_text.lower() == "nan":
+                return None
+            else:
+                return float(cell_text)
+        else:
+            if cell_text.lower() == "nan":
+                if cell_text == default_float_nan:
+                    return float("NaN")
+                else:
+                    return None
+            else:
+                return float(cell_text)
     except ValueError:
         return None
 
