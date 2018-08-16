@@ -5,7 +5,7 @@ releases:
   - action: fixed
     details:
     - '`#49`, support additional options when detecting float values in csv format. default_float_nan, ignore_nan_text'
-  date: unreleased
+  date: 16.08.2018
   version: 0.5.8
 - changes:
   - action: fixed
