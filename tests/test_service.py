@@ -74,3 +74,18 @@ def test_suppression_of_pep_0515_float():
     eq_(result, None)
     result = detect_float_value('123_123.1')
     eq_(result, None)
+
+
+def test_detect_float_value_on_nan():
+    result = detect_float_value('NaN', ignore_nan_text=True)
+    eq_(result, None)
+
+
+def test_detect_float_value_on_custom_nan_text():
+    result = detect_float_value('NaN', default_float_nan="nan")
+    eq_(result, None)
+
+
+def test_detect_float_value_on_custom_nan_text2():
+    result = detect_float_value('nan', default_float_nan="nan")
+    eq_(str(result), "nan")

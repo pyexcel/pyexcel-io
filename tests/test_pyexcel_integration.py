@@ -4,6 +4,7 @@ from unittest import TestCase
 from textwrap import dedent
 
 import pyexcel as pe
+from pyexcel_io._compact import text_type
 
 
 class TestDateFormat(TestCase):
@@ -125,13 +126,30 @@ class TestSpecialStrings(TestCase):
     """
 
     def setUp(self):
-        self.content = [['01', 1, 2.0, 3.1]]
+        self.content = [['01', 1, 2.0, 3.1, 'NaN', 'nan']]
         self.test_file = "test_auto_detect_init.csv"
         pe.save_as(array=self.content, dest_file_name=self.test_file)
 
-    def test_auto_detect_float_false(self):
+    def test_auto_detect_float_true(self):
         sheet = pe.get_sheet(file_name=self.test_file)
-        self.assertEqual(sheet.to_array(), [['01', 1, 2, 3.1]])
+        self.assertEqual(sheet.to_array(),
+                         [['01', 1, 2, 3.1, 'NaN', 'nan']])
+
+    def test_auto_detect_float_false(self):
+        sheet = pe.get_sheet(file_name=self.test_file, auto_detect_float=False)
+        self.assertEqual(sheet.to_array(),
+                         [['01', 1, '2.0', '3.1', 'NaN', 'nan']])
+
+    def test_auto_detect_float_ignore_nan_text(self):
+        sheet = pe.get_sheet(file_name=self.test_file, ignore_nan_text=True)
+        self.assertEqual(sheet.to_array(),
+                         [['01', 1, 2.0, 3.1, 'NaN', 'nan']])
+
+    def test_auto_detect_float_default_float_nan(self):
+        sheet = pe.get_sheet(file_name=self.test_file, default_float_nan="nan")
+        result = sheet.to_array()
+        assert isinstance(result[0][5], float)
+        assert isinstance(result[0][4], text_type)
 
     def tearDown(self):
         os.unlink(self.test_file)

@@ -131,6 +131,8 @@ class CSVSheetReader(SheetReader):
         auto_detect_int=True,
         auto_detect_datetime=True,
         pep_0515_off=True,
+        ignore_nan_text=False,
+        default_float_nan=None,
         **keywords
     ):
         SheetReader.__init__(self, sheet, **keywords)
@@ -141,6 +143,8 @@ class CSVSheetReader(SheetReader):
         self.__auto_detect_datetime = auto_detect_datetime
         self.__file_handle = None
         self.__pep_0515_off = pep_0515_off
+        self.__ignore_nan_text = ignore_nan_text
+        self.__default_float_nan = default_float_nan
 
     def get_file_handle(self):
         """ return me unicde reader for csv """
@@ -164,7 +168,9 @@ class CSVSheetReader(SheetReader):
             ret = service.detect_int_value(csv_cell_text, self.__pep_0515_off)
         if ret is None and self.__auto_detect_float:
             ret = service.detect_float_value(
-                csv_cell_text, self.__pep_0515_off
+                csv_cell_text, self.__pep_0515_off,
+                ignore_nan_text=self.__ignore_nan_text,
+                default_float_nan=self.__default_float_nan
             )
             shall_we_ignore_the_conversion = (
                 (ret in [float("inf"), float("-inf")])

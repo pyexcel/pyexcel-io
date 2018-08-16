@@ -32,6 +32,9 @@ def iget_data(afile, file_type=None, **keywords):
     :param auto_detect_int: defaults to True
     :param auto_detect_datetime: defaults to True
     :param ignore_infinity: defaults to True
+    :param ignore_nan_text: various forms of 'NaN', 'nan' are ignored
+    :param default_float_nan: choose one form of 'NaN', 'nan'
+    :param pep_0515_off: turn off pep 0515. default to True.
     :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
