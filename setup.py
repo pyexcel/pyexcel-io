@@ -1,4 +1,6 @@
-# Template by setupmobans
+#!/usr/bin/env python3
+
+# Template by pypi-mobans
 import os
 import sys
 import codecs
@@ -9,7 +11,7 @@ PY26 = PY2 and sys.version_info[1] < 7
 
 NAME = 'pyexcel-io'
 AUTHOR = 'C.W.'
-VERSION = '0.5.7'
+VERSION = '0.5.8'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -20,6 +22,7 @@ URL = 'https://github.com/pyexcel/pyexcel-io'
 DOWNLOAD_URL = '%s/archive/0.5.7.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
+    'python',
     'API',
     'tsv',
     'tsvz',
@@ -27,12 +30,9 @@ KEYWORDS = [
     'csvz',
     'django',
     'sqlalchemy',
-    'python'
 ]
 
 CLASSIFIERS = [
-    'Topic :: Office/Business',
-    'Topic :: Utilities',
     'Topic :: Software Development :: Libraries',
     'Programming Language :: Python',
     'Intended Audience :: Developers',
@@ -140,7 +140,8 @@ def read_files(*files):
 
 def read(afile):
     """Read a file into setup"""
-    with codecs.open(afile, 'r', 'utf-8') as opened_file:
+    the_relative_file = os.path.join(HERE, afile)
+    with codecs.open(the_relative_file, 'r', 'utf-8') as opened_file:
         content = filter_out_test_code(opened_file)
         content = "".join(list(content))
         return content

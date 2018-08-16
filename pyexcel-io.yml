@@ -1,8 +1,8 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-io"
 nick_name: io
-version: 0.5.7
-current_version: 0.5.7
+version: 0.5.8
+current_version: 0.5.8
 release: 0.5.7
 dependencies:
   - ordereddict;python_version<"2.7"

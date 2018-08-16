@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: fixed
     details:
+    - '`#49`, support additional options when detecting float values in csv format. default_float_nan, ignore_nan_text'
+  date: unreleased
+  version: 0.5.8
+- changes:
+  - action: fixed
+    details:
     - '`#48`, turn off pep 0515'
     - '`#47`, csv reader cannot handle relative file names'
   date: 02.05.2018
