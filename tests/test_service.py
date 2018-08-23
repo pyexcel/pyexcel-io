@@ -24,7 +24,7 @@ def test_date_util_parse():
 
 def test_issue_8_1():
     # https://github.com/pyexcel/pyexcel-ods3/issues/8
-    result = time_value('PT1111')
+    result = time_value("PT1111")
     eq_(result, None)
 
 
@@ -50,42 +50,42 @@ def test_fake_date_time_20():
 
 
 def test_issue_1_error():
-    result = time_value('PT1111')
+    result = time_value("PT1111")
     eq_(result, None)
 
 
 def test_detect_int_value():
-    result = detect_int_value('123')
+    result = detect_int_value("123")
     eq_(result, 123)
 
 
 def test_detect_float_value():
-    result = detect_float_value('123.1')
+    result = detect_float_value("123.1")
     eq_(result, 123.1)
 
 
 def test_suppression_of_pep_0515_int():
-    result = detect_int_value('123_123')
+    result = detect_int_value("123_123")
     eq_(result, None)
 
 
 def test_suppression_of_pep_0515_float():
-    result = detect_float_value('123_123.')
+    result = detect_float_value("123_123.")
     eq_(result, None)
-    result = detect_float_value('123_123.1')
+    result = detect_float_value("123_123.1")
     eq_(result, None)
 
 
 def test_detect_float_value_on_nan():
-    result = detect_float_value('NaN', ignore_nan_text=True)
+    result = detect_float_value("NaN", ignore_nan_text=True)
     eq_(result, None)
 
 
 def test_detect_float_value_on_custom_nan_text():
-    result = detect_float_value('NaN', default_float_nan="nan")
+    result = detect_float_value("NaN", default_float_nan="nan")
     eq_(result, None)
 
 
 def test_detect_float_value_on_custom_nan_text2():
-    result = detect_float_value('nan', default_float_nan="nan")
+    result = detect_float_value("nan", default_float_nan="nan")
     eq_(str(result), "nan")

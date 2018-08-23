@@ -1,6 +1,4 @@
-from pyexcel_io.sheet import (
-    SheetReader, SheetWriter, NamedContent
-)
+from pyexcel_io.sheet import SheetReader, SheetWriter, NamedContent
 from pyexcel_io.book import BookWriter
 from pyexcel_io.utils import is_empty_array
 from nose.tools import raises
@@ -28,7 +26,6 @@ class ArrayWriter(SheetWriter):
 
 
 class TestSheetReader:
-
     @raises(Exception)
     def test_abstractness(self):
         reader = SheetReader("test")
@@ -54,13 +51,13 @@ class TestSheetReader:
 
             def to_array(self):
                 pass
+
         b = B(name)
         b.to_array()
         assert b.name == name
 
 
 class TestSheetWriter:
-
     @raises(NotImplementedError)
     def test_abstractness(self):
         writer = SheetWriter("te", "st", "abstract")
@@ -71,16 +68,12 @@ class TestSheetWriter:
             def write_row(self, row):
                 pass
 
-        d = D('t', 'e', 's')
+        d = D("t", "e", "s")
         d.write_row([11, 11])
 
     def test_writer(self):
         native_sheet = NamedContent("test", [])
-        content = [
-            [1, 2],
-            [3, 4],
-            [5, 6]
-        ]
+        content = [[1, 2], [3, 4], [5, 6]]
         writer = ArrayWriter(None, native_sheet, "test")
         writer.write_row(content[0])
         writer.write_array(content[1:])
@@ -88,11 +81,7 @@ class TestSheetWriter:
 
     def test_writer2(self):
         native_sheet = NamedContent("test", [])
-        content = [
-            [1, 2],
-            [3, 4],
-            [5, 6]
-        ]
+        content = [[1, 2], [3, 4], [5, 6]]
         writer = ArrayWriter(None, native_sheet, None)
         writer.write_row(content[0])
         writer.write_array(content[1:])

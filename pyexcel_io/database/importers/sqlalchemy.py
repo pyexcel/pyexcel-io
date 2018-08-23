@@ -18,6 +18,7 @@ class PyexcelSQLSkipRowException(Exception):
     Raised this exception to skipping a row
     while data import
     """
+
     pass
 
 
@@ -93,8 +94,7 @@ class SQLBookWriter(BookWriter):
             )
         else:
             raise Exception(
-                "Sheet: %s does not match any given tables."
-                % sheet_name
+                "Sheet: %s does not match any given tables." % sheet_name
                 + "Please be aware of case sensitivity."
             )
 

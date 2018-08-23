@@ -23,6 +23,8 @@ def iget_data(afile, file_type=None, **keywords):
     :param sheet_index: the index of the sheet to be loaded
     :param sheets: a list of sheet to be loaded
     :param file_type: used only when filename is not a physial file name
+    :param force_file_type: used only when filename refers to a physical file
+                            and it is intended to open it as forced file type.
     :param streaming: toggles the type of returned data. The values of the
                       returned dictionary remain as generator if it is set
                       to True. Default is False.
@@ -147,6 +149,7 @@ def load_data(
     file_content=None,
     file_stream=None,
     file_type=None,
+    force_file_type=None,
     sheet_name=None,
     sheet_index=None,
     sheets=None,
@@ -158,6 +161,8 @@ def load_data(
 
     :param filename: actual file name, a file stream or actual content
     :param file_type: used only when filename is not a physial file name
+    :param force_file_type: used only when filename refers to a physical file
+                            and it is intended to open it as forced file type.
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
     :param keywords: any other parameters
@@ -169,10 +174,13 @@ def load_data(
         raise IOError(constants.MESSAGE_ERROR_02)
 
     if file_type is None:
-        try:
-            file_type = file_name.split(".")[-1]
-        except AttributeError:
-            raise Exception("file_name should be a string type")
+        if force_file_type:
+            file_type = force_file_type
+        else:
+            try:
+                file_type = file_name.split(".")[-1]
+            except AttributeError:
+                raise Exception("file_name should be a string type")
 
     reader = READERS.get_a_plugin(file_type, library)
     if file_name:

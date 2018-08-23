@@ -81,8 +81,7 @@ class DjangoBookWriter(BookWriter):
             )
         else:
             raise Exception(
-                "Sheet: %s does not match any given models."
-                % sheet_name
+                "Sheet: %s does not match any given models." % sheet_name
                 + "Please be aware of case sensitivity."
             )
 

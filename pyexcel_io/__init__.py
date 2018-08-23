@@ -18,7 +18,9 @@ import pyexcel_io.plugins as plugins
 
 BLACK_LIST = [__name__, "pyexcel_webio", "pyexcel_text"]
 WHITE_LIST = [
-    "pyexcel_io.readers", "pyexcel_io.writers", "pyexcel_io.database"
+    "pyexcel_io.readers",
+    "pyexcel_io.writers",
+    "pyexcel_io.database",
 ]
 PREFIX = "pyexcel_"
 

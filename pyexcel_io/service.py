@@ -40,9 +40,8 @@ def detect_date_value(cell_text):
 
 
 def detect_float_value(
-        cell_text, pep_0515_off=True,
-        ignore_nan_text=False,
-        default_float_nan=None):
+    cell_text, pep_0515_off=True, ignore_nan_text=False, default_float_nan=None
+):
     should_we_skip_it = (
         cell_text.startswith("0") and cell_text.startswith("0.") is False
     )

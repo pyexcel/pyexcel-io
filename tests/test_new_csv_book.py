@@ -11,23 +11,15 @@ from pyexcel_io.writers.tsv import TSVBookWriter
 
 
 class TestCSVReaders(TestCase):
-    file_type = 'csv'
+    file_type = "csv"
     reader_class = CSVBookReader
-    delimiter = ','
+    delimiter = ","
 
     def setUp(self):
         self.test_file = "csv_book." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
-        self.expected_data = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ]
-        with open(self.test_file, 'w') as f:
+        self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+        self.expected_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        with open(self.test_file, "w") as f:
             for row in self.data:
                 f.write(self.delimiter.join(row) + "\n")
 
@@ -39,7 +31,7 @@ class TestCSVReaders(TestCase):
 
     def test_book_reader_from_memory_source(self):
         io = manager.get_io(self.file_type)
-        with open(self.test_file, 'r') as f:
+        with open(self.test_file, "r") as f:
             io.write(f.read())
         io.seek(0)
         b = self.reader_class()
@@ -54,27 +46,19 @@ class TestCSVReaders(TestCase):
 class TestTSVReaders(TestCSVReaders):
     file_type = "tsv"
     reader_class = TSVBookReader
-    delimiter = '\t'
+    delimiter = "\t"
 
 
 class TestReadMultipleSheets(TestCase):
     file_type = "csv"
     reader_class = CSVBookReader
-    delimiter = ','
+    delimiter = ","
 
     def setUp(self):
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
         self.merged_book_file = "csv_multiple." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
-        self.expected_data = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ]
+        self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+        self.expected_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
         self.sheets = OrderedDict()
         self.sheets.update({"sheet1": self.data})
         self.sheets.update({"sheet2": self.data})
@@ -86,7 +70,7 @@ class TestReadMultipleSheets(TestCase):
         index = 0
         for key, value in self.sheets.items():
             file_name = self.test_file_formatter % (key, index)
-            with open(file_name, 'w') as f:
+            with open(file_name, "w") as f:
                 for row in value:
                     f.write(self.delimiter.join(row) + "\n")
             index = index + 1
@@ -103,8 +87,9 @@ class TestReadMultipleSheets(TestCase):
         b = self.reader_class()
         b.open(self.merged_book_file)
         sheets = b.read_sheet_by_name("sheet1")
-        self.assertEqual(list(sheets["sheet1"]),
-                         self.expected_sheets["sheet1"])
+        self.assertEqual(
+            list(sheets["sheet1"]), self.expected_sheets["sheet1"]
+        )
 
     @raises(ValueError)
     def test_read_one_from_many_by_non_existent_name(self):
@@ -116,8 +101,9 @@ class TestReadMultipleSheets(TestCase):
         b = self.reader_class()
         b.open(self.merged_book_file)
         sheets = b.read_sheet_by_index(1)
-        self.assertEqual(list(sheets["sheet2"]),
-                         self.expected_sheets["sheet2"])
+        self.assertEqual(
+            list(sheets["sheet2"]), self.expected_sheets["sheet2"]
+        )
 
     @raises(IndexError)
     def test_read_one_from_many_by_wrong_index(self):
@@ -134,31 +120,38 @@ class TestReadMultipleSheets(TestCase):
 
 
 class TestTSVBookReaders(TestReadMultipleSheets):
-    file_type = 'tsv'
+    file_type = "tsv"
     reader_class = TSVBookReader
-    delimiter = '\t'
+    delimiter = "\t"
 
 
 class TestWriteMultipleSheets(TestCase):
     file_type = "csv"
     writer_class = CSVBookWriter
     reader_class = CSVBookReader
-    result1 = dedent("""
+    result1 = dedent(
+        """
         1,2,3
         4,5,6
         7,8,9
-        """).strip('\n')
-    result2 = dedent("""
+        """
+    ).strip("\n")
+    result2 = dedent(
+        """
         1,2,3
         4,5,6
         7,8,1000
-        """).strip('\n')
-    result3 = dedent("""
+        """
+    ).strip("\n")
+    result3 = dedent(
+        """
         1,2,3
         4,5,6888
         7,8,9
-        """).strip('\n')
-    merged = dedent("""\
+        """
+    ).strip("\n")
+    merged = dedent(
+        """\
         ---pyexcel:sheet1---
         1,2,3
         4,5,6
@@ -174,41 +167,18 @@ class TestWriteMultipleSheets(TestCase):
         4,5,6888
         7,8,9
         ---pyexcel---
-        """)
+        """
+    )
 
     def setUp(self):
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
         self.merged_book_file = "csv_multiple." + self.file_type
-        self.data1 = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
-        self.data2 = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "1000"]
-        ]
-        self.data3 = [
-            ["1", "2", "3"],
-            ["4", "5", "6888"],
-            ["7", "8", "9"]
-        ]
-        self.expected_data1 = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ]
-        self.expected_data2 = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 1000]
-        ]
-        self.expected_data3 = [
-            [1, 2, 3],
-            [4, 5, 6888],
-            [7, 8, 9]
-        ]
+        self.data1 = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+        self.data2 = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "1000"]]
+        self.data3 = [["1", "2", "3"], ["4", "5", "6888"], ["7", "8", "9"]]
+        self.expected_data1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        self.expected_data2 = [[1, 2, 3], [4, 5, 6], [7, 8, 1000]]
+        self.expected_data3 = [[1, 2, 3], [4, 5, 6888], [7, 8, 9]]
         self.sheets = OrderedDict()
         self.sheets.update({"sheet1": self.data1})
         self.sheets.update({"sheet2": self.data2})
@@ -230,16 +200,16 @@ class TestWriteMultipleSheets(TestCase):
         index = 0
         for key, value in self.sheets.items():
             file_name = self.test_file_formatter % (key, index)
-            with open(file_name, 'r') as f:
-                content = f.read().replace('\r', '')
-                assert content.strip('\n') == self.result_dict[key]
+            with open(file_name, "r") as f:
+                content = f.read().replace("\r", "")
+                assert content.strip("\n") == self.result_dict[key]
             index = index + 1
         self.delete_files()
 
     def test_multiple_sheet_into_memory(self):
         io = manager.get_io(self.file_type)
         w = self.writer_class()
-        w.open(io, lineterminator='\n')
+        w.open(io, lineterminator="\n")
         w.write(self.sheets)
         w.close()
         content = io.getvalue()
@@ -249,11 +219,11 @@ class TestWriteMultipleSheets(TestCase):
         """Write csv book into a single stream"""
         io = manager.get_io(self.file_type)
         w = self.writer_class()
-        w.open(io, lineterminator='\n')
+        w.open(io, lineterminator="\n")
         w.write(self.sheets)
         w.close()
         reader = self.reader_class()
-        reader.open_stream(io, lineterminator='\n', multiple_sheets=True)
+        reader.open_stream(io, lineterminator="\n", multiple_sheets=True)
         sheets = reader.read_all()
         for sheet in sheets:
             sheets[sheet] = list(sheets[sheet])
@@ -268,25 +238,32 @@ class TestWriteMultipleSheets(TestCase):
 
 
 class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
-    file_type = 'tsv'
+    file_type = "tsv"
     writer_class = TSVBookWriter
     reader_class = TSVBookReader
-    result1 = dedent("""
+    result1 = dedent(
+        """
         1\t2\t3
         4\t5\t6
         7\t8\t9
-        """).strip('\n')
-    result2 = dedent("""
+        """
+    ).strip("\n")
+    result2 = dedent(
+        """
         1\t2\t3
         4\t5\t6
         7\t8\t1000
-        """).strip('\n')
-    result3 = dedent("""
+        """
+    ).strip("\n")
+    result3 = dedent(
+        """
         1\t2\t3
         4\t5\t6888
         7\t8\t9
-        """).strip('\n')
-    merged = dedent("""\
+        """
+    ).strip("\n")
+    merged = dedent(
+        """\
         ---pyexcel:sheet1---
         1\t2\t3
         4\t5\t6
@@ -302,65 +279,64 @@ class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
         4\t5\t6888
         7\t8\t9
         ---pyexcel---
-        """)
+        """
+    )
 
 
 class TestWriter(TestCase):
-    file_type = 'csv'
+    file_type = "csv"
     writer_class = CSVBookWriter
-    result = dedent("""
+    result = dedent(
+        """
         1,2,3
         4,5,6
         7,8,9
-        """).strip('\n')
+        """
+    ).strip("\n")
 
     def setUp(self):
         self.test_file = "csv_book." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
+        self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
 
     def test_book_writer(self):
         w = self.writer_class()
         w.open(self.test_file)
         w.write({None: self.data})
         w.close()
-        with open(self.test_file, 'r') as f:
-            content = f.read().replace('\r', '')
-            self.assertEqual(content.strip('\n'), self.result)
+        with open(self.test_file, "r") as f:
+            content = f.read().replace("\r", "")
+            self.assertEqual(content.strip("\n"), self.result)
 
     def tearDown(self):
         os.unlink(self.test_file)
 
 
 class TestTSVWriters(TestWriter):
-    file_type = 'tsv'
+    file_type = "tsv"
     writer_class = TSVBookWriter
-    result = dedent("""
+    result = dedent(
+        """
         1\t2\t3
         4\t5\t6
         7\t8\t9
-        """).strip('\n')
+        """
+    ).strip("\n")
 
 
 class TestMemoryWriter(TestCase):
     file_type = "csv"
     writer_class = CSVBookWriter
-    result = dedent("""
+    result = dedent(
+        """
            1,2,3
            4,5,6
            7,8,9
-        """).strip('\n')
+        """
+    ).strip("\n")
 
     def setUp(self):
         self.test_file = "csv_book." + self.file_type
-        self.data = [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"]
-        ]
+        self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
 
     def test_book_writer_to_memroy(self):
         io = manager.get_io(self.file_type)
@@ -368,15 +344,17 @@ class TestMemoryWriter(TestCase):
         w.open(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})
         w.close()
-        content = io.getvalue().replace('\r', '')
-        assert content.strip('\n') == self.result
+        content = io.getvalue().replace("\r", "")
+        assert content.strip("\n") == self.result
 
 
 class TestTSVMemoryWriter(TestMemoryWriter):
-    file_type = 'tsv'
+    file_type = "tsv"
     writer_class = TSVBookWriter
-    result = dedent("""
+    result = dedent(
+        """
            1\t2\t3
            4\t5\t6
            7\t8\t9
-        """).strip('\n')
+        """
+    ).strip("\n")

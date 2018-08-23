@@ -2,7 +2,13 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
-  - action: fixed
+  - action: added
+    details:
+    - '`pyexcel#148`, support force_file_type'
+  date: 23.08.2018
+  version: 0.5.9
+- changes:
+  - action: added
     details:
     - '`#49`, support additional options when detecting float values in csv format. default_float_nan, ignore_nan_text'
   date: 16.08.2018
