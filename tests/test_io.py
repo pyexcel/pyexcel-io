@@ -15,6 +15,16 @@ from zipfile import BadZipfile
 PY2 = sys.version_info[0] == 2
 
 
+def test_force_file_type():
+    test_file = "force_file_type.txt"
+    data = get_data(
+        os.path.join("tests", "fixtures", test_file),
+        force_file_type="csv"
+    )
+    expected = [[1, 2, 3]]
+    eq_(expected, data[test_file])
+
+
 @raises(IOError)
 def test_no_valid_parameters():
     load_data()
