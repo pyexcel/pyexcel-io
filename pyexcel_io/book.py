@@ -16,6 +16,7 @@ class RWInterface(object):
     """
     The common methods for book reader and writer
     """
+
     stream_type = None
 
     def __init__(self):

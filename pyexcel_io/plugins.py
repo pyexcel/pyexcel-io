@@ -98,7 +98,9 @@ class IOManager(PluginManager):
             message = "Please install "
             if len(plugins) > 1:
                 message += ERROR_MESSAGE_FORMATTER % (
-                    self.action, file_type, ",".join(plugins)
+                    self.action,
+                    file_type,
+                    ",".join(plugins),
                 )
             else:
                 message += plugins[0]

@@ -180,8 +180,7 @@ def load_data(
             try:
                 file_type = file_name.split(".")[-1]
             except AttributeError:
-                raise Exception(
-                    "file_name should be a string type")
+                raise Exception("file_name should be a string type")
 
     reader = READERS.get_a_plugin(file_type, library)
     if file_name:

@@ -84,7 +84,7 @@ class CSVMemoryMapIterator(compact.Iterator):
                 if bom_header == BOM_BIG_ENDIAN:
                     self.__endian = BIG_ENDIAN
         elif self.__endian == LITTLE_ENDIAN:
-            line = line[self.__zeros_left_in_2_row:]
+            line = line[self.__zeros_left_in_2_row :]
         if self.__endian == LITTLE_ENDIAN:
             line = line.rstrip()
         line = line.decode(self.__encoding)
@@ -168,14 +168,14 @@ class CSVSheetReader(SheetReader):
             ret = service.detect_int_value(csv_cell_text, self.__pep_0515_off)
         if ret is None and self.__auto_detect_float:
             ret = service.detect_float_value(
-                csv_cell_text, self.__pep_0515_off,
+                csv_cell_text,
+                self.__pep_0515_off,
                 ignore_nan_text=self.__ignore_nan_text,
-                default_float_nan=self.__default_float_nan
+                default_float_nan=self.__default_float_nan,
             )
             shall_we_ignore_the_conversion = (
-                (ret in [float("inf"), float("-inf")])
-                and self.__ignore_infinity
-            )
+                ret in [float("inf"), float("-inf")]
+            ) and self.__ignore_infinity
             if shall_we_ignore_the_conversion:
                 ret = None
         if ret is None and self.__auto_detect_datetime:

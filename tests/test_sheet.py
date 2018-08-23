@@ -4,13 +4,11 @@ import pyexcel_io.constants as constants
 
 
 class MyWriter(SheetWriter):
-
     def set_size(self, size):
         self.native_book = size
 
 
 class MyReader(SheetReader):
-
     def number_of_rows(self):
         return len(self._native_sheet)
 
@@ -39,10 +37,7 @@ def take_second_column(current_index, start, limit=-1):
 
 def test_custom_skip_row_func():
     take_second_row = take_second_column
-    array = [
-        [1, 2, 3],
-        [4, 5, 6]
-    ]
+    array = [[1, 2, 3], [4, 5, 6]]
     reader = MyReader(array, skip_row_func=take_second_row)
     actual = list(reader.to_array())
     expected = [[4, 5, 6]]
@@ -51,15 +46,9 @@ def test_custom_skip_row_func():
 
 
 def test_custom_skip_column_func():
-    array = [
-        [1, 2, 3],
-        [4, 5, 6]
-    ]
+    array = [[1, 2, 3], [4, 5, 6]]
     reader = MyReader(array, skip_column_func=take_second_column)
     actual = list(reader.to_array())
-    expected = [
-        [2],
-        [5]
-        ]
+    expected = [[2], [5]]
     eq_(expected, actual)
     reader.close()
