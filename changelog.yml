@@ -2,6 +2,12 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: updated
+    details:
+    - '`#53`, upgrade lml dependency to at least 0.0.2'
+  date: 30.08.2018
+  version: 0.5.9.1
+- changes:
   - action: added
     details:
     - '`pyexcel#148`, support force_file_type'
