@@ -24,6 +24,7 @@ URL = 'https://github.com/pyexcel/pyexcel-io'
 DOWNLOAD_URL = '%s/archive/0.5.9.1.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
+    'python',
     'API',
     'tsv',
     'tsvz',
@@ -31,7 +32,6 @@ KEYWORDS = [
     'csvz',
     'django',
     'sqlalchemy',
-    'python',
 ]
 
 CLASSIFIERS = [
