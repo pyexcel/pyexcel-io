@@ -1,32 +1,38 @@
 import sys
 import json
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-from sqlalchemy import Float, Date, DateTime, ForeignKey
-from sqlalchemy.orm import sessionmaker
 import datetime
+import platform
+
+from nose.tools import eq_, raises
+from sqlalchemy import (
+    Date,
+    Float,
+    Column,
+    String,
+    Integer,
+    DateTime,
+    ForeignKey,
+    create_engine,
+)
+from sqlalchemy.orm import backref, relationship, sessionmaker
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.database.common import (
     SQLTableExporter,
-    SQLTableExportAdapter,
     SQLTableImporter,
+    SQLTableExportAdapter,
     SQLTableImportAdapter,
 )
+from sqlalchemy.ext.declarative import declarative_base
+from pyexcel_io.database.querysets import QuerysetsReader
 from pyexcel_io.database.exporters.sqlalchemy import (
-    SQLTableReader,
     SQLBookReader,
+    SQLTableReader,
 )
 from pyexcel_io.database.importers.sqlalchemy import (
-    PyexcelSQLSkipRowException,
-    SQLTableWriter,
     SQLBookWriter,
+    SQLTableWriter,
+    PyexcelSQLSkipRowException,
 )
-from pyexcel_io.database.querysets import QuerysetsReader
-from sqlalchemy.orm import relationship, backref
-from nose.tools import raises, eq_
-import platform
-
 
 PY3 = sys.version_info[0] == 3
 PY36 = PY3 and sys.version_info[1] == 6

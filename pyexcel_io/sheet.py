@@ -7,9 +7,9 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io._compact import irange
-from pyexcel_io.utils import _index_filter
 import pyexcel_io.constants as constants
+from pyexcel_io.utils import _index_filter
+from pyexcel_io._compact import irange
 
 
 class NamedContent(object):

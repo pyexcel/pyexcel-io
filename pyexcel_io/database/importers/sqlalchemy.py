@@ -7,10 +7,10 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import pyexcel_io.constants as constants
 from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
-import pyexcel_io.constants as constants
 
 
 class PyexcelSQLSkipRowException(Exception):

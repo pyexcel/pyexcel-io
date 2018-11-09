@@ -9,7 +9,6 @@
 """
 import pyexcel_io.constants as constants
 
-
 XLS_PLUGIN = "pyexcel-xls"
 XLSX_PLUGIN = "pyexcel-xlsx"
 ODS_PLUGIN = "pyexcel-ods"

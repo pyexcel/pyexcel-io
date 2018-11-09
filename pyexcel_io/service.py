@@ -127,7 +127,7 @@ def time_value(value):
     """convert to time value accroding the specification"""
     import re
 
-    results = re.match("PT(\d+)H(\d+)M(\d+)S", value)
+    results = re.match(r"PT(\d+)H(\d+)M(\d+)S", value)
     if results and len(results.groups()) == 3:
         hour = int(results.group(1))
         minute = int(results.group(2))

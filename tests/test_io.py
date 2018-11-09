@@ -1,16 +1,15 @@
 import os
 import sys
 import types
+from zipfile import BadZipfile
 from unittest import TestCase
+
 import pyexcel_io.manager as manager
 import pyexcel_io.exceptions as exceptions
-from pyexcel_io._compact import StringIO, BytesIO, is_string
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io import save_data, get_data, iget_data
+from nose.tools import eq_, raises
+from pyexcel_io import get_data, iget_data, save_data
 from pyexcel_io.io import load_data, get_writer
-from nose.tools import raises, eq_
-from zipfile import BadZipfile
-
+from pyexcel_io._compact import BytesIO, StringIO, OrderedDict, is_string
 
 PY2 = sys.version_info[0] == 2
 

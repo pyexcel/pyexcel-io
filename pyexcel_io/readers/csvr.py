@@ -7,18 +7,17 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import re
 import os
+import re
 import csv
 import glob
 import codecs
 
-from pyexcel_io.book import BookReader
-from pyexcel_io.sheet import SheetReader, NamedContent
+import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-import pyexcel_io.service as service
-
+from pyexcel_io.book import BookReader
+from pyexcel_io.sheet import SheetReader, NamedContent
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"
@@ -84,7 +83,7 @@ class CSVMemoryMapIterator(compact.Iterator):
                 if bom_header == BOM_BIG_ENDIAN:
                     self.__endian = BIG_ENDIAN
         elif self.__endian == LITTLE_ENDIAN:
-            line = line[self.__zeros_left_in_2_row :]  # flake8: noqa
+            line = line[self.__zeros_left_in_2_row :]  # noqa: E203
         if self.__endian == LITTLE_ENDIAN:
             line = line.rstrip()
         line = line.decode(self.__encoding)

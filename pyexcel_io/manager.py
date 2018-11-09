@@ -7,8 +7,7 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io._compact import StringIO, BytesIO
-
+from pyexcel_io._compact import BytesIO, StringIO
 
 MIME_TYPES = {}
 FILE_TYPES = ()

@@ -9,11 +9,10 @@
 """
 import zipfile
 
-from pyexcel_io._compact import StringIO, PY2
 from pyexcel_io.book import BookWriter
-from pyexcel_io.constants import DEFAULT_SHEET_NAME, FILE_FORMAT_CSVZ
-
-from .csvw import CSVSheetWriter, UnicodeWriter
+from pyexcel_io._compact import PY2, StringIO
+from pyexcel_io.constants import FILE_FORMAT_CSVZ, DEFAULT_SHEET_NAME
+from .csvw import UnicodeWriter, CSVSheetWriter
 
 
 class CSVZipSheetWriter(CSVSheetWriter):

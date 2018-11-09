@@ -7,12 +7,12 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from types import GeneratorType
 import warnings
+from types import GeneratorType
 
-from pyexcel_io._compact import isstream, PY2
-from pyexcel_io.plugins import READERS, WRITERS
 import pyexcel_io.constants as constants
+from pyexcel_io.plugins import READERS, WRITERS
+from pyexcel_io._compact import PY2, isstream
 
 
 def iget_data(afile, file_type=None, **keywords):

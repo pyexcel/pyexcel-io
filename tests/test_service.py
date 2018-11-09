@@ -1,7 +1,10 @@
 from nose.tools import eq_, raises
-from pyexcel_io.service import date_value, time_value
-from pyexcel_io.service import detect_int_value
-from pyexcel_io.service import detect_float_value
+from pyexcel_io.service import (
+    date_value,
+    time_value,
+    detect_int_value,
+    detect_float_value,
+)
 
 
 def test_date_util_parse():
