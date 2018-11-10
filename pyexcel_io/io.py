@@ -119,29 +119,13 @@ def save_data(afile, data, file_type=None, **keywords):
     if no_file_type:
         file_type = constants.FILE_FORMAT_CSV
 
-    store_data(
-        afile,
-        to_store,
-        file_type=file_type,
-        single_sheet_in_book=single_sheet_in_book,
-        **keywords
-    )
-
-
-def store_data(afile, data, file_type=None, **keywords):
-    """Non public function to store data to afile
-
-    :param filename: actual file name, a file stream or actual content
-    :param data: the data to be written
-    :param file_type: used only when filename is not a physial file name
-    :param keywords: any other parameters
-    """
     if isstream(afile):
         keywords.update(dict(file_stream=afile, file_type=file_type))
     else:
         keywords.update(dict(file_name=afile, file_type=file_type))
+    keywords['single_sheet_in_book'] = single_sheet_in_book
     with get_writer(**keywords) as writer:
-        writer.write(data)
+        writer.write(to_store)
 
 
 def load_data(
