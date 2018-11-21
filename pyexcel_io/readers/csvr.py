@@ -84,7 +84,7 @@ class CSVMemoryMapIterator(compact.Iterator):
                 if bom_header == BOM_BIG_ENDIAN:
                     self.__endian = BIG_ENDIAN
         elif self.__endian == LITTLE_ENDIAN:
-            line = line[self.__zeros_left_in_2_row :]  # flake8: noqa
+            line = line[self.__zeros_left_in_2_row :]  # noqa: E203
         if self.__endian == LITTLE_ENDIAN:
             line = line.rstrip()
         line = line.decode(self.__encoding)

@@ -2,6 +2,9 @@ from nose.tools import eq_, raises
 from pyexcel_io.service import date_value, time_value
 from pyexcel_io.service import detect_int_value
 from pyexcel_io.service import detect_float_value
+from pyexcel_io.service import ODS_WRITE_FORMAT_COVERSION
+from pyexcel_io._compact import PY2
+from nose import SkipTest
 
 
 def test_date_util_parse():
@@ -89,3 +92,11 @@ def test_detect_float_value_on_custom_nan_text():
 def test_detect_float_value_on_custom_nan_text2():
     result = detect_float_value("nan", default_float_nan="nan")
     eq_(str(result), "nan")
+
+
+def test_ods_write_format_conversion():
+    if PY2:
+        expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
+        eq_('float', expected)
+    else:
+        raise SkipTest
