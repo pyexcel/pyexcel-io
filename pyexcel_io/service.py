@@ -12,6 +12,8 @@ import math
 import datetime
 
 from pyexcel_io._compact import PY2
+from pyexcel_io import constants
+from pyexcel_io import exceptions
 
 
 def has_no_digits_in_float(value):
@@ -97,8 +99,14 @@ def detect_int_value(cell_text, pep_0515_off=True):
 
 def float_value(value):
     """convert a value to float"""
+    if value > constants.MAX_INTEGER:
+        raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
     ret = float(value)
     return ret
+
+
+def throw_exception(value):
+    raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
 
 
 def date_value(value):
@@ -168,7 +176,6 @@ ODS_FORMAT_CONVERSION = {
 
 ODS_WRITE_FORMAT_COVERSION = {
     float: "float",
-    int: "float",
     str: "string",
     datetime.date: "date",
     datetime.time: "time",
@@ -178,7 +185,8 @@ ODS_WRITE_FORMAT_COVERSION = {
 
 if PY2:
     ODS_WRITE_FORMAT_COVERSION[unicode] = "string"
-    ODS_WRITE_FORMAT_COVERSION[long] = "float"
+    ODS_WRITE_FORMAT_COVERSION[long] = "throw_exception"
+
 
 VALUE_CONVERTERS = {
     "float": float_value,
@@ -220,6 +228,7 @@ ODS_VALUE_CONVERTERS = {
     "time": ods_time_value,
     "boolean": ods_bool_value,
     "timedelta": ods_timedelta_value,
+    "throw_exception": throw_exception
 }
 
 

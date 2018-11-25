@@ -3,7 +3,10 @@ from pyexcel_io.service import date_value, time_value
 from pyexcel_io.service import detect_int_value
 from pyexcel_io.service import detect_float_value
 from pyexcel_io.service import ODS_WRITE_FORMAT_COVERSION
+from pyexcel_io.service import float_value
+from pyexcel_io.service import throw_exception
 from pyexcel_io._compact import PY2
+from pyexcel_io.exceptions import IntegerAccuracyLossError
 from nose import SkipTest
 
 
@@ -100,3 +103,13 @@ def test_ods_write_format_conversion():
         eq_('float', expected)
     else:
         raise SkipTest
+
+
+@raises(IntegerAccuracyLossError)
+def test_big_int_value():
+    float_value(1000000000000000)
+
+
+@raises(IntegerAccuracyLossError)
+def test_throw_exception():
+    throw_exception(1000000000000000)
