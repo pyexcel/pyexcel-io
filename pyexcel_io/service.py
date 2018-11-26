@@ -99,14 +99,8 @@ def detect_int_value(cell_text, pep_0515_off=True):
 
 def float_value(value):
     """convert a value to float"""
-    if value > constants.MAX_INTEGER:
-        raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
     ret = float(value)
     return ret
-
-
-def throw_exception(value):
-    raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
 
 
 def date_value(value):
@@ -176,6 +170,7 @@ ODS_FORMAT_CONVERSION = {
 
 ODS_WRITE_FORMAT_COVERSION = {
     float: "float",
+    int: "float",
     str: "string",
     datetime.date: "date",
     datetime.time: "time",
@@ -184,8 +179,8 @@ ODS_WRITE_FORMAT_COVERSION = {
 }
 
 if PY2:
-    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"
-    ODS_WRITE_FORMAT_COVERSION[long] = "throw_exception"
+    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"  # noqa: F821
+    ODS_WRITE_FORMAT_COVERSION[long] = "throw_exception"  # noqa: F821
 
 
 VALUE_CONVERTERS = {
@@ -196,6 +191,16 @@ VALUE_CONVERTERS = {
     "boolean": boolean_value,
     "percentage": float_value,
 }
+
+
+def throw_exception(value):
+    raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
+
+
+def ods_float_value(value):
+    if value > constants.MAX_INTEGER:
+        raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
+    return value
 
 
 def ods_date_value(value):
@@ -228,6 +233,7 @@ ODS_VALUE_CONVERTERS = {
     "time": ods_time_value,
     "boolean": ods_bool_value,
     "timedelta": ods_timedelta_value,
+    "float": ods_float_value,
     "throw_exception": throw_exception
 }
 
