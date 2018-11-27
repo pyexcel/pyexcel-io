@@ -1,7 +1,7 @@
 Change log
 ================================================================================
 
-0.5.10 - 23.08.2018
+0.5.10 - 27.11.2018
 --------------------------------------------------------------------------------
 
 added
@@ -12,6 +12,15 @@ added
    greater than 10 to the power of 16, it will not be written either in ods. In
    both situation, IntegerPrecisionLossError will be raised. And this version
    enables pyexcel-ods and pyexcel-ods3 to do so.
+
+0.5.9.1 - 30.08.2018
+--------------------------------------------------------------------------------
+
+updated
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. `#53 <https://github.com/pyexcel/pyexcel-io/issues/53>`_, upgrade lml
+   dependency to at least 0.0.2
 
 0.5.9 - 23.08.2018
 --------------------------------------------------------------------------------

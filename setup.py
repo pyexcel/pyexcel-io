@@ -49,7 +49,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'lml==0.0.1',
+    'lml>=0.0.2',
 ]
 SETUP_COMMANDS = {}
 
