@@ -12,6 +12,8 @@ import math
 import datetime
 
 from pyexcel_io._compact import PY2
+from pyexcel_io import constants
+from pyexcel_io import exceptions
 
 
 def has_no_digits_in_float(value):
@@ -127,7 +129,7 @@ def time_value(value):
     """convert to time value accroding the specification"""
     import re
 
-    results = re.match("PT(\d+)H(\d+)M(\d+)S", value)
+    results = re.match(r"PT(\d+)H(\d+)M(\d+)S", value)
     if results and len(results.groups()) == 3:
         hour = int(results.group(1))
         minute = int(results.group(2))
@@ -177,7 +179,9 @@ ODS_WRITE_FORMAT_COVERSION = {
 }
 
 if PY2:
-    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"
+    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"  # noqa: F821
+    ODS_WRITE_FORMAT_COVERSION[long] = "throw_exception"  # noqa: F821
+
 
 VALUE_CONVERTERS = {
     "float": float_value,
@@ -187,6 +191,16 @@ VALUE_CONVERTERS = {
     "boolean": boolean_value,
     "percentage": float_value,
 }
+
+
+def throw_exception(value):
+    raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
+
+
+def ods_float_value(value):
+    if value > constants.MAX_INTEGER:
+        raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
+    return value
 
 
 def ods_date_value(value):
@@ -219,6 +233,8 @@ ODS_VALUE_CONVERTERS = {
     "time": ods_time_value,
     "boolean": ods_bool_value,
     "timedelta": ods_timedelta_value,
+    "float": ods_float_value,
+    "throw_exception": throw_exception
 }
 
 
