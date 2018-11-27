@@ -98,8 +98,11 @@ def test_detect_float_value_on_custom_nan_text2():
 
 
 def test_ods_write_format_conversion():
-    expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
-    eq_('throw_exception', expected)
+    if PY2:
+        expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
+        eq_('throw_exception', expected)
+    else:
+        raise SkipTest()
 
 
 @raises(IntegerAccuracyLossError)
