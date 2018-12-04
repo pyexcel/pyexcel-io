@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from lml.loader import scan_plugins
+from lml.loader import scan_plugins_regex
 from lml.plugin import PluginManager
 from lml.plugin import PluginInfoChain, PluginInfo
 
@@ -132,8 +132,11 @@ READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
 WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 
 
-def load_plugins(prefix, path, black_list, white_list):
+def load_plugins(plugin_name_patterns, path, black_list, white_list):
     """Try to discover all pyexcel-io plugins"""
-    scan_plugins(
-        prefix, path, black_list, white_list  # constants.DEFAULT_PLUGIN_NAME,
+    scan_plugins_regex(
+        plugin_name_patterns=plugin_name_patterns,
+        pyinstaller_path=path,
+        black_list=black_list,
+        white_list=white_list
     )
