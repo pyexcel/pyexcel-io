@@ -22,6 +22,10 @@ WHITE_LIST = [
     "pyexcel_io.writers",
     "pyexcel_io.database",
 ]
-PREFIX = "pyexcel_"
+PREFIX_PATTERN = "^pyexcel_.*$"
 
-plugins.load_plugins(PREFIX, __path__, BLACK_LIST, WHITE_LIST)
+plugins.load_plugins(
+    PREFIX_PATTERN,
+    __path__,  # noqa: F821
+    BLACK_LIST,
+    WHITE_LIST)

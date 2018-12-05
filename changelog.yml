@@ -4,6 +4,18 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`#59`: Please use scan_plugins_regex, which lml 0.7 complains about'
+  version: 0.5.11
+  date: 3.12.2018
+- changes:
+  - action: added
+    details:
+    - '`#57`, long type will not be written in ods. please use string type. And if the integer is equal or greater than 10 to the power of 16, it will not be written either in ods. In both situation, IntegerPrecisionLossError will be raised. And this version enables pyexcel-ods and pyexcel-ods3 to do so.'
+  date: 27.11.2018
+  version: 0.5.10
+- changes:
+  - action: updated
+    details:
     - '`#53`, upgrade lml dependency to at least 0.0.2'
   date: 30.08.2018
   version: 0.5.9.1
