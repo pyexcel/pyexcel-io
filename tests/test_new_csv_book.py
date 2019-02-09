@@ -1,13 +1,14 @@
 import os
-from unittest import TestCase
 from textwrap import dedent
-from nose.tools import raises
+from unittest import TestCase
+
 import pyexcel_io.manager as manager
+from nose.tools import raises
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.readers.csvr import CSVBookReader
 from pyexcel_io.readers.tsv import TSVBookReader
-from pyexcel_io.writers.csvw import CSVBookWriter
 from pyexcel_io.writers.tsv import TSVBookWriter
+from pyexcel_io.readers.csvr import CSVBookReader
+from pyexcel_io.writers.csvw import CSVBookWriter
 
 
 class TestCSVReaders(TestCase):

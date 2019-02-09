@@ -10,10 +10,10 @@
 import csv
 import codecs
 
-from pyexcel_io.book import BookWriter
-from pyexcel_io.sheet import SheetWriter
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
+from pyexcel_io.book import BookWriter
+from pyexcel_io.sheet import SheetWriter
 
 
 class UnicodeWriter(object):

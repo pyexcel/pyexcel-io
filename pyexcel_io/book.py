@@ -8,7 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.manager as manager
-from pyexcel_io._compact import OrderedDict, isstream, PY2
+from pyexcel_io._compact import PY2, OrderedDict, isstream
 from .constants import MESSAGE_ERROR_03, MESSAGE_WRONG_IO_INSTANCE
 
 

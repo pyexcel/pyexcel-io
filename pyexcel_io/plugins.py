@@ -13,9 +13,8 @@ from lml.plugin import PluginInfoChain, PluginInfo
 
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
-import pyexcel_io.exceptions as exceptions
 import pyexcel_io.constants as constants
-
+import pyexcel_io.exceptions as exceptions
 
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \

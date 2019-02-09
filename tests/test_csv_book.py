@@ -2,18 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import os
-from unittest import TestCase
 from textwrap import dedent
-from nose.tools import raises, eq_
+from unittest import TestCase
+
 import pyexcel_io.manager as manager
+from nose.tools import eq_, raises
 from pyexcel_io.sheet import NamedContent
+from pyexcel_io._compact import PY2, BytesIO, StringIO
 from pyexcel_io.readers.csvr import (
-    CSVSheetReader,
     CSVFileReader,
+    CSVSheetReader,
     CSVinMemoryReader,
 )
 from pyexcel_io.writers.csvw import CSVFileWriter, CSVMemoryWriter
-from pyexcel_io._compact import BytesIO, PY2, StringIO
 
 
 class TestReaders(TestCase):

@@ -7,18 +7,17 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import re
 import os
+import re
 import csv
 import glob
 import codecs
 
-from pyexcel_io.book import BookReader
-from pyexcel_io.sheet import SheetReader, NamedContent
+import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-import pyexcel_io.service as service
-
+from pyexcel_io.book import BookReader
+from pyexcel_io.sheet import SheetReader, NamedContent
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"

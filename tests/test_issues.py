@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+import pyexcel as p
+
 from nose import SkipTest
 from nose.tools import eq_
 from pyexcel_io import get_data, save_data
 from pyexcel_io._compact import PY26
-import pyexcel as p
 
 IN_TRAVIS = "TRAVIS" in os.environ
 

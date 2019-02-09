@@ -9,11 +9,10 @@
 """
 import zipfile
 
-from pyexcel_io._compact import StringIO, PY2
 from pyexcel_io.book import BookReader
+from pyexcel_io._compact import PY2, StringIO
 from pyexcel_io.constants import FILE_FORMAT_CSVZ
-
-from .csvr import CSVinMemoryReader, NamedContent
+from .csvr import NamedContent, CSVinMemoryReader
 
 
 class CSVZipBookReader(BookReader):
