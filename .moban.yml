@@ -11,7 +11,7 @@ configuration:
   - ".moban.d"
   configuration: pyexcel-io.yml
 targets:
-  - "docs/source/conf.py": "docs/source/conf.py"
+  - "docs/source/conf.py": "docs/conf.py_t"
   - setup.py: setup.py
   - .travis.yml: travis.yml.jj2
   - requirements.txt: requirements.txt.jj2
