@@ -17,7 +17,6 @@ targets:
   - requirements.txt: requirements.txt.jj2
   - "tests/requirements.txt": "tests/requirements.txt"
   - LICENSE: NEW_BSD_LICENSE.jj2
-  - MANIFEST.in: MANIFEST.in.jj2
   - test.sh: test.script.jj2
   - test.bat: test.script.jj2
   - README.rst: README.rst
