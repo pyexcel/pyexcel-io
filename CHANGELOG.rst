@@ -9,6 +9,8 @@ updated
 
 #. `#60 <https://github.com/pyexcel/pyexcel-io/issues/60>`_: include tests in
    tar ball
+#. `#61 <https://github.com/pyexcel/pyexcel-io/issues/61>`_: enable python
+   setup.py test
 
 0.5.11 - 3.12.2018
 --------------------------------------------------------------------------------
