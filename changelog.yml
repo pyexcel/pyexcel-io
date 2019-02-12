@@ -4,6 +4,19 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`#63`: Version 0.5.12 prevents xslx and ods plugin from being loaded'
+  version: 0.5.13
+  date: 12.02.2019
+- changes:
+  - action: updated
+    details:
+    - '`#60`: include tests in tar ball'
+    - '`#61`: enable python setup.py test'
+  version: 0.5.12
+  date: 9.02.2019
+- changes:
+  - action: updated
+    details:
     - '`#59`: Please use scan_plugins_regex, which lml 0.7 complains about'
   version: 0.5.10
   date: 3.12.2018
