@@ -5,8 +5,14 @@ releases:
   - action: updated
     details:
     - '`#65`: add tests/__init__.py because python2.7 setup.py test needs it'
-  version: 0.5.13
+  version: 0.5.14
   date: 21.02.2019
+- changes:
+  - action: updated
+    details:
+    - '`#63`: Version 0.5.12 prevents xslx and ods plugin from being loaded'
+  version: 0.5.13
+  date: 12.02.2019
 - changes:
   - action: updated
     details:

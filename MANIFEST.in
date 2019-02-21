@@ -3,3 +3,6 @@ include LICENSE
 include CHANGELOG.rst
 recursive-include tests *
 recursive-include docs *
+include docs/source/*
+include Makefile
+include test.sh
