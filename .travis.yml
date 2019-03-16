@@ -11,6 +11,20 @@ python:
   - 3.6
   - 3.5
   - 2.7
+
+stages:
+  - test
+  - lint
+jobs:
+  include:
+    - stage: lint
+      python: 3.6
+      script: make lint
+
+stage: test
+
+script: make test
+
 before_install:
   - if [[ $TRAVIS_PYTHON_VERSION == "2.6" ]]; then pip install flake8==2.6.2; fi
   - if [[ -f min_requirements.txt && "$MINREQ" -eq 1 ]]; then

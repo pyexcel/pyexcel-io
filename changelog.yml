@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`pyexcel-ods#33`: fix integer comparision error on i586'
+  version: 0.5.15
+  date: 16.03.2019
+- changes:
+  - action: updated
+    details:
     - '`#65`: add tests/__init__.py because python2.7 setup.py test needs it'
   version: 0.5.14
   date: 21.02.2019
