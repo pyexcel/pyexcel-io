@@ -1,3 +1,4 @@
+
 sudo: false
 dist: xenial
 language: python
@@ -11,8 +12,34 @@ python:
   - 3.6
   - 3.5
   - 2.7
+
+stages:
+  - test
+  - lint
+
+.disable_global: &disable_global
+  before_install: false
+  install: true
+  before_script: false
+  after_success: false
+  after_failure: false
+
+.lint: &lint
+  <<: *disable_global
+  python: 3.6
+  stage: lint
+  install: pip install flake8
+  script: make lint
+
+jobs:
+  include:
+    - *lint
+
+stage: test
+
+script: make test
+
 before_install:
-  - if [[ $TRAVIS_PYTHON_VERSION == "2.6" ]]; then pip install flake8==2.6.2; fi
   - if [[ -f min_requirements.txt && "$MINREQ" -eq 1 ]]; then
       mv min_requirements.txt requirements.txt ;
     fi

@@ -20,9 +20,9 @@ project = 'pyexcel-io'
 copyright = 'copyright 2015-2019 Onni Software Ltd.'
 author = 'C.W.'
 # The short X.Y version
-version = '0.5.13'
+version = '0.5.16'
 # The full version, including alpha/beta/rc tags
-release = '0.5.13'
+release = '0.5.16'
 
 # -- General configuration ---------------------------------------------------
 
@@ -45,7 +45,7 @@ source_suffix = ''
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = 'en'
+language = 'Python'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

@@ -100,7 +100,7 @@ def test_detect_float_value_on_custom_nan_text2():
 def test_ods_write_format_conversion():
     if PY2:
         expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
-        eq_('throw_exception', expected)
+        eq_('long', expected)
     else:
         raise SkipTest()
 
@@ -108,6 +108,21 @@ def test_ods_write_format_conversion():
 @raises(IntegerAccuracyLossError)
 def test_big_int_value():
     ods_float_value(1000000000000000)
+
+
+def test_max_value_on_python_2():
+    if PY2:
+        ods_float_value(long(999999999999999))
+    else:
+        raise SkipTest("No long in python 3")
+
+
+@raises(IntegerAccuracyLossError)
+def test_really_long_value_on_python2():
+    if PY2:
+        ods_float_value(long(999999999999999+1))
+    else:
+        raise SkipTest("No long in python 3")
 
 
 @raises(IntegerAccuracyLossError)
