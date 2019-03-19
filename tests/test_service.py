@@ -1,4 +1,3 @@
-import sys
 from nose.tools import eq_, raises
 from pyexcel_io.service import date_value, time_value
 from pyexcel_io.service import detect_int_value
@@ -9,8 +8,6 @@ from pyexcel_io.service import throw_exception
 from pyexcel_io._compact import PY2
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 from nose import SkipTest
-
-PY2 = sys.version[0] == 2
 
 
 def test_date_util_parse():
