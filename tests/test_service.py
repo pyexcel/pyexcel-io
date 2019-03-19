@@ -1,3 +1,4 @@
+import sys
 from nose.tools import eq_, raises
 from pyexcel_io.service import date_value, time_value
 from pyexcel_io.service import detect_int_value
@@ -8,6 +9,8 @@ from pyexcel_io.service import throw_exception
 from pyexcel_io._compact import PY2
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 from nose import SkipTest
+
+PY2 = sys.version[0] == 2
 
 
 def test_date_util_parse():
@@ -108,6 +111,21 @@ def test_ods_write_format_conversion():
 @raises(IntegerAccuracyLossError)
 def test_big_int_value():
     ods_float_value(1000000000000000)
+
+
+def test_max_value_on_python_2():
+    if PY2:
+        ods_float_value(long(999999999999999))
+    else:
+        raise SkipTest("No long in python 3")
+
+
+@raises(IntegerAccuracyLossError)
+def test_really_long_value_on_python2():
+    if PY2:
+        ods_float_value(long(999999999999999+1))
+    else:
+        raise SkipTest("No long in python 3")
 
 
 @raises(IntegerAccuracyLossError)

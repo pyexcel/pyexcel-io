@@ -180,7 +180,7 @@ ODS_WRITE_FORMAT_COVERSION = {
 
 if PY2:
     ODS_WRITE_FORMAT_COVERSION[unicode] = "string"  # noqa: F821
-    ODS_WRITE_FORMAT_COVERSION[long] = "throw_exception"  # noqa: F821
+    ODS_WRITE_FORMAT_COVERSION[long] = "long"  # noqa: F821
 
 
 VALUE_CONVERTERS = {
@@ -198,7 +198,7 @@ def throw_exception(value):
 
 
 def ods_float_value(value):
-    if int(value) > int(constants.MAX_INTEGER):
+    if value > constants.MAX_INTEGER:
         raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
     return value
 
@@ -234,7 +234,7 @@ ODS_VALUE_CONVERTERS = {
     "boolean": ods_bool_value,
     "timedelta": ods_timedelta_value,
     "float": ods_float_value,
-    "throw_exception": throw_exception
+    "long": ods_float_value
 }
 
 
