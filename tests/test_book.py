@@ -1,5 +1,6 @@
-from nose.tools import raises
 from pyexcel_io.book import BookReader, BookWriter, RWInterface
+
+from nose.tools import raises
 
 
 @raises(NotImplementedError)

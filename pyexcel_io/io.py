@@ -11,8 +11,9 @@ import os
 import warnings
 from types import GeneratorType
 
-from pyexcel_io._compact import isstream, PY2
+from pyexcel_io import constants
 from pyexcel_io.plugins import READERS, WRITERS
+from pyexcel_io._compact import PY2, isstream
 from pyexcel_io.exceptions import NoSupportingPluginFound
 
 
@@ -124,7 +125,7 @@ def save_data(afile, data, file_type=None, **keywords):
         keywords.update(dict(file_stream=afile, file_type=file_type))
     else:
         keywords.update(dict(file_name=afile, file_type=file_type))
-    keywords['single_sheet_in_book'] = single_sheet_in_book
+    keywords["single_sheet_in_book"] = single_sheet_in_book
     with get_writer(**keywords) as writer:
         writer.write(to_store)
 

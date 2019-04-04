@@ -46,11 +46,13 @@ class IntegerAccuracyLossError(Exception):
     b=get_sheet(file_name='abc.ods')
     b[0,0] != s[0,0]
     """
+
     def __init__(self, message):
         custom_message = (
-            message + '\n' +
-            "In order to keep its accuracy, please save as string. Then " +
-            "convert to int, long or float after the value will be read back"
+            message
+            + "\n"
+            + "In order to keep its accuracy, please save as string. Then "
+            + "convert to int, long or float after the value will be read back"
         )
 
         super(IntegerAccuracyLossError, self).__init__(custom_message)

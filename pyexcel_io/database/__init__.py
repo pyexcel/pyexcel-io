@@ -8,8 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.plugins import IOPluginInfoChain
-from pyexcel_io.constants import DB_DJANGO, DB_SQL
-
+from pyexcel_io.constants import DB_SQL, DB_DJANGO
 
 IOPluginInfoChain(__name__).add_a_reader(
     relative_plugin_class_path="exporters.django.DjangoBookReader",

@@ -4,11 +4,11 @@
 import os
 
 import pyexcel as p
+from pyexcel_io import get_data, save_data
+from pyexcel_io._compact import PY26
 
 from nose import SkipTest
 from nose.tools import eq_
-from pyexcel_io import get_data, save_data
-from pyexcel_io._compact import PY26
 
 IN_TRAVIS = "TRAVIS" in os.environ
 

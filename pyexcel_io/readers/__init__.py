@@ -9,7 +9,6 @@
 """
 from pyexcel_io.plugins import IOPluginInfoChain
 
-
 IOPluginInfoChain(__name__).add_a_reader(
     relative_plugin_class_path="csvr.CSVBookReader",
     file_types=["csv"],

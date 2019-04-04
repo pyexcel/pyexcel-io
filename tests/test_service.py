@@ -1,13 +1,17 @@
-from nose.tools import eq_, raises
-from pyexcel_io.service import date_value, time_value
-from pyexcel_io.service import detect_int_value
-from pyexcel_io.service import detect_float_value
-from pyexcel_io.service import ODS_WRITE_FORMAT_COVERSION
-from pyexcel_io.service import ods_float_value
-from pyexcel_io.service import throw_exception
+from pyexcel_io.service import (
+    ODS_WRITE_FORMAT_COVERSION,
+    date_value,
+    time_value,
+    ods_float_value,
+    throw_exception,
+    detect_int_value,
+    detect_float_value,
+)
 from pyexcel_io._compact import PY2
 from pyexcel_io.exceptions import IntegerAccuracyLossError
+
 from nose import SkipTest
+from nose.tools import eq_, raises
 
 
 def test_date_util_parse():
@@ -100,7 +104,7 @@ def test_detect_float_value_on_custom_nan_text2():
 def test_ods_write_format_conversion():
     if PY2:
         expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
-        eq_('long', expected)
+        eq_("long", expected)
     else:
         raise SkipTest()
 
@@ -120,7 +124,7 @@ def test_max_value_on_python_2():
 @raises(IntegerAccuracyLossError)
 def test_really_long_value_on_python2():
     if PY2:
-        ods_float_value(long(999999999999999+1))
+        ods_float_value(long(999999999999999 + 1))
     else:
         raise SkipTest("No long in python 3")
 

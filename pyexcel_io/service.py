@@ -11,9 +11,8 @@ import re
 import math
 import datetime
 
+from pyexcel_io import constants, exceptions
 from pyexcel_io._compact import PY2
-from pyexcel_io import constants
-from pyexcel_io import exceptions
 
 
 def has_no_digits_in_float(value):
@@ -234,7 +233,7 @@ ODS_VALUE_CONVERTERS = {
     "boolean": ods_bool_value,
     "timedelta": ods_timedelta_value,
     "float": ods_float_value,
-    "long": ods_float_value
+    "long": ods_float_value,
 }
 
 
