@@ -7,11 +7,13 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import os
 from types import GeneratorType
 import warnings
 
 from pyexcel_io._compact import isstream, PY2
 from pyexcel_io.plugins import READERS, WRITERS
+from pyexcel_io.exceptions import NoSupportingPluginFound
 import pyexcel_io.constants as constants
 
 
@@ -182,7 +184,15 @@ def load_data(
             except AttributeError:
                 raise Exception("file_name should be a string type")
 
-    reader = READERS.get_a_plugin(file_type, library)
+    try:
+        reader = READERS.get_a_plugin(file_type, library)
+    except NoSupportingPluginFound:
+        if file_name:
+            if not os.path.exists(file_name):
+                raise IOError("%s does not exist" % file_name)
+        else:
+            raise
+
     if file_name:
         reader.open(file_name, **keywords)
     elif file_content:
