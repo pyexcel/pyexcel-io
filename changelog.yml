@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`#68`: Raise IOError when the data file does not exist'
+  version: 0.5.17
+  date: 04.04.2019
+- changes:
+  - action: updated
+    details:
     - '`#67`: fix conversion issue for long type on python 2.7 for ods'
   version: 0.5.16
   date: 19.03.2019

@@ -24,6 +24,11 @@ def test_force_file_type():
 
 
 @raises(IOError)
+def test_invalid_file():
+    load_data('/something/does/not/exist')
+
+
+@raises(IOError)
 def test_no_valid_parameters():
     load_data()
 
@@ -83,7 +88,7 @@ def test_write_xlsx_data_to_memory():
         eq_(str(e), msg)
 
 
-@raises(exceptions.NoSupportingPluginFound)
+@raises(IOError)
 def test_load_unknown_data():
     get_data("test.unknown")
 
@@ -106,11 +111,6 @@ def test_load_csvz_data_from_memory():
 @raises(IOError)
 def test_write_xlsx_data():
     get_data("test.xlsx")
-
-
-@raises(exceptions.NoSupportingPluginFound)
-def test_write_unknown_data():
-    get_data("test.unknown")
 
 
 @raises(Exception)
