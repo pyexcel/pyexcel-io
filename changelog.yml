@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`#69`: Force file type(force_file_type) on write'
+  version: 0.5.18
+  date: 12.06.2019
+- changes:
+  - action: updated
+    details:
     - '`#68`: Raise IOError when the data file does not exist'
   version: 0.5.17
   date: 04.04.2019

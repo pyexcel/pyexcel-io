@@ -23,12 +23,12 @@ DESCRIPTION = (
 # -- Project information -----------------------------------------------------
 
 project = 'pyexcel-io'
-copyright = 'copyright 2015-2019 Onni Software Ltd.'
-author = 'Onni Software Ltd.'
+copyright = '2015-2019 Onni Software Ltd.'
+author = 'C.W.'
 # The short X.Y version
-version = '0.5.17'
+version = '0.5.18'
 # The full version, including alpha/beta/rc tags
-release = '0.5.17'
+release = '0.5.18'
 
 # -- General configuration ---------------------------------------------------
 

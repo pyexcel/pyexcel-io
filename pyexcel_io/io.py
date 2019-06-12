@@ -4,7 +4,7 @@
 
     The io interface to file extensions
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2019 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import os
@@ -24,7 +24,7 @@ def iget_data(afile, file_type=None, **keywords):
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
     :param sheets: a list of sheet to be loaded
-    :param file_type: used only when filename is not a physial file name
+    :param file_type: used only when filename is not a physical file name
     :param force_file_type: used only when filename refers to a physical file
                             and it is intended to open it as forced file type.
     :param streaming: toggles the type of returned data. The values of the
@@ -99,6 +99,8 @@ def save_data(afile, data, file_type=None, **keywords):
     :param filename: actual file name, a file stream or actual content
     :param data: a dictionary but an ordered dictionary is preferred
     :param file_type: used only when filename is not a physial file name
+    :param force_file_type: used only when filename refers to a physical file
+                            and it is intended to open it as forced file type.
     :param library: explicitly name a library for use.
                     e.g. library='pyexcel-ods'
     :param keywords: any other parameters that python csv module's
@@ -217,7 +219,8 @@ def load_data(
 
 
 def get_writer(
-    file_name=None, file_stream=None, file_type=None, library=None, **keywords
+    file_name=None, file_stream=None, file_type=None,
+    library=None, force_file_type=None, **keywords
 ):
     """find a suitable writer"""
     inputs = [file_name, file_stream]
@@ -227,11 +230,15 @@ def get_writer(
         raise IOError(constants.MESSAGE_ERROR_02)
 
     file_type_given = True
+
     if file_type is None and file_name:
-        try:
-            file_type = file_name.split(".")[-1]
-        except AttributeError:
-            raise Exception("file_name should be a string type")
+        if force_file_type:
+            file_type = force_file_type
+        else:
+            try:
+                file_type = file_name.split(".")[-1]
+            except AttributeError:
+                raise Exception("file_name should be a string type")
 
         file_type_given = False
 
