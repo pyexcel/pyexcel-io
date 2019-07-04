@@ -172,6 +172,12 @@ def test_issue_43():
     # flake8: noqa
 
 
+def test_issue_70():
+    data = get_data("", file_type="csv")
+    expected = []
+    eq_(data["csv"], expected)
+
+
 def test_pyexcel_issue_138():
     array = [["123_122", "123_1.", "123_1.0"]]
     save_data("test.csv", array)

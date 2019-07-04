@@ -179,7 +179,7 @@ def load_data(
 
     if file_name:
         reader.open(file_name, **keywords)
-    elif file_content:
+    elif file_content is not None:
         reader.open_content(file_content, **keywords)
     elif file_stream:
         reader.open_stream(file_stream, **keywords)
