@@ -233,9 +233,13 @@ def _convert_content_to_stream(file_content, file_type):
     stream = manager.get_io(file_type)
     if not PY2:
         target_content_type = manager.get_io_type(file_type)
-        if target_content_type == 'bytes' and not isinstance(file_content, bytes):
+        needs_encode = (target_content_type == 'bytes' and
+                        not isinstance(file_content, bytes))
+        needs_decode = (target_content_type == 'string' and
+                        isinstance(file_content, bytes))
+        if needs_encode:
             file_content = file_content.encode('utf-8')
-        elif target_content_type == 'string' and isinstance(file_content, bytes):
+        elif needs_decode:
             file_content = file_content.decode('utf-8')
     stream.write(file_content)
     stream.seek(0)

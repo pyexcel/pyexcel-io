@@ -1,5 +1,6 @@
 from nose.tools import raises
-from pyexcel_io.book import RWInterface, BookReader, BookWriter, _convert_content_to_stream
+from pyexcel_io.book import RWInterface, BookReader, BookWriter
+from pyexcel_io.book import _convert_content_to_stream
 from pyexcel_io._compact import PY2, StringIO, BytesIO
 from nose import SkipTest
 
