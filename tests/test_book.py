@@ -39,7 +39,7 @@ def test_convert_to_bytes_stream():
         raise SkipTest('No need test in python 2')
     else:
         file_content = b'test'
-        stream = _convert_content_to_stream(file_content, 'string')
+        stream = _convert_content_to_stream(file_content, 'csv')
         assert isinstance(stream, StringIO)
 
 
@@ -48,5 +48,5 @@ def test_convert_to_string_stream():
         raise SkipTest('No need test in python 2')
     else:
         file_content = 'test'
-        stream = _convert_content_to_stream(file_content, 'bytes')
+        stream = _convert_content_to_stream(file_content, 'csvz')
         assert isinstance(stream, BytesIO)
