@@ -15,7 +15,6 @@ python:
 stages:
   - test
   - lint
-  - moban
 
 .disable_global: &disable_global
   addons: false
