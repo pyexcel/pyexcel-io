@@ -36,6 +36,7 @@ stages:
     submodules: false
   python: 3.6
   stage: lint
+  install: pip install flake8
   script: make lint
 
 jobs:
