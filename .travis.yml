@@ -39,15 +39,6 @@ stages:
   stage: lint
   script: make lint
 
-.moban: &moban
-  <<: *disable_global
-  python: 3.6
-  stage: moban
-  install: pip install moban>=0.0.4
-  script:
-    - moban
-    - git diff --exit-code
-
 jobs:
   include:
     - *moban
