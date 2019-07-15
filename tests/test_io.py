@@ -24,6 +24,21 @@ def test_force_file_type():
     eq_(expected, data[test_file])
 
 
+def test_force_file_type_on_write():
+    test_file = "force_file_type_on_write.txt"
+    save_data(
+        test_file,
+        {"sheet 1": [[1, 2]]},
+        force_file_type="csv"
+    )
+    data = get_data(
+        test_file, force_file_type="csv"
+    )
+    expected = [[1, 2]]
+    eq_(expected, data[test_file])
+    os.unlink(test_file)
+
+
 @raises(IOError)
 def test_invalid_file():
     load_data("/something/does/not/exist")

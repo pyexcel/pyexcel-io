@@ -1,6 +1,9 @@
 from pyexcel_io.book import BookReader, BookWriter, RWInterface
 
 from nose.tools import raises
+from pyexcel_io.book import _convert_content_to_stream
+from pyexcel_io._compact import PY2, StringIO, BytesIO
+from nose import SkipTest
 
 
 @raises(NotImplementedError)
@@ -31,3 +34,21 @@ def test_book_reader_open_stream():
 def test_book_writer():
     writer = BookWriter()
     writer.open_stream("a string")
+
+
+def test_convert_to_bytes_stream():
+    if PY2:
+        raise SkipTest('No need test in python 2')
+    else:
+        file_content = b'test'
+        stream = _convert_content_to_stream(file_content, 'csv')
+        assert isinstance(stream, StringIO)
+
+
+def test_convert_to_string_stream():
+    if PY2:
+        raise SkipTest('No need test in python 2')
+    else:
+        file_content = 'test'
+        stream = _convert_content_to_stream(file_content, 'csvz')
+        assert isinstance(stream, BytesIO)
