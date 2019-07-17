@@ -5,6 +5,7 @@ nick_name: io
 version: 0.5.20
 current_version: 0.5.20
 release: 0.5.20
+moban_command: false
 copyright_year: 2015-2019
 dependencies:
   - ordereddict;python_version<"2.7"
