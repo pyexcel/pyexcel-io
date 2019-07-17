@@ -190,7 +190,12 @@ def load_data(
         reader = READERS.get_a_plugin(file_type, library)
     except NoSupportingPluginFound:
         if file_name:
-            if not os.path.exists(file_name):
+            if os.path.exists(file_name):
+                if os.path.isfile(file_name):
+                    raise
+                else:
+                    raise IOError("%s is not a file" % file_name)
+            else:
                 raise IOError("%s does not exist" % file_name)
         else:
             raise
