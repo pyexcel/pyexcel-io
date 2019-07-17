@@ -2,11 +2,10 @@ overrides: "pyexcel.yaml"
 project: "pyexcel-io"
 name: pyexcel-io
 nick_name: io
-version: 0.5.19
-current_version: 0.5.19
-release: 0.5.19
+version: 0.5.20
+current_version: 0.5.20
+release: 0.5.20
 copyright_year: 2015-2019
-moban_command: false
 dependencies:
   - ordereddict;python_version<"2.7"
   - lml>=0.0.4
