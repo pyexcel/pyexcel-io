@@ -34,6 +34,7 @@ def iget_data(afile, file_type=None, **keywords):
                     e.g. library='pyexcel-ods'
     :param auto_detect_float: defaults to True
     :param auto_detect_int: defaults to True
+    :param auto_detect_delimiter: defaults to True
     :param auto_detect_datetime: defaults to True
     :param ignore_infinity: defaults to True
     :param ignore_nan_text: various forms of 'NaN', 'nan' are ignored
