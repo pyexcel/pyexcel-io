@@ -125,6 +125,7 @@ class CSVSheetReader(SheetReader):
         self,
         sheet,
         encoding="utf-8",
+        auto_detect_delimiter=True,
         auto_detect_float=True,
         ignore_infinity=True,
         auto_detect_int=True,
@@ -136,6 +137,7 @@ class CSVSheetReader(SheetReader):
     ):
         SheetReader.__init__(self, sheet, **keywords)
         self._encoding = encoding
+        self.__auto_detect_delimiter = auto_detect_delimiter
         self.__auto_detect_int = auto_detect_int
         self.__auto_detect_float = auto_detect_float
         self.__ignore_infinity = ignore_infinity
@@ -151,6 +153,17 @@ class CSVSheetReader(SheetReader):
 
     def row_iterator(self):
         self.__file_handle = self.get_file_handle()
+        # CSVMemoryMapIterator does not support readline()
+        if self.__auto_detect_delimiter and not isinstance(self.__file_handle, CSVMemoryMapIterator):
+            first_line = self.__file_handle.readline()
+            try:
+                # csv.Sniffer() can raise Error() if no delimiters are found
+                dialect = csv.Sniffer().sniff(first_line)
+                self._keywords['delimiter'] = dialect.delimiter
+            except csv.Error:
+                pass
+            finally:
+                self.__file_handle.seek(0)
         return csv.reader(self.__file_handle, **self._keywords)
 
     def column_iterator(self, row):
