@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - '`#70`: when the given file is a root directory, the error shall read it is not a file'
+  version: 0.5.20
+  date: 17.7.2019
+- changes:
+  - action: updated
+    details:
     - '`pyexcel#185`: handle stream conversion if file type(html) needs string content then bytes to handle'
   version: 0.5.19
   date: 14.7.2019

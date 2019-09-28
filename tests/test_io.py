@@ -15,6 +15,11 @@ from nose.tools import eq_, raises
 PY2 = sys.version_info[0] == 2
 
 
+@raises(IOError)
+def test_directory_name_as_file():
+    get_data('/')
+
+
 def test_force_file_type():
     test_file = "force_file_type.txt"
     data = get_data(
