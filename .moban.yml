@@ -3,6 +3,7 @@ configuration:
   template_dir:
   - "git://github.com/moremoban/pypi-mobans.git?branch=dev&submodule=true!/templates"
   - "git://github.com/pyexcel/pyexcel-mobans.git!/templates"
+  - "git://github.com/pyexcel/pyexcel-mobans.git!/statics"
   - ".moban.d"
   configuration: pyexcel-io.yml
 targets:
@@ -20,3 +21,4 @@ targets:
     configuration: changelog.yml
     template: CHANGELOG.rst.jj2
   - lint.sh: lint.script.jj2
+  - ".github/FUNDING.yml": "FUNDING.yml"
