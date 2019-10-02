@@ -1,26 +1,20 @@
-requires:
-  - type: git
-    url: https://github.com/moremoban/pypi-mobans
-    branch: dev
-    submodule: true
-  - https://github.com/pyexcel/pyexcel-mobans
 configuration:
-  configuration_dir: "pyexcel-mobans:config"
+  configuration_dir: "git://github.com/pyexcel/pyexcel-mobans!/config"
   template_dir:
-  - "pyexcel-mobans:templates"
-  - "pypi-mobans:templates"
+  - "git://github.com/moremoban/pypi-mobans.git?branch=dev&submodule=true!/templates"
+  - "git://github.com/pyexcel/pyexcel-mobans.git!/templates"
   - ".moban.d"
   configuration: pyexcel-io.yml
 targets:
   - "docs/source/conf.py": "docs/conf.py_t"
-  - setup.py: setup.py
+  - setup.py: io_setup.py.jj2
   - .travis.yml: travis.yml.jj2
   - requirements.txt: requirements.txt.jj2
   - "tests/requirements.txt": "tests/requirements.txt"
   - LICENSE: NEW_BSD_LICENSE.jj2
   - test.sh: test.script.jj2
   - test.bat: test.script.jj2
-  - README.rst: README.rst
+  - README.rst: io_readme.rst.jj2
   - "docs/source/index.rst": "docs/source/index.rst"
   - output: CHANGELOG.rst
     configuration: changelog.yml
