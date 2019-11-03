@@ -168,7 +168,7 @@ def load_data(
             try:
                 file_type = file_name.split(".")[-1]
             except AttributeError:
-                raise Exception("file_name should be a string type")
+                raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
     try:
         reader = READERS.get_a_plugin(file_type, library)
@@ -178,9 +178,9 @@ def load_data(
                 if os.path.isfile(file_name):
                     raise
                 else:
-                    raise IOError("%s is not a file" % file_name)
+                    raise IOError(constants.MESSAGE_NOT_FILE_FORMATTER % file_name)
             else:
-                raise IOError("%s does not exist" % file_name)
+                raise IOError(constants.MESSAGE_FILE_DOES_NOT_EXIST % file_name)
         else:
             raise
 
@@ -227,7 +227,7 @@ def get_writer(
             try:
                 file_type = file_name.split(".")[-1]
             except AttributeError:
-                raise Exception("file_name should be a string type")
+                raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
         file_type_given = False
 

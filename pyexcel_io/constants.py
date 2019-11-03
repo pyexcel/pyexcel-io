@@ -16,6 +16,7 @@ MESSAGE_INVALID_PARAMETERS = "Invalid parameters"
 MESSAGE_ERROR_02 = "No content, file name. Nothing is given"
 MESSAGE_ERROR_03 = "cannot handle unknown content"
 MESSAGE_WRONG_IO_INSTANCE = "Wrong io instance is passed for your file format."
+MESSAGE_FILE_NAME_SHOULD_BE_STRING = "file_name should be a string"
 MESSAGE_CANNOT_WRITE_STREAM_FORMATTER = (
     "Cannot write content of file type %s to stream"
 )
@@ -31,6 +32,8 @@ MESSAGE_CANNOT_READ_FILE_TYPE_FORMATTER = (
 MESSAGE_LOADING_FORMATTER = (
     "The plugin for file type %s is not installed. Please install %s"
 )
+MESSAGE_NOT_FILE_FORMATTER = "%s is not a file"
+MESSAGE_FILE_DOES_NOT_EXIST = "%s does not exist"
 MESSAGE_EMPTY_ARRAY = "One empty row is found"
 MESSAGE_IGNORE_ROW = "One row is ignored"
 MESSAGE_DB_EXCEPTION = """
