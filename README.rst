@@ -14,8 +14,14 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-io
 
+.. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/version.svg
+   :target: https://anaconda.org/conda-forge/pyexcel-io
+
 .. image:: https://pepy.tech/badge/pyexcel-io/month
    :target: https://pepy.tech/project/pyexcel-io/month
+
+.. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/downloads.svg
+   :target: https://anaconda.org/conda-forge/pyexcel-io
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
