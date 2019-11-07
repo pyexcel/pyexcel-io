@@ -7,6 +7,7 @@ current_version: 0.6.0
 release: 0.5.20
 copyright_year: 2015-2019
 moban_command: false
+is_on_conda: true
 dependencies:
   - ordereddict;python_version<"2.7"
   - lml>=0.0.4
