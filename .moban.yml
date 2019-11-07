@@ -11,7 +11,7 @@ targets:
   - setup.py: io_setup.py.jj2
   - .travis.yml: travis.yml.jj2
   - requirements.txt: requirements.txt.jj2
-  - "tests/requirements.txt": "tests/requirements.txt"
+  - "tests/requirements.txt": "tests/custom-requirements.txt.jj2"
   - LICENSE: NEW_BSD_LICENSE.jj2
   - test.sh: test.script.jj2
   - test.bat: test.script.jj2

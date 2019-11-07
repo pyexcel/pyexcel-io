@@ -1,9 +1,11 @@
-{% extends 'tests/requirements.txt.jj2' %}
-{%block extras %}
+nose
+mock;python_version<"3"
+codecov
+coverage
+flake8
 SQLAlchemy
 pyexcel>=0.2.0
 pyexcel-xls>=0.1.0
 moban
 black;python_version>="3.6"
 isort;python_version>="3.6"
-{%endblock%}
