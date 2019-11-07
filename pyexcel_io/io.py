@@ -178,9 +178,13 @@ def load_data(
                 if os.path.isfile(file_name):
                     raise
                 else:
-                    raise IOError(constants.MESSAGE_NOT_FILE_FORMATTER % file_name)
+                    raise IOError(
+                        constants.MESSAGE_NOT_FILE_FORMATTER % file_name
+                    )
             else:
-                raise IOError(constants.MESSAGE_FILE_DOES_NOT_EXIST % file_name)
+                raise IOError(
+                    constants.MESSAGE_FILE_DOES_NOT_EXIST % file_name
+                )
         else:
             raise
 
@@ -208,8 +212,12 @@ def load_data(
 
 
 def get_writer(
-    file_name=None, file_stream=None, file_type=None,
-    library=None, force_file_type=None, **keywords
+    file_name=None,
+    file_stream=None,
+    file_type=None,
+    library=None,
+    force_file_type=None,
+    **keywords
 ):
     """find a suitable writer"""
     inputs = [file_name, file_stream]

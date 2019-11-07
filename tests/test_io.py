@@ -17,7 +17,7 @@ PY2 = sys.version_info[0] == 2
 
 @raises(IOError)
 def test_directory_name_as_file():
-    get_data('/')
+    get_data("/")
 
 
 def test_force_file_type():
@@ -31,14 +31,8 @@ def test_force_file_type():
 
 def test_force_file_type_on_write():
     test_file = "force_file_type_on_write.txt"
-    save_data(
-        test_file,
-        {"sheet 1": [[1, 2]]},
-        force_file_type="csv"
-    )
-    data = get_data(
-        test_file, force_file_type="csv"
-    )
+    save_data(test_file, {"sheet 1": [[1, 2]]}, force_file_type="csv")
+    data = get_data(test_file, force_file_type="csv")
     expected = [[1, 2]]
     eq_(expected, data[test_file])
     os.unlink(test_file)
