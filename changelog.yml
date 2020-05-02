@@ -2,6 +2,12 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: removed
+    details:
+    - 'python 3.6 lower versions are no longer supported'
+  version: 0.6.0
+  date: tbd
+- changes:
   - action: updated
     details:
     - '`#70`: when the given file is a root directory, the error shall read it is not a file'
