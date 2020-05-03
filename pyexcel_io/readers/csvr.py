@@ -11,7 +11,6 @@ import os
 import re
 import csv
 import glob
-import codecs
 
 import pyexcel_io.service as service
 import pyexcel_io._compact as compact
@@ -91,30 +90,6 @@ class CSVMemoryMapIterator(compact.Iterator):
         if line == "":
             raise StopIteration
 
-        if compact.PY2:
-            # python 2 requires utf-8 encoded string for reading
-            line = line.encode("utf-8")
-        return line
-
-
-class UTF8Recorder(compact.Iterator):
-    """
-    Iterator that reads an encoded stream and reencodes the input to UTF-8.
-    """
-
-    def __init__(self, file_handle, encoding):
-        self.__file_handle = file_handle
-        self.reader = codecs.getreader(encoding)(file_handle)
-
-    def close(self):
-        self.__file_handle.close()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        # python 2 requires utf-8 encoded string for reading
-        line = next(self.reader).encode("utf-8")
         return line
 
 
@@ -196,14 +171,9 @@ class CSVFileReader(CSVSheetReader):
     """ read csv from phyical file """
 
     def get_file_handle(self):
-        unicode_reader = None
-        if compact.PY2:
-            file_handle = open(self._native_sheet.payload, "rb")
-            unicode_reader = UTF8Recorder(file_handle, self._encoding)
-        else:
-            unicode_reader = open(
-                self._native_sheet.payload, "r", encoding=self._encoding
-            )
+        unicode_reader = open(
+            self._native_sheet.payload, "r", encoding=self._encoding
+        )
         return unicode_reader
 
 
@@ -211,26 +181,17 @@ class CSVinMemoryReader(CSVSheetReader):
     """ read csv file from memory """
 
     def get_file_handle(self):
-        unicode_reader = None
-        if compact.PY2:
-            if hasattr(self._native_sheet.payload, "read"):
-                unicode_reader = UTF8Recorder(
-                    self._native_sheet.payload, self._encoding
-                )
-            else:
-                unicode_reader = self._native_sheet.payload
+        if isinstance(self._native_sheet.payload, compact.BytesIO):
+            # please note that
+            # if the end developer feed us bytesio in python3
+            # we will do the conversion to StriongIO but that
+            # comes at a cost.
+            content = self._native_sheet.payload.read()
+            unicode_reader = compact.StringIO(
+                content.decode(self._encoding)
+            )
         else:
-            if isinstance(self._native_sheet.payload, compact.BytesIO):
-                # please note that
-                # if the end developer feed us bytesio in python3
-                # we will do the conversion to StriongIO but that
-                # comes at a cost.
-                content = self._native_sheet.payload.read()
-                unicode_reader = compact.StringIO(
-                    content.decode(self._encoding)
-                )
-            else:
-                unicode_reader = self._native_sheet.payload
+            unicode_reader = self._native_sheet.payload
 
         return unicode_reader
 
@@ -259,26 +220,22 @@ class CSVBookReader(BookReader):
         self._native_book = self._load_from_stream()
 
     def open_content(self, file_content, **keywords):
-        try:
-            import mmap
+        import mmap
 
-            encoding = keywords.get("encoding", "utf-8")
-            if isinstance(file_content, mmap.mmap):
-                # load from mmap
-                self.__multiple_sheets = keywords.get("multiple_sheets", False)
-                self._file_stream = CSVMemoryMapIterator(
-                    file_content, encoding
-                )
-                self._keywords = keywords
-                self._native_book = self._load_from_stream()
-            else:
-                if compact.PY3_ABOVE:
-                    if isinstance(file_content, bytes):
-                        file_content = file_content.decode(encoding)
-                # else python 2.7 does not care about bytes nor str
-                BookReader.open_content(self, file_content, **keywords)
-        except ImportError:
-            # python 2.6 or Google app engine
+        encoding = keywords.get("encoding", "utf-8")
+        if isinstance(file_content, mmap.mmap):
+            # load from mmap
+            self.__multiple_sheets = keywords.get("multiple_sheets", False)
+            self._file_stream = CSVMemoryMapIterator(
+                file_content, encoding
+            )
+            self._keywords = keywords
+            self._native_book = self._load_from_stream()
+        else:
+            if compact.PY3_ABOVE:
+                if isinstance(file_content, bytes):
+                    file_content = file_content.decode(encoding)
+            # else python 2.7 does not care about bytes nor str
             BookReader.open_content(self, file_content, **keywords)
 
     def read_sheet(self, native_sheet):

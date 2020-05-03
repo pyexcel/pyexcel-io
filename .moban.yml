@@ -2,7 +2,7 @@ overrides: "git://github.com/pyexcel/pyexcel-mobans!/mobanfile.yaml"
 configuration:
   configuration: pyexcel-io.yml
 targets:
-  - "docs/source/conf.py": "docs/conf.py_t"
+  - "docs/source/conf.py": "docs/source/custom_conf.py.jj2"
   - setup.py: io_setup.py.jj2
   - .travis.yml: custom_travis.yml.jj2
   - "tests/requirements.txt": "tests/custom-requirements.txt.jj2"
