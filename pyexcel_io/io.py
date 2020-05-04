@@ -13,7 +13,7 @@ from types import GeneratorType
 
 from pyexcel_io import constants
 from pyexcel_io.plugins import READERS, WRITERS
-from pyexcel_io._compact import PY2, isstream
+from pyexcel_io._compact import isstream
 from pyexcel_io.exceptions import NoSupportingPluginFound
 
 
@@ -113,10 +113,7 @@ def save_data(afile, data, file_type=None, **keywords):
         single_sheet_in_book = True
         to_store = {constants.DEFAULT_SHEET_NAME: data}
     else:
-        if PY2:
-            keys = data.keys()
-        else:
-            keys = list(data.keys())
+        keys = list(data.keys())
         single_sheet_in_book = len(keys) == 1
 
     no_file_type = isstream(afile) and file_type is None

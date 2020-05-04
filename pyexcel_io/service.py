@@ -12,7 +12,6 @@ import math
 import datetime
 
 from pyexcel_io import constants, exceptions
-from pyexcel_io._compact import PY2
 
 
 def has_no_digits_in_float(value):
@@ -176,10 +175,6 @@ ODS_WRITE_FORMAT_COVERSION = {
     datetime.timedelta: "timedelta",
     bool: "boolean",
 }
-
-if PY2:
-    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"  # noqa: F821
-    ODS_WRITE_FORMAT_COVERSION[long] = "long"  # noqa: F821
 
 
 VALUE_CONVERTERS = {
