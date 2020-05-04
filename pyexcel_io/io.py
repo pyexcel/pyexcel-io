@@ -12,7 +12,7 @@ import warnings
 from types import GeneratorType
 
 from pyexcel_io import constants
-from pyexcel_io.plugins import READERS
+from pyexcel_io.reader import Reader
 from pyexcel_io.writer import Writer
 from pyexcel_io._compact import isstream
 from pyexcel_io.exceptions import NoSupportingPluginFound
@@ -169,7 +169,7 @@ def load_data(
                 raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
     try:
-        reader = READERS.get_a_plugin(file_type, library)
+        reader = Reader(file_type, library)
     except NoSupportingPluginFound:
         if file_name:
             if os.path.exists(file_name):
