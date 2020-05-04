@@ -12,7 +12,8 @@ import warnings
 from types import GeneratorType
 
 from pyexcel_io import constants
-from pyexcel_io.plugins import READERS, WRITERS
+from pyexcel_io.plugins import READERS
+from pyexcel_io.writer import Writer
 from pyexcel_io._compact import isstream
 from pyexcel_io.exceptions import NoSupportingPluginFound
 
@@ -236,7 +237,7 @@ def get_writer(
 
         file_type_given = False
 
-    writer = WRITERS.get_a_plugin(file_type, library)
+    writer = Writer(file_type, library)
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)
