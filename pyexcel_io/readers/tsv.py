@@ -8,7 +8,6 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
-
 from .csvr import CSVBookReader
 
 

@@ -1,8 +1,7 @@
+from nose.tools import raises
 from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetReader, SheetWriter, NamedContent
 from pyexcel_io.utils import is_empty_array
-
-from nose.tools import raises
 
 
 @raises(NotImplementedError)

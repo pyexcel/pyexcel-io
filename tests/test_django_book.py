@@ -1,3 +1,4 @@
+from nose.tools import eq_, raises
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
@@ -15,8 +16,6 @@ from pyexcel_io.database.importers.django import (
     DjangoBookWriter,
     DjangoModelWriter,
 )
-
-from nose.tools import eq_, raises
 
 
 class Package:

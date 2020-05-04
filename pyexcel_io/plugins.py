@@ -7,12 +7,13 @@
     :copyright: (c) 2014-2017 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from lml.loader import scan_plugins_regex
+from lml.plugin import PluginInfo, PluginManager, PluginInfoChain
+
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
 import pyexcel_io.constants as constants
 import pyexcel_io.exceptions as exceptions
-from lml.loader import scan_plugins_regex
-from lml.plugin import PluginInfo, PluginManager, PluginInfoChain
 
 ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \

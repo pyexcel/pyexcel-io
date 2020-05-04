@@ -1,3 +1,5 @@
+from nose import SkipTest
+from nose.tools import eq_, raises
 from pyexcel_io.service import (
     ODS_WRITE_FORMAT_COVERSION,
     date_value,
@@ -9,9 +11,6 @@ from pyexcel_io.service import (
 )
 from pyexcel_io._compact import PY2
 from pyexcel_io.exceptions import IntegerAccuracyLossError
-
-from nose import SkipTest
-from nose.tools import eq_, raises
 
 
 def test_date_util_parse():

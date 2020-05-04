@@ -187,9 +187,7 @@ class CSVinMemoryReader(CSVSheetReader):
             # we will do the conversion to StriongIO but that
             # comes at a cost.
             content = self._native_sheet.payload.read()
-            unicode_reader = compact.StringIO(
-                content.decode(self._encoding)
-            )
+            unicode_reader = compact.StringIO(content.decode(self._encoding))
         else:
             unicode_reader = self._native_sheet.payload
 
@@ -226,16 +224,13 @@ class CSVBookReader(BookReader):
         if isinstance(file_content, mmap.mmap):
             # load from mmap
             self.__multiple_sheets = keywords.get("multiple_sheets", False)
-            self._file_stream = CSVMemoryMapIterator(
-                file_content, encoding
-            )
+            self._file_stream = CSVMemoryMapIterator(file_content, encoding)
             self._keywords = keywords
             self._native_book = self._load_from_stream()
         else:
-            if compact.PY3_ABOVE:
-                if isinstance(file_content, bytes):
-                    file_content = file_content.decode(encoding)
-            # else python 2.7 does not care about bytes nor str
+            if isinstance(file_content, bytes):
+                file_content = file_content.decode(encoding)
+
             BookReader.open_content(self, file_content, **keywords)
 
     def read_sheet(self, native_sheet):

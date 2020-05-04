@@ -5,14 +5,13 @@ import zipfile
 from unittest import TestCase
 
 import pyexcel_io.manager as manager
+from nose.tools import raises
 from pyexcel_io import save_data
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.readers.csvz import CSVZipBookReader
 from pyexcel_io.readers.tsvz import TSVZipBookReader
 from pyexcel_io.writers.csvz import CSVZipBookWriter
 from pyexcel_io.writers.tsvz import TSVZipBookWriter
-
-from nose.tools import raises
 
 PY2 = sys.version_info[0] == 2
 

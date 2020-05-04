@@ -108,16 +108,10 @@ class CSVFileWriter(CSVSheetWriter):
             )
         else:
             file_name = self._native_book
-        if compact.PY2:
-            self.file_handle = open(file_name, "wb")
-            self.writer = UnicodeWriter(
-                self.file_handle, encoding=self._encoding, **self._keywords
-            )
-        else:
-            self.file_handle = open(
-                file_name, "w", newline="", encoding=self._encoding
-            )
-            self.writer = csv.writer(self.file_handle, **self._keywords)
+        self.file_handle = open(
+            file_name, "w", newline="", encoding=self._encoding
+        )
+        self.writer = csv.writer(self.file_handle, **self._keywords)
 
 
 class CSVMemoryWriter(CSVSheetWriter):
@@ -143,14 +137,8 @@ class CSVMemoryWriter(CSVSheetWriter):
         )
 
     def set_sheet_name(self, name):
-        if compact.PY2:
-            self.file_handle = self._native_book
-            self.writer = UnicodeWriter(
-                self.file_handle, encoding=self._encoding, **self._keywords
-            )
-        else:
-            self.file_handle = self._native_book
-            self.writer = csv.writer(self.file_handle, **self._keywords)
+        self.file_handle = self._native_book
+        self.writer = csv.writer(self.file_handle, **self._keywords)
         if not self._single_sheet_in_book:
             self.writer.writerow(
                 [
