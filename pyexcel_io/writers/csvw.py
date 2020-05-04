@@ -8,46 +8,11 @@
     :license: New BSD License, see LICENSE for more details
 """
 import csv
-import codecs
 
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
 from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
-
-
-class UnicodeWriter(object):
-    """
-    A CSV writer which will write rows to CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, file_handle, encoding="utf-8", **kwds):
-        # Redirect output to a queue
-        self.queue = compact.StringIO()
-        self.writer = csv.writer(self.queue, **kwds)
-        self.stream = file_handle
-        self.encoder = codecs.getincrementalencoder(encoding)()
-
-    def writerow(self, row):
-        """ write row into the csv file """
-        self.writer.writerow(
-            [compact.text_type(s).encode("utf-8") for s in row]
-        )
-        # Fetch UTF-8 output from the queue ...
-        data = self.queue.getvalue()
-        data = data.decode("utf-8")
-        # ... and reencode it into the target encoding
-        data = self.encoder.encode(data)
-        # write to the target stream
-        self.stream.write(data)
-        # empty queue
-        self.queue.truncate(0)
-
-    def writerows(self, rows):
-        """ write multiple rows into csv file """
-        for row in rows:
-            self.writerow(row)
 
 
 class CSVSheetWriter(SheetWriter):
