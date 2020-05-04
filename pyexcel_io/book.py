@@ -85,26 +85,15 @@ class BookReader(RWInterface):
         keywords are passed on to individual readers
         """
         if isstream(file_stream):
-            if PY2:
-                if hasattr(file_stream, "seek"):
-                    file_stream.seek(0)
-                else:
-                    # python 2
-                    # Hei zipfile in odfpy would do a seek
-                    # but stream from urlib cannot do seek
-                    file_stream = _convert_content_to_stream(
-                        file_stream.read(), self._file_type
-                    )
-            else:
-                from io import UnsupportedOperation
+            from io import UnsupportedOperation
 
-                try:
-                    file_stream.seek(0)
-                except UnsupportedOperation:
-                    # python 3
-                    file_stream = _convert_content_to_stream(
-                        file_stream.read(), self._file_type
-                    )
+            try:
+                file_stream.seek(0)
+            except UnsupportedOperation:
+                # python 3
+                file_stream = _convert_content_to_stream(
+                    file_stream.read(), self._file_type
+                )
 
             self._file_stream = file_stream
             self._keywords = keywords
@@ -231,18 +220,17 @@ class BookWriter(RWInterface):
 
 def _convert_content_to_stream(file_content, file_type):
     stream = manager.get_io(file_type)
-    if not PY2:
-        target_content_type = manager.get_io_type(file_type)
-        needs_encode = target_content_type == "bytes" and not isinstance(
-            file_content, bytes
-        )
-        needs_decode = target_content_type == "string" and isinstance(
-            file_content, bytes
-        )
-        if needs_encode:
-            file_content = file_content.encode("utf-8")
-        elif needs_decode:
-            file_content = file_content.decode("utf-8")
+    target_content_type = manager.get_io_type(file_type)
+    needs_encode = target_content_type == "bytes" and not isinstance(
+        file_content, bytes
+    )
+    needs_decode = target_content_type == "string" and isinstance(
+        file_content, bytes
+    )
+    if needs_encode:
+        file_content = file_content.encode("utf-8")
+    elif needs_decode:
+        file_content = file_content.decode("utf-8")
     stream.write(file_content)
     stream.seek(0)
     return stream
