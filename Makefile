@@ -3,6 +3,9 @@ all: test
 test:
 	bash test.sh
 
+install_test:
+	pip install -r tests/requirements.txt
+
 document:
 	sphinx-autogen -o docs/source/generated/ docs/source/*.rst
 	sphinx-build -b html docs/source/ docs/build/
@@ -15,4 +18,6 @@ format:
 lint:
 	bash lint.sh
 
+git-diff-check:
+	git diff --exit-code
 
