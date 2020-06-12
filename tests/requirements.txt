@@ -6,6 +6,7 @@ flake8
 black
 isort
 collective.checkdocs
+pygments
 moban
 pyexcel
 pyexcel-xls
