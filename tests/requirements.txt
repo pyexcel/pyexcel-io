@@ -9,3 +9,4 @@ pyexcel-xls>=0.1.0
 moban
 black;python_version>="3.6"
 isort;python_version>="3.6"
+collective.checkdocs

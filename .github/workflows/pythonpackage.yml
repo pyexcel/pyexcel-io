@@ -26,4 +26,5 @@ jobs:
           make install_test format git-diff-check lint
       - name: Test
         run: |
+          pip install -r tests/requirements.txt
           make
