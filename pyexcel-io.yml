@@ -11,6 +11,10 @@ is_on_conda: true
 dependencies:
   - ordereddict;python_version<"2.7"
   - lml>=0.0.4
+test_dependencies:
+  - pyexcel
+  - pyexcel-xls
+  - SQLAlchemy
 extra_dependencies:
   - xls:
     - pyexcel-xls>=0.5.0

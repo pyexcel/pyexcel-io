@@ -5,6 +5,5 @@ targets:
   - "docs/source/conf.py": "docs/source/custom_conf.py.jj2"
   - setup.py: io_setup.py.jj2
   - .travis.yml: custom_travis.yml.jj2
-  - "tests/requirements.txt": "tests/custom-requirements.txt.jj2"
   - README.rst: io_readme.rst.jj2
   - "docs/source/index.rst": "docs/source/index.rst"
