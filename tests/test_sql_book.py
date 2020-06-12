@@ -3,6 +3,24 @@ import json
 import datetime
 import platform
 
+from pyexcel_io._compact import OrderedDict
+from pyexcel_io.database.common import (
+    SQLTableExporter,
+    SQLTableImporter,
+    SQLTableExportAdapter,
+    SQLTableImportAdapter,
+)
+from pyexcel_io.database.querysets import QuerysetsReader
+from pyexcel_io.database.exporters.sqlalchemy import (
+    SQLBookReader,
+    SQLTableReader,
+)
+from pyexcel_io.database.importers.sqlalchemy import (
+    SQLBookWriter,
+    SQLTableWriter,
+    PyexcelSQLSkipRowException,
+)
+
 from nose.tools import eq_, raises
 from sqlalchemy import (
     Date,
@@ -15,24 +33,7 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.orm import backref, relationship, sessionmaker
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io.database.common import (
-    SQLTableExporter,
-    SQLTableImporter,
-    SQLTableExportAdapter,
-    SQLTableImportAdapter,
-)
 from sqlalchemy.ext.declarative import declarative_base
-from pyexcel_io.database.querysets import QuerysetsReader
-from pyexcel_io.database.exporters.sqlalchemy import (
-    SQLBookReader,
-    SQLTableReader,
-)
-from pyexcel_io.database.importers.sqlalchemy import (
-    SQLBookWriter,
-    SQLTableWriter,
-    PyexcelSQLSkipRowException,
-)
 
 PY3 = sys.version_info[0] == 3
 PY36 = PY3 and sys.version_info[1] == 6

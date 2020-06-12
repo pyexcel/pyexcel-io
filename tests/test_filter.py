@@ -1,9 +1,10 @@
 import os
 
 import pyexcel_io.constants as constants
-from nose.tools import eq_
 from pyexcel_io import get_data, save_data
 from pyexcel_io.utils import _index_filter
+
+from nose.tools import eq_
 
 
 def test_index_filter():

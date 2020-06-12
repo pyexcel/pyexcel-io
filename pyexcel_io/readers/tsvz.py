@@ -8,6 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.constants import FILE_FORMAT_TSVZ, KEYWORD_TSV_DIALECT
+
 from .csvz import CSVZipBookReader
 
 

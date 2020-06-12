@@ -247,3 +247,7 @@ def get_writer(
         writer.open_stream(file_stream, **keywords)
     # else: is resolved by earlier raise statement
     return writer
+
+
+# backward compactibility
+write_data = save_data

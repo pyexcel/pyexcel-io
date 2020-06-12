@@ -1,5 +1,3 @@
-from nose import SkipTest
-from nose.tools import raises
 from pyexcel_io.book import (
     BookReader,
     BookWriter,
@@ -7,6 +5,9 @@ from pyexcel_io.book import (
     _convert_content_to_stream,
 )
 from pyexcel_io._compact import PY2, BytesIO, StringIO
+
+from nose import SkipTest
+from nose.tools import raises
 
 
 @raises(NotImplementedError)
