@@ -250,4 +250,4 @@ def get_writer(
 
 
 # backward compactibility
-write_data = save_data
+store_data = save_data
