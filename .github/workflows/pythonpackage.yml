@@ -27,4 +27,5 @@ jobs:
       - name: Test
         run: |
           pip install -r tests/requirements.txt
+          pip install -r rnd_requirements.txt
           make
