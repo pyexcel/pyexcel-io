@@ -4,13 +4,13 @@
 
     The lower level csvz file format handler.
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import zipfile
 
 from pyexcel_io.book import BookReader
-from pyexcel_io._compact import PY2, StringIO
+from pyexcel_io._compact import StringIO
 from pyexcel_io.constants import FILE_FORMAT_CSVZ
 
 from .csvr import NamedContent, CSVinMemoryReader
@@ -40,10 +40,7 @@ class CSVZipBookReader(BookReader):
 
     def read_sheet(self, native_sheet):
         content = self.zipfile.read(native_sheet.payload)
-        if PY2:
-            sheet = StringIO(content)
-        else:
-            sheet = StringIO(content.decode("utf-8"))
+        sheet = StringIO(content.decode("utf-8"))
 
         reader = CSVinMemoryReader(
             NamedContent(native_sheet.name, sheet), **self._keywords

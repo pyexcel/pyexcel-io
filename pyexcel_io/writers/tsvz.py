@@ -4,7 +4,7 @@
 
     The lower level tsvz file format handler.
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.constants import FILE_FORMAT_TSVZ, KEYWORD_TSV_DIALECT

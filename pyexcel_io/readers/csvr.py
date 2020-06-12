@@ -4,7 +4,7 @@
 
     csv file reader
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import os
@@ -130,8 +130,6 @@ class CSVSheetReader(SheetReader):
 
     def column_iterator(self, row):
         for element in row:
-            if compact.PY2:
-                element = element.decode("utf-8")
             if element is not None and element != "":
                 element = self.__convert_cell(element)
             yield element
