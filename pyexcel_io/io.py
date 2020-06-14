@@ -14,6 +14,7 @@ from types import GeneratorType
 from pyexcel_io import constants
 from pyexcel_io.reader import Reader
 from pyexcel_io.writer import Writer
+from pyexcel_io.plugins import OLD_READERS
 from pyexcel_io._compact import isstream
 from pyexcel_io.exceptions import NoSupportingPluginFound
 
@@ -169,7 +170,32 @@ def load_data(
                 raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
     try:
+        reader = OLD_READERS.get_a_plugin(file_type, library)
+    except NoSupportingPluginFound:
         reader = Reader(file_type, library)
+
+    try:
+        if file_name:
+            reader.open(file_name, **keywords)
+        elif file_content:
+            reader.open_content(file_content, **keywords)
+        elif file_stream:
+            reader.open_stream(file_stream, **keywords)
+        if sheet_name:
+            result = reader.read_sheet_by_name(sheet_name)
+        elif sheet_index is not None:
+            result = reader.read_sheet_by_index(sheet_index)
+        elif sheets is not None:
+            result = reader.read_many(sheets)
+        else:
+            result = reader.read_all()
+        if streaming is False:
+            for key in result.keys():
+                result[key] = list(result[key])
+            reader.close()
+            reader = None
+
+        return result, reader
     except NoSupportingPluginFound:
         if file_name:
             if os.path.exists(file_name):
@@ -185,28 +211,6 @@ def load_data(
                 )
         else:
             raise
-
-    if file_name:
-        reader.open(file_name, **keywords)
-    elif file_content:
-        reader.open_content(file_content, **keywords)
-    elif file_stream:
-        reader.open_stream(file_stream, **keywords)
-    if sheet_name:
-        result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index is not None:
-        result = reader.read_sheet_by_index(sheet_index)
-    elif sheets is not None:
-        result = reader.read_many(sheets)
-    else:
-        result = reader.read_all()
-    if streaming is False:
-        for key in result.keys():
-            result[key] = list(result[key])
-        reader.close()
-        reader = None
-
-    return result, reader
 
 
 def get_writer(

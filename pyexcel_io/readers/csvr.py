@@ -92,6 +92,9 @@ class CSVMemoryMapIterator(compact.Iterator):
 
         return line
 
+    def close(self):
+        pass
+
 
 class CSVSheetReader(SheetReader):
     """ generic csv file reader"""
