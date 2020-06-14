@@ -11,6 +11,7 @@ DEFAULT_SHEET_SEPARATOR_FORMATTER = f"---{constants.DEFAULT_NAME}---%s"
 class MemoryReader(object):
     def __init__(self):
         self.handles = []
+        self.file_type = constants.FILE_FORMAT_CSV
 
     def set_type(self, _):
         pass
@@ -21,7 +22,6 @@ class MemoryReader(object):
         :returns: a book
         """
         self.keywords = keywords
-        file_type = constants.FILE_FORMAT_CSV
         self.__load_from_memory_flag = True
         self.__line_terminator = keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, constants.DEFAULT_CSV_NEWLINE
@@ -49,7 +49,7 @@ class MemoryReader(object):
         else:
             if hasattr(file_stream, "seek"):
                 file_stream.seek(0)
-            self.content_array = [NamedContent(file_type, file_stream)]
+            self.content_array = [NamedContent(self.file_type, file_stream)]
 
     def read_sheet(self, index):
         reader = CSVinMemoryReader(self.content_array[index], **self.keywords)

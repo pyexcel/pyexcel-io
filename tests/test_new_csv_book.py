@@ -3,8 +3,8 @@ from textwrap import dedent
 from unittest import TestCase
 
 import pyexcel_io.manager as manager
+from pyexcel_io.reader import Reader
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.readers.tsv import TSVBookReader
 from pyexcel_io.writers.tsv import TSVBookWriter
 from pyexcel_io.readers.csvr import CSVBookReader
 from pyexcel_io.writers.csvw import CSVBookWriter
@@ -45,16 +45,49 @@ class TestCSVReaders(TestCase):
         os.unlink(self.test_file)
 
 
-class TestTSVReaders(TestCSVReaders):
+class TestNewCSVReaders(TestCase):
+    file_type = "csv"
+    delimiter = ","
+
+    def setUp(self):
+        self.test_file = "csv_book." + self.file_type
+        self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+        self.expected_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        with open(self.test_file, "w") as f:
+            for row in self.data:
+                f.write(self.delimiter.join(row) + "\n")
+
+    def test_book_reader(self):
+        b = Reader(self.file_type)
+        b.open(self.test_file)
+        sheets = b.read_all()
+        self.assertEqual(list(sheets[self.test_file]), self.expected_data)
+
+    def test_book_reader_from_memory_source(self):
+        io = manager.get_io(self.file_type)
+        with open(self.test_file, "r") as f:
+            io.write(f.read())
+        io.seek(0)
+        b = Reader(self.file_type)
+        b.open_stream(io)
+        sheets = b.read_all()
+        self.assertEqual(list(sheets[self.file_type]), self.expected_data)
+
+    def tearDown(self):
+        os.unlink(self.test_file)
+
+
+class TestTSVReaders(TestNewCSVReaders):
     file_type = "tsv"
-    reader_class = TSVBookReader
     delimiter = "\t"
 
 
 class TestReadMultipleSheets(TestCase):
     file_type = "csv"
-    reader_class = CSVBookReader
     delimiter = ","
+
+    def reader_class(self):
+        return Reader(self.file_type)
 
     def setUp(self):
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
@@ -123,14 +156,12 @@ class TestReadMultipleSheets(TestCase):
 
 class TestTSVBookReaders(TestReadMultipleSheets):
     file_type = "tsv"
-    reader_class = TSVBookReader
     delimiter = "\t"
 
 
 class TestWriteMultipleSheets(TestCase):
     file_type = "csv"
     writer_class = CSVBookWriter
-    reader_class = CSVBookReader
     result1 = dedent(
         """
         1,2,3
@@ -171,6 +202,9 @@ class TestWriteMultipleSheets(TestCase):
         ---pyexcel---
         """
     )
+
+    def reader_class(self):
+        return Reader(self.file_type)
 
     def setUp(self):
         self.test_file_formatter = "csv_multiple__%s__%s." + self.file_type
@@ -242,7 +276,6 @@ class TestWriteMultipleSheets(TestCase):
 class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
     file_type = "tsv"
     writer_class = TSVBookWriter
-    reader_class = TSVBookReader
     result1 = dedent(
         """
         1\t2\t3

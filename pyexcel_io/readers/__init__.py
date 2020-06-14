@@ -38,4 +38,19 @@ NewIOPluginInfoChain(__name__).add_a_reader(
     location="memory",
     file_types=["csv"],
     stream_type="text",
+).add_a_reader(
+    relative_plugin_class_path="tsv.TSVMemoryReader",
+    location="memory",
+    file_types=["tsv"],
+    stream_type="text",
+).add_a_reader(
+    relative_plugin_class_path="tsv.TSVFileReader",
+    location="file",
+    file_types=["tsv"],
+    stream_type="text",
+).add_a_reader(
+    relative_plugin_class_path="tsv.TSVContentReader",
+    location="content",
+    file_types=["tsv"],
+    stream_type="text",
 )
