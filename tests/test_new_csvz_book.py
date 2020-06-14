@@ -6,9 +6,8 @@ from unittest import TestCase
 
 import pyexcel_io.manager as manager
 from pyexcel_io import save_data
+from pyexcel_io.reader import Reader
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.readers.csvz import CSVZipBookReader
-from pyexcel_io.readers.tsvz import TSVZipBookReader
 from pyexcel_io.writers.csvz import CSVZipBookWriter
 from pyexcel_io.writers.tsvz import TSVZipBookWriter
 
@@ -20,8 +19,10 @@ PY2 = sys.version_info[0] == 2
 class TestCSVZ(TestCase):
     file_type = "csvz"
     writer_class = CSVZipBookWriter
-    reader_class = CSVZipBookReader
     result = u"中,文,1,2,3"
+
+    def reader_class(self):
+        return Reader(self.file_type)
 
     def setUp(self):
         self.file = "csvz." + self.file_type
@@ -59,7 +60,6 @@ class TestCSVZ(TestCase):
 class TestTSVZ(TestCSVZ):
     file_type = "tsvz"
     writer_class = TSVZipBookWriter
-    reader_class = TSVZipBookReader
     result = u"中\t文\t1\t2\t3"
 
 
@@ -70,7 +70,7 @@ def test_reading_from_memory():
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
-    zipreader = CSVZipBookReader()
+    zipreader = Reader("csvz")
     zipreader.open_stream(io)
     data = zipreader.read_all()
     assert list(data["pyexcel_sheet1"]) == [[1, 2, 3]]
@@ -83,7 +83,7 @@ def test_reading_from_memory_tsvz():
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
-    zipreader = TSVZipBookReader()
+    zipreader = Reader("tsvz")
     zipreader.open_stream(io)
     data = zipreader.read_all()
     assert list(data["pyexcel_sheet1"]) == [[1, 2, 3]]
@@ -91,7 +91,9 @@ def test_reading_from_memory_tsvz():
 
 class TestMultipleSheet(TestCase):
     file_name = "mybook.csvz"
-    reader_class = CSVZipBookReader
+
+    def reader_class(self):
+        return Reader("csvz")
 
     def setUp(self):
         self.content = OrderedDict()
@@ -140,4 +142,6 @@ class TestMultipleSheet(TestCase):
 
 class TestMultipleTSVSheet(TestMultipleSheet):
     file_name = "mybook.tsvz"
-    reader_class = TSVZipBookReader
+
+    def reader_class(self):
+        return Reader("tsvz")

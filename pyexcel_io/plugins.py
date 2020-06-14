@@ -160,6 +160,7 @@ class NewIOManager(IOManager):
         return handler
 
     def raise_exception(self, file_type):
+        file_type = file_type.split("-")[1]
         plugins = self.known_plugins.get(file_type, None)
         if plugins:
             message = "Please install "
@@ -202,7 +203,7 @@ class FakeReaders:
 
 OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
 WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
-NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_NEW_READERS)
+NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_READERS)
 READERS = FakeReaders()
 
 

@@ -1,3 +1,5 @@
+from pyexcel_io import exceptions
+from pyexcel_io.book import _convert_content_to_stream
 from pyexcel_io.plugins import NEW_READERS
 from pyexcel_io._compact import OrderedDict
 
@@ -14,10 +16,19 @@ class Reader(object):
         return self.reader.open(file_name, **keywords)
 
     def open_content(self, file_content, **keywords):
-        self.reader = NEW_READERS.get_a_plugin(
-            self.file_type, location="content", library=self.library
-        )
-        return self.reader.open(file_content, **keywords)
+        try:
+            self.reader = NEW_READERS.get_a_plugin(
+                self.file_type, location="content", library=self.library
+            )
+            return self.reader.open(file_content, **keywords)
+        except (
+            exceptions.NoSupportingPluginFound,
+            exceptions.SupportingPluginAvailableButNotInstalled,
+        ):
+            file_stream = _convert_content_to_stream(
+                file_content, self.file_type
+            )
+            return self.open_stream(file_stream, **keywords)
 
     def open_stream(self, file_stream, **keywords):
         self.reader = NEW_READERS.get_a_plugin(

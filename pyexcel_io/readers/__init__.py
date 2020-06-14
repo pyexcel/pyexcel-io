@@ -9,20 +9,6 @@
 """
 from pyexcel_io.plugins import IOPluginInfoChain, NewIOPluginInfoChain
 
-IOPluginInfoChain(__name__).add_a_reader(
-    relative_plugin_class_path="tsv.TSVBookReader",
-    file_types=["tsv"],
-    stream_type="text",
-).add_a_reader(
-    relative_plugin_class_path="csvz.CSVZipBookReader",
-    file_types=["csvz"],
-    stream_type="binary",
-).add_a_reader(
-    relative_plugin_class_path="tsvz.TSVZipBookReader",
-    file_types=["tsvz"],
-    stream_type="binary",
-)
-
 NewIOPluginInfoChain(__name__).add_a_reader(
     relative_plugin_class_path="csv_file_reader.FileReader",
     location="file",
@@ -53,4 +39,24 @@ NewIOPluginInfoChain(__name__).add_a_reader(
     location="content",
     file_types=["tsv"],
     stream_type="text",
+).add_a_reader(
+    relative_plugin_class_path="csvz.FileReader",
+    file_types=["csvz"],
+    location="file",
+    stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="csvz.FileReader",
+    file_types=["csvz"],
+    location="memory",
+    stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="tsvz.TSVZipFileReader",
+    file_types=["tsvz"],
+    location="file",
+    stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="tsvz.TSVZipFileReader",
+    file_types=["tsvz"],
+    location="memory",
+    stream_type="binary",
 )

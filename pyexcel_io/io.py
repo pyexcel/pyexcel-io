@@ -16,7 +16,10 @@ from pyexcel_io.reader import Reader
 from pyexcel_io.writer import Writer
 from pyexcel_io.plugins import OLD_READERS
 from pyexcel_io._compact import isstream
-from pyexcel_io.exceptions import NoSupportingPluginFound
+from pyexcel_io.exceptions import (
+    NoSupportingPluginFound,
+    SupportingPluginAvailableButNotInstalled,
+)
 
 
 def iget_data(afile, file_type=None, **keywords):
@@ -171,7 +174,7 @@ def load_data(
 
     try:
         reader = OLD_READERS.get_a_plugin(file_type, library)
-    except NoSupportingPluginFound:
+    except (NoSupportingPluginFound, SupportingPluginAvailableButNotInstalled):
         reader = Reader(file_type, library)
 
     try:
