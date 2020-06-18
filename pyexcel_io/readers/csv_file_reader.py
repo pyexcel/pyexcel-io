@@ -56,10 +56,7 @@ class FileReader(object):
             self.content_array = ret
 
     def read_sheet(self, index):
-        reader = CSVFileReader(self.content_array[index], **self.keywords)
-        content = reader.to_array()
-        self.handles.append(reader)
-        return {self.content_array[index].name: content}
+        return CSVFileReader(self.content_array[index], **self.keywords)
 
     def close(self):
         for reader in self.handles:

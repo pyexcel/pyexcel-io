@@ -7,16 +7,11 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import os
-import re
 import csv
-import glob
 
 import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-from pyexcel_io.book import BookReader
-from pyexcel_io.sheet import SheetReader, NamedContent
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"
@@ -96,7 +91,7 @@ class CSVMemoryMapIterator(compact.Iterator):
         pass
 
 
-class CSVSheetReader(SheetReader):
+class CSVSheetReader(object):
     """ generic csv file reader"""
 
     def __init__(
@@ -112,7 +107,8 @@ class CSVSheetReader(SheetReader):
         default_float_nan=None,
         **keywords
     ):
-        SheetReader.__init__(self, sheet, **keywords)
+        self._native_sheet = sheet
+        self._keywords = keywords
         self._encoding = encoding
         self.__auto_detect_int = auto_detect_int
         self.__auto_detect_float = auto_detect_float
@@ -193,129 +189,3 @@ class CSVinMemoryReader(CSVSheetReader):
             unicode_reader = self._native_sheet.payload
 
         return unicode_reader
-
-
-class CSVBookReader(BookReader):
-    """ read csv file """
-
-    def __init__(self):
-        BookReader.__init__(self)
-        self._file_type = constants.FILE_FORMAT_CSV
-        self._file_content = None
-        self.__load_from_memory_flag = False
-        self.__line_terminator = constants.DEFAULT_CSV_NEWLINE
-        self.__sheet_name = None
-        self.__sheet_index = None
-        self.__multiple_sheets = False
-        self.__readers = []
-
-    def open(self, file_name, **keywords):
-        BookReader.open(self, file_name, **keywords)
-        self._native_book = self._load_from_file()
-
-    def open_stream(self, file_stream, multiple_sheets=False, **keywords):
-        BookReader.open_stream(self, file_stream, **keywords)
-        self.__multiple_sheets = multiple_sheets
-        self._native_book = self._load_from_stream()
-
-    def open_content(self, file_content, **keywords):
-        import mmap
-
-        encoding = keywords.get("encoding", "utf-8")
-        if isinstance(file_content, mmap.mmap):
-            # load from mmap
-            self.__multiple_sheets = keywords.get("multiple_sheets", False)
-            self._file_stream = CSVMemoryMapIterator(file_content, encoding)
-            self._keywords = keywords
-            self._native_book = self._load_from_stream()
-        else:
-            if isinstance(file_content, bytes):
-                file_content = file_content.decode(encoding)
-
-            BookReader.open_content(self, file_content, **keywords)
-
-    def read_sheet(self, native_sheet):
-        if self.__load_from_memory_flag:
-            reader = CSVinMemoryReader(native_sheet, **self._keywords)
-        else:
-            reader = CSVFileReader(native_sheet, **self._keywords)
-            self.__readers.append(reader)
-        return reader.to_array()
-
-    def close(self):
-        for reader in self.__readers:
-            reader.close()
-
-    def _load_from_stream(self):
-        """Load content from memory
-
-        :params stream file_content: the actual file content in memory
-        :returns: a book
-        """
-        self.__load_from_memory_flag = True
-        self.__line_terminator = self._keywords.get(
-            constants.KEYWORD_LINE_TERMINATOR, self.__line_terminator
-        )
-        separator = DEFAULT_SHEET_SEPARATOR_FORMATTER % self.__line_terminator
-        if self.__multiple_sheets:
-            # will be slow for large files
-            self._file_stream.seek(0)
-            content = self._file_stream.read()
-            sheets = content.split(separator)
-            named_contents = []
-            for sheet in sheets:
-                if sheet == "":  # skip empty named sheet
-                    continue
-
-                lines = sheet.split(self.__line_terminator)
-                result = re.match(constants.SEPARATOR_MATCHER, lines[0])
-                new_content = "\n".join(lines[1:])
-                new_sheet = NamedContent(
-                    result.group(1), compact.StringIO(new_content)
-                )
-                named_contents.append(new_sheet)
-            return named_contents
-
-        else:
-            if hasattr(self._file_stream, "seek"):
-                self._file_stream.seek(0)
-            return [NamedContent(self._file_type, self._file_stream)]
-
-    def _load_from_file(self):
-        """Load content from a file
-
-        :params str filename: an accessible file path
-        :returns: a book
-        """
-        self.__line_terminator = self._keywords.get(
-            constants.KEYWORD_LINE_TERMINATOR, self.__line_terminator
-        )
-        names = os.path.splitext(self._file_name)
-        filepattern = "%s%s*%s*%s" % (
-            names[0],
-            constants.DEFAULT_MULTI_CSV_SEPARATOR,
-            constants.DEFAULT_MULTI_CSV_SEPARATOR,
-            names[1],
-        )
-        filelist = glob.glob(filepattern)
-        if len(filelist) == 0:
-            file_parts = os.path.split(self._file_name)
-            return [NamedContent(file_parts[-1], self._file_name)]
-
-        else:
-            matcher = "%s%s(.*)%s(.*)%s" % (
-                names[0],
-                constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                names[1],
-            )
-            tmp_file_list = []
-            for filen in filelist:
-                result = re.match(matcher, filen)
-                tmp_file_list.append((result.group(1), result.group(2), filen))
-            ret = []
-            for lsheetname, index, filen in sorted(
-                tmp_file_list, key=lambda row: row[1]
-            ):
-                ret.append(NamedContent(lsheetname, filen))
-            return ret

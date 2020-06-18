@@ -9,9 +9,9 @@
 """
 import zipfile
 
+from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
-
-from .csvr import NamedContent, CSVinMemoryReader
+from pyexcel_io.readers.csvr import CSVinMemoryReader
 
 
 class FileReader(object):
@@ -45,8 +45,7 @@ class FileReader(object):
         content = self.zipfile.read(self.content_array[index].payload)
         sheet = StringIO(content.decode("utf-8"))
 
-        reader = CSVinMemoryReader(NamedContent(name, sheet), **self.keywords)
-        return {name: reader.to_array()}
+        return CSVinMemoryReader(NamedContent(name, sheet), **self.keywords)
 
 
 def _get_sheet_name(filename):

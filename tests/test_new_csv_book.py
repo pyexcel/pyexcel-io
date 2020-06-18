@@ -6,7 +6,6 @@ import pyexcel_io.manager as manager
 from pyexcel_io.reader import Reader
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.writers.tsv import TSVBookWriter
-from pyexcel_io.readers.csvr import CSVBookReader
 from pyexcel_io.writers.csvw import CSVBookWriter
 
 from nose.tools import raises
@@ -14,8 +13,10 @@ from nose.tools import raises
 
 class TestCSVReaders(TestCase):
     file_type = "csv"
-    reader_class = CSVBookReader
     delimiter = ","
+
+    def reader_class(self):
+        return Reader(self.file_type)
 
     def setUp(self):
         self.test_file = "csv_book." + self.file_type

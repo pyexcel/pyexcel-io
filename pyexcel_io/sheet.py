@@ -38,11 +38,11 @@ class SheetReader(object):
         skip_column_func=None,
         skip_empty_rows=False,
         row_renderer=None,
-        **keywords
+        **deprecated_use_of_keywords_here
     ):
         self._native_sheet = sheet
         self._keywords = {}
-        self._keywords.update(keywords)
+        self._keywords.update(deprecated_use_of_keywords_here)
         self._start_row = start_row
         self._row_limit = row_limit
         self._start_column = start_column
