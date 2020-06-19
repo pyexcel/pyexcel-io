@@ -1,0 +1,63 @@
+import os
+import re
+import glob
+
+from pyexcel_io import constants
+from pyexcel_io.sheet import NamedContent
+from pyexcel_io.readers.csvr import CSVFileReader
+
+DEFAULT_NEWLINE = "\r\n"
+
+
+class FileReader(object):
+    def __init__(self):
+        self.handles = []
+
+    def set_type(self, _):
+        pass
+
+    def open(self, file_name, **keywords):
+        """Load content from a file
+        :params str filename: an accessible file path
+        :returns: a book
+        """
+        self.keywords = keywords
+        self.__line_terminator = keywords.get(
+            constants.KEYWORD_LINE_TERMINATOR, DEFAULT_NEWLINE
+        )
+        names = os.path.splitext(file_name)
+        filepattern = "%s%s*%s*%s" % (
+            names[0],
+            constants.DEFAULT_MULTI_CSV_SEPARATOR,
+            constants.DEFAULT_MULTI_CSV_SEPARATOR,
+            names[1],
+        )
+        filelist = glob.glob(filepattern)
+        if len(filelist) == 0:
+            file_parts = os.path.split(file_name)
+            self.content_array = [NamedContent(file_parts[-1], file_name)]
+
+        else:
+            matcher = "%s%s(.*)%s(.*)%s" % (
+                names[0],
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
+                constants.DEFAULT_MULTI_CSV_SEPARATOR,
+                names[1],
+            )
+            tmp_file_list = []
+            for filen in filelist:
+                result = re.match(matcher, filen)
+                tmp_file_list.append((result.group(1), result.group(2), filen))
+            ret = []
+            for lsheetname, index, filen in sorted(
+                tmp_file_list, key=lambda row: row[1]
+            ):
+                ret.append(NamedContent(lsheetname, filen))
+            self.content_array = ret
+
+    def read_sheet(self, index):
+        return CSVFileReader(self.content_array[index], **self.keywords)
+
+    def close(self):
+        for reader in self.handles:
+            reader.close()

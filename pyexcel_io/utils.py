@@ -16,13 +16,14 @@ ODS3_PLUGIN = "pyexcel-ods3"
 XLSXW_PLUGIN = "pyexcel-xlsxw"
 IO_ITSELF = "pyexcel-io"
 
+AVAILABLE_NEW_READERS = {}
 
 AVAILABLE_READERS = {
+    constants.FILE_FORMAT_CSV: [IO_ITSELF],
     constants.FILE_FORMAT_XLS: [XLS_PLUGIN],
     constants.FILE_FORMAT_XLSX: [XLS_PLUGIN, XLSX_PLUGIN],
     constants.FILE_FORMAT_XLSM: [XLS_PLUGIN, XLSX_PLUGIN],
     constants.FILE_FORMAT_ODS: [ODS_PLUGIN, ODS3_PLUGIN],
-    constants.FILE_FORMAT_CSV: [IO_ITSELF],
     constants.FILE_FORMAT_TSV: [IO_ITSELF],
     constants.FILE_FORMAT_CSVZ: [IO_ITSELF],
     constants.FILE_FORMAT_TSVZ: [IO_ITSELF],
