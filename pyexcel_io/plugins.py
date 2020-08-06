@@ -20,6 +20,7 @@ plugin compactibility table."
 READER_PLUGIN = "pyexcel-io reader"
 NEW_READER_PLUGIN = "pyexcel-io new reader"
 WRITER_PLUGIN = "pyexcel-io writer"
+NEW_WRITER_PLUGIN = "pyexcel-io new writer"
 
 
 class IOPluginInfo(PluginInfo):
@@ -201,10 +202,19 @@ class FakeReaders:
         )
 
 
+class FakeWriters:
+    def get_all_formats(self):
+        return OLD_WRITERS.get_all_formats().union(
+            NEW_WRITERS.get_all_formats()
+        )
+
+
 OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
-WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
+OLD_WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
+NEW_WRITERS = NewIOManager(NEW_WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_READERS)
 READERS = FakeReaders()
+WRITERS = FakeWriters()
 
 
 def load_plugins(plugin_name_patterns, path, black_list, white_list):

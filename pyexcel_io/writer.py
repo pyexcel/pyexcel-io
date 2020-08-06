@@ -1,18 +1,29 @@
-from pyexcel_io.plugins import WRITERS
+from pyexcel_io.plugins import NEW_WRITERS
 
 
 class Writer(object):
     def __init__(self, file_type, library):
-        self.writer = WRITERS.get_a_plugin(file_type, library)
+        self.file_type = file_type
+        self.library = library
+        self.keyboards = None
 
     def open(self, file_name, **keywords):
+        self.writer = NEW_WRITERS.get_a_plugin(
+            self.file_type, library=self.library, location="file"
+        )
         self.writer.open(file_name, **keywords)
 
-    def open_stream(self, file_stream, **keywords):
-        self.writer.open_stream(file_stream, **keywords)
-
     def open_content(self, file_stream, **keywords):
+        self.writer = NEW_WRITERS.get_a_plugin(
+            self.file_type, library=self.library, location="content"
+        )
         self.writer.open_content(file_stream, **keywords)
+
+    def open_stream(self, file_stream, **keywords):
+        self.writer = NEW_WRITERS.get_a_plugin(
+            self.file_type, library=self.library, location="memory"
+        )
+        self.writer.open_stream(file_stream, **keywords)
 
     def write(self, incoming_dict):
         self.writer.write(incoming_dict)
