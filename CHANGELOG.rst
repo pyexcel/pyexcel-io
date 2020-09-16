@@ -4,6 +4,10 @@ Change log
 0.6.0 - tbd
 --------------------------------------------------------------------------------
 
+#. `#74 <https://github.com/pyexcel/pyexcel-io/issues/74>`_: handle zip files which
+   contain non-UTF-8 encoded files.
+
+
 **removed**
 
 #. python 3.6 lower versions are no longer supported

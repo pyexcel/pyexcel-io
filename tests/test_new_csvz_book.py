@@ -53,6 +53,16 @@ class TestCSVZ(TestCase):
         self.assertEqual(list(data["pyexcel_sheet1"]), [[u"中", u"文", 1, 2, 3]])
         zipreader.close()
 
+    def test_reading_utf32(self):
+        zip = zipfile.ZipFile(self.file, "w")
+        zip.writestr("something.ext", self.result.encode("utf-32"))
+        zip.close()
+        zipreader = self.reader_class()
+        zipreader.open(self.file)
+        data = zipreader.read_all()
+        self.assertEqual(list(data["something"]), [[u"中", u"文", 1, 2, 3]])
+        zipreader.close()
+
     def tearDown(self):
         os.unlink(self.file)
 
