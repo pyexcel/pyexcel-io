@@ -2,6 +2,9 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: fixed
+    details:
+    - "`#74`: handle zip files which contain non-UTF-8 encoded files."
   - action: removed
     details:
     - 'python 3.6 lower versions are no longer supported'
