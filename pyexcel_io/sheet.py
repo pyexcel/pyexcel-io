@@ -58,8 +58,7 @@ class SheetReader(object):
             self._skip_column = skip_column_func
 
     def to_array(self):
-        """2 dimentional representation of the content
-        """
+        """2 dimentional representation of the content"""
         for row_index, row in enumerate(self.row_iterator()):
             row_position = self._skip_row(
                 row_index, self._start_row, self._row_limit

@@ -12,8 +12,7 @@ from pyexcel_io.database.querysets import QuerysetsReader
 
 
 class DjangoModelReader(QuerysetsReader):
-    """Read from django model
-    """
+    """Read from django model"""
 
     def __init__(self, model, export_columns=None, **keywords):
         self.__model = model

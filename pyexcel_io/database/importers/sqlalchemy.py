@@ -23,8 +23,7 @@ class PyexcelSQLSkipRowException(Exception):
 
 
 class SQLTableWriter(SheetWriter):
-    """Write to a table
-    """
+    """Write to a table"""
 
     def __init__(
         self, importer, adapter, auto_commit=True, bulk_size=1000, **keywords

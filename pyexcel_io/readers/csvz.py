@@ -10,7 +10,6 @@
 import zipfile
 
 import chardet
-
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
 from pyexcel_io.readers.csvr import CSVinMemoryReader

@@ -50,7 +50,7 @@ if PY2:
 
 
 else:
-    from io import StringIO, BytesIO
+    from io import BytesIO, StringIO
 
     text_type = str
     Iterator = object
