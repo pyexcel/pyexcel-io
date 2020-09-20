@@ -9,6 +9,7 @@
 """
 import zipfile
 
+import chardet
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
 from pyexcel_io.readers.csvr import CSVinMemoryReader
@@ -43,7 +44,8 @@ class FileReader(object):
     def read_sheet(self, index):
         name = self.content_array[index].name
         content = self.zipfile.read(self.content_array[index].payload)
-        sheet = StringIO(content.decode("utf-8"))
+        encoding_guess = chardet.detect(content)
+        sheet = StringIO(content.decode(encoding_guess["encoding"]))
 
         return CSVinMemoryReader(NamedContent(name, sheet), **self.keywords)
 

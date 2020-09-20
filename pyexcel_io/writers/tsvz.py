@@ -13,7 +13,7 @@ from .csvz import CSVZipBookWriter
 
 
 class TSVZipBookWriter(CSVZipBookWriter):
-    """ write zipped tsv file
+    """write zipped tsv file
 
     It is similiar to CSVZipBookWriter, but support tab separated values
     """

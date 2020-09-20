@@ -13,7 +13,7 @@ from .csvz import FileReader
 
 
 class TSVZipFileReader(FileReader):
-    """ read zipped tab separated value file
+    """read zipped tab separated value file
 
     it supports single tsv file and mulitple tsv files
     """

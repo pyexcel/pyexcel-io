@@ -98,6 +98,24 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
    ======================== ======================= ================= ==================
 
 
+Plugin shopping guide
+------------------------
+
+Except csv files, xls, xlsx and ods files are a zip of a folder containing a lot of
+xml files 
+
+The dedicated readers for excel files can stream read 
+
+
+In order to manage the list of plugins installed, you need to use pip to add or remove
+a plugin. When you use virtualenv, you can have different plugins per virtual
+environment. In the situation where you have multiple plugins that does the same thing
+in your environment, you need to tell pyexcel which plugin to use per function call.
+For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
+You need to append get_array(..., library='pyexcel-odsr').
+
+
+
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
 .. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
@@ -119,13 +137,6 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 .. _pyexcel-ezodf: https://github.com/pyexcel/pyexcel-ezodf
 .. _odfpy: https://github.com/eea/odfpy
 
-
-In order to manage the list of plugins installed, you need to use pip to add or remove
-a plugin. When you use virtualenv, you can have different plugins per virtual
-environment. In the situation where you have multiple plugins that does the same thing
-in your environment, you need to tell pyexcel which plugin to use per function call.
-For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
-You need to append get_array(..., library='pyexcel-odsr').
 
 .. rubric:: Footnotes
 
@@ -213,22 +224,6 @@ Please run::
 
 so as to beautify your code otherwise travis-ci may fail your unit test.
 
-
-And make sure you would have run moban command
----------------------------------------------------------
-
-Additional steps are required:
-
-#. pip install moban
-#. make your changes in `.moban.d` directory, then issue command `moban`
-#. moban
-
-otherwise travis-ci may also fail your unit test.
-
-What is .moban.d
----------------------------------
-
-`.moban.d` stores the specific meta data for the library.
 
 
 

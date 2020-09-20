@@ -12,8 +12,7 @@ from pyexcel_io.database.querysets import QuerysetsReader
 
 
 class SQLTableReader(QuerysetsReader):
-    """Read a table
-    """
+    """Read a table"""
 
     def __init__(self, session, table, export_columns=None, **keywords):
         everything = session.query(table).all()
