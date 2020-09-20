@@ -19,13 +19,19 @@ NewIOPluginInfoChain(__name__).add_a_writer(
     locations=["memory"],
     file_types=["csv"],
     stream_type="text",
-)
-
-IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="tsv.TSVBookWriter",
+).add_a_writer(
+    relative_plugin_class_path="tsv_file_writer.TsvFileWriter",
+    locations=["file", "content"],
     file_types=["tsv"],
     stream_type="text",
 ).add_a_writer(
+    relative_plugin_class_path="tsv_memory_writer.TsvMemoryWriter",
+    locations=["memory"],
+    file_types=["tsv"],
+    stream_type="text",
+)
+
+IOPluginInfoChain(__name__).add_a_writer(
     relative_plugin_class_path="csvz.CSVZipBookWriter",
     file_types=["csvz"],
     stream_type="binary",
