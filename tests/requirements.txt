@@ -12,3 +12,4 @@ moban_jinja2_github
 pyexcel
 pyexcel-xls
 SQLAlchemy
+pyexcel-xlsxw
