@@ -29,13 +29,14 @@ NewIOPluginInfoChain(__name__).add_a_writer(
     locations=["memory"],
     file_types=["tsv"],
     stream_type="text",
+).add_a_writer(
+    relative_plugin_class_path="csvz_writer.CsvZipWriter",
+    locations=["memory", "file", "content"],
+    file_types=["csvz"],
+    stream_type="binary",
 )
 
 IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="csvz.CSVZipBookWriter",
-    file_types=["csvz"],
-    stream_type="binary",
-).add_a_writer(
     relative_plugin_class_path="tsvz.TSVZipBookWriter",
     file_types=["tsvz"],
     stream_type="binary",
