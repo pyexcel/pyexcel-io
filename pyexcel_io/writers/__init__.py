@@ -7,7 +7,7 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.plugins import IOPluginInfoChain, NewIOPluginInfoChain
+from pyexcel_io.plugins import NewIOPluginInfoChain
 
 NewIOPluginInfoChain(__name__).add_a_writer(
     relative_plugin_class_path="csv_file_writer.CsvFileWriter",
@@ -34,10 +34,9 @@ NewIOPluginInfoChain(__name__).add_a_writer(
     locations=["memory", "file", "content"],
     file_types=["csvz"],
     stream_type="binary",
-)
-
-IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="tsvz.TSVZipBookWriter",
+).add_a_writer(
+    relative_plugin_class_path="tsvz_writer.TsvZipWriter",
+    locations=["memory", "file", "content"],
     file_types=["tsvz"],
     stream_type="binary",
 )
