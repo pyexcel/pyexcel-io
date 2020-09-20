@@ -3,6 +3,17 @@ import json
 import datetime
 import platform
 
+from sqlalchemy import (
+    Date,
+    Float,
+    Column,
+    String,
+    Integer,
+    DateTime,
+    ForeignKey,
+    create_engine,
+)
+from sqlalchemy.orm import backref, relationship, sessionmaker
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.database.common import (
     SQLTableExporter,
@@ -10,6 +21,7 @@ from pyexcel_io.database.common import (
     SQLTableExportAdapter,
     SQLTableImportAdapter,
 )
+from sqlalchemy.ext.declarative import declarative_base
 from pyexcel_io.database.querysets import QuerysetsReader
 from pyexcel_io.database.exporters.sqlalchemy import (
     SQLBookReader,
@@ -22,18 +34,6 @@ from pyexcel_io.database.importers.sqlalchemy import (
 )
 
 from nose.tools import eq_, raises
-from sqlalchemy import (
-    Date,
-    Float,
-    Column,
-    String,
-    Integer,
-    DateTime,
-    ForeignKey,
-    create_engine,
-)
-from sqlalchemy.orm import backref, relationship, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 
 PY3 = sys.version_info[0] == 3
 PY36 = PY3 and sys.version_info[1] == 6
