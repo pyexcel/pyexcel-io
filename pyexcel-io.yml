@@ -15,6 +15,7 @@ test_dependencies:
   - pyexcel
   - pyexcel-xls
   - SQLAlchemy
+  - pyexcel-xlsxw
 extra_dependencies:
   - xls:
     - pyexcel-xls>=0.5.0
