@@ -1,27 +1,11 @@
-"""
-    pyexcel_io.fileformat.tsvz
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    The lower level tsvz file format handler.
-
-    :copyright: (c) 2014-2020 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
-"""
 from pyexcel_io.constants import FILE_FORMAT_TSVZ, KEYWORD_TSV_DIALECT
+from pyexcel_io.writers.csvz_writer import CsvZipWriter
 
-from .csvz import CSVZipBookWriter
 
-
-class TSVZipBookWriter(CSVZipBookWriter):
-    """write zipped tsv file
-
-    It is similiar to CSVZipBookWriter, but support tab separated values
-    """
-
+class TsvZipWriter(CsvZipWriter):
     def __init__(self):
-        CSVZipBookWriter.__init__(self)
+        super().__init__()
         self._file_type = FILE_FORMAT_TSVZ
 
     def open(self, file_name, **keywords):
-        keywords["dialect"] = KEYWORD_TSV_DIALECT
-        CSVZipBookWriter.open(self, file_name, **keywords)
+        super().open(file_name, dialect=KEYWORD_TSV_DIALECT, **keywords)

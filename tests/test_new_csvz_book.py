@@ -7,9 +7,8 @@ from unittest import TestCase
 import pyexcel_io.manager as manager
 from pyexcel_io import save_data
 from pyexcel_io.reader import Reader
+from pyexcel_io.writer import Writer
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.writers.csvz import CSVZipBookWriter
-from pyexcel_io.writers.tsvz import TSVZipBookWriter
 
 from nose.tools import raises
 
@@ -18,8 +17,10 @@ PY2 = sys.version_info[0] == 2
 
 class TestCSVZ(TestCase):
     file_type = "csvz"
-    writer_class = CSVZipBookWriter
     result = u"中,文,1,2,3"
+
+    def writer_class(self):
+        return Writer(self.file_type)
 
     def reader_class(self):
         return Reader(self.file_type)
@@ -69,14 +70,13 @@ class TestCSVZ(TestCase):
 
 class TestTSVZ(TestCSVZ):
     file_type = "tsvz"
-    writer_class = TSVZipBookWriter
     result = u"中\t文\t1\t2\t3"
 
 
 def test_reading_from_memory():
     data = [[1, 2, 3]]
     io = manager.get_io("csvz")
-    zipbook = CSVZipBookWriter()
+    zipbook = Writer('csvz')
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
@@ -89,7 +89,7 @@ def test_reading_from_memory():
 def test_reading_from_memory_tsvz():
     data = [[1, 2, 3]]
     io = manager.get_io("tsvz")
-    zipbook = TSVZipBookWriter()
+    zipbook = Writer('tsvz')
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()

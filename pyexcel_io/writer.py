@@ -5,7 +5,7 @@ from .constants import MESSAGE_ERROR_03
 
 
 class Writer(object):
-    def __init__(self, file_type, library):
+    def __init__(self, file_type, library=None):
         self.file_type = file_type
         self.library = library
         self.keyboards = None

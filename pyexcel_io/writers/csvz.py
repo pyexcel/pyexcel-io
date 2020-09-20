@@ -7,11 +7,7 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import zipfile
-
-from pyexcel_io.book import BookWriter
 from pyexcel_io._compact import StringIO
-from pyexcel_io.constants import FILE_FORMAT_CSVZ, DEFAULT_SHEET_NAME
 
 from .csvw import CSVSheetWriter
 
@@ -35,34 +31,3 @@ class CSVZipSheetWriter(CSVSheetWriter):
         self.content.seek(0)
         self._native_book.writestr(file_name, self.content.read())
         self.content.close()
-
-
-class CSVZipBookWriter(BookWriter):
-    """
-    csvz writer
-
-    It is better to store csv files as a csvz as it saves your disk space.
-    Pyexcel-io had the facility to unzip it for you or you could use
-    any other unzip software.
-    """
-
-    def __init__(self):
-        BookWriter.__init__(self)
-        self._file_type = FILE_FORMAT_CSVZ
-        self.zipfile = None
-
-    def open(self, file_name, **keywords):
-        BookWriter.open(self, file_name, **keywords)
-        self.zipfile = zipfile.ZipFile(file_name, "w", zipfile.ZIP_DEFLATED)
-
-    def create_sheet(self, name):
-        given_name = name
-        if given_name is None:
-            given_name = DEFAULT_SHEET_NAME
-        writer = CSVZipSheetWriter(
-            self.zipfile, given_name, self._file_type[:3], **self._keywords
-        )
-        return writer
-
-    def close(self):
-        self.zipfile.close()

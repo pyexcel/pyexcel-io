@@ -35,7 +35,7 @@ NewIOPluginInfoChain(__name__).add_a_writer(
     file_types=["csvz"],
     stream_type="binary",
 ).add_a_writer(
-    relative_plugin_class_path="tsvz_writer.TsvZipWriter",
+    relative_plugin_class_path="tsvz.TsvZipWriter",
     locations=["memory", "file", "content"],
     file_types=["tsvz"],
     stream_type="binary",
