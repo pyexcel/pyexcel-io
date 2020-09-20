@@ -84,6 +84,26 @@ class NewIOPluginInfoChain(PluginInfoChain):
         )
         return self.add_a_plugin_instance(a_plugin_info)
 
+    def add_a_writer(
+        self,
+        relative_plugin_class_path=None,
+        locations=(),
+        file_types=(),
+        stream_type=None,
+    ):
+        """ add pyexcle-io writer plugin info """
+        a_plugin_info = IOPluginInfo(
+            NEW_WRITER_PLUGIN,
+            self._get_abs_path(relative_plugin_class_path),
+            file_types=[
+                f"{location}-{file_type}"
+                for file_type in file_types
+                for location in locations
+            ],
+            stream_type=stream_type,
+        )
+        return self.add_a_plugin_instance(a_plugin_info)
+
 
 class IOManager(PluginManager):
     """Manage pyexcel-io plugins"""
@@ -144,12 +164,12 @@ class IOManager(PluginManager):
 class NewIOManager(IOManager):
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
-        _do_additional_registration(plugin_info)
+        _do_additional_registration_for_new_plugins(plugin_info)
 
     def register_a_plugin(self, cls, plugin_info):
         """ for dynamically loaded plugin """
         PluginManager.register_a_plugin(self, cls, plugin_info)
-        _do_additional_registration(plugin_info)
+        _do_additional_registration_for_new_plugins(plugin_info)
 
     def get_a_plugin(
         self, file_type=None, location=None, library=None, **keywords
@@ -193,6 +213,16 @@ def _do_additional_registration(plugin_info):
     for file_type in plugin_info.tags():
         manager.register_stream_type(file_type, plugin_info.stream_type)
         manager.register_a_file_type(file_type, plugin_info.stream_type, None)
+
+
+def _do_additional_registration_for_new_plugins(plugin_info):
+    for file_type in plugin_info.tags():
+        manager.register_stream_type(
+            file_type.split("-")[1], plugin_info.stream_type
+        )
+        manager.register_a_file_type(
+            file_type.split("-")[1], plugin_info.stream_type, None
+        )
 
 
 class FakeReaders:

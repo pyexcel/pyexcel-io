@@ -7,13 +7,21 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.plugins import IOPluginInfoChain
+from pyexcel_io.plugins import IOPluginInfoChain, NewIOPluginInfoChain
 
-IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="csvw.CSVBookWriter",
+NewIOPluginInfoChain(__name__).add_a_writer(
+    relative_plugin_class_path="csv_file_writer.CsvFileWriter",
+    locations=["file", "content"],
     file_types=["csv"],
     stream_type="text",
 ).add_a_writer(
+    relative_plugin_class_path="csv_memory_writer.CsvMemoryWriter",
+    locations=["memory"],
+    file_types=["csv"],
+    stream_type="text",
+)
+
+IOPluginInfoChain(__name__).add_a_writer(
     relative_plugin_class_path="tsv.TSVBookWriter",
     file_types=["tsv"],
     stream_type="text",
