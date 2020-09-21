@@ -4,9 +4,8 @@ from unittest import TestCase
 
 import pyexcel_io.manager as manager
 from pyexcel_io.reader import Reader
+from pyexcel_io.writer import Writer
 from pyexcel_io._compact import OrderedDict
-from pyexcel_io.writers.tsv import TSVBookWriter
-from pyexcel_io.writers.csvw import CSVBookWriter
 
 from nose.tools import raises
 
@@ -162,7 +161,7 @@ class TestTSVBookReaders(TestReadMultipleSheets):
 
 class TestWriteMultipleSheets(TestCase):
     file_type = "csv"
-    writer_class = CSVBookWriter
+
     result1 = dedent(
         """
         1,2,3
@@ -203,6 +202,9 @@ class TestWriteMultipleSheets(TestCase):
         ---pyexcel---
         """
     )
+
+    def writer_class(self):
+        return Writer(self.file_type)
 
     def reader_class(self):
         return Reader(self.file_type)
@@ -246,7 +248,7 @@ class TestWriteMultipleSheets(TestCase):
     def test_multiple_sheet_into_memory(self):
         io = manager.get_io(self.file_type)
         w = self.writer_class()
-        w.open(io, lineterminator="\n")
+        w.open_stream(io, lineterminator="\n")
         w.write(self.sheets)
         w.close()
         content = io.getvalue()
@@ -256,7 +258,7 @@ class TestWriteMultipleSheets(TestCase):
         """Write csv book into a single stream"""
         io = manager.get_io(self.file_type)
         w = self.writer_class()
-        w.open(io, lineterminator="\n")
+        w.open_stream(io, lineterminator="\n")
         w.write(self.sheets)
         w.close()
         reader = self.reader_class()
@@ -276,7 +278,7 @@ class TestWriteMultipleSheets(TestCase):
 
 class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
     file_type = "tsv"
-    writer_class = TSVBookWriter
+
     result1 = dedent(
         """
         1\t2\t3
@@ -321,7 +323,7 @@ class TestTSVWriteMultipleSheets(TestWriteMultipleSheets):
 
 class TestWriter(TestCase):
     file_type = "csv"
-    writer_class = CSVBookWriter
+
     result = dedent(
         """
         1,2,3
@@ -329,6 +331,9 @@ class TestWriter(TestCase):
         7,8,9
         """
     ).strip("\n")
+
+    def writer_class(self):
+        return Writer(self.file_type)
 
     def setUp(self):
         self.test_file = "csv_book." + self.file_type
@@ -349,7 +354,7 @@ class TestWriter(TestCase):
 
 class TestTSVWriters(TestWriter):
     file_type = "tsv"
-    writer_class = TSVBookWriter
+
     result = dedent(
         """
         1\t2\t3
@@ -361,7 +366,7 @@ class TestTSVWriters(TestWriter):
 
 class TestMemoryWriter(TestCase):
     file_type = "csv"
-    writer_class = CSVBookWriter
+
     result = dedent(
         """
            1,2,3
@@ -370,6 +375,9 @@ class TestMemoryWriter(TestCase):
         """
     ).strip("\n")
 
+    def writer_class(self):
+        return Writer(self.file_type)
+
     def setUp(self):
         self.test_file = "csv_book." + self.file_type
         self.data = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
@@ -377,7 +385,7 @@ class TestMemoryWriter(TestCase):
     def test_book_writer_to_memroy(self):
         io = manager.get_io(self.file_type)
         w = self.writer_class()
-        w.open(io, single_sheet_in_book=True)
+        w.open_stream(io, single_sheet_in_book=True)
         w.write({self.file_type: self.data})
         w.close()
         content = io.getvalue().replace("\r", "")
@@ -386,7 +394,7 @@ class TestMemoryWriter(TestCase):
 
 class TestTSVMemoryWriter(TestMemoryWriter):
     file_type = "tsv"
-    writer_class = TSVBookWriter
+
     result = dedent(
         """
            1\t2\t3

@@ -9,9 +9,7 @@
 """
 import csv
 
-import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 
 
@@ -119,27 +117,3 @@ class CSVMemoryWriter(CSVSheetWriter):
             pass
         else:
             self.writer.writerow([constants.SEPARATOR_FORMATTER % ""])
-
-
-class CSVBookWriter(BookWriter):
-    """ write csv with unicode support """
-
-    def __init__(self):
-        BookWriter.__init__(self)
-        self._file_type = constants.FILE_FORMAT_CSV
-        self.__index = 0
-
-    def create_sheet(self, name):
-        writer_class = None
-        if compact.is_string(type(self._file_alike_object)):
-            writer_class = CSVFileWriter
-        else:
-            writer_class = CSVMemoryWriter
-        writer = writer_class(
-            self._file_alike_object,
-            name,
-            sheet_index=self.__index,
-            **self._keywords
-        )
-        self.__index = self.__index + 1
-        return writer

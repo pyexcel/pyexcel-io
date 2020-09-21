@@ -76,7 +76,7 @@ class TestTSVZ(TestCSVZ):
 def test_reading_from_memory():
     data = [[1, 2, 3]]
     io = manager.get_io("csvz")
-    zipbook = Writer('csvz')
+    zipbook = Writer("csvz")
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
@@ -89,7 +89,7 @@ def test_reading_from_memory():
 def test_reading_from_memory_tsvz():
     data = [[1, 2, 3]]
     io = manager.get_io("tsvz")
-    zipbook = Writer('tsvz')
+    zipbook = Writer("tsvz")
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
