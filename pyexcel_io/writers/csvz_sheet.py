@@ -8,7 +8,6 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io._compact import StringIO
-
 from pyexcel_io.writers.csv_sheet import CSVSheetWriter
 
 
