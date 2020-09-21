@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 from textwrap import dedent
 from unittest import TestCase
@@ -14,7 +11,7 @@ from pyexcel_io.readers.csvr import (
     CSVSheetReader,
     CSVinMemoryReader,
 )
-from pyexcel_io.writers.csvw import CSVFileWriter, CSVMemoryWriter
+from pyexcel_io.writers.csv_sheet import CSVFileWriter, CSVMemoryWriter
 
 from nose.tools import eq_, raises
 

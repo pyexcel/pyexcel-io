@@ -20,6 +20,7 @@ plugin compactibility table."
 READER_PLUGIN = "pyexcel-io reader"
 NEW_READER_PLUGIN = "pyexcel-io new reader"
 WRITER_PLUGIN = "pyexcel-io writer"
+NEW_WRITER_PLUGIN = "pyexcel-io new writer"
 
 
 class IOPluginInfo(PluginInfo):
@@ -79,6 +80,26 @@ class NewIOPluginInfoChain(PluginInfoChain):
             NEW_READER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
             file_types=[f"{location}-{file_type}" for file_type in file_types],
+            stream_type=stream_type,
+        )
+        return self.add_a_plugin_instance(a_plugin_info)
+
+    def add_a_writer(
+        self,
+        relative_plugin_class_path=None,
+        locations=(),
+        file_types=(),
+        stream_type=None,
+    ):
+        """ add pyexcle-io writer plugin info """
+        a_plugin_info = IOPluginInfo(
+            NEW_WRITER_PLUGIN,
+            self._get_abs_path(relative_plugin_class_path),
+            file_types=[
+                f"{location}-{file_type}"
+                for file_type in file_types
+                for location in locations
+            ],
             stream_type=stream_type,
         )
         return self.add_a_plugin_instance(a_plugin_info)
@@ -143,12 +164,12 @@ class IOManager(PluginManager):
 class NewIOManager(IOManager):
     def load_me_later(self, plugin_info):
         PluginManager.load_me_later(self, plugin_info)
-        _do_additional_registration(plugin_info)
+        _do_additional_registration_for_new_plugins(plugin_info)
 
     def register_a_plugin(self, cls, plugin_info):
         """ for dynamically loaded plugin """
         PluginManager.register_a_plugin(self, cls, plugin_info)
-        _do_additional_registration(plugin_info)
+        _do_additional_registration_for_new_plugins(plugin_info)
 
     def get_a_plugin(
         self, file_type=None, location=None, library=None, **keywords
@@ -156,7 +177,6 @@ class NewIOManager(IOManager):
         __file_type = file_type.lower()
         plugin = self.load_me_now(f"{location}-{__file_type}", library=library)
         handler = plugin()
-        handler.set_type(__file_type)
         return handler
 
     def raise_exception(self, file_type):
@@ -194,6 +214,16 @@ def _do_additional_registration(plugin_info):
         manager.register_a_file_type(file_type, plugin_info.stream_type, None)
 
 
+def _do_additional_registration_for_new_plugins(plugin_info):
+    for file_type in plugin_info.tags():
+        manager.register_stream_type(
+            file_type.split("-")[1], plugin_info.stream_type
+        )
+        manager.register_a_file_type(
+            file_type.split("-")[1], plugin_info.stream_type, None
+        )
+
+
 class FakeReaders:
     def get_all_formats(self):
         return OLD_READERS.get_all_formats().union(
@@ -201,10 +231,19 @@ class FakeReaders:
         )
 
 
+class FakeWriters:
+    def get_all_formats(self):
+        return OLD_WRITERS.get_all_formats().union(
+            NEW_WRITERS.get_all_formats()
+        )
+
+
 OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
-WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
+OLD_WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
+NEW_WRITERS = NewIOManager(NEW_WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_READERS)
 READERS = FakeReaders()
+WRITERS = FakeWriters()
 
 
 def load_plugins(plugin_name_patterns, path, black_list, white_list):

@@ -7,22 +7,36 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.plugins import IOPluginInfoChain
+from pyexcel_io.plugins import NewIOPluginInfoChain
 
-IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="csvw.CSVBookWriter",
+NewIOPluginInfoChain(__name__).add_a_writer(
+    relative_plugin_class_path="csv_in_file.CsvFileWriter",
+    locations=["file", "content"],
     file_types=["csv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="tsv.TSVBookWriter",
+    relative_plugin_class_path="csv_in_memory.CsvMemoryWriter",
+    locations=["memory"],
+    file_types=["csv"],
+    stream_type="text",
+).add_a_writer(
+    relative_plugin_class_path="tsv_in_file.TsvFileWriter",
+    locations=["file", "content"],
     file_types=["tsv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="csvz.CSVZipBookWriter",
+    relative_plugin_class_path="tsv_in_memory.TsvMemoryWriter",
+    locations=["memory"],
+    file_types=["tsv"],
+    stream_type="text",
+).add_a_writer(
+    relative_plugin_class_path="csvz_writer.CsvZipWriter",
+    locations=["memory", "file", "content"],
     file_types=["csvz"],
     stream_type="binary",
 ).add_a_writer(
-    relative_plugin_class_path="tsvz.TSVZipBookWriter",
+    relative_plugin_class_path="tsvz_writer.TsvZipWriter",
+    locations=["memory", "file", "content"],
     file_types=["tsvz"],
     stream_type="binary",
 )
