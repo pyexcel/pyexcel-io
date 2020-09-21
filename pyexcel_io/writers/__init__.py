@@ -10,22 +10,22 @@
 from pyexcel_io.plugins import NewIOPluginInfoChain
 
 NewIOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="csv_file_writer.CsvFileWriter",
+    relative_plugin_class_path="csv_in_file.CsvFileWriter",
     locations=["file", "content"],
     file_types=["csv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="csv_memory_writer.CsvMemoryWriter",
+    relative_plugin_class_path="csv_in_memory.CsvMemoryWriter",
     locations=["memory"],
     file_types=["csv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="tsv_file_writer.TsvFileWriter",
+    relative_plugin_class_path="tsv_in_file.TsvFileWriter",
     locations=["file", "content"],
     file_types=["tsv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="tsv_memory_writer.TsvMemoryWriter",
+    relative_plugin_class_path="tsv_in_memory.TsvMemoryWriter",
     locations=["memory"],
     file_types=["tsv"],
     stream_type="text",
@@ -35,7 +35,7 @@ NewIOPluginInfoChain(__name__).add_a_writer(
     file_types=["csvz"],
     stream_type="binary",
 ).add_a_writer(
-    relative_plugin_class_path="tsvz.TsvZipWriter",
+    relative_plugin_class_path="tsvz_writer.TsvZipWriter",
     locations=["memory", "file", "content"],
     file_types=["tsvz"],
     stream_type="binary",

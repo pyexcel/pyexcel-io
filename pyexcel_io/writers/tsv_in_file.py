@@ -1,5 +1,5 @@
 from pyexcel_io.constants import KEYWORD_TSV_DIALECT
-from pyexcel_io.writers.csv_file_writer import CsvFileWriter
+from pyexcel_io.writers.csv_in_file import CsvFileWriter
 
 
 class TsvFileWriter(CsvFileWriter):

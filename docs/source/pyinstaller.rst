@@ -1,6 +1,30 @@
 Packaging with PyInstaller
 ================================================================================
 
+With pyexcel-io v0.6.0, the way to package it has been changed because
+plugin interface update.
+
+Built-in plugins for pyexcel-io
+---------------------------------
+
+In order to package every built-in plugins of pyexcel-io, you need to specify::
+
+    --hidden-import pyexcel_io.readers.csvr
+    --hidden-import pyexcel_io.readers.csvz
+    --hidden-import pyexcel_io.readers.tsv
+    --hidden-import pyexcel_io.readers.tsvz
+    --hidden-import pyexcel_io.writers.csv_file_writer
+    --hidden-import pyexcel_io.writers.csv_memory_writer
+    --hidden-import pyexcel_io.writers.tsv_file_writer
+    --hidden-import pyexcel_io.writers.tsv_memory_writer
+    --hidden-import pyexcel_io.writers.csvz_writer
+    --hidden-import pyexcel_io.writers.tsvz_writer
+    --hidden-import pyexcel_io.database.importers.django
+    --hidden-import pyexcel_io.database.importers.sqlalchemy
+    --hidden-import pyexcel_io.database.exporters.django
+    --hidden-import pyexcel_io.database.exporters.sqlalchemy
+
+
 With pyexcel-io v0.4.0, the way to package it has been changed because it
 uses lml for all plugins.
 
@@ -14,9 +38,9 @@ In order to package every built-in plugins of pyexcel-io, you need to specify::
     --hidden-import pyexcel_io.readers.tsv
     --hidden-import pyexcel_io.readers.tsvz
     --hidden-import pyexcel_io.writers.csvw
-    --hidden-import pyexcel_io.readers.csvz
-    --hidden-import pyexcel_io.readers.tsv
-    --hidden-import pyexcel_io.readers.tsvz
+    --hidden-import pyexcel_io.writers.csvz
+    --hidden-import pyexcel_io.writers.tsv
+    --hidden-import pyexcel_io.writers.tsvz
     --hidden-import pyexcel_io.database.importers.django
     --hidden-import pyexcel_io.database.importers.sqlalchemy
     --hidden-import pyexcel_io.database.exporters.django
