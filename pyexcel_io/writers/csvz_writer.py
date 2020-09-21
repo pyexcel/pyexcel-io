@@ -35,6 +35,3 @@ class CsvZipWriter(object):
     def close(self):
         if self.zipfile:
             self.zipfile.close()
-
-    def set_type(self, _):
-        pass

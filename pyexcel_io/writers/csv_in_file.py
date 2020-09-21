@@ -23,6 +23,3 @@ class CsvFileWriter:
     def close(self):
         if self.writer:
             self.writer.close()
-
-    def set_type(self, _):
-        pass

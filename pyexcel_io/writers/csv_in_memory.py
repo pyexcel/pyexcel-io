@@ -22,6 +22,3 @@ class CsvMemoryWriter:
 
     def close(self):
         pass
-
-    def set_type(self, _):
-        pass
