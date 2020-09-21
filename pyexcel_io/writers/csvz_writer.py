@@ -2,7 +2,7 @@ import zipfile
 
 from pyexcel_io.constants import FILE_FORMAT_CSVZ, DEFAULT_SHEET_NAME
 
-from .csvz import CSVZipSheetWriter
+from pyexcel_io.writers.csvz_sheet import CSVZipSheetWriter
 
 
 class CsvZipWriter(object):

@@ -9,7 +9,7 @@
 """
 from pyexcel_io._compact import StringIO
 
-from .csvw import CSVSheetWriter
+from pyexcel_io.writers.csv_sheet import CSVSheetWriter
 
 
 class CSVZipSheetWriter(CSVSheetWriter):

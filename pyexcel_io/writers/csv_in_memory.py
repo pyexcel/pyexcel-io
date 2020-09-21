@@ -1,4 +1,4 @@
-from pyexcel_io.writers.csvw import CSVMemoryWriter
+from pyexcel_io.writers.csv_sheet import CSVMemoryWriter
 
 
 class CsvMemoryWriter:

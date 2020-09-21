@@ -1,4 +1,4 @@
-from pyexcel_io.writers.csvw import CSVFileWriter
+from pyexcel_io.writers.csv_sheet import CSVFileWriter
 
 
 class CsvFileWriter:
