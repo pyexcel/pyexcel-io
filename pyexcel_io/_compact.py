@@ -17,16 +17,7 @@ import sys
 import types
 import logging
 
-PY2 = sys.version_info[0] == 2
-PY3_ABOVE = sys.version_info[0] >= 3
-PY26 = PY2 and sys.version_info[1] < 7
-PY27 = PY2 and sys.version_info[1] == 7
-PY27_ABOVE = PY27 or PY3_ABOVE
-
-if PY26:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
+from collections import OrderedDict
 
 try:
     from logging import NullHandler
@@ -37,24 +28,11 @@ except ImportError:
             pass
 
 
-if PY2:
-    from cStringIO import StringIO
-    from cStringIO import StringIO as BytesIO
+from io import BytesIO, StringIO
 
-    text_type = unicode
-    irange = xrange
-
-    class Iterator(object):
-        def next(self):
-            return type(self).__next__(self)
-
-
-else:
-    from io import BytesIO, StringIO
-
-    text_type = str
-    Iterator = object
-    irange = range
+text_type = str
+Iterator = object
+irange = range
 
 
 def isstream(instance):

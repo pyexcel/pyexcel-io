@@ -223,14 +223,14 @@ def _do_additional_registration_for_new_plugins(plugin_info):
         )
 
 
-class FakeReaders:
+class AllReaders:
     def get_all_formats(self):
         return OLD_READERS.get_all_formats().union(
             NEW_READERS.get_all_formats()
         )
 
 
-class FakeWriters:
+class AllWriters:
     def get_all_formats(self):
         return OLD_WRITERS.get_all_formats().union(
             NEW_WRITERS.get_all_formats()
@@ -241,8 +241,8 @@ OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
 OLD_WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 NEW_WRITERS = NewIOManager(NEW_WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
 NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_READERS)
-READERS = FakeReaders()
-WRITERS = FakeWriters()
+READERS = AllReaders()
+WRITERS = AllWriters()
 
 
 def load_plugins(plugin_name_patterns, path, black_list, white_list):
