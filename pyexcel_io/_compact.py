@@ -16,7 +16,6 @@
 import sys
 import types
 import logging
-
 from collections import OrderedDict
 
 try:

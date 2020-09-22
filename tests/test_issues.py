@@ -57,9 +57,7 @@ def test_issue_33_34():
 
     test_file = get_fixture("issue20.csv")
     with open(test_file, "r+b") as f:
-        memory_mapped_file = mmap.mmap(
-            f.fileno(), 0, access=mmap.ACCESS_READ
-        )
+        memory_mapped_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         data = get_data(memory_mapped_file, file_type="csv")
         expected = [[u"to", u"infinity", u"and", u"beyond"]]
         eq_(data["csv"], expected)
