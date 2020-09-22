@@ -3,9 +3,6 @@ from pyexcel_io.writers.csvz_writer import CsvZipWriter
 
 
 class TsvZipWriter(CsvZipWriter):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, file_name, **keywords):
+        super().__init__(file_name, dialect=KEYWORD_TSV_DIALECT, **keywords)
         self._file_type = FILE_FORMAT_TSVZ
-
-    def open(self, file_name, **keywords):
-        super().open(file_name, dialect=KEYWORD_TSV_DIALECT, **keywords)

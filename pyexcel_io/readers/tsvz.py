@@ -18,6 +18,5 @@ class TSVZipFileReader(FileReader):
     it supports single tsv file and mulitple tsv files
     """
 
-    def open(self, file_name, **keywords):
-        keywords["dialect"] = KEYWORD_TSV_DIALECT
-        super(TSVZipFileReader, self).open(file_name, **keywords)
+    def __init__(self, file_name, **keywords):
+        super().__init__(file_name, dialect=KEYWORD_TSV_DIALECT, **keywords)

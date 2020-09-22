@@ -6,7 +6,14 @@ from pyexcel_io.readers.csv_memory_reader import MemoryReader
 
 
 class ContentReader(MemoryReader):
-    def open(self, file_content, **keywords):
+    def __init__(self, file_content, **keywords):
+        file_stream = ContentReader.convert_content_to_stream(
+            file_content, "csv", **keywords
+        )
+        super().__init__(file_stream, **keywords)
+
+    @staticmethod
+    def convert_content_to_stream(file_content, file_type, **keywords):
         encoding = keywords.get("encoding", "utf-8")
         if isinstance(file_content, mmap.mmap):
             # load from mmap
@@ -15,7 +22,6 @@ class ContentReader(MemoryReader):
             if isinstance(file_content, bytes):
                 file_content = file_content.decode(encoding)
 
-            file_stream = _convert_content_to_stream(
-                file_content, self.file_type
-            )
-        super(ContentReader, self).open(file_stream, **keywords)
+            file_stream = _convert_content_to_stream(file_content, file_type)
+
+        return file_stream

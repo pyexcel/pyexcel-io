@@ -33,19 +33,21 @@ class Reader(object):
         self.keywords = None
 
     def open(self, file_name, **keywords):
-        self.reader = NEW_READERS.get_a_plugin(
+        reader_class = NEW_READERS.get_a_plugin(
             self.file_type, location="file", library=self.library
         )
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
-        return self.reader.open(file_name, **native_sheet_keywords)
+        self.reader = reader_class(file_name, **native_sheet_keywords)
+        return self.reader
 
     def open_content(self, file_content, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
         try:
-            self.reader = NEW_READERS.get_a_plugin(
+            reader_class = NEW_READERS.get_a_plugin(
                 self.file_type, location="content", library=self.library
             )
-            return self.reader.open(file_content, **native_sheet_keywords)
+            self.reader = reader_class(file_content, **native_sheet_keywords)
+            return self.reader
         except (
             exceptions.NoSupportingPluginFound,
             exceptions.SupportingPluginAvailableButNotInstalled,
@@ -57,10 +59,11 @@ class Reader(object):
 
     def open_stream(self, file_stream, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
-        self.reader = NEW_READERS.get_a_plugin(
+        reader_class = NEW_READERS.get_a_plugin(
             self.file_type, location="memory", library=self.library
         )
-        return self.reader.open(file_stream, **native_sheet_keywords)
+        self.reader = reader_class(file_stream, **native_sheet_keywords)
+        return self.reader
 
     def read_sheet_by_name(self, sheet_name):
         """

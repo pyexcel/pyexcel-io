@@ -176,8 +176,7 @@ class NewIOManager(IOManager):
     ):
         __file_type = file_type.lower()
         plugin = self.load_me_now(f"{location}-{__file_type}", library=library)
-        handler = plugin()
-        return handler
+        return plugin
 
     def raise_exception(self, file_type):
         file_type = file_type.split("-")[1]

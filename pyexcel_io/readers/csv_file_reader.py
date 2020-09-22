@@ -10,17 +10,12 @@ DEFAULT_NEWLINE = "\r\n"
 
 
 class FileReader(object):
-    def __init__(self):
-        self.handles = []
-
-    def set_type(self, _):
-        pass
-
-    def open(self, file_name, **keywords):
+    def __init__(self, file_name, **keywords):
         """Load content from a file
         :params str filename: an accessible file path
         :returns: a book
         """
+        self.handles = []
         self.keywords = keywords
         self.__line_terminator = keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, DEFAULT_NEWLINE

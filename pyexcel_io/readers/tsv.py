@@ -14,26 +14,25 @@ from pyexcel_io.readers.csv_content_reader import ContentReader
 
 
 class TSVFileReader(FileReader):
-    def open(self, file_name, **keywords):
-        keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
-        super(TSVFileReader, self).open(file_name, **keywords)
+    def __init__(self, file_name, **keywords):
+        super().__init__(
+            file_name, dialect=constants.KEYWORD_TSV_DIALECT, **keywords
+        )
 
 
 class TSVMemoryReader(MemoryReader):
-    def __init__(self):
-        self.handles = []
-        self.file_type = constants.FILE_FORMAT_TSV
+    file_type = constants.FILE_FORMAT_TSV
 
-    def open(self, file_stream, **keywords):
-        keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
-        super(TSVMemoryReader, self).open(file_stream, **keywords)
+    def __init__(self, file_stream, **keywords):
+        super().__init__(
+            file_stream, dialect=constants.KEYWORD_TSV_DIALECT, **keywords
+        )
 
 
 class TSVContentReader(ContentReader):
-    def __init__(self):
-        self.handles = []
-        self.file_type = constants.FILE_FORMAT_TSV
+    file_type = constants.FILE_FORMAT_TSV
 
-    def open(self, file_content, **keywords):
-        keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
-        super(TSVContentReader, self).open(file_content, **keywords)
+    def __init__(self, file_content, **keywords):
+        super().__init__(
+            file_stream, dialect=constants.KEYWORD_TSV_DIALECT, **keywords
+        )

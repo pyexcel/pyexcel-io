@@ -11,24 +11,24 @@ class Writer(object):
         self.keyboards = None
 
     def open(self, file_name, **keywords):
-        self.writer = NEW_WRITERS.get_a_plugin(
+        writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="file"
         )
-        self.writer.open(file_name, **keywords)
+        self.writer = writer_class(file_name, **keywords)
 
     def open_content(self, file_stream, **keywords):
         if not isstream(file_stream):
             raise IOError(MESSAGE_ERROR_03)
-        self.writer = NEW_WRITERS.get_a_plugin(
+        writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="content"
         )
-        self.writer.open(file_stream, **keywords)
+        self.writer = writer_class(file_stream, **keywords)
 
     def open_stream(self, file_stream, **keywords):
-        self.writer = NEW_WRITERS.get_a_plugin(
+        writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="memory"
         )
-        self.writer.open(file_stream, **keywords)
+        self.writer = writer_class(file_stream, **keywords)
 
     def write(self, incoming_dict):
         for sheet_name in incoming_dict:
