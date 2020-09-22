@@ -4,8 +4,8 @@
 
 In alphabetical order:
 
-* `Craig Anderson <https://api.github.com/users/craiga>`_
-* `John Vandenberg <https://api.github.com/users/jayvdb>`_
-* `Stephen J. Fuhry <https://api.github.com/users/fuhrysteve>`_
-* `Stephen Rauch <https://api.github.com/users/stephenrauch>`_
-* `Víctor Antonio Hernández Monroy <https://api.github.com/users/antherkiv>`_
+* `Craig Anderson <https://github.com/craiga>`_
+* `John Vandenberg <https://github.com/jayvdb>`_
+* `Stephen J. Fuhry <https://github.com/fuhrysteve>`_
+* `Stephen Rauch <https://github.com/stephenrauch>`_
+* `Víctor Antonio Hernández Monroy <https://github.com/antherkiv>`_

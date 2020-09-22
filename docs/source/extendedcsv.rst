@@ -74,6 +74,8 @@ Continue from previous example::
    :hide:
 
    >>> import os
+   >>> if os.path.exists("your_file.csv"):
+   ...     os.unlink("your_file.csv")
    >>> os.unlink("your_file__Sheet 1__0.csv")
    >>> os.unlink("your_file__Sheet 2__1.csv")
    

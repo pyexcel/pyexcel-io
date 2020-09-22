@@ -4,23 +4,18 @@ import glob
 
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.readers.csvr import CSVFileReader
+from pyexcel_io.readers.csv_sheet import CSVFileReader
 
 DEFAULT_NEWLINE = "\r\n"
 
 
 class FileReader(object):
-    def __init__(self):
-        self.handles = []
-
-    def set_type(self, _):
-        pass
-
-    def open(self, file_name, **keywords):
+    def __init__(self, file_name, **keywords):
         """Load content from a file
         :params str filename: an accessible file path
         :returns: a book
         """
+        self.handles = []
         self.keywords = keywords
         self.__line_terminator = keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, DEFAULT_NEWLINE

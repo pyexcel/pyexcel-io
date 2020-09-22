@@ -12,18 +12,12 @@ import zipfile
 import chardet
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
-from pyexcel_io.readers.csvr import CSVinMemoryReader
+from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
 
 
 class FileReader(object):
-    def __init__(self):
+    def __init__(self, file_alike_object, **keywords):
         self.content_array = []
-        self.keywords = None
-
-    def set_type(self, _):
-        pass
-
-    def open(self, file_alike_object, **keywords):
         try:
             self.zipfile = zipfile.ZipFile(file_alike_object, "r")
             sheets = [

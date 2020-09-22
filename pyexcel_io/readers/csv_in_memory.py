@@ -3,24 +3,20 @@ import re
 import pyexcel_io._compact as compact
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.readers.csvr import CSVinMemoryReader
+from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
 
 DEFAULT_SHEET_SEPARATOR_FORMATTER = f"---{constants.DEFAULT_NAME}---%s"
 
 
 class MemoryReader(object):
-    def __init__(self):
-        self.handles = []
-        self.file_type = constants.FILE_FORMAT_CSV
+    file_type = constants.FILE_FORMAT_CSV
 
-    def set_type(self, _):
-        pass
-
-    def open(self, file_stream, multiple_sheets=False, **keywords):
+    def __init__(self, file_stream, multiple_sheets=False, **keywords):
         """Load content from memory
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
+        self.handles = []
         self.keywords = keywords
         self.__load_from_memory_flag = True
         self.__line_terminator = keywords.get(

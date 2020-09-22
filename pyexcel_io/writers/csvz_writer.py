@@ -13,12 +13,8 @@ class CsvZipWriter(object):
     any other unzip software.
     """
 
-    def __init__(self):
-        self.zipfile = None
-        self._keywords = None
+    def __init__(self, file_name, **keywords):
         self._file_type = FILE_FORMAT_CSVZ
-
-    def open(self, file_name, **keywords):
         self.zipfile = zipfile.ZipFile(file_name, "w", zipfile.ZIP_DEFLATED)
         self._keywords = keywords
 

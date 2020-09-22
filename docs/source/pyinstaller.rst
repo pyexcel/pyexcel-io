@@ -9,14 +9,16 @@ Built-in plugins for pyexcel-io
 
 In order to package every built-in plugins of pyexcel-io, you need to specify::
 
-    --hidden-import pyexcel_io.readers.csvr
+    --hidden-import pyexcel_io.readers.csv_in_file
+    --hidden-import pyexcel_io.readers.csv_in_memory
+    --hidden-import pyexcel_io.readers.csv_content
     --hidden-import pyexcel_io.readers.csvz
     --hidden-import pyexcel_io.readers.tsv
     --hidden-import pyexcel_io.readers.tsvz
-    --hidden-import pyexcel_io.writers.csv_file_writer
-    --hidden-import pyexcel_io.writers.csv_memory_writer
-    --hidden-import pyexcel_io.writers.tsv_file_writer
-    --hidden-import pyexcel_io.writers.tsv_memory_writer
+    --hidden-import pyexcel_io.writers.csv_in_file
+    --hidden-import pyexcel_io.writers.csv_in_memory
+    --hidden-import pyexcel_io.writers.tsv_in_file
+    --hidden-import pyexcel_io.writers.tsv_in_memory
     --hidden-import pyexcel_io.writers.csvz_writer
     --hidden-import pyexcel_io.writers.tsvz_writer
     --hidden-import pyexcel_io.database.importers.django

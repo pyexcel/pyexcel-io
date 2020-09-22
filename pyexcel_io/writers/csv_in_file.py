@@ -2,13 +2,11 @@ from pyexcel_io.writers.csv_sheet import CSVFileWriter
 
 
 class CsvFileWriter:
-    def __init__(self):
-        self.__index = 0
-        self.writer = None
-
-    def open(self, file_alike_object, **keywords):
+    def __init__(self, file_alike_object, **keywords):
         self._file_alike_object = file_alike_object
         self._keywords = keywords
+        self.__index = 0
+        self.writer = None
 
     def create_sheet(self, name):
         self.writer = CSVFileWriter(

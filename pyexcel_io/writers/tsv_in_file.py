@@ -3,7 +3,7 @@ from pyexcel_io.writers.csv_in_file import CsvFileWriter
 
 
 class TsvFileWriter(CsvFileWriter):
-    def open(self, file_alike_object, **keywords):
-        super().open(
+    def __init__(self, file_alike_object, **keywords):
+        super().__init__(
             file_alike_object, dialect=KEYWORD_TSV_DIALECT, **keywords
         )

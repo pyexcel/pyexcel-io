@@ -7,3 +7,4 @@ targets:
   - .travis.yml: custom_travis.yml.jj2
   - README.rst: io_readme.rst.jj2
   - "docs/source/index.rst": "docs/source/index.rst"
+  - .gitignore: gitignore.jj2

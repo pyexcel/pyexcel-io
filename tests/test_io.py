@@ -196,6 +196,7 @@ def test_file_handle_as_input():
     with open(test_file, "r") as f:
         data = get_data(f, "csv")
         eq_(data["csv"], [[1, 2, 3]])
+    os.unlink("file_handle.csv")
 
 
 def test_file_type_case_insensitivity():
@@ -206,6 +207,7 @@ def test_file_type_case_insensitivity():
     with open(test_file, "r") as f:
         data = get_data(f, "csv")
         eq_(data["csv"], [[1, 2, 3]])
+    os.unlink("file_handle.CSv")
 
 
 def test_file_handle_as_output():
@@ -216,6 +218,7 @@ def test_file_handle_as_output():
     with open(test_file, "r") as f:
         content = f.read()
         eq_(content, "1,2,3\n")
+    os.unlink("file_handle.csv")
 
 
 def test_binary_file_content():
