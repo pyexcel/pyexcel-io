@@ -3,7 +3,7 @@ import re
 import pyexcel_io._compact as compact
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.readers.csvr import CSVinMemoryReader
+from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
 
 DEFAULT_SHEET_SEPARATOR_FORMATTER = f"---{constants.DEFAULT_NAME}---%s"
 

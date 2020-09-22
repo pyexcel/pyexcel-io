@@ -6,7 +6,7 @@ import pyexcel_io.manager as manager
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import PY2, BytesIO, StringIO
-from pyexcel_io.readers.csvr import (
+from pyexcel_io.readers.csv_sheet import (
     CSVFileReader,
     CSVSheetReader,
     CSVinMemoryReader,
