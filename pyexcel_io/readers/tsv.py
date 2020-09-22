@@ -8,9 +8,9 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
+from pyexcel_io.readers.csv_content import ContentReader
 from pyexcel_io.readers.csv_in_file import FileReader
 from pyexcel_io.readers.csv_in_memory import MemoryReader
-from pyexcel_io.readers.csv_content import ContentReader
 
 
 class TSVFileReader(FileReader):

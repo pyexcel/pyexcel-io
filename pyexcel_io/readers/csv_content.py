@@ -8,7 +8,7 @@ from pyexcel_io.readers.csv_in_memory import MemoryReader
 
 class ContentReader(MemoryReader):
     file_type = constants.FILE_FORMAT_CSV
-    
+
     def __init__(self, file_content, **keywords):
         file_stream = ContentReader.convert_content_to_stream(
             file_content, self.file_type, **keywords
