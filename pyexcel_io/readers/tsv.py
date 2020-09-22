@@ -8,9 +8,9 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
-from pyexcel_io.readers.csv_file_reader import FileReader
-from pyexcel_io.readers.csv_memory_reader import MemoryReader
-from pyexcel_io.readers.csv_content_reader import ContentReader
+from pyexcel_io.readers.csv_in_file import FileReader
+from pyexcel_io.readers.csv_in_memory import MemoryReader
+from pyexcel_io.readers.csv_content import ContentReader
 
 
 class TSVFileReader(FileReader):
@@ -34,5 +34,5 @@ class TSVContentReader(ContentReader):
 
     def __init__(self, file_content, **keywords):
         super().__init__(
-            file_stream, dialect=constants.KEYWORD_TSV_DIALECT, **keywords
+            file_content, dialect=constants.KEYWORD_TSV_DIALECT, **keywords
         )

@@ -10,17 +10,17 @@
 from pyexcel_io.plugins import NewIOPluginInfoChain
 
 NewIOPluginInfoChain(__name__).add_a_reader(
-    relative_plugin_class_path="csv_file_reader.FileReader",
+    relative_plugin_class_path="csv_in_file.FileReader",
     location="file",
     file_types=["csv"],
     stream_type="text",
 ).add_a_reader(
-    relative_plugin_class_path="csv_content_reader.ContentReader",
+    relative_plugin_class_path="csv_content.ContentReader",
     location="content",
     file_types=["csv"],
     stream_type="text",
 ).add_a_reader(
-    relative_plugin_class_path="csv_memory_reader.MemoryReader",
+    relative_plugin_class_path="csv_in_memory.MemoryReader",
     location="memory",
     file_types=["csv"],
     stream_type="text",

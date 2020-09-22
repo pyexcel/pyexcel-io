@@ -3,7 +3,7 @@ import mmap
 import pyexcel_io.constants as constants
 from pyexcel_io.book import _convert_content_to_stream
 from pyexcel_io.readers.csv_sheet import CSVMemoryMapIterator
-from pyexcel_io.readers.csv_memory_reader import MemoryReader
+from pyexcel_io.readers.csv_in_memory import MemoryReader
 
 
 class ContentReader(MemoryReader):
