@@ -172,4 +172,5 @@ When you read it back you will have to specify encoding too.
 
    >>> import os
    >>> os.unlink("your_file.csv")
+   >>> os.unlink("test-utf16-encoding.csv")
    >>> os.unlink(test_file)

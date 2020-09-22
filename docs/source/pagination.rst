@@ -60,3 +60,9 @@ Obvious, you could do both at the same time:
 
 The pagination support is available across all pyexcel-io plugins.
 
+.. testcode::
+   :hide:
+
+   >>> import os
+   >>> if os.path.exists("your_file.csv"):
+   ...     os.unlink("your_file.csv")
