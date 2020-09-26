@@ -72,15 +72,10 @@ class SQLTableWriter(SheetWriter):
             self._native_book.session.commit()
 
 
-class SQLBookWriter(BookWriter):
+class SQLBookWriter(object):
     """ write data into database tables via sqlalchemy """
 
-    def __init__(self):
-        BookWriter.__init__(self)
-        self.__importer = None
-        self.__auto_commit = True
-
-    def open_content(self, file_content, auto_commit=True, **keywords):
+    def __init__(self,  file_content, auto_commit=True, **keywords):
         self.__importer = file_content
         self.__auto_commit = auto_commit
 
@@ -98,3 +93,15 @@ class SQLBookWriter(BookWriter):
             )
 
         return sheet_writer
+
+    def write(self, incoming_dict):
+        for sheet_name in incoming_dict:
+            sheet_writer = self.create_sheet(sheet_name)
+            if sheet_writer:
+                sheet_writer.write_array(incoming_dict[sheet_name])
+                sheet_writer.close()
+            else:
+                raise Exception("Cannot create a sheet writer!")
+
+    def close(self):
+        pass

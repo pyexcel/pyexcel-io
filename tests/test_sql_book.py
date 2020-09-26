@@ -441,8 +441,7 @@ class TestMultipleRead:
         post_adapter.column_names = data["Post"][0]
         post_adapter.row_initializer = post_init_func
         importer.append(post_adapter)
-        writer = SQLBookWriter()
-        writer.open_content(importer)
+        writer = SQLBookWriter(importer)
         to_store = OrderedDict()
         to_store.update({category_adapter.get_name(): data["Category"][1:]})
         to_store.update({post_adapter.get_name(): data["Post"][1:]})
@@ -560,8 +559,7 @@ def test_unknown_sheet(self):
     category_adapter = SQLTableImportAdapter(Category)
     category_adapter.column_names = [""]
     importer.append(category_adapter)
-    writer = SQLBookWriter()
-    writer.open_content(importer)
+    writer = SQLBookWriter(importer)
     to_store = OrderedDict()
     to_store.update({"you do not see me": [[]]})
     writer.write(to_store)
