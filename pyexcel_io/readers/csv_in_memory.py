@@ -48,7 +48,9 @@ class MemoryReader(object):
             self.content_array = [NamedContent(self.file_type, file_stream)]
 
     def read_sheet(self, index):
-        return CSVinMemoryReader(self.content_array[index], **self.keywords)
+        reader = CSVinMemoryReader(self.content_array[index], **self.keywords)
+        self.handles.append(reader)
+        return reader
 
     def close(self):
         for reader in self.handles:

@@ -554,7 +554,7 @@ def test_sql_table_import_adapter():
 
 
 @raises(Exception)
-def test_unknown_sheet(self):
+def test_unknown_sheet():
     importer = SQLTableImporter(None)
     category_adapter = SQLTableImportAdapter(Category)
     category_adapter.column_names = [""]

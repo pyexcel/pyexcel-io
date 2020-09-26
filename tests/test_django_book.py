@@ -359,35 +359,6 @@ class TestMultipleModels:
             "Sheet2": self.content["Sheet2"][1:],
         }
         save_data(importer, to_store, file_type=DB_DJANGO)
-        assert model1.objects.objs == self.result1
-        model1._meta.model_name = "Sheet1"
-        model1._meta.update(["X", "Y", "Z"])
-        exporter = DjangoModelExporter()
-        adapter = DjangoModelExportAdapter(model1)
-        exporter.append(adapter)
-        reader = DjangoBookReader(exporter)
-        result = OrderedDict()
-        for index, sheet in enumerate(reader.content_array):
-            result.update(
-                {
-                    reader.content_array[index].name: list(
-                        reader.read_sheet(index).to_array()
-                    )
-                }
-            )
-        assert list(result["Sheet1"]) == self.content["Sheet1"]
-
-
-@raises(TypeError)
-def test_not_implemented_method():
-    reader = DjangoBookReader()
-    reader.open("afile")
-
-
-@raises(TypeError)
-def test_not_implemented_method_2():
-    reader = DjangoBookReader()
-    reader.open_stream("afile")
 
 
 class TestFilter:
