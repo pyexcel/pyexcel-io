@@ -7,7 +7,6 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.database.common import DbExporter
 from pyexcel_io.database.querysets import QuerysetsReader
 
 
@@ -31,24 +30,22 @@ class SQLTableReader(QuerysetsReader):
         QuerysetsReader.__init__(self, everything, column_names, **keywords)
 
 
-class SQLBookReader(DbExporter):
+class SQLBookReader(object):
     """ read a table via sqlalchemy """
 
-    def __init__(self):
-        DbExporter.__init__(self)
-        self.__exporter = None
+    def __init__(self, exporter, **keywords):
+        self.__exporter = exporter
+        self.content_array = self.__exporter.adapters
+        self.keywords = keywords
 
-    def export_tables(self, file_content, **keywords):
-        self.__exporter = file_content
-        self._load_from_tables()
-
-    def read_sheet(self, native_sheet):
+    def read_sheet(self, native_sheet_index):
+        native_sheet = self.content_array[native_sheet_index]
         reader = SQLTableReader(
             self.__exporter.session,
             native_sheet.table,
             native_sheet.export_columns,
         )
-        return reader.to_array()
+        return reader
 
-    def _load_from_tables(self):
-        self._native_book = self.__exporter.adapters
+    def close(self):
+        pass

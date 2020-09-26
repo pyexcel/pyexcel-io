@@ -455,12 +455,17 @@ class TestMultipleRead:
         exporter.append(category_adapter)
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
-        book = SQLBookReader()
-        book.open_content(exporter)
-        data = book.read_all()
-        for key in data.keys():
-            data[key] = list(data[key])
-        assert json.dumps(data) == (
+        reader = SQLBookReader(exporter)
+        result = OrderedDict()
+        for index, sheet in enumerate(reader.content_array):
+            result.update(
+                {
+                    reader.content_array[index].name: list(
+                        reader.read_sheet(index).to_array()
+                    )
+                }
+            )
+        assert json.dumps(result) == (
             '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], '
             + '"post": [["body", "category_id", "id", "pub_date", "title"], '
             + '["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], '
