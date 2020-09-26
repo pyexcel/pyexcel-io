@@ -335,12 +335,17 @@ class TestMultipleModels:
         adapter2 = DjangoModelExportAdapter(model2)
         exporter.append(adapter1)
         exporter.append(adapter2)
-        reader = DjangoBookReader()
-        reader.open_content(exporter)
-        data = reader.read_all()
-        for key in data.keys():
-            data[key] = list(data[key])
-        assert data == self.content
+        reader = DjangoBookReader(exporter)
+        result = OrderedDict()
+        for index, sheet in enumerate(reader.content_array):
+            result.update(
+                {
+                    reader.content_array[index].name: list(
+                        reader.read_sheet(index).to_array()
+                    )
+                }
+            )
+        assert result == self.content
 
     @raises(Exception)
     def test_special_case_where_only_one_model_used(self):
