@@ -280,8 +280,7 @@ class TestMultipleModels:
             adapter1.get_name(): self.content["Sheet1"][1:],
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
-        writer = DjangoBookWriter()
-        writer.open_content(importer, batch_size=sample_size)
+        writer = DjangoBookWriter(importer, batch_size=sample_size)
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == self.result1
@@ -303,8 +302,9 @@ class TestMultipleModels:
             adapter1.get_name(): self.content["Sheet1"][1:],
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
-        writer = DjangoBookWriter()
-        writer.open_content(importer, batch_size=sample_size, bulk_save=False)
+        writer = DjangoBookWriter(
+            importer, batch_size=sample_size, bulk_save=False
+        )
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == []
@@ -365,10 +365,17 @@ class TestMultipleModels:
         exporter = DjangoModelExporter()
         adapter = DjangoModelExportAdapter(model1)
         exporter.append(adapter)
-        reader = DjangoBookReader()
-        reader.open_content(exporter)
-        data = reader.read_all()
-        assert list(data["Sheet1"]) == self.content["Sheet1"]
+        reader = DjangoBookReader(exporter)
+        result = OrderedDict()
+        for index, sheet in enumerate(reader.content_array):
+            result.update(
+                {
+                    reader.content_array[index].name: list(
+                        reader.read_sheet(index).to_array()
+                    )
+                }
+            )
+        assert list(result["Sheet1"]) == self.content["Sheet1"]
 
 
 @raises(TypeError)

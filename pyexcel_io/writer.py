@@ -17,8 +17,8 @@ class Writer(object):
         self.writer = writer_class(file_name, **keywords)
 
     def open_content(self, file_stream, **keywords):
-        if not isstream(file_stream):
-            raise IOError(MESSAGE_ERROR_03)
+        # if not isstream(file_stream):
+        #    raise IOError(MESSAGE_ERROR_03)
         writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="content"
         )
