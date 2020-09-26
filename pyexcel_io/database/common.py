@@ -7,24 +7,6 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.book import BookReader
-
-
-class DbExporter(BookReader):
-    """ Transcode the book reader interface to db interface """
-
-    def open(self, file_name, **keywords):
-        self.export_tables(self, file_name, **keywords)
-
-    def open_stream(self, file_stream, **keywords):
-        self.export_tables(self, file_stream, **keywords)
-
-    def open_content(self, file_content, **keywords):
-        self.export_tables(file_content, **keywords)
-
-    def export_tables(self, exporter, **keywords):
-        """ read database tables """
-        raise NotImplementedError("Please implement this method")
 
 
 class DjangoModelExportAdapter(object):

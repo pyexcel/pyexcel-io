@@ -58,15 +58,11 @@ class DjangoModelWriter(SheetWriter):
                 an_object.save()
 
 
-class DjangoBookWriter(BookWriter):
+class DjangoBookWriter(object):
     """ write data into django models """
 
-    def __init__(self):
-        BookWriter.__init__(self)
-        self.__importer = None
-
-    def open_content(self, file_content, **keywords):
-        self.__importer = file_content
+    def __init__(self, exporter, **keywords):
+        self.__importer = exporter
         self._keywords = keywords
 
     def create_sheet(self, sheet_name):
@@ -86,3 +82,15 @@ class DjangoBookWriter(BookWriter):
             )
 
         return sheet_writer
+
+    def write(self, incoming_dict):
+        for sheet_name in incoming_dict:
+            sheet_writer = self.create_sheet(sheet_name)
+            if sheet_writer:
+                sheet_writer.write_array(incoming_dict[sheet_name])
+                sheet_writer.close()
+            else:
+                raise Exception("Cannot create a sheet writer!")
+
+    def close(self):
+        pass
