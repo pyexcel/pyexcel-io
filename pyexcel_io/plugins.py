@@ -227,14 +227,14 @@ class AllReaders:
     def get_all_formats(self):
         return OLD_READERS.get_all_formats().union(
             NEW_READERS.get_all_formats()
-        )
+        ) - set([constants.DB_SQL, constants.DB_DJANGO])
 
 
 class AllWriters:
     def get_all_formats(self):
         return OLD_WRITERS.get_all_formats().union(
             NEW_WRITERS.get_all_formats()
-        )
+        ) - set([constants.DB_SQL, constants.DB_DJANGO])
 
 
 OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
