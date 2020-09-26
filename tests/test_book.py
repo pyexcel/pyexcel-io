@@ -6,7 +6,6 @@ from pyexcel_io.book import (
 )
 from pyexcel_io._compact import BytesIO, StringIO
 
-from nose import SkipTest
 from nose.tools import raises
 
 

@@ -71,7 +71,7 @@ class NewIOPluginInfoChain(PluginInfoChain):
     def add_a_reader(
         self,
         relative_plugin_class_path=None,
-        location="file",
+        locations=(),
         file_types=None,
         stream_type=None,
     ):
@@ -79,7 +79,11 @@ class NewIOPluginInfoChain(PluginInfoChain):
         a_plugin_info = IOPluginInfo(
             NEW_READER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
-            file_types=[f"{location}-{file_type}" for file_type in file_types],
+            file_types=[
+                f"{location}-{file_type}"
+                for file_type in file_types
+                for location in locations
+            ],
             stream_type=stream_type,
         )
         return self.add_a_plugin_instance(a_plugin_info)

@@ -1,7 +1,4 @@
 from pyexcel_io.plugins import NEW_WRITERS
-from pyexcel_io._compact import isstream
-
-from .constants import MESSAGE_ERROR_03
 
 
 class Writer(object):
@@ -31,13 +28,7 @@ class Writer(object):
         self.writer = writer_class(file_stream, **keywords)
 
     def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            sheet_writer = self.writer.create_sheet(sheet_name)
-            if sheet_writer:
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-            else:
-                raise Exception("Cannot create a sheet writer!")
+        self.writer.write(incoming_dict)
 
     def close(self):
         self.writer.close()
