@@ -16,7 +16,7 @@ Change log
 **updated**
 
 #. pyexcel-io plugin interface has been rewritten. PyInstaller user will be
-   impacted.
+   impacted. please read 'Packaging with Pyinstaller' in the documentation.
 
 0.5.20 - 17.7.2019
 --------------------------------------------------------------------------------
