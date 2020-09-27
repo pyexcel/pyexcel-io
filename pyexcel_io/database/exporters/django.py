@@ -29,7 +29,7 @@ class DjangoModelReader(QuerysetsReader):
 class DjangoBookReader(object):
     """ read django models """
 
-    def __init__(self, exporter, **keywords):
+    def __init__(self, exporter, _, **keywords):
         self.exporter = exporter
         self.keywords = keywords
         self.content_array = self.exporter.adapters

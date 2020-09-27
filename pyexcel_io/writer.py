@@ -11,7 +11,7 @@ class Writer(object):
         writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="file"
         )
-        self.writer = writer_class(file_name, **keywords)
+        self.writer = writer_class(file_name, self.file_type, **keywords)
 
     def open_content(self, file_stream, **keywords):
         # if not isstream(file_stream):
@@ -19,13 +19,13 @@ class Writer(object):
         writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="content"
         )
-        self.writer = writer_class(file_stream, **keywords)
+        self.writer = writer_class(file_stream, self.file_type, **keywords)
 
     def open_stream(self, file_stream, **keywords):
         writer_class = NEW_WRITERS.get_a_plugin(
             self.file_type, library=self.library, location="memory"
         )
-        self.writer = writer_class(file_stream, **keywords)
+        self.writer = writer_class(file_stream, self.file_type, **keywords)
 
     def write(self, incoming_dict):
         self.writer.write(incoming_dict)

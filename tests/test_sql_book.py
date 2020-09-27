@@ -441,7 +441,7 @@ class TestMultipleRead:
         post_adapter.column_names = data["Post"][0]
         post_adapter.row_initializer = post_init_func
         importer.append(post_adapter)
-        writer = SQLBookWriter(importer)
+        writer = SQLBookWriter(importer, 'sql')
         to_store = OrderedDict()
         to_store.update({category_adapter.get_name(): data["Category"][1:]})
         to_store.update({post_adapter.get_name(): data["Post"][1:]})
@@ -454,7 +454,7 @@ class TestMultipleRead:
         exporter.append(category_adapter)
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
-        reader = SQLBookReader(exporter)
+        reader = SQLBookReader(exporter, 'sql')
         result = OrderedDict()
         for index, sheet in enumerate(reader.content_array):
             result.update(
@@ -559,7 +559,7 @@ def test_unknown_sheet():
     category_adapter = SQLTableImportAdapter(Category)
     category_adapter.column_names = [""]
     importer.append(category_adapter)
-    writer = SQLBookWriter(importer)
+    writer = SQLBookWriter(importer, 'sql')
     to_store = OrderedDict()
     to_store.update({"you do not see me": [[]]})
     writer.write(to_store)

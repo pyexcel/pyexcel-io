@@ -60,7 +60,7 @@ class DjangoModelWriter(SheetWriter):
 class DjangoBookWriter(object):
     """ write data into django models """
 
-    def __init__(self, exporter, **keywords):
+    def __init__(self, exporter, _, **keywords):
         self.__importer = exporter
         self._keywords = keywords
 

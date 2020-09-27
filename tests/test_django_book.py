@@ -280,7 +280,7 @@ class TestMultipleModels:
             adapter1.get_name(): self.content["Sheet1"][1:],
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
-        writer = DjangoBookWriter(importer, batch_size=sample_size)
+        writer = DjangoBookWriter(importer, 'django', batch_size=sample_size)
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == self.result1
@@ -303,7 +303,7 @@ class TestMultipleModels:
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
         writer = DjangoBookWriter(
-            importer, batch_size=sample_size, bulk_save=False
+            importer, 'django', batch_size=sample_size, bulk_save=False
         )
         writer.write(to_store)
         writer.close()
@@ -335,7 +335,7 @@ class TestMultipleModels:
         adapter2 = DjangoModelExportAdapter(model2)
         exporter.append(adapter1)
         exporter.append(adapter2)
-        reader = DjangoBookReader(exporter)
+        reader = DjangoBookReader(exporter, 'django')
         result = OrderedDict()
         for index, sheet in enumerate(reader.content_array):
             result.update(
