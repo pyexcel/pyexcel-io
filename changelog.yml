@@ -10,7 +10,8 @@ releases:
     - 'python 3.6 lower versions are no longer supported'
   - action: updated
     details:
-    - 'pyexcel-io plugin interface has been rewritten. PyInstaller user will be impacted.'
+    - pyexcel-io plugin interface has been rewritten. PyInstaller user will be impacted.
+      please read 'Packaging with Pyinstaller' in the documentation.
   version: 0.6.0
   date: tbd
 - changes:
