@@ -12,31 +12,16 @@ from pyexcel_io.plugins import NewIOPluginInfoChain
 NewIOPluginInfoChain(__name__).add_a_writer(
     relative_plugin_class_path="csv_in_file.CsvFileWriter",
     locations=["file", "content"],
-    file_types=["csv"],
+    file_types=["csv", "tsv"],
     stream_type="text",
 ).add_a_writer(
     relative_plugin_class_path="csv_in_memory.CsvMemoryWriter",
     locations=["memory"],
-    file_types=["csv"],
-    stream_type="text",
-).add_a_writer(
-    relative_plugin_class_path="tsv_in_file.TsvFileWriter",
-    locations=["file", "content"],
-    file_types=["tsv"],
-    stream_type="text",
-).add_a_writer(
-    relative_plugin_class_path="tsv_in_memory.TsvMemoryWriter",
-    locations=["memory"],
-    file_types=["tsv"],
+    file_types=["csv", "tsv"],
     stream_type="text",
 ).add_a_writer(
     relative_plugin_class_path="csvz_writer.CsvZipWriter",
     locations=["memory", "file", "content"],
-    file_types=["csvz"],
-    stream_type="binary",
-).add_a_writer(
-    relative_plugin_class_path="tsvz_writer.TsvZipWriter",
-    locations=["memory", "file", "content"],
-    file_types=["tsvz"],
+    file_types=["csvz", "tsvz"],
     stream_type="binary",
 )

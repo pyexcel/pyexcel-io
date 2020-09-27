@@ -9,15 +9,19 @@ DEFAULT_SHEET_SEPARATOR_FORMATTER = f"---{constants.DEFAULT_NAME}---%s"
 
 
 class MemoryReader(object):
-    file_type = constants.FILE_FORMAT_CSV
-
-    def __init__(self, file_stream, multiple_sheets=False, **keywords):
+    def __init__(
+        self, file_stream, file_type, multiple_sheets=False, **keywords
+    ):
         """Load content from memory
         :params stream file_content: the actual file content in memory
         :returns: a book
         """
         self.handles = []
         self.keywords = keywords
+        if file_type == constants.FILE_FORMAT_TSV:
+            self.keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
+        self.file_type = file_type
+
         self.__load_from_memory_flag = True
         self.__line_terminator = keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, constants.DEFAULT_CSV_NEWLINE

@@ -10,13 +10,15 @@ DEFAULT_NEWLINE = "\r\n"
 
 
 class FileReader(object):
-    def __init__(self, file_name, **keywords):
+    def __init__(self, file_name, file_type, **keywords):
         """Load content from a file
         :params str filename: an accessible file path
         :returns: a book
         """
         self.handles = []
         self.keywords = keywords
+        if file_type == constants.FILE_FORMAT_TSV:
+            self.keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
         self.__line_terminator = keywords.get(
             constants.KEYWORD_LINE_TERMINATOR, DEFAULT_NEWLINE
         )

@@ -10,13 +10,14 @@
 import zipfile
 
 import chardet
+from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
 from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
 
 
 class FileReader(object):
-    def __init__(self, file_alike_object, **keywords):
+    def __init__(self, file_alike_object, file_type, **keywords):
         self.content_array = []
         try:
             self.zipfile = zipfile.ZipFile(file_alike_object, "r")
@@ -26,6 +27,8 @@ class FileReader(object):
             ]
             self.content_array = sheets
             self.keywords = keywords
+            if file_type == constants.FILE_FORMAT_TSVZ:
+                self.keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
 
         except zipfile.BadZipfile:
             print("StringIO instance was passed by any chance?")

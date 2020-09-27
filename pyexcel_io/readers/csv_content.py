@@ -1,19 +1,16 @@
 import mmap
 
-import pyexcel_io.constants as constants
 from pyexcel_io.book import _convert_content_to_stream
 from pyexcel_io.readers.csv_sheet import CSVMemoryMapIterator
 from pyexcel_io.readers.csv_in_memory import MemoryReader
 
 
 class ContentReader(MemoryReader):
-    file_type = constants.FILE_FORMAT_CSV
-
-    def __init__(self, file_content, **keywords):
+    def __init__(self, file_content, file_type, **keywords):
         file_stream = ContentReader.convert_content_to_stream(
-            file_content, self.file_type, **keywords
+            file_content, file_type, **keywords
         )
-        super().__init__(file_stream, **keywords)
+        super().__init__(file_stream, file_type, **keywords)
 
     @staticmethod
     def convert_content_to_stream(file_content, file_type, **keywords):
