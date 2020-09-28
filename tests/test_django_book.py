@@ -1,4 +1,5 @@
 from pyexcel_io import save_data
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
 from pyexcel_io.database.common import (
@@ -210,7 +211,9 @@ class TestSheet:
             return [str(element) for element in row]
 
         # the key point of this test case
-        reader = DjangoModelReader(model, row_renderer=row_renderer)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(model), row_renderer=row_renderer
+        )
         data = reader.to_array()
         expected = [["X", "Y", "Z"], ["1", "2", "3"], ["4", "5", "6"]]
         eq_(list(data), expected)
@@ -336,16 +339,10 @@ class TestMultipleModels:
         exporter.append(adapter1)
         exporter.append(adapter2)
         reader = DjangoBookReader(exporter, "django")
-        result = OrderedDict()
-        for index, sheet in enumerate(reader.content_array):
-            result.update(
-                {
-                    reader.content_array[index].name: list(
-                        reader.read_sheet(index).to_array()
-                    )
-                }
-            )
-        assert result == self.content
+        result = reader.read_all()
+        for key in result:
+            result[key] = list(result[key])
+        eq_(result, self.content)
 
     @raises(Exception)
     def test_special_case_where_only_one_model_used(self):
@@ -377,25 +374,33 @@ class TestFilter:
         self.model._meta.update(["X", "Y", "Z"])
 
     def test_load_sheet_from_django_model_with_filter(self):
-        reader = DjangoModelReader(self.model, start_row=0, row_limit=2)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_row=0, row_limit=2
+        )
         data = reader.to_array()
         expected = [["X", "Y", "Z"], [1, 2, 3]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_1(self):
-        reader = DjangoModelReader(self.model, start_row=1, row_limit=3)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_row=1, row_limit=3
+        )
         data = reader.to_array()
         expected = [[1, 2, 3], [4, 5, 6]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_2(self):
-        reader = DjangoModelReader(self.model, start_column=1)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_column=1
+        )
         data = reader.to_array()
         expected = [["Y", "Z"], [2, 3], [5, 6]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_3(self):
-        reader = DjangoModelReader(self.model, start_column=1, column_limit=1)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_column=1, column_limit=1
+        )
         data = reader.to_array()
         expected = [["Y"], [2], [5]]
         eq_(list(data), expected)

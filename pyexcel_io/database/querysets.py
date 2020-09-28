@@ -10,16 +10,18 @@
 import datetime
 from itertools import chain
 
-from pyexcel_io.sheet import SheetReader
+from pyexcel_io.plugin_api.abstract_sheet import Sheet
 
 
-class QuerysetsReader(SheetReader):
+class QuerysetsReader(Sheet):
     """ turn querysets into an array """
 
-    def __init__(self, query_sets, column_names, **keywords):
-        SheetReader.__init__(self, query_sets, **keywords)
+    def __init__(self, query_sets, column_names):
         self.__column_names = column_names
         self.__query_sets = query_sets
+
+    def row_iterator(self):
+        return chain([self.__column_names], self.__query_sets)
 
     def to_array(self):
         """
@@ -28,11 +30,8 @@ class QuerysetsReader(SheetReader):
         if len(self.__query_sets) == 0:
             yield []
 
-        for element in SheetReader.to_array(self):
+        for element in Sheet.to_array(self):
             yield element
-
-    def row_iterator(self):
-        return chain([self.__column_names], self.__query_sets)
 
     def column_iterator(self, row):
         if self.__column_names is None:

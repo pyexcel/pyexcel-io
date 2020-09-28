@@ -14,6 +14,7 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.orm import backref, relationship, sessionmaker
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.database.common import (
     SQLTableExporter,
@@ -124,7 +125,7 @@ class TestSingleRead:
             ["2014-11-12", 1, "Smith", 12.25],
         ]
         # 'pyexcel' here is the table name
-        assert list(data) == content
+        eq_(list(data), content)
         mysession.close()
 
     def test_sql_formating(self):
@@ -134,8 +135,8 @@ class TestSingleRead:
             return [str(element) for element in row]
 
         # the key for this test case
-        sheet = SQLTableReader(
-            mysession, Pyexcel, row_renderer=custom_renderer
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), row_renderer=custom_renderer
         )
         data = sheet.to_array()
         content = [
@@ -148,7 +149,9 @@ class TestSingleRead:
 
     def test_sql_filter(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_row=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_row=1
+        )
         data = sheet.to_array()
         content = [
             ["2014-11-11", 0, "Adam", 11.25],
@@ -160,7 +163,9 @@ class TestSingleRead:
 
     def test_sql_filter_1(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_row=1, row_limit=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_row=1, row_limit=1
+        )
         data = sheet.to_array()
         content = [["2014-11-11", 0, "Adam", 11.25]]
         # 'pyexcel'' here is the table name
@@ -169,7 +174,9 @@ class TestSingleRead:
 
     def test_sql_filter_2(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_column=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_column=1
+        )
         data = sheet.to_array()
         content = [
             ["id", "name", "weight"],
@@ -182,8 +189,8 @@ class TestSingleRead:
 
     def test_sql_filter_3(self):
         mysession = Session()
-        sheet = SQLTableReader(
-            mysession, Pyexcel, start_column=1, column_limit=1
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_column=1, column_limit=1
         )
         data = sheet.to_array()
         content = [["id"], [0], [1]]
@@ -455,15 +462,10 @@ class TestMultipleRead:
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
         reader = SQLBookReader(exporter, "sql")
-        result = OrderedDict()
-        for index, sheet in enumerate(reader.content_array):
-            result.update(
-                {
-                    reader.content_array[index].name: list(
-                        reader.read_sheet(index).to_array()
-                    )
-                }
-            )
+        result = reader.read_all()
+        for key in result:
+            result[key] = list(result[key])
+
         assert json.dumps(result) == (
             '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], '
             + '"post": [["body", "category_id", "id", "pub_date", "title"], '
