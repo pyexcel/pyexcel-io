@@ -17,7 +17,7 @@ class QuerysetsReader(Sheet):
     """ turn querysets into an array """
 
     def __init__(self, query_sets, column_names):
-        self.name = 'pyexcel-queryset'
+        self.name = "pyexcel-queryset"
         self.__column_names = column_names
         self.__query_sets = query_sets
 
