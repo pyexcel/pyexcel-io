@@ -184,6 +184,8 @@ def load_data(
             reader.open_content(file_content, **keywords)
         elif file_stream:
             reader.open_stream(file_stream, **keywords)
+        else:
+            raise IOError("Unrecognized options")
         if sheet_name:
             result = reader.read_sheet_by_name(sheet_name)
         elif sheet_index is not None:

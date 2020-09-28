@@ -2,9 +2,10 @@ import zipfile
 
 from pyexcel_io import constants
 from pyexcel_io.writers.csvz_sheet import CSVZipSheetWriter
+from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
-class CsvZipWriter(object):
+class CsvZipWriter(IWriter):
     """
     csvz writer
 
@@ -28,15 +29,6 @@ class CsvZipWriter(object):
             self.zipfile, given_name, self._file_type[:3], **self._keywords
         )
         return writer
-
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            sheet_writer = self.create_sheet(sheet_name)
-            if sheet_writer:
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-            else:
-                raise Exception("Cannot create a sheet writer!")
 
     def close(self):
         if self.zipfile:

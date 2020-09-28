@@ -4,11 +4,12 @@ import pyexcel_io._compact as compact
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
+from pyexcel_io.plugin_api.abstract_reader import IReader
 
 DEFAULT_SHEET_SEPARATOR_FORMATTER = f"---{constants.DEFAULT_NAME}---%s"
 
 
-class MemoryReader(object):
+class MemoryReader(IReader):
     def __init__(
         self, file_stream, file_type, multiple_sheets=False, **keywords
     ):

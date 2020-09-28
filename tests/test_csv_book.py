@@ -4,7 +4,6 @@ from unittest import TestCase
 
 import pyexcel_io.manager as manager
 from pyexcel_io.sheet import NamedContent
-from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import BytesIO, StringIO
 from pyexcel_io.readers.csv_sheet import (
     CSVFileReader,
@@ -32,9 +31,7 @@ class TestReaders(TestCase):
         sheet.get_file_handle()
 
     def test_sheet_file_reader(self):
-        r = EncapsulatedSheetReader(
-            CSVFileReader(NamedContent(self.file_type, self.test_file))
-        )
+        r = CSVFileReader(NamedContent(self.file_type, self.test_file))
         result = list(r.to_array())
         self.assertEqual(result, self.expected_data)
 
@@ -43,9 +40,8 @@ class TestReaders(TestCase):
         with open(self.test_file, "r") as f:
             io.write(f.read())
         io.seek(0)
-        r = EncapsulatedSheetReader(
-            CSVinMemoryReader(NamedContent(self.file_type, io))
-        )
+        r = CSVinMemoryReader(NamedContent(self.file_type, io))
+
         result = list(r.to_array())
         self.assertEqual(result, self.expected_data)
 
@@ -112,9 +108,7 @@ class TestNonUniformCSV(TestCase):
                 f.write(",".join(row) + "\n")
 
     def test_sheet_file_reader(self):
-        r = EncapsulatedSheetReader(
-            CSVFileReader(NamedContent(self.file_type, self.test_file))
-        )
+        r = CSVFileReader(NamedContent(self.file_type, self.test_file))
         result = list(r.to_array())
         self.assertEqual(result, [[1], [4, 5, 6], ["", 7]])
 
@@ -124,9 +118,8 @@ class TestNonUniformCSV(TestCase):
 
 def test_utf16_decoding():
     test_file = os.path.join("tests", "fixtures", "csv-encoding-utf16.csv")
-    reader = EncapsulatedSheetReader(
-        CSVFileReader(NamedContent("csv", test_file), encoding="utf-16")
-    )
+    reader = CSVFileReader(NamedContent("csv", test_file), encoding="utf-16")
+
     content = list(reader.to_array())
     expected = [["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"]]
     eq_(content, expected)
@@ -149,9 +142,10 @@ def test_utf16_encoding():
 def test_utf16_memory_decoding():
     test_content = u"Äkkilähdöt,Matkakirjoituksia,Matkatoimistot"
     test_content = BytesIO(test_content.encode("utf-16"))
-    reader = EncapsulatedSheetReader(
-        CSVinMemoryReader(NamedContent("csv", test_content), encoding="utf-16")
+    reader = CSVinMemoryReader(
+        NamedContent("csv", test_content), encoding="utf-16"
     )
+
     content = list(reader.to_array())
     expected = [["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"]]
     eq_(content, expected)
