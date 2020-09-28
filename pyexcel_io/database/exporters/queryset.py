@@ -16,5 +16,5 @@ class QueryReader(IReader):
     def read_sheet(self, index):
         return self.content_array[index]
 
-    def close():
+    def close(self):
         pass
