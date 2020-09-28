@@ -8,6 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.database.querysets import QuerysetsReader
+from pyexcel_io.plugin_api.abstract_reader import IReader
 
 
 class DjangoModelReader(QuerysetsReader):
@@ -26,7 +27,7 @@ class DjangoModelReader(QuerysetsReader):
         )
 
 
-class DjangoBookReader(object):
+class DjangoBookReader(IReader):
     """ read django models """
 
     def __init__(self, exporter, _, **keywords):

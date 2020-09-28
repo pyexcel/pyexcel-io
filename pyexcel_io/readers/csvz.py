@@ -14,9 +14,10 @@ from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO
 from pyexcel_io.readers.csv_sheet import CSVinMemoryReader
+from pyexcel_io.plugin_api.abstract_reader import IReader
 
 
-class FileReader(object):
+class FileReader(IReader):
     def __init__(self, file_alike_object, file_type, **keywords):
         self.content_array = []
         try:

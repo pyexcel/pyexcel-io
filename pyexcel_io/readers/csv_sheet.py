@@ -12,6 +12,7 @@ import csv
 import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
+from pyexcel_io.sheet import SheetReader
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"
@@ -91,7 +92,7 @@ class CSVMemoryMapIterator(compact.Iterator):
         pass
 
 
-class CSVSheetReader(object):
+class CSVSheetReader(SheetReader):
     """ generic csv file reader"""
 
     def __init__(
@@ -107,6 +108,7 @@ class CSVSheetReader(object):
         default_float_nan=None,
         **keywords
     ):
+        SheetReader.__init__(self, sheet, **keywords)
         self._native_sheet = sheet
         self._keywords = keywords
         self._encoding = encoding

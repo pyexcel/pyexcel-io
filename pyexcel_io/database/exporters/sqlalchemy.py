@@ -8,6 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.database.querysets import QuerysetsReader
+from pyexcel_io.plugin_api.abstract_reader import IReader
 
 
 class SQLTableReader(QuerysetsReader):
@@ -30,7 +31,7 @@ class SQLTableReader(QuerysetsReader):
         QuerysetsReader.__init__(self, everything, column_names, **keywords)
 
 
-class SQLBookReader(object):
+class SQLBookReader(IReader):
     """ read a table via sqlalchemy """
 
     def __init__(self, exporter, _, **keywords):

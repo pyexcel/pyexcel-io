@@ -1,8 +1,9 @@
 from pyexcel_io import constants
 from pyexcel_io.writers.csv_sheet import CSVFileWriter
+from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
-class CsvFileWriter:
+class CsvFileWriter(IWriter):
     def __init__(self, file_alike_object, file_type, **keywords):
         self._file_alike_object = file_alike_object
         self._keywords = keywords
@@ -20,15 +21,6 @@ class CsvFileWriter:
         )
         self.__index = self.__index + 1
         return self.writer
-
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            sheet_writer = self.create_sheet(sheet_name)
-            if sheet_writer:
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-            else:
-                raise Exception("Cannot create a sheet writer!")
 
     def close(self):
         if self.writer:

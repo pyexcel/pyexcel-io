@@ -5,11 +5,12 @@ import glob
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.readers.csv_sheet import CSVFileReader
+from pyexcel_io.plugin_api.abstract_reader import IReader
 
 DEFAULT_NEWLINE = "\r\n"
 
 
-class FileReader(object):
+class FileReader(IReader):
     def __init__(self, file_name, file_type, **keywords):
         """Load content from a file
         :params str filename: an accessible file path
