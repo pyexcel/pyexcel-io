@@ -49,6 +49,7 @@ FILE_FORMAT_XLSX = "xlsx"
 FILE_FORMAT_XLSM = "xlsm"
 DB_SQL = "sql"
 DB_DJANGO = "django"
+DB_QUERYSET = "queryset"
 KEYWORD_TSV_DIALECT = "excel-tab"
 KEYWORD_LINE_TERMINATOR = "lineterminator"
 
