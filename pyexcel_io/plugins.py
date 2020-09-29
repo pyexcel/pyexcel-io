@@ -18,9 +18,9 @@ ERROR_MESSAGE_FORMATTER = "one of these plugins for %s data in '%s': %s"
 UPGRADE_MESSAGE = "Please upgrade the plugin '%s' according to \
 plugin compactibility table."
 READER_PLUGIN = "pyexcel-io reader"
-NEW_READER_PLUGIN = "pyexcel-io new reader"
+READER_PLUGIN_V2 = "pyexcel-io v2 reader"
 WRITER_PLUGIN = "pyexcel-io writer"
-NEW_WRITER_PLUGIN = "pyexcel-io new writer"
+WRITER_PLUGIN_V2 = "pyexcel-io v2 writer"
 
 
 class IOPluginInfo(PluginInfo):
@@ -65,7 +65,7 @@ class IOPluginInfoChain(PluginInfoChain):
         return self.add_a_plugin_instance(a_plugin_info)
 
 
-class NewIOPluginInfoChain(PluginInfoChain):
+class IOPluginInfoChainV2(PluginInfoChain):
     """provide custom functions to add a reader and a writer """
 
     def add_a_reader(
@@ -77,7 +77,7 @@ class NewIOPluginInfoChain(PluginInfoChain):
     ):
         """ add pyexcle-io reader plugin info """
         a_plugin_info = IOPluginInfo(
-            NEW_READER_PLUGIN,
+            READER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
             file_types=[
                 f"{location}-{file_type}"
@@ -97,7 +97,7 @@ class NewIOPluginInfoChain(PluginInfoChain):
     ):
         """ add pyexcle-io writer plugin info """
         a_plugin_info = IOPluginInfo(
-            NEW_WRITER_PLUGIN,
+            WRITER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
             file_types=[
                 f"{location}-{file_type}"
@@ -243,8 +243,8 @@ class AllWriters:
 
 OLD_READERS = IOManager(READER_PLUGIN, ioutils.AVAILABLE_READERS)
 OLD_WRITERS = IOManager(WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
-NEW_WRITERS = NewIOManager(NEW_WRITER_PLUGIN, ioutils.AVAILABLE_WRITERS)
-NEW_READERS = NewIOManager(NEW_READER_PLUGIN, ioutils.AVAILABLE_READERS)
+NEW_WRITERS = NewIOManager(WRITER_PLUGIN_V2, ioutils.AVAILABLE_WRITERS)
+NEW_READERS = NewIOManager(READER_PLUGIN_V2, ioutils.AVAILABLE_READERS)
 READERS = AllReaders()
 WRITERS = AllWriters()
 

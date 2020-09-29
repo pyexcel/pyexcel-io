@@ -12,7 +12,7 @@ import csv
 import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-from pyexcel_io.sheet import SheetReader
+from pyexcel_io.plugin_api.abstract_sheet import ISheet
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"
@@ -27,7 +27,7 @@ LITTLE_ENDIAN = 0
 BIG_ENDIAN = 1
 
 
-class CSVMemoryMapIterator(compact.Iterator):
+class CSVMemoryMapIterator(object):
     """
     Wrapper class for mmap object
 
@@ -52,7 +52,7 @@ class CSVMemoryMapIterator(compact.Iterator):
             # \r\x00\x00\x00\n
             # \x00\x00\x00\x..
             self.__zeros_left_in_2_row = 3
-        elif encoding == "utf-32-be" or encoding == "utf-16-be":
+        elif encoding in ["utf-32-be", "utf-16-be"]:
             self.__zeros_left_in_2_row = 0
             self.__endian = BIG_ENDIAN
         elif encoding == "utf-32-le":
@@ -92,7 +92,7 @@ class CSVMemoryMapIterator(compact.Iterator):
         pass
 
 
-class CSVSheetReader(SheetReader):
+class CSVSheetReader(ISheet):
     """ generic csv file reader"""
 
     def __init__(
@@ -108,9 +108,7 @@ class CSVSheetReader(SheetReader):
         default_float_nan=None,
         **keywords
     ):
-        SheetReader.__init__(self, sheet, **keywords)
         self._native_sheet = sheet
-        self._keywords = keywords
         self._encoding = encoding
         self.__auto_detect_int = auto_detect_int
         self.__auto_detect_float = auto_detect_float
@@ -120,6 +118,7 @@ class CSVSheetReader(SheetReader):
         self.__pep_0515_off = pep_0515_off
         self.__ignore_nan_text = ignore_nan_text
         self.__default_float_nan = default_float_nan
+        self._keywords = keywords
 
     def get_file_handle(self):
         """ return me unicde reader for csv """

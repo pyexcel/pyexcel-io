@@ -1,4 +1,4 @@
-class Sheet(object):
+class ISheet(object):
     def to_array(self):
         data = []
         for row in self.row_iterator():

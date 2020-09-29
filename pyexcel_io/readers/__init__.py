@@ -7,9 +7,9 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.plugins import NewIOPluginInfoChain
+from pyexcel_io.plugins import IOPluginInfoChainV2
 
-NewIOPluginInfoChain(__name__).add_a_reader(
+IOPluginInfoChainV2(__name__).add_a_reader(
     relative_plugin_class_path="csv_in_file.FileReader",
     locations=["file"],
     file_types=["csv", "tsv"],
