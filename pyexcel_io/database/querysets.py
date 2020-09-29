@@ -10,8 +10,8 @@
 import datetime
 from itertools import chain
 
-from pyexcel_io.plugin_api.abstract_sheet import Sheet
 from pyexcel_io.constants import DEFAULT_SHEET_NAME
+from pyexcel_io.plugin_api.abstract_sheet import Sheet
 
 
 class QuerysetsReader(Sheet):

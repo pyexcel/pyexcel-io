@@ -233,7 +233,7 @@ class TestSingleWrite:
         result = reader.read_all()
         for key in result:
             result[key] = list(result[key])
-        eq_(result, {'pyexcel_sheet1': self.results})
+        eq_(result, {"pyexcel_sheet1": self.results})
         mysession.close()
 
     def test_update_existing_row(self):
