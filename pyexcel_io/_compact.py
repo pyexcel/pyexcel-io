@@ -30,7 +30,6 @@ except ImportError:
 from io import BytesIO, StringIO
 
 text_type = str
-Iterator = object
 irange = range
 
 

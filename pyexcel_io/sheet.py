@@ -86,7 +86,7 @@ class SheetReader(object):
 
                 tmp_row.append(cell_value)
                 if cell_value is not None and cell_value != "":
-                    return_row.append(cell_value)
+                    return_row += tmp_row
                     tmp_row = []
             if self._skip_empty_rows and len(return_row) < 1:
                 # we by-pass next yeild here

@@ -27,7 +27,7 @@ LITTLE_ENDIAN = 0
 BIG_ENDIAN = 1
 
 
-class CSVMemoryMapIterator(compact.Iterator):
+class CSVMemoryMapIterator(object):
     """
     Wrapper class for mmap object
 
