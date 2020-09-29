@@ -229,11 +229,12 @@ class TestSingleWrite:
         assert list(results) == self.results
 
         query_sets = mysession.query(Pyexcel).all()
-        reader = QueryReader(query_sets, None, column_names=self.data[0])
-        result = reader.read_all()
+        query_reader = QueryReader(query_sets, None, column_names=self.data[0])
+        result = query_reader.read_all()
         for key in result:
             result[key] = list(result[key])
         eq_(result, {"pyexcel_sheet1": self.results})
+        query_reader.close()
         mysession.close()
 
     def test_update_existing_row(self):
