@@ -10,6 +10,7 @@
 import pyexcel_io.constants as constants
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
+from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -71,7 +72,7 @@ class SQLTableWriter(SheetWriter):
             self._native_book.session.commit()
 
 
-class SQLBookWriter(object):
+class SQLBookWriter(IWriter):
     """ write data into database tables via sqlalchemy """
 
     def __init__(self, file_content, _, auto_commit=True, **keywords):
@@ -92,15 +93,6 @@ class SQLBookWriter(object):
             )
 
         return sheet_writer
-
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            sheet_writer = self.create_sheet(sheet_name)
-            if sheet_writer:
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-            else:
-                raise Exception("Cannot create a sheet writer!")
 
     def close(self):
         pass

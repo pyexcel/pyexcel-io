@@ -75,7 +75,7 @@ def test_wrong_parameter_to_get_writer():
 
 def test_load_ods_data():
     msg = "Please install one of these plugins for read data in 'ods': "
-    msg += "pyexcel-ods,pyexcel-ods3"
+    msg += "pyexcel-ods,pyexcel-ods3,pyexcel-odsr"
     try:
         get_data("test.ods")
     except exceptions.SupportingPluginAvailableButNotInstalled as e:
@@ -85,7 +85,7 @@ def test_load_ods_data():
 def test_load_ods_data_from_memory():
     io = BytesIO()
     msg = "Please install one of these plugins for read data in 'ods': "
-    msg += "pyexcel-ods,pyexcel-ods3"
+    msg += "pyexcel-ods,pyexcel-ods3,pyexcel-odsr"
     try:
         get_data(io, file_type="ods")
     except exceptions.SupportingPluginAvailableButNotInstalled as e:

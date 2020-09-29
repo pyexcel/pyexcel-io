@@ -12,6 +12,7 @@ import logging
 import pyexcel_io.constants as constants
 from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
+from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +58,7 @@ class DjangoModelWriter(SheetWriter):
                 an_object.save()
 
 
-class DjangoBookWriter(object):
+class DjangoBookWriter(IWriter):
     """ write data into django models """
 
     def __init__(self, exporter, _, **keywords):
@@ -81,15 +82,6 @@ class DjangoBookWriter(object):
             )
 
         return sheet_writer
-
-    def write(self, incoming_dict):
-        for sheet_name in incoming_dict:
-            sheet_writer = self.create_sheet(sheet_name)
-            if sheet_writer:
-                sheet_writer.write_array(incoming_dict[sheet_name])
-                sheet_writer.close()
-            else:
-                raise Exception("Cannot create a sheet writer!")
 
     def close(self):
         pass
