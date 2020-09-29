@@ -52,7 +52,7 @@ class CSVMemoryMapIterator(object):
             # \r\x00\x00\x00\n
             # \x00\x00\x00\x..
             self.__zeros_left_in_2_row = 3
-        elif encoding == "utf-32-be" or encoding == "utf-16-be":
+        elif encoding in ["utf-32-be", "utf-16-be"]:
             self.__zeros_left_in_2_row = 0
             self.__endian = BIG_ENDIAN
         elif encoding == "utf-32-le":
