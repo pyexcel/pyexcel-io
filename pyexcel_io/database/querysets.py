@@ -11,10 +11,10 @@ import datetime
 from itertools import chain
 
 from pyexcel_io.constants import DEFAULT_SHEET_NAME
-from pyexcel_io.plugin_api.abstract_sheet import Sheet
+from pyexcel_io.plugin_api.abstract_sheet import ISheet
 
 
-class QuerysetsReader(Sheet):
+class QuerysetsReader(ISheet):
     """ turn querysets into an array """
 
     def __init__(self, query_sets, column_names):
@@ -32,7 +32,7 @@ class QuerysetsReader(Sheet):
         if len(self.__query_sets) == 0:
             yield []
 
-        for element in Sheet.to_array(self):
+        for element in ISheet.to_array(self):
             yield element
 
     def column_iterator(self, row):

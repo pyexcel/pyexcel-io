@@ -4,6 +4,7 @@ from unittest import TestCase
 
 import pyexcel_io.manager as manager
 from pyexcel_io.sheet import NamedContent
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import BytesIO, StringIO
 from pyexcel_io.readers.csv_sheet import (
     CSVFileReader,
@@ -108,7 +109,9 @@ class TestNonUniformCSV(TestCase):
                 f.write(",".join(row) + "\n")
 
     def test_sheet_file_reader(self):
-        r = CSVFileReader(NamedContent(self.file_type, self.test_file))
+        r = EncapsulatedSheetReader(
+            CSVFileReader(NamedContent(self.file_type, self.test_file))
+        )
         result = list(r.to_array())
         self.assertEqual(result, [[1], [4, 5, 6], ["", 7]])
 
