@@ -10,6 +10,7 @@
 import datetime
 from itertools import chain
 
+from pyexcel_io.constants import DEFAULT_SHEET_NAME
 from pyexcel_io.plugin_api.abstract_sheet import Sheet
 
 
@@ -17,6 +18,7 @@ class QuerysetsReader(Sheet):
     """ turn querysets into an array """
 
     def __init__(self, query_sets, column_names):
+        self.name = DEFAULT_SHEET_NAME
         self.__column_names = column_names
         self.__query_sets = query_sets
 

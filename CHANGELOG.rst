@@ -17,6 +17,8 @@ Change log
 
 #. pyexcel-io plugin interface has been rewritten. PyInstaller user will be
    impacted. please read 'Packaging with Pyinstaller' in the documentation.
+#. new query set reader plugin. pyexcel<=0.6.4 has used intrusive way of getting
+   query set source done. it is against the plugin interface.
 
 0.5.20 - 17.7.2019
 --------------------------------------------------------------------------------

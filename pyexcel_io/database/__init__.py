@@ -8,9 +8,13 @@
     :license: New BSD License, see LICENSE for more details
 """
 from pyexcel_io.plugins import NewIOPluginInfoChain
-from pyexcel_io.constants import DB_SQL, DB_DJANGO
+from pyexcel_io.constants import DB_SQL, DB_DJANGO, DB_QUERYSET
 
 NewIOPluginInfoChain(__name__).add_a_reader(
+    relative_plugin_class_path="exporters.queryset.QueryReader",
+    locations=["file", "memory", "content"],
+    file_types=[DB_QUERYSET],
+).add_a_reader(
     relative_plugin_class_path="exporters.django.DjangoBookReader",
     locations=["file", "memory", "content"],
     file_types=[DB_DJANGO],

@@ -24,6 +24,7 @@ from pyexcel_io.database.common import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from pyexcel_io.database.querysets import QuerysetsReader
+from pyexcel_io.database.exporters.queryset import QueryReader
 from pyexcel_io.database.exporters.sqlalchemy import (
     SQLBookReader,
     SQLTableReader,
@@ -226,6 +227,14 @@ class TestSingleWrite:
         reader = QuerysetsReader(query_sets, self.data[0])
         results = reader.to_array()
         assert list(results) == self.results
+
+        query_sets = mysession.query(Pyexcel).all()
+        query_reader = QueryReader(query_sets, None, column_names=self.data[0])
+        result = query_reader.read_all()
+        for key in result:
+            result[key] = list(result[key])
+        eq_(result, {"pyexcel_sheet1": self.results})
+        query_reader.close()
         mysession.close()
 
     def test_update_existing_row(self):
