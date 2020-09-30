@@ -8,8 +8,8 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
-from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
+from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
 from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
@@ -22,18 +22,17 @@ class PyexcelSQLSkipRowException(Exception):
     pass
 
 
-class SQLTableWriter(SheetWriter):
+class SQLTableWriter(ISheetWriter):
     """Write to a table"""
 
     def __init__(
         self, importer, adapter, auto_commit=True, bulk_size=1000, **keywords
     ):
-        SheetWriter.__init__(
-            self, importer, adapter, adapter.get_name(), **keywords
-        )
         self.__auto_commit = auto_commit
         self.__count = 0
         self.__bulk_size = bulk_size
+        self.adapter = adapter
+        self.importer = importer
 
     def write_row(self, array):
         if is_empty_array(array):
@@ -47,29 +46,29 @@ class SQLTableWriter(SheetWriter):
                 print(new_array)
 
     def _write_row(self, array):
-        row = dict(zip(self._native_sheet.column_names, array))
+        row = dict(zip(self.adapter.column_names, array))
         obj = None
-        if self._native_sheet.row_initializer:
+        if self.adapter.row_initializer:
             # allow initinalizer to return None
             # if skipping is needed
-            obj = self._native_sheet.row_initializer(row)
+            obj = self.adapter.row_initializer(row)
         if obj is None:
-            obj = self._native_sheet.table()
-            for name in self._native_sheet.column_names:
-                if self._native_sheet.column_name_mapping_dict is not None:
-                    key = self._native_sheet.column_name_mapping_dict[name]
+            obj = self.adapter.table()
+            for name in self.adapter.column_names:
+                if self.adapter.column_name_mapping_dict is not None:
+                    key = self.adapter.column_name_mapping_dict[name]
                 else:
                     key = name
                 setattr(obj, key, row[name])
-        self._native_book.session.add(obj)
+        self.importer.session.add(obj)
         if self.__auto_commit and self.__bulk_size != float("inf"):
             self.__count += 1
             if self.__count % self.__bulk_size == 0:
-                self._native_book.session.commit()
+                self.importer.session.commit()
 
     def close(self):
         if self.__auto_commit:
-            self._native_book.session.commit()
+            self.importer.session.commit()
 
 
 class SQLBookWriter(IWriter):

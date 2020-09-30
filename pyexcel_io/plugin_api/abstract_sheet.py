@@ -7,3 +7,12 @@ class ISheet(object):
                 my_row.append(element)
             data.append(my_row)
         return data
+
+
+class ISheetWriter(object):
+    def write_array(self, table):
+        """
+        For standalone usage, write an array
+        """
+        for row in table:
+            self.write_row(row)
