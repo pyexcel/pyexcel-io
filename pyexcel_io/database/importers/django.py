@@ -10,18 +10,17 @@
 import logging
 
 import pyexcel_io.constants as constants
-from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 from pyexcel_io.plugin_api.abstract_writer import IWriter
+from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
 
 log = logging.getLogger(__name__)
 
 
-class DjangoModelWriter(SheetWriter):
+class DjangoModelWriter(ISheetWriter):
     """ import data into a django model """
 
     def __init__(self, importer, adapter, batch_size=None, bulk_save=True):
-        SheetWriter.__init__(self, importer, adapter, adapter.name)
         self.__batch_size = batch_size
         self.__model = adapter.model
         self.__column_names = adapter.column_names

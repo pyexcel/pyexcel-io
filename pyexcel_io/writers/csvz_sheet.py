@@ -26,7 +26,7 @@ class CSVZipSheetWriter(CSVFileWriter):
         return csv.writer(self.content, **self._keywords)
 
     def close(self):
-        file_name = "%s.%s" % (self._native_sheet, self.file_extension)
+        file_name = "%s.%s" % (self._sheet_name, self.file_extension)
         self.content.seek(0)
         self._native_book.writestr(file_name, self.content.read())
         self.content.close()

@@ -8,9 +8,9 @@
     :license: New BSD License, see LICENSE for more details
 """
 import pyexcel_io.constants as constants
-from pyexcel_io.sheet import SheetWriter
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 from pyexcel_io.plugin_api.abstract_writer import IWriter
+from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -22,18 +22,17 @@ class PyexcelSQLSkipRowException(Exception):
     pass
 
 
-class SQLTableWriter(SheetWriter):
+class SQLTableWriter(ISheetWriter):
     """Write to a table"""
 
     def __init__(
         self, importer, adapter, auto_commit=True, bulk_size=1000, **keywords
     ):
-        SheetWriter.__init__(
-            self, importer, adapter, adapter.get_name(), **keywords
-        )
         self.__auto_commit = auto_commit
         self.__count = 0
         self.__bulk_size = bulk_size
+        self._native_sheet = adapter
+        self._native_book = importer
 
     def write_row(self, array):
         if is_empty_array(array):

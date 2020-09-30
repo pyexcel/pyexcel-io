@@ -42,18 +42,8 @@ class CSVFileWriter(ISheetWriter):
         self._sheet_index = sheet_index
         self.file_handle = None
         self._native_book = filename
-        self._native_sheet = self._sheet_name
 
         self.writer = self.get_writer()
-
-    def write_row(self, array):
-        """
-        write a row into the file
-        """
-        self.writer.writerow(array)
-
-    def close(self):
-        self.file_handle.close()
 
     def get_writer(self):
         if self._sheet_name != constants.DEFAULT_SHEET_NAME:
@@ -73,6 +63,15 @@ class CSVFileWriter(ISheetWriter):
             file_name, "w", newline="", encoding=self._encoding
         )
         return csv.writer(self.file_handle, **self._keywords)
+
+    def write_row(self, array):
+        """
+        write a row into the file
+        """
+        self.writer.writerow(array)
+
+    def close(self):
+        self.file_handle.close()
 
 
 class CSVMemoryWriter(CSVFileWriter):
