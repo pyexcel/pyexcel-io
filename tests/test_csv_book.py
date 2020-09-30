@@ -126,7 +126,9 @@ class TestNonUniformCSV(TestCase):
 
     def test_get_data_with_trailing_empty_cells(self):
         result = get_data(self.test_file, keep_trailing_empty_cells=True)
-        self.assertEqual(result[self.test_file], [[1], [4, 5, 6, "", ""], ["", 7]])
+        self.assertEqual(
+            result[self.test_file], [[1], [4, 5, 6, "", ""], ["", 7]]
+        )
 
     def tearDown(self):
         os.unlink(self.test_file)
