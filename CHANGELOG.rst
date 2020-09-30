@@ -4,6 +4,11 @@ Change log
 0.6.0 - tbd
 --------------------------------------------------------------------------------
 
+**added**
+
+#. `#86 <https://github.com/pyexcel/pyexcel-io/issues/86>`_: allow trailing
+   options, get_data(...keep_trailing_empty_cells=True).
+
 **fixed**
 
 #. `#74 <https://github.com/pyexcel/pyexcel-io/issues/74>`_: handle zip files

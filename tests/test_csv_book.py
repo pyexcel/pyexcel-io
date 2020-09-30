@@ -3,6 +3,7 @@ from textwrap import dedent
 from unittest import TestCase
 
 import pyexcel_io.manager as manager
+from pyexcel_io import get_data
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import BytesIO, StringIO
@@ -114,6 +115,20 @@ class TestNonUniformCSV(TestCase):
         )
         result = list(r.to_array())
         self.assertEqual(result, [[1], [4, 5, 6], ["", 7]])
+
+    def test_sheet_file_reader_with_trailing_empty_cells(self):
+        r = EncapsulatedSheetReader(
+            CSVFileReader(NamedContent(self.file_type, self.test_file)),
+            keep_trailing_empty_cells=True,
+        )
+        result = list(r.to_array())
+        self.assertEqual(result, [[1], [4, 5, 6, "", ""], ["", 7]])
+
+    def test_get_data_with_trailing_empty_cells(self):
+        result = get_data(self.test_file, keep_trailing_empty_cells=True)
+        self.assertEqual(
+            result[self.test_file], [[1], [4, 5, 6, "", ""], ["", 7]]
+        )
 
     def tearDown(self):
         os.unlink(self.test_file)

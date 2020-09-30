@@ -17,6 +17,7 @@ def clean_keywords(keywords):
         "skip_row_func",
         "skip_empty_rows",
         "row_renderer",
+        "keep_trailing_empty_cells",
     ]
     for arg in keywords:
         if arg in args_list:

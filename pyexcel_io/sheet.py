@@ -38,6 +38,7 @@ class SheetReader(object):
         skip_column_func=None,
         skip_empty_rows=False,
         row_renderer=None,
+        keep_trailing_empty_cells=False,
         **deprecated_use_of_keywords_here
     ):
         self._native_sheet = sheet
@@ -51,6 +52,7 @@ class SheetReader(object):
         self._skip_column = _index_filter
         self._skip_empty_rows = skip_empty_rows
         self._row_renderer = row_renderer
+        self.keep_trailing_empty_cells = keep_trailing_empty_cells
 
         if skip_row_func:
             self._skip_row = skip_row_func
@@ -84,10 +86,13 @@ class SheetReader(object):
                 elif column_position == constants.STOP_ITERATION:
                     break
 
-                tmp_row.append(cell_value)
-                if cell_value is not None and cell_value != "":
-                    return_row += tmp_row
-                    tmp_row = []
+                if self.keep_trailing_empty_cells:
+                    return_row.append(cell_value)
+                else:
+                    tmp_row.append(cell_value)
+                    if cell_value is not None and cell_value != "":
+                        return_row += tmp_row
+                        tmp_row = []
             if self._skip_empty_rows and len(return_row) < 1:
                 # we by-pass next yeild here
                 # because it is an empty row

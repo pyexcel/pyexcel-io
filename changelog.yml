@@ -2,6 +2,9 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: added
+    details:
+    - "`#86`: allow trailing options, get_data(...keep_trailing_empty_cells=True)."
   - action: fixed
     details:
     - "`#74`: handle zip files which contain non-UTF-8 encoded files."
