@@ -9,8 +9,8 @@
 """
 import pyexcel_io.constants as constants
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
-from pyexcel_io.plugin_api.abstract_writer import IWriter
 from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
+from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
 class PyexcelSQLSkipRowException(Exception):
