@@ -80,7 +80,7 @@ class Reader(object):
             if content.name == sheet_name:
                 return {content.name: self.read_sheet(index)}
         else:
-            raise ValueError("Cannot find sheet %s" % sheet_name)
+            raise KeyError("Cannot find sheet %s" % sheet_name)
 
     def read_sheet(self, sheet_index):
         sheet_reader = self.reader.read_sheet(sheet_index)

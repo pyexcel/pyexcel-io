@@ -130,7 +130,10 @@ class IOManager(PluginManager):
 
     def get_a_plugin(self, file_type=None, library=None, **keywords):
         __file_type = file_type.lower()
-        plugin = self.load_me_now(__file_type, library=library)
+        try:
+            plugin = self.load_me_now(__file_type, library=library)
+        except Exception:
+            self.raise_exception(__file_type)
         handler = plugin()
         handler.set_type(__file_type)
         return handler
