@@ -24,6 +24,10 @@ class TestISheetWriter:
     def test_write_row(self):
         self.isheet_writer.write_row([1, 2])
 
+    @raises(NotImplementedError)
+    def test_close(self):
+        self.isheet_writer.close()
+
 
 class TestIReader:
     def setUp(self):

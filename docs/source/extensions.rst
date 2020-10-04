@@ -3,6 +3,11 @@ Extend pyexcel-io Tutorial
 
 pyexcel-io itself comes with csv support.
 
+.. note::
+
+   No longer, you will need to do explicit imports for pyexcel-io extensions.
+   Instead, you install them and manage them via pip.
+
 Reader
 --------------------------------------------------------------------------------
 
@@ -10,14 +15,12 @@ Suppose we have a yaml file, containing a dictionary where the values are
 two dimensional array. The task is write reader plugin to pyexcel-io so that
 we can use get_data() to read it out.
 
-Example yaml data::
-
 .. literalinclude:: ../../examples/test.yaml
   :language: yaml
   
-Example code::
+Here is the source
 
-.. literalinclude:: ../../examples/custom_yeaml_reader.py
+.. literalinclude:: ../../examples/custom_yaml_reader.py
   :language: python
 
 
@@ -25,11 +28,12 @@ Writer
 --------------------------------------------------------------------------------
 
 
+Here is the source
 
-.. note::
+.. literalinclude:: ../../examples/custom_yaml_writer.py
+  :language: python
 
-   No longer, you will need to do explicit imports for pyexcel-io extensions.
-   Instead, you install them and manage them via pip.
+
 
 Work with physical file
 -----------------------------------------------------------------------------

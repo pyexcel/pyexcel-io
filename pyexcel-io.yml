@@ -31,6 +31,12 @@ keywords:
   - csvz
   - django
   - sqlalchemy
+sphinx_extensions:
+  - sphinx.ext.autosummary
+  - sphinx.ext.doctest
+  - sphinx.ext.intersphinx
+  - sphinx.ext.viewcode
+  - sphinx.ext.autodoc
 description: A python library to read and write structured data in csv, zipped csv format and to/from databases
 python_requires: ">=3.6"
 min_python_version: "3.6"
