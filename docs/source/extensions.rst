@@ -30,17 +30,18 @@ Example code::
   from pyexcel_io.sheet import NamedContent
   from pyexcel_io.plugin_api import ISheet
   from pyexcel_io.plugin_api import IReader
+  from pyexcel_io.plugins import IOPluginInfoChainV2
   
 
   class YourSingleSheet(ISheet):
-      def __init__(self, your_choice, **your_keywords):
-          pass
+      def __init__(self, your_native_sheet):
+          self.two_dimensional_array = your_native_sheet
 
       def row_iterator(self):
-          pass
+          yield from self.two_dimensional_array
 
-      def column_iterator(self):
-          pass
+      def column_iterator(self, row):
+          yield from row
 
       def close(self):
           pass
@@ -54,10 +55,22 @@ Example code::
           self.content_array = [NamedContent(key, values) for key, values in self.native_book.items()]
 
       def read_sheet(self, sheet_index):
-          pass
+          two_dimensional_array = self.content_array[sheet_index].payload
+          return YourSingleSheet(two_dimensional_array)
 
       def close():
-          pass
+          self.file_handle.close()
+
+
+   IOPluginInfoChainV2(__name__).add_a_reader(
+      relative_plugin_class_path="csv_in_file.FileReader",
+      locations=["file"],
+      file_types=["csv", "tsv"],
+      stream_type="text",
+   )
+
+   if __name__ = '__main__':
+       
 
 Writer
 --------------------------------------------------------------------------------

@@ -51,4 +51,4 @@ def is_string(atype):
     if atype == str:
         return True
 
-     return False
+    return False
