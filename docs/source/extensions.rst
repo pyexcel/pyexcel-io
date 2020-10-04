@@ -1,18 +1,33 @@
-Extend pyexcel-io
+Extend pyexcel-io Tutorial
 ================================================================================
 
 pyexcel-io itself comes with csv support.
 
-
 Reader
 --------------------------------------------------------------------------------
 
-`ISheet` interface 
+Suppose we have a yaml file, containing a dictionary where the values are
+two dimensional array. The task is write reader plugin to pyexcel-io so that
+we can use get_data() to read it out.
 
+Example yaml data::
 
+    sheet 1:
+    - - 1
+      - 2
+      - 3
+    - - 2
+      - 3
+      - 4
+    sheet 2:
+    - - A
+      - B
+      - C
+  
 Example code::
 
-
+  import yaml
+  from pyexcel_io.sheet import NamedContent
   from pyexcel_io.plugin_api import ISheet
   from pyexcel_io.plugin_api import IReader
   
@@ -34,7 +49,9 @@ Example code::
   class YourReader(IReader):
       def __init__(self, file_name, file_type, **keywords):
           # construct self.content_array and should a list of NamedContent
-          pass
+          self.file_handle = open(file_name, 'r')
+          self.native_book = yaml.load(self.file_handle)
+          self.content_array = [NamedContent(key, values) for key, values in self.native_book.items()]
 
       def read_sheet(self, sheet_index):
           pass

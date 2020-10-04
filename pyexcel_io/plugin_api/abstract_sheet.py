@@ -7,6 +7,9 @@ class ISheet(object):
 
 
 class ISheetWriter(object):
+    def write_row(self, data_row):
+        raise NotImplementedError("How does your sheet write a row of data")
+
     def write_array(self, table):
         """
         For standalone usage, write an array

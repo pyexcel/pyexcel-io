@@ -3,8 +3,9 @@ from .abstract_sheet import ISheet
 
 class IReader(object):
     """
-    content_array should be a list of NamedContent where: name is the sheet name,
-    payload is the native sheet.
+    content_array should be a list of NamedContent 
+    where: name is the sheet name,
+           payload is the native sheet.
     """
 
     def read_sheet(self) -> ISheet:
