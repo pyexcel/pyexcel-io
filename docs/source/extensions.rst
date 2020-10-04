@@ -1,3 +1,52 @@
+Extend pyexcel-io
+================================================================================
+
+pyexcel-io itself comes with csv support.
+
+
+Reader
+--------------------------------------------------------------------------------
+
+`ISheet` interface 
+
+
+Example code::
+
+
+  from pyexcel_io.plugin_api import ISheet
+  from pyexcel_io.plugin_api import IReader
+  
+
+  class YourSingleSheet(ISheet):
+      def __init__(self, your_choice, **your_keywords):
+          pass
+
+      def row_iterator(self):
+          pass
+
+      def column_iterator(self):
+          pass
+
+      def close(self):
+          pass
+
+
+  class YourReader(IReader):
+      def __init__(self, file_name, file_type, **keywords):
+          # construct self.content_array and should a list of NamedContent
+          pass
+
+      def read_sheet(self, sheet_index):
+          pass
+
+      def close():
+          pass
+
+Writer
+--------------------------------------------------------------------------------
+
+
+
 Working with xls, xlsx, and ods formats
 ================================================================================
 

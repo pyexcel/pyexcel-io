@@ -1,12 +1,14 @@
-from pyexcel_io._compact import OrderedDict
+from .abstract_sheet import ISheet
 
 
 class IReader(object):
-    def read_all(self):
-        result = OrderedDict()
-        for index, sheet in enumerate(self.content_array):
-            result.update({sheet.name: self.read_sheet(index).to_array()})
-        return result
+    """
+    content_array should be a list of NamedContent where: name is the sheet name,
+    payload is the native sheet.
+    """
+
+    def read_sheet(self) -> ISheet:
+        raise NotImplementedError("")
 
     def sheet_names(self):
         return [content.name for content in self.content_array]

@@ -339,7 +339,7 @@ class TestMultipleModels:
         exporter.append(adapter1)
         exporter.append(adapter2)
         reader = DjangoBookReader(exporter, "django")
-        result = reader.read_all()
+        result = read_all(reader)
         for key in result:
             result[key] = list(result[key])
         eq_(result, self.content)
@@ -411,3 +411,10 @@ def test_django_model_import_adapter():
     adapter.column_names = ["a"]
     adapter.row_initializer = "abc"
     eq_(adapter.row_initializer, "abc")
+
+
+def read_all(reader):
+    result = OrderedDict()
+    for index, sheet in enumerate(reader.content_array):
+        result.update({sheet.name: reader.read_sheet(index).to_array()})
+    return result

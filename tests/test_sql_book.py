@@ -230,7 +230,7 @@ class TestSingleWrite:
 
         query_sets = mysession.query(Pyexcel).all()
         query_reader = QueryReader(query_sets, None, column_names=self.data[0])
-        result = query_reader.read_all()
+        result = read_all(query_reader)
         for key in result:
             result[key] = list(result[key])
         eq_(result, {"pyexcel_sheet1": self.results})
@@ -471,7 +471,7 @@ class TestMultipleRead:
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
         reader = SQLBookReader(exporter, "sql")
-        result = reader.read_all()
+        result = read_all(reader)
         for key in result:
             result[key] = list(result[key])
 
@@ -574,3 +574,10 @@ def test_unknown_sheet():
     to_store = OrderedDict()
     to_store.update({"you do not see me": [[]]})
     writer.write(to_store)
+
+
+def read_all(reader):
+    result = OrderedDict()
+    for index, sheet in enumerate(reader.content_array):
+        result.update({sheet.name: reader.read_sheet(index).to_array()})
+    return result
