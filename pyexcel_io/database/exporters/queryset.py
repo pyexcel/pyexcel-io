@@ -1,5 +1,5 @@
+from pyexcel_io.plugin_api import IReader
 from pyexcel_io.database.querysets import QuerysetsReader
-from pyexcel_io.plugin_api.abstract_reader import IReader
 
 
 class QueryReader(IReader):

@@ -7,8 +7,8 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+from pyexcel_io.plugin_api import IReader
 from pyexcel_io.database.querysets import QuerysetsReader
-from pyexcel_io.plugin_api.abstract_reader import IReader
 
 
 class DjangoModelReader(QuerysetsReader):

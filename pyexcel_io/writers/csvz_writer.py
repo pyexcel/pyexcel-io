@@ -1,8 +1,8 @@
 import zipfile
 
 from pyexcel_io import constants
+from pyexcel_io.plugin_api import IWriter
 from pyexcel_io.writers.csvz_sheet import CSVZipSheetWriter
-from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
 class CsvZipWriter(IWriter):

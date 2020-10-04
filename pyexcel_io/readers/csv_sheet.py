@@ -1,5 +1,5 @@
 """
-    pyexcel_io.readers.csvr
+    pyexcel_io.readers.csv_sheet
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     csv file reader
@@ -12,7 +12,7 @@ import csv
 import pyexcel_io.service as service
 import pyexcel_io._compact as compact
 import pyexcel_io.constants as constants
-from pyexcel_io.plugin_api.abstract_sheet import ISheet
+from pyexcel_io.plugin_api import ISheet
 
 DEFAULT_SEPARATOR = "__"
 DEFAULT_SHEET_SEPARATOR_FORMATTER = "---%s---" % constants.DEFAULT_NAME + "%s"

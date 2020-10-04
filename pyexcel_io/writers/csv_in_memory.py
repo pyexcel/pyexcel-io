@@ -1,6 +1,6 @@
 from pyexcel_io import constants
+from pyexcel_io.plugin_api import IWriter
 from pyexcel_io.writers.csv_sheet import CSVMemoryWriter
-from pyexcel_io.plugin_api.abstract_writer import IWriter
 
 
 class CsvMemoryWriter(IWriter):

@@ -4,8 +4,8 @@ import glob
 
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
+from pyexcel_io.plugin_api import IReader
 from pyexcel_io.readers.csv_sheet import CSVFileReader
-from pyexcel_io.plugin_api.abstract_reader import IReader
 
 DEFAULT_NEWLINE = "\r\n"
 

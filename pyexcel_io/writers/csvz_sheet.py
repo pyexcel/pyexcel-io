@@ -1,6 +1,6 @@
 """
-    pyexcel_io.fileformat.csvz
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    pyexcel_io.fileformat.csvz_sheet
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level csvz file format handler.
 
