@@ -26,9 +26,6 @@ Writer
 
 
 
-Working with xls, xlsx, and ods formats
-================================================================================
-
 .. note::
 
    No longer, you will need to do explicit imports for pyexcel-io extensions.
