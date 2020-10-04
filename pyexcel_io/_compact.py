@@ -51,8 +51,4 @@ def is_string(atype):
     if atype == str:
         return True
 
-    elif PY2:
-        if atype == unicode:
-            return True
-
-    return False
+     return False

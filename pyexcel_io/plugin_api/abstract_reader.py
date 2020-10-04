@@ -8,7 +8,7 @@ class IReader(object):
            payload is the native sheet.
     """
 
-    def read_sheet(self) -> ISheet:
+    def read_sheet(self, sheet_index) -> ISheet:
         raise NotImplementedError("")
 
     def sheet_names(self):

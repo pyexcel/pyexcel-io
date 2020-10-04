@@ -13,7 +13,7 @@ dependencies:
   - lml>=0.0.4
 test_dependencies:
   - pyexcel
-  - pyexcel-xls
+  - pyexcel-xls==0.5.9
   - SQLAlchemy
   - pyexcel-xlsxw
 extra_dependencies:

@@ -2,7 +2,7 @@ class ISheet(object):
     def row_iterator(self):
         raise NotImplementedError("")
 
-    def column_iterator(self, column):
+    def column_iterator(self, row):
         raise NotImplementedError("")
 
 
