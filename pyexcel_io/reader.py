@@ -79,34 +79,22 @@ class Reader(object):
         sheet_names = self.reader.sheet_names()
         index = sheet_names.index(sheet_name)
 
-        return {sheet_names[index]: self.read_sheet(index)}
-
-    def read_sheet(self, sheet_index):
-        sheet_reader = self.reader.read_sheet(sheet_index)
-        sheet = EncapsulatedSheetReader(sheet_reader, **self.keywords)
-        return sheet.to_array()
+        return self.read_sheet_by_index(index)
 
     def read_sheet_by_index(self, sheet_index):
-        """
-        read an indexed sheet from a excel data book
-        """
-        try:
-            name = self.reader.content_array[sheet_index].name
-            return {name: self.read_sheet(sheet_index)}
-
-        except IndexError:
-            self.close()
-            raise
+        sheet_reader = self.reader.read_sheet(sheet_index)
+        sheet_names = self.reader.sheet_names()
+        sheet = EncapsulatedSheetReader(sheet_reader, **self.keywords)
+        return {sheet_names[sheet_index]: sheet.to_array()}
 
     def read_all(self):
         """
         read everything from a excel data book
         """
         result = OrderedDict()
-        for index, sheet_name in enumerate(self.reader.sheet_names()):
-            result.update(
-                {sheet_name: self.read_sheet(index)}
-            )
+        for sheet_index in range(len(self.reader)):
+            content_dict = self.read_sheet_by_index(sheet_index)
+            result.update(content_dict)
         return result
 
     def read_many(self, sheets):
