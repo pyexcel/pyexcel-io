@@ -6,5 +6,5 @@ targets:
   - setup.py: io_setup.py.jj2
   - .travis.yml: custom_travis.yml.jj2
   - README.rst: io_readme.rst.jj2
-  - "docs/source/index.rst": "docs/source/index.rst"
+  - "docs/source/index.rst": "docs/source/index.rst.jj2"
   - .gitignore: gitignore.jj2
