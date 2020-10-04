@@ -76,11 +76,10 @@ class Reader(object):
         """
         read a named sheet from a excel data book
         """
-        for index, content in enumerate(self.reader.content_array):
-            if content.name == sheet_name:
-                return {content.name: self.read_sheet(index)}
-        else:
-            raise ValueError("Cannot find sheet %s" % sheet_name)
+        sheet_names = self.reader.sheet_names()
+        index = sheet_names.index(sheet_name)
+
+        return {sheet_names[index]: self.read_sheet(index)}
 
     def read_sheet(self, sheet_index):
         sheet_reader = self.reader.read_sheet(sheet_index)
@@ -104,9 +103,9 @@ class Reader(object):
         read everything from a excel data book
         """
         result = OrderedDict()
-        for index, sheet in enumerate(self.reader.content_array):
+        for index, sheet_name in enumerate(self.reader.sheet_names()):
             result.update(
-                {self.reader.content_array[index].name: self.read_sheet(index)}
+                {sheet_name: self.read_sheet(index)}
             )
         return result
 
