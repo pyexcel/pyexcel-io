@@ -1,3 +1,31 @@
+Extend pyexcel-io Tutorial
+================================================================================
+
+pyexcel-io itself comes with csv support.
+
+Reader
+--------------------------------------------------------------------------------
+
+Suppose we have a yaml file, containing a dictionary where the values are
+two dimensional array. The task is write reader plugin to pyexcel-io so that
+we can use get_data() to read it out.
+
+Example yaml data::
+
+.. literalinclude:: ../../examples/test.yaml
+  :language: yaml
+  
+Example code::
+
+.. literalinclude:: ../../examples/custom_yeaml_reader.py
+  :language: python
+
+
+Writer
+--------------------------------------------------------------------------------
+
+
+
 Working with xls, xlsx, and ods formats
 ================================================================================
 

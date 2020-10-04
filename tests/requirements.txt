@@ -10,6 +10,6 @@ pygments
 moban
 moban_jinja2_github
 pyexcel
-pyexcel-xls
+pyexcel-xls==0.5.9
 SQLAlchemy
 pyexcel-xlsxw

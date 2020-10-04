@@ -32,8 +32,11 @@ class QuerysetsReader(ISheet):
         if len(self.__query_sets) == 0:
             yield []
 
-        for element in ISheet.to_array(self):
-            yield element
+        for row in self.row_iterator():
+            row_values = []
+            for value in self.column_iterator(row):
+                row_values.append(value)
+            yield row_values
 
     def column_iterator(self, row):
         if self.__column_names is None:

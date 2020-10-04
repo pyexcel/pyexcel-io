@@ -1,15 +1,15 @@
 class ISheet(object):
-    def to_array(self):
-        data = []
-        for row in self.row_iterator():
-            my_row = []
-            for element in self.column_iterator(row):
-                my_row.append(element)
-            data.append(my_row)
-        return data
+    def row_iterator(self):
+        raise NotImplementedError("")
+
+    def column_iterator(self, row):
+        raise NotImplementedError("")
 
 
 class ISheetWriter(object):
+    def write_row(self, data_row):
+        raise NotImplementedError("How does your sheet write a row of data")
+
     def write_array(self, table):
         """
         For standalone usage, write an array

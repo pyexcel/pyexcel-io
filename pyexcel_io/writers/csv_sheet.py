@@ -1,5 +1,5 @@
 """
-    pyexcel_io.writers.csvw
+    pyexcel_io.writers.csv_sheet
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The lower level csv file format writer
@@ -10,7 +10,7 @@
 import csv
 
 import pyexcel_io.constants as constants
-from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
+from pyexcel_io.plugin_api import ISheetWriter
 
 
 class CSVFileWriter(ISheetWriter):
