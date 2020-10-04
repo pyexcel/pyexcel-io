@@ -1,10 +1,8 @@
 import yaml
-
-from pyexcel_io.sheet import NamedContent
-from pyexcel_io.plugin_api import ISheet
-from pyexcel_io.plugin_api import IReader
-from pyexcel_io.plugins import IOPluginInfoChainV2
 from pyexcel_io import get_data
+from pyexcel_io.sheet import NamedContent
+from pyexcel_io.plugins import IOPluginInfoChainV2
+from pyexcel_io.plugin_api import ISheet, IReader
 
 
 class YourSingleSheet(ISheet):
@@ -23,7 +21,8 @@ class YourReader(IReader):
         self.file_handle = open(file_name, "r")
         self.native_book = yaml.load(self.file_handle)
         self.content_array = [
-            NamedContent(key, values) for key, values in self.native_book.items()
+            NamedContent(key, values)
+            for key, values in self.native_book.items()
         ]
 
     def read_sheet(self, sheet_index):
