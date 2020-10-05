@@ -9,10 +9,13 @@ class IReader(object):
     """
 
     def read_sheet(self, sheet_index) -> ISheet:
-        raise NotImplementedError("")
+        raise NotImplementedError("Read the sheet by index")
 
     def sheet_names(self):
         return [content.name for content in self.content_array]
 
     def __len__(self):
         return len(self.content_array)
+
+    def close(self):
+        raise NotImplementedError("Close the file")

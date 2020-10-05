@@ -1,9 +1,9 @@
 class ISheet(object):
     def row_iterator(self):
-        raise NotImplementedError("")
+        raise NotImplementedError("iterate each row")
 
     def column_iterator(self, row):
-        raise NotImplementedError("")
+        raise NotImplementedError("iterate each column at a given row")
 
 
 class ISheetWriter(object):
@@ -16,3 +16,6 @@ class ISheetWriter(object):
         """
         for row in table:
             self.write_row(row)
+
+    def close(self):
+        raise NotImplementedError("How would you close your file")

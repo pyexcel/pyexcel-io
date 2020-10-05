@@ -193,6 +193,7 @@ get_data(.., library='pyexcel-ods')
    csvz
    sqlalchemy
    django
+   options
    extensions
 
 

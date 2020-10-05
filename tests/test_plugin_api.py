@@ -24,6 +24,10 @@ class TestISheetWriter:
     def test_write_row(self):
         self.isheet_writer.write_row([1, 2])
 
+    @raises(NotImplementedError)
+    def test_close(self):
+        self.isheet_writer.close()
+
 
 class TestIReader:
     def setUp(self):
@@ -32,6 +36,10 @@ class TestIReader:
     @raises(NotImplementedError)
     def test_read_sheet(self):
         self.ireader.read_sheet(1)
+
+    @raises(NotImplementedError)
+    def test_close(self):
+        self.ireader.close()
 
 
 class TestIWriter:
