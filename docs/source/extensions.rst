@@ -1,7 +1,9 @@
 Extend pyexcel-io Tutorial
 ================================================================================
 
-pyexcel-io itself comes with csv support.
+You are welcome extend pyexcel-io to read and write more tabular formats. In
+github repo, you will find two examples in `examples` folder. This section
+explains its implementations to help you write yours.
 
 .. note::
 
