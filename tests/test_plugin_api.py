@@ -37,6 +37,10 @@ class TestIReader:
     def test_read_sheet(self):
         self.ireader.read_sheet(1)
 
+    @raises(NotImplementedError)
+    def test_close(self):
+        self.ireader.close()
+
 
 class TestIWriter:
     def setUp(self):
