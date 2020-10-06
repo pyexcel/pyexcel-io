@@ -1,7 +1,7 @@
 Extend pyexcel-io Tutorial
 ================================================================================
 
-You are welcome toextend pyexcel-io to read and write more tabular formats.
+You are welcome to extend pyexcel-io to read and write more tabular formats.
 No. 1 rule, your plugin must have a prefix 'pyexcel_' in its module path.
 For example, `pyexcel-xls` has 'pyexcel_xls' as its module path. Otherwise,
 pyexcel-io will not load your plugin.

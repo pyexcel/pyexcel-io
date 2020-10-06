@@ -10,16 +10,7 @@
 import pyexcel_io.constants as constants
 from pyexcel_io.utils import _index_filter
 from pyexcel_io._compact import irange
-
-
-class NamedContent(object):
-    """
-    Helper class for content that does not have a name
-    """
-
-    def __init__(self, name, payload):
-        self.name = name
-        self.payload = payload
+from pyexcel_io.plugin_api import NamedContent  # noqa: F401
 
 
 class SheetReader(object):

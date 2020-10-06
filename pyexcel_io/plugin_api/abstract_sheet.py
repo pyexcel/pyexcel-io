@@ -19,3 +19,13 @@ class ISheetWriter(object):
 
     def close(self):
         raise NotImplementedError("How would you close your file")
+
+
+class NamedContent(object):
+    """
+    Helper class for content that does not have a name
+    """
+
+    def __init__(self, name, payload):
+        self.name = name
+        self.payload = payload
