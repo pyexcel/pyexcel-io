@@ -1,5 +1,4 @@
 import os
-import sys
 import types
 from zipfile import BadZipfile
 from unittest import TestCase
@@ -11,8 +10,6 @@ from pyexcel_io.io import load_data, get_writer
 from pyexcel_io._compact import BytesIO, StringIO, OrderedDict, is_string
 
 from nose.tools import eq_, raises
-
-PY2 = sys.version_info[0] == 2
 
 
 @raises(IOError)
@@ -116,11 +113,8 @@ def test_load_unknown_data_from_memory():
 
 @raises(BadZipfile)
 def test_load_csvz_data_from_memory():
-    if not PY2:
-        io = StringIO()
-        get_data(io, file_type="csvz")
-    else:
-        raise BadZipfile("pass it")
+    io = StringIO()
+    get_data(io, file_type="csvz")
 
 
 @raises(IOError)
@@ -130,12 +124,9 @@ def test_write_xlsx_data():
 
 @raises(Exception)
 def test_writer_csvz_data_from_memory():
-    if not PY2:
-        io = StringIO()
-        writer = get_writer(io, file_type="csvz")
-        writer.write({"adb": [[2, 3]]})
-    else:
-        raise Exception("pass it")
+    io = StringIO()
+    writer = get_writer(io, file_type="csvz")
+    writer.write({"adb": [[2, 3]]})
 
 
 @raises(exceptions.NoSupportingPluginFound)
@@ -264,10 +255,7 @@ def test_conversion_from_bytes_to_text():
 
 
 def test_is_string():
-    if PY2:
-        assert is_string(type(u"a")) is True
-    else:
-        assert is_string(type("a")) is True
+    assert is_string(type("a")) is True
 
 
 def test_generator_is_obtained():

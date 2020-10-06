@@ -1,5 +1,5 @@
-pyexcel_io.get_data
-===================
+pyexcel\_io.get\_data
+=====================
 
 .. currentmodule:: pyexcel_io
 

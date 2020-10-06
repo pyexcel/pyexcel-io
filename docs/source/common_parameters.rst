@@ -2,9 +2,26 @@ Common parameters
 ================================================================================
 
 
+'library' option is added
+--------------------------------------------------------------------------------
+
+In order to have overlapping plugins co-exit, 'library' option is added to
+get_data and save_data.
+
+
+get_data only parameters
+-------------------------------
+
+keep_trailing_empty_cells
+********************************************************************************
+
+default: False
+
+If turned on, the return data will contain trailing empty cells.
+
 
 auto_dectect_datetime
---------------------------------------------------------------------------------
+********************************************************************************
 
 The datetime formats are:
 
@@ -14,11 +31,6 @@ The datetime formats are:
 
 Any other datetime formats will be thrown as ValueError
 
-'library' option is added
---------------------------------------------------------------------------------
-
-In order to have overlapping plugins co-exit, 'library' option is added to
-get_data and save_data.
 
 csv only parameters
 --------------------------------------------------------------------------------
