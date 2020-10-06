@@ -1,10 +1,17 @@
+from datetime import time, datetime, timedelta
+
 from pyexcel_io.service import (
     date_value,
     time_value,
+    boolean_value,
+    ods_bool_value,
+    ods_date_value,
+    ods_time_value,
     ods_float_value,
     throw_exception,
     detect_int_value,
     detect_float_value,
+    ods_timedelta_value,
 )
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 
@@ -106,3 +113,52 @@ def test_big_int_value():
 @raises(IntegerAccuracyLossError)
 def test_throw_exception():
     throw_exception(1000000000000000)
+
+
+def test_boolean_value():
+    fixture = ["true", "false", 1]
+    expected = [True, False, 1]
+
+    actual = [boolean_value(element) for element in fixture]
+    eq_(actual, expected)
+
+
+def test_time_delta_presentation():
+    a = datetime(2020, 12, 12, 12, 12, 12)
+    b = datetime(2020, 11, 12, 12, 12, 11)
+    delta = a - b
+
+    value = ods_timedelta_value(delta)
+    eq_(value, "PT720H00M01S")
+
+
+def test_ods_bool_to_string():
+    fixture = [True, False]
+    expected = ["true", "false"]
+
+    actual = [ods_bool_value(element) for element in fixture]
+    eq_(actual, expected)
+
+
+def test_ods_time_value():
+    test = datetime(2020, 10, 6, 11, 11, 11)
+    actual = ods_time_value(test)
+    eq_(actual, "PT11H11M11S")
+
+
+def test_ods_date_value():
+    test = datetime(2020, 10, 6, 11, 11, 11)
+    actual = ods_date_value(test)
+    eq_(actual, "2020-10-06")
+
+
+def test_time_value_returns_time_delta():
+    test_time_value = "PT720H00M01S"
+    delta = time_value(test_time_value)
+    eq_(delta, timedelta(days=30, seconds=1))
+
+
+def test_time_value():
+    test_time_value = "PT23H00M01S"
+    delta = time_value(test_time_value)
+    eq_(delta, time(23, 0, 1))
