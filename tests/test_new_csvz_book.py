@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import zipfile
 from unittest import TestCase
 
@@ -11,8 +10,6 @@ from pyexcel_io.writer import Writer
 from pyexcel_io._compact import OrderedDict
 
 from nose.tools import raises
-
-PY2 = sys.version_info[0] == 2
 
 
 class TestCSVZ(TestCase):

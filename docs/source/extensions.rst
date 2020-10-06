@@ -1,8 +1,12 @@
 Extend pyexcel-io Tutorial
 ================================================================================
 
-You are welcome extend pyexcel-io to read and write more tabular formats. In
-github repo, you will find two examples in `examples` folder. This section
+You are welcome toextend pyexcel-io to read and write more tabular formats.
+No. 1 rule, your plugin must have a prefix 'pyexcel_' in its module path.
+For example, `pyexcel-xls` has 'pyexcel_xls' as its module path. Otherwise,
+pyexcel-io will not load your plugin.
+
+On github, you will find two examples in `examples` folder. This section
 explains its implementations to help you write yours.
 
 .. note::
@@ -10,7 +14,7 @@ explains its implementations to help you write yours.
    No longer, you will need to do explicit imports for pyexcel-io extensions.
    Instead, you install them and manage them via pip.
 
-Reader
+Simple Reader for a yaml file
 --------------------------------------------------------------------------------
 
 Suppose we have a yaml file, containing a dictionary where the values are
@@ -68,7 +72,15 @@ Let's run the following code and see if it works.
   :language: python
   :lines: 43-45
 
-Writer
+
+You would see these in standard output:
+
+.. code-block:: bash
+
+   $ python custom_yaml_reader.py
+   OrderedDict([('sheet 1', [[1, 2, 3], [2, 3, 4]]), ('sheet 2', [['A', 'B', 'C']])])                
+
+A writer to write content in yaml
 --------------------------------------------------------------------------------
 
 Now for the writer, let's write a pyexcel-io writer that write a dictionary of
@@ -111,8 +123,25 @@ Let's run the following code and please examine `mytest.yaml` yourself.
   :language: python
   :lines: 40-46
 
+And you shall find a file named 'mytest.yaml':
 
-       
+
+.. code-block:: bash
+
+   $ cat mytest.yaml
+   sheet 1:
+   - - 1
+     - 3
+     - 4
+   - - 2
+     - 4
+     - 9
+   sheet 2:
+   - - B
+     - C
+     - D
+
+
 Other pyexcel-io plugins
 -----------------------------------------------------------------------------
 
@@ -137,26 +166,6 @@ And you can also get the data back::
     >>> data['pyexcel_sheet1']
     [[1, 2, 3]]
 
-
-Work with memory file
------------------------------------------------------------------------------
-
-Here is the sample code to work with memory file::
-
-    >>> from pyexcel_io.manager import get_io
-    >>> io = get_io("xls")
-    >>> data = [[1,2,3]]
-    >>> save_data(io, data, "xls")
-
-The difference is that you have mention file type if you use :meth:`pyexcel_io.save_data`
-
-And you can also get the data back::
-
-    >>> data = get_data(io, "xls") 
-    >>> data['pyexcel_sheet1']
-    [[1, 2, 3]]
-
-The same applies to :meth:`pyexcel_io.get_data`.
 
 Other formats
 -----------------------------------------------------------------------------
