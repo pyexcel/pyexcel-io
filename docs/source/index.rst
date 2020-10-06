@@ -159,6 +159,7 @@ get_data(.., library='pyexcel-ods')
     ============= ======= ======== ======= ======== ======== ========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
     ============= ======= ======== ======= ======== ======== ========
+    0.6.0+        0.5.0+  0.5.0+   0.5.4   0.5.3    0.5.0+   0.5.0+
     0.5.10+       0.5.0+  0.5.0+   0.5.4   0.5.3    0.5.0+   0.5.0+
     0.5.1+        0.5.0+  0.5.0+   0.5.0+  0.5.0+   0.5.0+   0.5.0+
     0.4.x         0.4.x   0.4.x    0.4.x   0.4.x    0.4.x    0.4.x
@@ -193,7 +194,6 @@ get_data(.., library='pyexcel-ods')
    csvz
    sqlalchemy
    django
-   options
    extensions
 
 
@@ -210,6 +210,7 @@ API
 .. autosummary::
    :toctree: api/
 
+   iget_data
    get_data
    save_data
 

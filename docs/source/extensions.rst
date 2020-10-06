@@ -60,7 +60,7 @@ files on physical disk. "memory" means a file stream. "content" means a string b
   :lines: 36-41
 
 
-**Test your reader **
+**Test your reader**
 
 Let's run the following code and see if it works.
 
@@ -74,7 +74,7 @@ Writer
 Now for the writer, let's write a pyexcel-io writer that write a dictionary of
 two dimentaional arrays back into a yaml file seen above.
 
-** Implement IWriter **
+**Implement IWriter**
 
 Two abstract functions are required:
 
@@ -85,7 +85,7 @@ Two abstract functions are required:
   :language: python
   :lines: 18-30
 
-** Implement ISheetWriter **
+**Implement ISheetWriter**
 
 It is imagined that you will have your own sheet writer. You simply need to figure
 out how to write a row. Row by row write action was already written by `ISheetWrier`.

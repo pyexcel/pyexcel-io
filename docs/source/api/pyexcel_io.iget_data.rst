@@ -1,6 +1,6 @@
-pyexcel\_io.save\_data
+pyexcel\_io.iget\_data
 ======================
 
 .. currentmodule:: pyexcel_io
 
-.. autofunction:: save_data
+.. autofunction:: iget_data

@@ -1,5 +1,4 @@
 Rendering(Formatting) the data
-
 ================================================================================
 
 You might want to do custom rendering on your data obtained. `row_renderer` was
