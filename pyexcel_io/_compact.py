@@ -7,6 +7,7 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import sys
 import logging
 from io import BytesIO, StringIO  # noqa: F401
 from collections import OrderedDict  # noqa: F401
@@ -22,6 +23,7 @@ except ImportError:
 
 text_type = str
 irange = range
+PY2 = sys.version[0] == 2
 
 
 def isstream(instance):

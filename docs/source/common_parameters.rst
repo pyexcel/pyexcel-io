@@ -5,12 +5,12 @@ Common parameters
 'library' option is added
 --------------------------------------------------------------------------------
 
-In order to have overlapping plugins co-exit, 'library' option is added to
+In order to have overlapping plugins co-exist, 'library' option is added to
 get_data and save_data.
 
 
 get_data only parameters
--------------------------------
+--------------------------------------------------------------------------------
 
 keep_trailing_empty_cells
 ********************************************************************************

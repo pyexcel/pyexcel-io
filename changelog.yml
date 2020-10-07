@@ -2,6 +2,12 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: updated
+    details:
+    - "`#94`: keep backward compatibility for pyexcel-xls 0.4.1"
+  version: 0.6.2
+  date: 7.10.2020
+- changes:
   - action: removed
     details:
     - 'python 3.6 lower versions are no longer supported'
