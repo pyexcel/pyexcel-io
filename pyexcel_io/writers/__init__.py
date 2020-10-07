@@ -4,26 +4,24 @@
 
     file writers
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.plugins import IOPluginInfoChain
+from pyexcel_io.plugins import IOPluginInfoChainV2
 
-
-IOPluginInfoChain(__name__).add_a_writer(
-    relative_plugin_class_path="csvw.CSVBookWriter",
-    file_types=["csv"],
+IOPluginInfoChainV2(__name__).add_a_writer(
+    relative_plugin_class_path="csv_in_file.CsvFileWriter",
+    locations=["file", "content"],
+    file_types=["csv", "tsv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="tsv.TSVBookWriter",
-    file_types=["tsv"],
+    relative_plugin_class_path="csv_in_memory.CsvMemoryWriter",
+    locations=["memory"],
+    file_types=["csv", "tsv"],
     stream_type="text",
 ).add_a_writer(
-    relative_plugin_class_path="csvz.CSVZipBookWriter",
-    file_types=["csvz"],
-    stream_type="binary",
-).add_a_writer(
-    relative_plugin_class_path="tsvz.TSVZipBookWriter",
-    file_types=["tsvz"],
+    relative_plugin_class_path="csvz_writer.CsvZipWriter",
+    locations=["memory", "file", "content"],
+    file_types=["csvz", "tsvz"],
     stream_type="binary",
 )

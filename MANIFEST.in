@@ -1,8 +1,8 @@
 include README.rst
 include LICENSE
 include CHANGELOG.rst
+include CONTRIBUTORS.rst
 recursive-include tests *
 recursive-include docs *
-include docs/source/*
 include Makefile
 include test.sh

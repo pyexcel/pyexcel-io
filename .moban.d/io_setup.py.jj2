@@ -6,4 +6,3 @@
 {%block pyexcel_extra_classifiers%}
     'Programming Language :: Python :: Implementation :: PyPy'
 {%endblock%}}
-

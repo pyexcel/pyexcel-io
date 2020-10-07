@@ -1,13 +1,21 @@
-from nose.tools import eq_, raises
-from pyexcel_io.service import date_value, time_value
-from pyexcel_io.service import detect_int_value
-from pyexcel_io.service import detect_float_value
-from pyexcel_io.service import ODS_WRITE_FORMAT_COVERSION
-from pyexcel_io.service import ods_float_value
-from pyexcel_io.service import throw_exception
-from pyexcel_io._compact import PY2
+from datetime import time, datetime, timedelta
+
+from pyexcel_io.service import (
+    date_value,
+    time_value,
+    boolean_value,
+    ods_bool_value,
+    ods_date_value,
+    ods_time_value,
+    ods_float_value,
+    throw_exception,
+    detect_int_value,
+    detect_float_value,
+    ods_timedelta_value,
+)
 from pyexcel_io.exceptions import IntegerAccuracyLossError
-from nose import SkipTest
+
+from nose.tools import eq_, raises
 
 
 def test_date_util_parse():
@@ -97,34 +105,60 @@ def test_detect_float_value_on_custom_nan_text2():
     eq_(str(result), "nan")
 
 
-def test_ods_write_format_conversion():
-    if PY2:
-        expected = ODS_WRITE_FORMAT_COVERSION[long]  # noqa: F821
-        eq_('long', expected)
-    else:
-        raise SkipTest()
-
-
 @raises(IntegerAccuracyLossError)
 def test_big_int_value():
     ods_float_value(1000000000000000)
 
 
-def test_max_value_on_python_2():
-    if PY2:
-        ods_float_value(long(999999999999999))
-    else:
-        raise SkipTest("No long in python 3")
-
-
-@raises(IntegerAccuracyLossError)
-def test_really_long_value_on_python2():
-    if PY2:
-        ods_float_value(long(999999999999999+1))
-    else:
-        raise SkipTest("No long in python 3")
-
-
 @raises(IntegerAccuracyLossError)
 def test_throw_exception():
     throw_exception(1000000000000000)
+
+
+def test_boolean_value():
+    fixture = ["true", "false", 1]
+    expected = [True, False, 1]
+
+    actual = [boolean_value(element) for element in fixture]
+    eq_(actual, expected)
+
+
+def test_time_delta_presentation():
+    a = datetime(2020, 12, 12, 12, 12, 12)
+    b = datetime(2020, 11, 12, 12, 12, 11)
+    delta = a - b
+
+    value = ods_timedelta_value(delta)
+    eq_(value, "PT720H00M01S")
+
+
+def test_ods_bool_to_string():
+    fixture = [True, False]
+    expected = ["true", "false"]
+
+    actual = [ods_bool_value(element) for element in fixture]
+    eq_(actual, expected)
+
+
+def test_ods_time_value():
+    test = datetime(2020, 10, 6, 11, 11, 11)
+    actual = ods_time_value(test)
+    eq_(actual, "PT11H11M11S")
+
+
+def test_ods_date_value():
+    test = datetime(2020, 10, 6, 11, 11, 11)
+    actual = ods_date_value(test)
+    eq_(actual, "2020-10-06")
+
+
+def test_time_value_returns_time_delta():
+    test_time_value = "PT720H00M01S"
+    delta = time_value(test_time_value)
+    eq_(delta, timedelta(days=30, seconds=1))
+
+
+def test_time_value():
+    test_time_value = "PT23H00M01S"
+    delta = time_value(test_time_value)
+    eq_(delta, time(23, 0, 1))

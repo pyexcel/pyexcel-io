@@ -4,21 +4,30 @@
 
     The io interface to file extensions
 
-    :copyright: (c) 2014-2019 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import os
-from types import GeneratorType
 import warnings
+from types import GeneratorType
 
-from pyexcel_io._compact import isstream, PY2
-from pyexcel_io.plugins import READERS, WRITERS
-from pyexcel_io.exceptions import NoSupportingPluginFound
-import pyexcel_io.constants as constants
+from pyexcel_io import constants
+from pyexcel_io.reader import Reader
+from pyexcel_io.writer import Writer
+from pyexcel_io.plugins import OLD_READERS, OLD_WRITERS
+from pyexcel_io._compact import isstream
+from pyexcel_io.exceptions import (
+    NoSupportingPluginFound,
+    SupportingPluginAvailableButNotInstalled,
+)
 
 
 def iget_data(afile, file_type=None, **keywords):
     """Get data from an excel file source
+
+    The data has not gone into memory yet. If you use dedicated partial read
+    plugins, such as pyexcel-xlsxr, pyexcel-odsr, you will notice
+    the memory consumption drop when you work with big files.
 
     :param afile: a file name, a file stream or actual content
     :param sheet_name: the name of the sheet to be loaded
@@ -27,9 +36,6 @@ def iget_data(afile, file_type=None, **keywords):
     :param file_type: used only when filename is not a physical file name
     :param force_file_type: used only when filename refers to a physical file
                             and it is intended to open it as forced file type.
-    :param streaming: toggles the type of returned data. The values of the
-                      returned dictionary remain as generator if it is set
-                      to True. Default is False.
     :param library: explicitly name a library for use.
                     e.g. library='pyexcel-ods'
     :param auto_detect_float: defaults to True
@@ -39,6 +45,7 @@ def iget_data(afile, file_type=None, **keywords):
     :param ignore_nan_text: various forms of 'NaN', 'nan' are ignored
     :param default_float_nan: choose one form of 'NaN', 'nan'
     :param pep_0515_off: turn off pep 0515. default to True.
+    :param keep_trailing_empty_cells: keep trailing columns. default to False
     :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
@@ -54,7 +61,10 @@ def get_data(afile, file_type=None, streaming=None, **keywords):
     :param afile: a file name, a file stream or actual content
     :param sheet_name: the name of the sheet to be loaded
     :param sheet_index: the index of the sheet to be loaded
+    :param sheets: a list of sheet to be loaded
     :param file_type: used only when filename is not a physial file name
+    :param force_file_type: used only when filename refers to a physical file
+                            and it is intended to open it as forced file type.
     :param streaming: toggles the type of returned data. The values of the
                       returned dictionary remain as generator if it is set
                       to True. Default is False.
@@ -64,6 +74,10 @@ def get_data(afile, file_type=None, streaming=None, **keywords):
     :param auto_detect_int: defaults to True
     :param auto_detect_datetime: defaults to True
     :param ignore_infinity: defaults to True
+    :param ignore_nan_text: various forms of 'NaN', 'nan' are ignored
+    :param default_float_nan: choose one form of 'NaN', 'nan'
+    :param pep_0515_off: turn off pep 0515. default to True.
+    :param keep_trailing_empty_cells: keep trailing columns. default to False
     :param keywords: any other library specific parameters
     :returns: an ordered dictionary
     """
@@ -113,39 +127,20 @@ def save_data(afile, data, file_type=None, **keywords):
         single_sheet_in_book = True
         to_store = {constants.DEFAULT_SHEET_NAME: data}
     else:
-        if PY2:
-            keys = data.keys()
-        else:
-            keys = list(data.keys())
+        keys = list(data.keys())
         single_sheet_in_book = len(keys) == 1
 
     no_file_type = isstream(afile) and file_type is None
     if no_file_type:
         file_type = constants.FILE_FORMAT_CSV
 
-    store_data(
-        afile,
-        to_store,
-        file_type=file_type,
-        single_sheet_in_book=single_sheet_in_book,
-        **keywords
-    )
-
-
-def store_data(afile, data, file_type=None, **keywords):
-    """Non public function to store data to afile
-
-    :param filename: actual file name, a file stream or actual content
-    :param data: the data to be written
-    :param file_type: used only when filename is not a physial file name
-    :param keywords: any other parameters
-    """
     if isstream(afile):
         keywords.update(dict(file_stream=afile, file_type=file_type))
     else:
         keywords.update(dict(file_name=afile, file_type=file_type))
+    keywords["single_sheet_in_book"] = single_sheet_in_book
     with get_writer(**keywords) as writer:
-        writer.write(data)
+        writer.write(to_store)
 
 
 def load_data(
@@ -184,48 +179,61 @@ def load_data(
             try:
                 file_type = file_name.split(".")[-1]
             except AttributeError:
-                raise Exception("file_name should be a string type")
+                raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
     try:
-        reader = READERS.get_a_plugin(file_type, library)
+        reader = OLD_READERS.get_a_plugin(file_type, library)
+    except (NoSupportingPluginFound, SupportingPluginAvailableButNotInstalled):
+        reader = Reader(file_type, library)
+
+    try:
+        if file_name:
+            reader.open(file_name, **keywords)
+        elif file_content:
+            reader.open_content(file_content, **keywords)
+        elif file_stream:
+            reader.open_stream(file_stream, **keywords)
+        else:
+            raise IOError("Unrecognized options")
+        if sheet_name:
+            result = reader.read_sheet_by_name(sheet_name)
+        elif sheet_index is not None:
+            result = reader.read_sheet_by_index(sheet_index)
+        elif sheets is not None:
+            result = reader.read_many(sheets)
+        else:
+            result = reader.read_all()
+        if streaming is False:
+            for key in result.keys():
+                result[key] = list(result[key])
+            reader.close()
+            reader = None
+
+        return result, reader
     except NoSupportingPluginFound:
         if file_name:
             if os.path.exists(file_name):
                 if os.path.isfile(file_name):
                     raise
                 else:
-                    raise IOError("%s is not a file" % file_name)
+                    raise IOError(
+                        constants.MESSAGE_NOT_FILE_FORMATTER % file_name
+                    )
             else:
-                raise IOError("%s does not exist" % file_name)
+                raise IOError(
+                    constants.MESSAGE_FILE_DOES_NOT_EXIST % file_name
+                )
         else:
             raise
 
-    if file_name:
-        reader.open(file_name, **keywords)
-    elif file_content:
-        reader.open_content(file_content, **keywords)
-    elif file_stream:
-        reader.open_stream(file_stream, **keywords)
-    if sheet_name:
-        result = reader.read_sheet_by_name(sheet_name)
-    elif sheet_index is not None:
-        result = reader.read_sheet_by_index(sheet_index)
-    elif sheets is not None:
-        result = reader.read_many(sheets)
-    else:
-        result = reader.read_all()
-    if streaming is False:
-        for key in result.keys():
-            result[key] = list(result[key])
-        reader.close()
-        reader = None
-
-    return result, reader
-
 
 def get_writer(
-    file_name=None, file_stream=None, file_type=None,
-    library=None, force_file_type=None, **keywords
+    file_name=None,
+    file_stream=None,
+    file_type=None,
+    library=None,
+    force_file_type=None,
+    **keywords
 ):
     """find a suitable writer"""
     inputs = [file_name, file_stream]
@@ -243,11 +251,15 @@ def get_writer(
             try:
                 file_type = file_name.split(".")[-1]
             except AttributeError:
-                raise Exception("file_name should be a string type")
+                raise Exception(constants.MESSAGE_FILE_NAME_SHOULD_BE_STRING)
 
         file_type_given = False
 
-    writer = WRITERS.get_a_plugin(file_type, library)
+    try:
+        writer = OLD_WRITERS.get_a_plugin(file_type, library)
+    except (NoSupportingPluginFound, SupportingPluginAvailableButNotInstalled):
+        writer = Writer(file_type, library)
+
     if file_name:
         if file_type_given:
             writer.open_content(file_name, **keywords)
@@ -257,3 +269,7 @@ def get_writer(
         writer.open_stream(file_stream, **keywords)
     # else: is resolved by earlier raise statement
     return writer
+
+
+# backward compactibility
+store_data = save_data

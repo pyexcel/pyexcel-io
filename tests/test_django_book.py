@@ -1,21 +1,23 @@
-from nose.tools import raises, eq_
 from pyexcel_io import save_data
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.constants import DB_DJANGO
 from pyexcel_io.database.common import (
-    DjangoModelImporter,
-    DjangoModelImportAdapter,
     DjangoModelExporter,
+    DjangoModelImporter,
     DjangoModelExportAdapter,
-)
-from pyexcel_io.database.importers.django import (
-    DjangoModelWriter,
-    DjangoBookWriter,
+    DjangoModelImportAdapter,
 )
 from pyexcel_io.database.exporters.django import (
-    DjangoModelReader,
     DjangoBookReader,
+    DjangoModelReader,
 )
+from pyexcel_io.database.importers.django import (
+    DjangoBookWriter,
+    DjangoModelWriter,
+)
+
+from nose.tools import eq_, raises
 
 
 class Package:
@@ -209,7 +211,9 @@ class TestSheet:
             return [str(element) for element in row]
 
         # the key point of this test case
-        reader = DjangoModelReader(model, row_renderer=row_renderer)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(model), row_renderer=row_renderer
+        )
         data = reader.to_array()
         expected = [["X", "Y", "Z"], ["1", "2", "3"], ["4", "5", "6"]]
         eq_(list(data), expected)
@@ -279,8 +283,7 @@ class TestMultipleModels:
             adapter1.get_name(): self.content["Sheet1"][1:],
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
-        writer = DjangoBookWriter()
-        writer.open_content(importer, batch_size=sample_size)
+        writer = DjangoBookWriter(importer, "django", batch_size=sample_size)
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == self.result1
@@ -302,8 +305,9 @@ class TestMultipleModels:
             adapter1.get_name(): self.content["Sheet1"][1:],
             adapter2.get_name(): self.content["Sheet2"][1:],
         }
-        writer = DjangoBookWriter()
-        writer.open_content(importer, batch_size=sample_size, bulk_save=False)
+        writer = DjangoBookWriter(
+            importer, "django", batch_size=sample_size, bulk_save=False
+        )
         writer.write(to_store)
         writer.close()
         assert model1.objects.objs == []
@@ -334,12 +338,11 @@ class TestMultipleModels:
         adapter2 = DjangoModelExportAdapter(model2)
         exporter.append(adapter1)
         exporter.append(adapter2)
-        reader = DjangoBookReader()
-        reader.open_content(exporter)
-        data = reader.read_all()
-        for key in data.keys():
-            data[key] = list(data[key])
-        assert data == self.content
+        reader = DjangoBookReader(exporter, "django")
+        result = read_all(reader)
+        for key in result:
+            result[key] = list(result[key])
+        eq_(result, self.content)
 
     @raises(Exception)
     def test_special_case_where_only_one_model_used(self):
@@ -353,28 +356,6 @@ class TestMultipleModels:
             "Sheet2": self.content["Sheet2"][1:],
         }
         save_data(importer, to_store, file_type=DB_DJANGO)
-        assert model1.objects.objs == self.result1
-        model1._meta.model_name = "Sheet1"
-        model1._meta.update(["X", "Y", "Z"])
-        exporter = DjangoModelExporter()
-        adapter = DjangoModelExportAdapter(model1)
-        exporter.append(adapter)
-        reader = DjangoBookReader()
-        reader.open_content(exporter)
-        data = reader.read_all()
-        assert list(data["Sheet1"]) == self.content["Sheet1"]
-
-
-@raises(TypeError)
-def test_not_implemented_method():
-    reader = DjangoBookReader()
-    reader.open("afile")
-
-
-@raises(TypeError)
-def test_not_implemented_method_2():
-    reader = DjangoBookReader()
-    reader.open_stream("afile")
 
 
 class TestFilter:
@@ -393,25 +374,33 @@ class TestFilter:
         self.model._meta.update(["X", "Y", "Z"])
 
     def test_load_sheet_from_django_model_with_filter(self):
-        reader = DjangoModelReader(self.model, start_row=0, row_limit=2)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_row=0, row_limit=2
+        )
         data = reader.to_array()
         expected = [["X", "Y", "Z"], [1, 2, 3]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_1(self):
-        reader = DjangoModelReader(self.model, start_row=1, row_limit=3)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_row=1, row_limit=3
+        )
         data = reader.to_array()
         expected = [[1, 2, 3], [4, 5, 6]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_2(self):
-        reader = DjangoModelReader(self.model, start_column=1)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_column=1
+        )
         data = reader.to_array()
         expected = [["Y", "Z"], [2, 3], [5, 6]]
         eq_(list(data), expected)
 
     def test_load_sheet_from_django_model_with_filter_3(self):
-        reader = DjangoModelReader(self.model, start_column=1, column_limit=1)
+        reader = EncapsulatedSheetReader(
+            DjangoModelReader(self.model), start_column=1, column_limit=1
+        )
         data = reader.to_array()
         expected = [["Y"], [2], [5]]
         eq_(list(data), expected)
@@ -422,3 +411,10 @@ def test_django_model_import_adapter():
     adapter.column_names = ["a"]
     adapter.row_initializer = "abc"
     eq_(adapter.row_initializer, "abc")
+
+
+def read_all(reader):
+    result = OrderedDict()
+    for index, sheet in enumerate(reader.content_array):
+        result.update({sheet.name: reader.read_sheet(index).to_array()})
+    return result

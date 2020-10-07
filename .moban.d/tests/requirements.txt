@@ -1,6 +1,0 @@
-{% extends 'tests/requirements.txt.jj2' %}
-{%block extras %}
-SQLAlchemy
-pyexcel>=0.2.0
-pyexcel-xls>=0.1.0
-{%endblock%}

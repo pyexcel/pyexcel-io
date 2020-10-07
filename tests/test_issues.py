@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+import pyexcel as p
+from pyexcel_io import get_data, save_data
+
 from nose import SkipTest
 from nose.tools import eq_
-from pyexcel_io import get_data, save_data
-from pyexcel_io._compact import PY26
-import pyexcel as p
 
 IN_TRAVIS = "TRAVIS" in os.environ
 
@@ -52,19 +53,14 @@ def test_issue_23():
 
 
 def test_issue_33_34():
-    if PY26:
-        pass
-    else:
-        import mmap
+    import mmap
 
-        test_file = get_fixture("issue20.csv")
-        with open(test_file, "r+b") as f:
-            memory_mapped_file = mmap.mmap(
-                f.fileno(), 0, access=mmap.ACCESS_READ
-            )
-            data = get_data(memory_mapped_file, file_type="csv")
-            expected = [[u"to", u"infinity", u"and", u"beyond"]]
-            eq_(data["csv"], expected)
+    test_file = get_fixture("issue20.csv")
+    with open(test_file, "r+b") as f:
+        memory_mapped_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        data = get_data(memory_mapped_file, file_type="csv")
+        expected = [[u"to", u"infinity", u"and", u"beyond"]]
+        eq_(data["csv"], expected)
 
 
 def test_issue_30_utf8_BOM_header():
@@ -80,52 +76,31 @@ def test_issue_30_utf8_BOM_header():
 
 
 def test_issue_33_34_utf32_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-32")
+    check_mmap_encoding("utf-32")
 
 
 def test_issue_33_34_utf32be_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-32-be")
+    check_mmap_encoding("utf-32-be")
 
 
 def test_issue_33_34_utf32le_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-32-le")
+    check_mmap_encoding("utf-32-le")
 
 
 def test_issue_33_34_utf16_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-16")
+    check_mmap_encoding("utf-16")
 
 
 def test_issue_33_34_utf16be_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-16-be")
+    check_mmap_encoding("utf-16-be")
 
 
 def test_issue_33_34_utf16le_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-16-le")
+    check_mmap_encoding("utf-16-le")
 
 
 def test_issue_33_34_utf8_encoded_file():
-    if PY26:
-        pass
-    else:
-        check_mmap_encoding("utf-8")
+    check_mmap_encoding("utf-8")
 
 
 def check_mmap_encoding(encoding):

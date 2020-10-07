@@ -1,23 +1,20 @@
 import os
-import sys
 import types
+from zipfile import BadZipfile
 from unittest import TestCase
+
 import pyexcel_io.manager as manager
 import pyexcel_io.exceptions as exceptions
-from pyexcel_io._compact import StringIO, BytesIO, is_string
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io import save_data, get_data, iget_data
+from pyexcel_io import get_data, iget_data, save_data
 from pyexcel_io.io import load_data, get_writer
-from nose.tools import raises, eq_
-from zipfile import BadZipfile
+from pyexcel_io._compact import BytesIO, StringIO, OrderedDict, is_string
 
-
-PY2 = sys.version_info[0] == 2
+from nose.tools import eq_, raises
 
 
 @raises(IOError)
 def test_directory_name_as_file():
-    get_data('/')
+    get_data("/")
 
 
 def test_force_file_type():
@@ -31,14 +28,8 @@ def test_force_file_type():
 
 def test_force_file_type_on_write():
     test_file = "force_file_type_on_write.txt"
-    save_data(
-        test_file,
-        {"sheet 1": [[1, 2]]},
-        force_file_type="csv"
-    )
-    data = get_data(
-        test_file, force_file_type="csv"
-    )
+    save_data(test_file, {"sheet 1": [[1, 2]]}, force_file_type="csv")
+    data = get_data(test_file, force_file_type="csv")
     expected = [[1, 2]]
     eq_(expected, data[test_file])
     os.unlink(test_file)
@@ -46,7 +37,7 @@ def test_force_file_type_on_write():
 
 @raises(IOError)
 def test_invalid_file():
-    load_data('/something/does/not/exist')
+    load_data("/something/does/not/exist")
 
 
 @raises(IOError)
@@ -74,14 +65,14 @@ def test_wrong_parameter_to_get_writer():
     get_writer(1)
 
 
-@raises(Exception)
-def test_wrong_parameter_to_get_writer2():
-    get_writer(1, file_type="csv")
+# @raises(Exception)
+# def test_wrong_parameter_to_get_writer2():
+#    get_writer(1, file_type="csv")
 
 
 def test_load_ods_data():
     msg = "Please install one of these plugins for read data in 'ods': "
-    msg += "pyexcel-ods,pyexcel-ods3"
+    msg += "pyexcel-ods,pyexcel-ods3,pyexcel-odsr"
     try:
         get_data("test.ods")
     except exceptions.SupportingPluginAvailableButNotInstalled as e:
@@ -91,7 +82,7 @@ def test_load_ods_data():
 def test_load_ods_data_from_memory():
     io = BytesIO()
     msg = "Please install one of these plugins for read data in 'ods': "
-    msg += "pyexcel-ods,pyexcel-ods3"
+    msg += "pyexcel-ods,pyexcel-ods3,pyexcel-odsr"
     try:
         get_data(io, file_type="ods")
     except exceptions.SupportingPluginAvailableButNotInstalled as e:
@@ -122,11 +113,8 @@ def test_load_unknown_data_from_memory():
 
 @raises(BadZipfile)
 def test_load_csvz_data_from_memory():
-    if not PY2:
-        io = StringIO()
-        get_data(io, file_type="csvz")
-    else:
-        raise BadZipfile("pass it")
+    io = StringIO()
+    get_data(io, file_type="csvz")
 
 
 @raises(IOError)
@@ -136,12 +124,9 @@ def test_write_xlsx_data():
 
 @raises(Exception)
 def test_writer_csvz_data_from_memory():
-    if not PY2:
-        io = StringIO()
-        writer = get_writer(io, file_type="csvz")
-        writer.write({"adb": [[2, 3]]})
-    else:
-        raise Exception("pass it")
+    io = StringIO()
+    writer = get_writer(io, file_type="csvz")
+    writer.write({"adb": [[2, 3]]})
 
 
 @raises(exceptions.NoSupportingPluginFound)
@@ -202,6 +187,7 @@ def test_file_handle_as_input():
     with open(test_file, "r") as f:
         data = get_data(f, "csv")
         eq_(data["csv"], [[1, 2, 3]])
+    os.unlink("file_handle.csv")
 
 
 def test_file_type_case_insensitivity():
@@ -212,6 +198,7 @@ def test_file_type_case_insensitivity():
     with open(test_file, "r") as f:
         data = get_data(f, "csv")
         eq_(data["csv"], [[1, 2, 3]])
+    os.unlink("file_handle.CSv")
 
 
 def test_file_handle_as_output():
@@ -222,6 +209,7 @@ def test_file_handle_as_output():
     with open(test_file, "r") as f:
         content = f.read()
         eq_(content, "1,2,3\n")
+    os.unlink("file_handle.csv")
 
 
 def test_binary_file_content():
@@ -267,10 +255,7 @@ def test_conversion_from_bytes_to_text():
 
 
 def test_is_string():
-    if PY2:
-        assert is_string(type(u"a")) is True
-    else:
-        assert is_string(type("a")) is True
+    assert is_string(type("a")) is True
 
 
 def test_generator_is_obtained():

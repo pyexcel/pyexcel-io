@@ -4,16 +4,15 @@
 
     The lower level handler for django import and export
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io.database.common import DbExporter
+from pyexcel_io.plugin_api import IReader
 from pyexcel_io.database.querysets import QuerysetsReader
 
 
 class DjangoModelReader(QuerysetsReader):
-    """Read from django model
-    """
+    """Read from django model"""
 
     def __init__(self, model, export_columns=None, **keywords):
         self.__model = model
@@ -28,22 +27,20 @@ class DjangoModelReader(QuerysetsReader):
         )
 
 
-class DjangoBookReader(DbExporter):
+class DjangoBookReader(IReader):
     """ read django models """
 
-    def __init__(self):
-        DbExporter.__init__(self)
-        self.exporter = None
+    def __init__(self, exporter, _, **keywords):
+        self.exporter = exporter
+        self.keywords = keywords
+        self.content_array = self.exporter.adapters
 
-    def export_tables(self, file_content, **keywords):
-        self.exporter = file_content
-        self._load_from_django_models()
-
-    def read_sheet(self, native_sheet):
+    def read_sheet(self, native_sheet_index):
+        native_sheet = self.content_array[native_sheet_index]
         reader = DjangoModelReader(
-            native_sheet.model, native_sheet.export_columns
+            native_sheet.model, export_columns=native_sheet.export_columns
         )
-        return reader.to_array()
+        return reader
 
-    def _load_from_django_models(self):
-        self._native_book = self.exporter.adapters
+    def close(self):
+        pass

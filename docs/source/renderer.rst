@@ -1,5 +1,4 @@
 Rendering(Formatting) the data
-
 ================================================================================
 
 You might want to do custom rendering on your data obtained. `row_renderer` was
@@ -46,3 +45,10 @@ And you may want use row_renderer to customize it to string:
    >>> data = get_data("your_file.csv", row_renderer=my_renderer)
    >>> data['your_file.csv']
    [['1', '21', '31'], ['2', '22', '32'], ['3', '23', '33']]
+
+.. testcode::
+   :hide:
+
+   >>> import os
+   >>> if os.path.exists("your_file.csv"):
+   ...     os.unlink("your_file.csv")

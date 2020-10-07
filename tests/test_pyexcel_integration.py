@@ -1,7 +1,7 @@
 import os
 import datetime
-from unittest import TestCase
 from textwrap import dedent
+from unittest import TestCase
 
 import pyexcel as pe
 from pyexcel_io._compact import text_type

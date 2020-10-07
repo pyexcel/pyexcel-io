@@ -4,29 +4,12 @@
 
     Compatibles
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-# flake8: noqa
-# pylint: disable=import-error
-# pylint: disable=invalid-name
-# pylint: disable=too-few-public-methods
-# pylint: disable=ungrouped-imports
-# pylint: disable=redefined-variable-type
-import sys
-import types
 import logging
-
-PY2 = sys.version_info[0] == 2
-PY3_ABOVE = sys.version_info[0] >= 3
-PY26 = PY2 and sys.version_info[1] < 7
-PY27 = PY2 and sys.version_info[1] == 7
-PY27_ABOVE = PY27 or PY3_ABOVE
-
-if PY26:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
+from io import BytesIO, StringIO  # noqa: F401
+from collections import OrderedDict  # noqa: F401
 
 try:
     from logging import NullHandler
@@ -37,24 +20,8 @@ except ImportError:
             pass
 
 
-if PY2:
-    from cStringIO import StringIO
-    from cStringIO import StringIO as BytesIO
-
-    text_type = unicode
-    irange = xrange
-
-    class Iterator(object):
-        def next(self):
-            return type(self).__next__(self)
-
-
-else:
-    from io import StringIO, BytesIO
-
-    text_type = str
-    Iterator = object
-    irange = range
+text_type = str
+irange = range
 
 
 def isstream(instance):
@@ -72,11 +39,4 @@ def isstream(instance):
 
 def is_string(atype):
     """find out if a type is str or not"""
-    if atype == str:
-        return True
-
-    elif PY2:
-        if atype == unicode:
-            return True
-
-    return False
+    return atype == str

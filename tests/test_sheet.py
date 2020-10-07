@@ -1,6 +1,7 @@
-from nose.tools import eq_
-from pyexcel_io.sheet import SheetWriter, SheetReader
 import pyexcel_io.constants as constants
+from pyexcel_io.sheet import SheetReader, SheetWriter
+
+from nose.tools import eq_
 
 
 class MyWriter(SheetWriter):

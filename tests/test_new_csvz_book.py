@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 import os
-from unittest import TestCase
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io import save_data
-import pyexcel_io.manager as manager
-from pyexcel_io.readers.csvz import CSVZipBookReader
-from pyexcel_io.writers.csvz import CSVZipBookWriter
-from pyexcel_io.readers.tsvz import TSVZipBookReader
-from pyexcel_io.writers.tsvz import TSVZipBookWriter
 import zipfile
-from nose.tools import raises
-import sys
+from unittest import TestCase
 
-PY2 = sys.version_info[0] == 2
+import pyexcel_io.manager as manager
+from pyexcel_io import save_data
+from pyexcel_io.reader import Reader
+from pyexcel_io.writer import Writer
+from pyexcel_io._compact import OrderedDict
+
+from nose.tools import raises
 
 
 class TestCSVZ(TestCase):
     file_type = "csvz"
-    writer_class = CSVZipBookWriter
-    reader_class = CSVZipBookReader
     result = u"中,文,1,2,3"
+
+    def writer_class(self):
+        return Writer(self.file_type)
+
+    def reader_class(self):
+        return Reader(self.file_type)
 
     def setUp(self):
         self.file = "csvz." + self.file_type
@@ -50,25 +51,33 @@ class TestCSVZ(TestCase):
         self.assertEqual(list(data["pyexcel_sheet1"]), [[u"中", u"文", 1, 2, 3]])
         zipreader.close()
 
+    def test_reading_utf32(self):
+        zip = zipfile.ZipFile(self.file, "w")
+        zip.writestr("something.ext", self.result.encode("utf-32"))
+        zip.close()
+        zipreader = self.reader_class()
+        zipreader.open(self.file)
+        data = zipreader.read_all()
+        self.assertEqual(list(data["something"]), [[u"中", u"文", 1, 2, 3]])
+        zipreader.close()
+
     def tearDown(self):
         os.unlink(self.file)
 
 
 class TestTSVZ(TestCSVZ):
     file_type = "tsvz"
-    writer_class = TSVZipBookWriter
-    reader_class = TSVZipBookReader
     result = u"中\t文\t1\t2\t3"
 
 
 def test_reading_from_memory():
     data = [[1, 2, 3]]
     io = manager.get_io("csvz")
-    zipbook = CSVZipBookWriter()
+    zipbook = Writer("csvz")
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
-    zipreader = CSVZipBookReader()
+    zipreader = Reader("csvz")
     zipreader.open_stream(io)
     data = zipreader.read_all()
     assert list(data["pyexcel_sheet1"]) == [[1, 2, 3]]
@@ -77,11 +86,11 @@ def test_reading_from_memory():
 def test_reading_from_memory_tsvz():
     data = [[1, 2, 3]]
     io = manager.get_io("tsvz")
-    zipbook = TSVZipBookWriter()
+    zipbook = Writer("tsvz")
     zipbook.open_stream(io)
     zipbook.write({None: data})
     zipbook.close()
-    zipreader = TSVZipBookReader()
+    zipreader = Reader("tsvz")
     zipreader.open_stream(io)
     data = zipreader.read_all()
     assert list(data["pyexcel_sheet1"]) == [[1, 2, 3]]
@@ -89,7 +98,9 @@ def test_reading_from_memory_tsvz():
 
 class TestMultipleSheet(TestCase):
     file_name = "mybook.csvz"
-    reader_class = CSVZipBookReader
+
+    def reader_class(self):
+        return Reader("csvz")
 
     def setUp(self):
         self.content = OrderedDict()
@@ -138,4 +149,6 @@ class TestMultipleSheet(TestCase):
 
 class TestMultipleTSVSheet(TestMultipleSheet):
     file_name = "mybook.tsvz"
-    reader_class = TSVZipBookReader
+
+    def reader_class(self):
+        return Reader("tsvz")

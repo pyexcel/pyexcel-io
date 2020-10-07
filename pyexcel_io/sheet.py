@@ -4,22 +4,13 @@
 
     The io interface to file extensions
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from pyexcel_io._compact import irange
-from pyexcel_io.utils import _index_filter
 import pyexcel_io.constants as constants
-
-
-class NamedContent(object):
-    """
-    Helper class for content that does not have a name
-    """
-
-    def __init__(self, name, payload):
-        self.name = name
-        self.payload = payload
+from pyexcel_io.utils import _index_filter
+from pyexcel_io._compact import irange
+from pyexcel_io.plugin_api import NamedContent  # noqa: F401
 
 
 class SheetReader(object):
@@ -38,11 +29,12 @@ class SheetReader(object):
         skip_column_func=None,
         skip_empty_rows=False,
         row_renderer=None,
-        **keywords
+        keep_trailing_empty_cells=False,
+        **deprecated_use_of_keywords_here
     ):
         self._native_sheet = sheet
         self._keywords = {}
-        self._keywords.update(keywords)
+        self._keywords.update(deprecated_use_of_keywords_here)
         self._start_row = start_row
         self._row_limit = row_limit
         self._start_column = start_column
@@ -51,6 +43,7 @@ class SheetReader(object):
         self._skip_column = _index_filter
         self._skip_empty_rows = skip_empty_rows
         self._row_renderer = row_renderer
+        self.keep_trailing_empty_cells = keep_trailing_empty_cells
 
         if skip_row_func:
             self._skip_row = skip_row_func
@@ -58,8 +51,7 @@ class SheetReader(object):
             self._skip_column = skip_column_func
 
     def to_array(self):
-        """2 dimentional representation of the content
-        """
+        """2 dimentional representation of the content"""
         for row_index, row in enumerate(self.row_iterator()):
             row_position = self._skip_row(
                 row_index, self._start_row, self._row_limit
@@ -85,10 +77,13 @@ class SheetReader(object):
                 elif column_position == constants.STOP_ITERATION:
                     break
 
-                tmp_row.append(cell_value)
-                if cell_value is not None and cell_value != "":
-                    return_row += tmp_row
-                    tmp_row = []
+                if self.keep_trailing_empty_cells:
+                    return_row.append(cell_value)
+                else:
+                    tmp_row.append(cell_value)
+                    if cell_value is not None and cell_value != "":
+                        return_row += tmp_row
+                        tmp_row = []
             if self._skip_empty_rows and len(return_row) < 1:
                 # we by-pass next yeild here
                 # because it is an empty row

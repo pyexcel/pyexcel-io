@@ -3,6 +3,13 @@ mock;python_version<"3"
 codecov
 coverage
 flake8
+black
+isort
+collective.checkdocs
+pygments
+moban
+moban_jinja2_github
+pyexcel
+pyexcel-xls==0.5.9
 SQLAlchemy
-pyexcel>=0.2.0
-pyexcel-xls>=0.1.0
+pyexcel-xlsxw

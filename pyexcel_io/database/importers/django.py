@@ -4,24 +4,22 @@
 
     The lower level handler for django import and export
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import logging
 
-from pyexcel_io.book import BookWriter
-from pyexcel_io.sheet import SheetWriter
-from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 import pyexcel_io.constants as constants
+from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
+from pyexcel_io.plugin_api import IWriter, ISheetWriter
 
 log = logging.getLogger(__name__)
 
 
-class DjangoModelWriter(SheetWriter):
+class DjangoModelWriter(ISheetWriter):
     """ import data into a django model """
 
     def __init__(self, importer, adapter, batch_size=None, bulk_save=True):
-        SheetWriter.__init__(self, importer, adapter, adapter.name)
         self.__batch_size = batch_size
         self.__model = adapter.model
         self.__column_names = adapter.column_names
@@ -58,15 +56,11 @@ class DjangoModelWriter(SheetWriter):
                 an_object.save()
 
 
-class DjangoBookWriter(BookWriter):
+class DjangoBookWriter(IWriter):
     """ write data into django models """
 
-    def __init__(self):
-        BookWriter.__init__(self)
-        self.__importer = None
-
-    def open_content(self, file_content, **keywords):
-        self.__importer = file_content
+    def __init__(self, exporter, _, **keywords):
+        self.__importer = exporter
         self._keywords = keywords
 
     def create_sheet(self, sheet_name):
@@ -86,3 +80,6 @@ class DjangoBookWriter(BookWriter):
             )
 
         return sheet_writer
+
+    def close(self):
+        pass

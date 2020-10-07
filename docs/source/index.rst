@@ -6,7 +6,7 @@
 `pyexcel-io` - Let you focus on data, instead of file formats
 ================================================================================
 
-:Author: C.W.
+:Author: chfw
 :Source code: http://github.com/pyexcel/pyexcel-io.git
 :Issues: http://github.com/pyexcel/pyexcel-io/issues
 :License: New BSD License
@@ -67,8 +67,10 @@ For individual excel file formats, please install them as you wish:
    ======================== ======================= ================= ==================
    Package name              Supported file formats  Dependencies     Python versions
    ======================== ======================= ================= ==================
-   `pyexcel-io`_            csv, csvz [#f1]_, tsv,                    2.6, 2.7, 3.3,
-                            tsvz [#f2]_                               3.4, 3.5, 3.6
+   `pyexcel-io`_ >=v0.6.0   csv, csvz [#f1]_, tsv,                    3.6+ 
+                            tsvz [#f2]_                               
+   `pyexcel-io`_ <=0.5.20   same as above                             2.6, 2.7, 3.3,
+                                                                      3.4, 3.5, 3.6
                                                                       pypy
    `pyexcel-xls`_           xls, xlsx(read only),   `xlrd`_,          same as above
                             xlsm(read only)         `xlwt`_
@@ -93,6 +95,24 @@ For individual excel file formats, please install them as you wish:
    ======================== ======================= ================= ==================
 
 
+Plugin shopping guide
+------------------------
+
+Except csv files, xls, xlsx and ods files are a zip of a folder containing a lot of
+xml files 
+
+The dedicated readers for excel files can stream read 
+
+
+In order to manage the list of plugins installed, you need to use pip to add or remove
+a plugin. When you use virtualenv, you can have different plugins per virtual
+environment. In the situation where you have multiple plugins that does the same thing
+in your environment, you need to tell pyexcel which plugin to use per function call.
+For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
+You need to append get_array(..., library='pyexcel-odsr').
+
+
+
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
 .. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
@@ -114,13 +134,6 @@ For individual excel file formats, please install them as you wish:
 .. _pyexcel-ezodf: https://github.com/pyexcel/pyexcel-ezodf
 .. _odfpy: https://github.com/eea/odfpy
 
-
-In order to manage the list of plugins installed, you need to use pip to add or remove
-a plugin. When you use virtualenv, you can have different plugins per virtual
-environment. In the situation where you have multiple plugins that does the same thing
-in your environment, you need to tell pyexcel which plugin to use per function call.
-For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
-You need to append get_array(..., library='pyexcel-odsr').
 
 .. rubric:: Footnotes
 
@@ -145,6 +158,7 @@ get_data(.., library='pyexcel-ods')
     ============= ======= ======== ======= ======== ======== ========
     `pyexcel-io`_ `xls`_  `xlsx`_  `ods`_  `ods3`_  `odsr`_  `xlsxw`_
     ============= ======= ======== ======= ======== ======== ========
+    0.6.0+        0.5.0+  0.5.0+   0.5.4   0.5.3    0.5.0+   0.5.0+
     0.5.10+       0.5.0+  0.5.0+   0.5.4   0.5.3    0.5.0+   0.5.0+
     0.5.1+        0.5.0+  0.5.0+   0.5.0+  0.5.0+   0.5.0+   0.5.0+
     0.4.x         0.4.x   0.4.x    0.4.x   0.4.x    0.4.x    0.4.x
@@ -195,6 +209,7 @@ API
 .. autosummary::
    :toctree: api/
 
+   iget_data
    get_data
    save_data
 

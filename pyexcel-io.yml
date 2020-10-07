@@ -2,14 +2,19 @@ overrides: "pyexcel.yaml"
 project: "pyexcel-io"
 name: pyexcel-io
 nick_name: io
-version: 0.5.20
-current_version: 0.5.20
-release: 0.5.20
+version: 0.6.0
+current_version: 0.6.0
+release: 0.6.0
+copyright_year: 2015-2020
 moban_command: false
-copyright_year: 2015-2019
+is_on_conda: true
 dependencies:
-  - ordereddict;python_version<"2.7"
   - lml>=0.0.4
+test_dependencies:
+  - pyexcel
+  - pyexcel-xls==0.5.9
+  - SQLAlchemy
+  - pyexcel-xlsxw
 extra_dependencies:
   - xls:
     - pyexcel-xls>=0.5.0
@@ -25,4 +30,12 @@ keywords:
   - csvz
   - django
   - sqlalchemy
+sphinx_extensions:
+  - sphinx.ext.autosummary
+  - sphinx.ext.doctest
+  - sphinx.ext.intersphinx
+  - sphinx.ext.viewcode
+  - sphinx.ext.autodoc
 description: A python library to read and write structured data in csv, zipped csv format and to/from databases
+python_requires: ">=3.6"
+min_python_version: "3.6"

@@ -3,16 +3,28 @@ pyexcel-io - Let you focus on data, instead of file formats
 ================================================================================
 
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
-   :target: https://www.patreon.com/pyexcel
+   :target: https://www.patreon.com/chfw
 
-.. image:: https://api.bountysource.com/badge/team?team_id=288537
-   :target: https://salt.bountysource.com/teams/chfw-pyexcel
+.. image:: https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg
+   :target: https://awesome-python.com/#specific-formats-processing
 
 .. image:: https://travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-io
 
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-io
+
+.. image:: https://badge.fury.io/py/pyexcel-io.svg
+   :target: https://pypi.org/project/pyexcel-io
+
+.. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/version.svg
+   :target: https://anaconda.org/conda-forge/pyexcel-io
+
+.. image:: https://pepy.tech/badge/pyexcel-io/month
+   :target: https://pepy.tech/project/pyexcel-io/month
+
+.. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/downloads.svg
+   :target: https://anaconda.org/conda-forge/pyexcel-io
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
@@ -24,7 +36,7 @@ Support the project
 ================================================================================
 
 If your company has embedded pyexcel and its components into a revenue generating
-product, please support me on `patreon <https://www.patreon.com/bePatron?u=5537627>`_
+product, please support me on github, `patreon <https://www.patreon.com/bePatron?u=5537627>`_
 or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
 the project and develop it further.
 
@@ -60,8 +72,10 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
    ======================== ======================= ================= ==================
    Package name              Supported file formats  Dependencies     Python versions
    ======================== ======================= ================= ==================
-   `pyexcel-io`_            csv, csvz [#f1]_, tsv,                    2.6, 2.7, 3.3,
-                            tsvz [#f2]_                               3.4, 3.5, 3.6
+   `pyexcel-io`_ >=v0.6.0   csv, csvz [#f1]_, tsv,                    3.6+ 
+                            tsvz [#f2]_                               
+   `pyexcel-io`_ <=0.5.20   same as above                             2.6, 2.7, 3.3,
+                                                                      3.4, 3.5, 3.6
                                                                       pypy
    `pyexcel-xls`_           xls, xlsx(read only),   `xlrd`_,          same as above
                             xlsm(read only)         `xlwt`_
@@ -86,6 +100,24 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
    ======================== ======================= ================= ==================
 
 
+Plugin shopping guide
+------------------------
+
+Except csv files, xls, xlsx and ods files are a zip of a folder containing a lot of
+xml files 
+
+The dedicated readers for excel files can stream read 
+
+
+In order to manage the list of plugins installed, you need to use pip to add or remove
+a plugin. When you use virtualenv, you can have different plugins per virtual
+environment. In the situation where you have multiple plugins that does the same thing
+in your environment, you need to tell pyexcel which plugin to use per function call.
+For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
+You need to append get_array(..., library='pyexcel-odsr').
+
+
+
 .. _pyexcel-io: https://github.com/pyexcel/pyexcel-io
 .. _pyexcel-xls: https://github.com/pyexcel/pyexcel-xls
 .. _pyexcel-xlsx: https://github.com/pyexcel/pyexcel-xlsx
@@ -107,13 +139,6 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 .. _pyexcel-ezodf: https://github.com/pyexcel/pyexcel-ezodf
 .. _odfpy: https://github.com/eea/odfpy
 
-
-In order to manage the list of plugins installed, you need to use pip to add or remove
-a plugin. When you use virtualenv, you can have different plugins per virtual
-environment. In the situation where you have multiple plugins that does the same thing
-in your environment, you need to tell pyexcel which plugin to use per function call.
-For example, pyexcel-ods and pyexcel-odsr, and you want to get_array to use pyexcel-odsr.
-You need to append get_array(..., library='pyexcel-odsr').
 
 .. rubric:: Footnotes
 
@@ -191,37 +216,16 @@ On Windows systems, please issue this command::
 
     > test.bat
 
-How to update test environment and update documentation
----------------------------------------------------------
 
-Additional steps are required:
+Before you commit
+------------------------------
 
-#. pip install moban
-#. git clone https://github.com/moremoban/setupmobans.git # generic setup
-#. git clone https://github.com/pyexcel/pyexcel-commons.git commons
-#. make your changes in `.moban.d` directory, then issue command `moban`
+Please run::
 
-What is pyexcel-commons
----------------------------------
+    $ make format
 
-Many information that are shared across pyexcel projects, such as: this developer guide, license info, etc. are stored in `pyexcel-commons` project.
+so as to beautify your code otherwise travis-ci may fail your unit test.
 
-What is .moban.d
----------------------------------
-
-`.moban.d` stores the specific meta data for the library.
-
-Acceptance criteria
--------------------
-
-#. Has Test cases written
-#. Has all code lines tested
-#. Passes all Travis CI builds
-#. Has fair amount of documentation if your change is complex
-#. run 'make format' so as to confirm the pyexcel organisation's coding style
-#. Please update CHANGELOG.rst
-#. Please add yourself to CONTRIBUTORS.rst
-#. Agree on NEW BSD License for your contribution
 
 
 

@@ -1,32 +1,41 @@
 import sys
 import json
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-from sqlalchemy import Float, Date, DateTime, ForeignKey
-from sqlalchemy.orm import sessionmaker
 import datetime
+import platform
+
+from sqlalchemy import (
+    Date,
+    Float,
+    Column,
+    String,
+    Integer,
+    DateTime,
+    ForeignKey,
+    create_engine,
+)
+from sqlalchemy.orm import backref, relationship, sessionmaker
+from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import OrderedDict
 from pyexcel_io.database.common import (
     SQLTableExporter,
-    SQLTableExportAdapter,
     SQLTableImporter,
+    SQLTableExportAdapter,
     SQLTableImportAdapter,
 )
+from sqlalchemy.ext.declarative import declarative_base
+from pyexcel_io.database.querysets import QuerysetsReader
+from pyexcel_io.database.exporters.queryset import QueryReader
 from pyexcel_io.database.exporters.sqlalchemy import (
-    SQLTableReader,
     SQLBookReader,
+    SQLTableReader,
 )
 from pyexcel_io.database.importers.sqlalchemy import (
-    PyexcelSQLSkipRowException,
-    SQLTableWriter,
     SQLBookWriter,
+    SQLTableWriter,
+    PyexcelSQLSkipRowException,
 )
-from pyexcel_io.database.querysets import QuerysetsReader
-from sqlalchemy.orm import relationship, backref
-from nose.tools import raises, eq_
-import platform
 
+from nose.tools import eq_, raises
 
 PY3 = sys.version_info[0] == 3
 PY36 = PY3 and sys.version_info[1] == 6
@@ -117,7 +126,7 @@ class TestSingleRead:
             ["2014-11-12", 1, "Smith", 12.25],
         ]
         # 'pyexcel' here is the table name
-        assert list(data) == content
+        eq_(list(data), content)
         mysession.close()
 
     def test_sql_formating(self):
@@ -127,8 +136,8 @@ class TestSingleRead:
             return [str(element) for element in row]
 
         # the key for this test case
-        sheet = SQLTableReader(
-            mysession, Pyexcel, row_renderer=custom_renderer
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), row_renderer=custom_renderer
         )
         data = sheet.to_array()
         content = [
@@ -141,7 +150,9 @@ class TestSingleRead:
 
     def test_sql_filter(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_row=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_row=1
+        )
         data = sheet.to_array()
         content = [
             ["2014-11-11", 0, "Adam", 11.25],
@@ -153,7 +164,9 @@ class TestSingleRead:
 
     def test_sql_filter_1(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_row=1, row_limit=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_row=1, row_limit=1
+        )
         data = sheet.to_array()
         content = [["2014-11-11", 0, "Adam", 11.25]]
         # 'pyexcel'' here is the table name
@@ -162,7 +175,9 @@ class TestSingleRead:
 
     def test_sql_filter_2(self):
         mysession = Session()
-        sheet = SQLTableReader(mysession, Pyexcel, start_column=1)
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_column=1
+        )
         data = sheet.to_array()
         content = [
             ["id", "name", "weight"],
@@ -175,8 +190,8 @@ class TestSingleRead:
 
     def test_sql_filter_3(self):
         mysession = Session()
-        sheet = SQLTableReader(
-            mysession, Pyexcel, start_column=1, column_limit=1
+        sheet = EncapsulatedSheetReader(
+            SQLTableReader(mysession, Pyexcel), start_column=1, column_limit=1
         )
         data = sheet.to_array()
         content = [["id"], [0], [1]]
@@ -212,6 +227,14 @@ class TestSingleWrite:
         reader = QuerysetsReader(query_sets, self.data[0])
         results = reader.to_array()
         assert list(results) == self.results
+
+        query_sets = mysession.query(Pyexcel).all()
+        query_reader = QueryReader(query_sets, None, column_names=self.data[0])
+        result = read_all(query_reader)
+        for key in result:
+            result[key] = list(result[key])
+        eq_(result, {"pyexcel_sheet1": self.results})
+        query_reader.close()
         mysession.close()
 
     def test_update_existing_row(self):
@@ -434,8 +457,7 @@ class TestMultipleRead:
         post_adapter.column_names = data["Post"][0]
         post_adapter.row_initializer = post_init_func
         importer.append(post_adapter)
-        writer = SQLBookWriter()
-        writer.open_content(importer)
+        writer = SQLBookWriter(importer, "sql")
         to_store = OrderedDict()
         to_store.update({category_adapter.get_name(): data["Category"][1:]})
         to_store.update({post_adapter.get_name(): data["Post"][1:]})
@@ -448,12 +470,12 @@ class TestMultipleRead:
         exporter.append(category_adapter)
         post_adapter = SQLTableExportAdapter(Post)
         exporter.append(post_adapter)
-        book = SQLBookReader()
-        book.open_content(exporter)
-        data = book.read_all()
-        for key in data.keys():
-            data[key] = list(data[key])
-        assert json.dumps(data) == (
+        reader = SQLBookReader(exporter, "sql")
+        result = read_all(reader)
+        for key in result:
+            result[key] = list(result[key])
+
+        assert json.dumps(result) == (
             '{"category": [["id", "name"], [1, "News"], [2, "Sports"]], '
             + '"post": [["body", "category_id", "id", "pub_date", "title"], '
             + '["formal", 1, 1, "2015-01-20T23:28:29", "Title A"], '
@@ -543,13 +565,19 @@ def test_sql_table_import_adapter():
 
 
 @raises(Exception)
-def test_unknown_sheet(self):
+def test_unknown_sheet():
     importer = SQLTableImporter(None)
     category_adapter = SQLTableImportAdapter(Category)
     category_adapter.column_names = [""]
     importer.append(category_adapter)
-    writer = SQLBookWriter()
-    writer.open_content(importer)
+    writer = SQLBookWriter(importer, "sql")
     to_store = OrderedDict()
     to_store.update({"you do not see me": [[]]})
     writer.write(to_store)
+
+
+def read_all(reader):
+    result = OrderedDict()
+    for index, sheet in enumerate(reader.content_array):
+        result.update({sheet.name: reader.read_sheet(index).to_array()})
+    return result
