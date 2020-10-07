@@ -17,7 +17,7 @@ releases:
   - action: added
     details:
     - "`#86`: allow trailing options, get_data(...keep_trailing_empty_cells=True)."
-  version: 0.6.0
+  version: 0.6.1
   date: 7.10.2020
 - changes:
   - action: updated
