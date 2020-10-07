@@ -33,12 +33,20 @@ class Reader(object):
         self.library = library
         self.keywords = None
 
+        # if you know which reader class to use, this attribute allows
+        # you to set reader class externally. Since there is no
+        # so call private field in Python, I am not going to create
+        # useless setter and getter functions like Java.
+        # in pyexcel, this attribute is mainly used for testing
+        self.reader_class = None
+
     def open(self, file_name, **keywords):
-        reader_class = NEW_READERS.get_a_plugin(
-            self.file_type, location="file", library=self.library
-        )
+        if self.reader_class is None:
+            self.reader_class = NEW_READERS.get_a_plugin(
+                self.file_type, location="file", library=self.library
+            )
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
-        self.reader = reader_class(
+        self.reader = self.reader_class(
             file_name, self.file_type, **native_sheet_keywords
         )
         return self.reader
@@ -46,10 +54,11 @@ class Reader(object):
     def open_content(self, file_content, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
         try:
-            reader_class = NEW_READERS.get_a_plugin(
-                self.file_type, location="content", library=self.library
-            )
-            self.reader = reader_class(
+            if self.reader_class is None:
+                self.reader_class = NEW_READERS.get_a_plugin(
+                    self.file_type, location="content", library=self.library
+                )
+            self.reader = self.reader_class(
                 file_content, self.file_type, **native_sheet_keywords
             )
             return self.reader
@@ -64,10 +73,11 @@ class Reader(object):
 
     def open_stream(self, file_stream, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
-        reader_class = NEW_READERS.get_a_plugin(
-            self.file_type, location="memory", library=self.library
-        )
-        self.reader = reader_class(
+        if self.reader_class is None:
+            self.reader_class = NEW_READERS.get_a_plugin(
+                self.file_type, location="memory", library=self.library
+            )
+        self.reader = self.reader_class(
             file_stream, self.file_type, **native_sheet_keywords
         )
         return self.reader

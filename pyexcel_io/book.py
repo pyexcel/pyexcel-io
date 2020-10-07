@@ -7,10 +7,18 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import warnings
+
 import pyexcel_io.manager as manager
 from pyexcel_io._compact import OrderedDict, isstream
 
 from .constants import MESSAGE_ERROR_03, MESSAGE_WRONG_IO_INSTANCE
+
+DEPRECATED_SINCE_0_6_0 = (
+    "Deprecated since v0.6.0! "
+    + "Although backward compatibility is preserved, "
+    + "it is recommended to upgrade to get new features."
+)
 
 
 class RWInterface(object):
@@ -21,6 +29,7 @@ class RWInterface(object):
     stream_type = None
 
     def __init__(self):
+        warnings.warn(DEPRECATED_SINCE_0_6_0)
         self._file_type = None
 
     def open(self, file_name, **keywords):
