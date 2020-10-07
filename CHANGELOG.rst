@@ -1,18 +1,8 @@
 Change log
 ================================================================================
 
-0.6.0 - tbd
+0.6.0 - 7.10.2020
 --------------------------------------------------------------------------------
-
-**added**
-
-#. `#86 <https://github.com/pyexcel/pyexcel-io/issues/86>`_: allow trailing
-   options, get_data(...keep_trailing_empty_cells=True).
-
-**fixed**
-
-#. `#74 <https://github.com/pyexcel/pyexcel-io/issues/74>`_: handle zip files
-   which contain non-UTF-8 encoded files.
 
 **removed**
 
@@ -24,6 +14,16 @@ Change log
    impacted. please read 'Packaging with Pyinstaller' in the documentation.
 #. new query set reader plugin. pyexcel<=0.6.4 has used intrusive way of getting
    query set source done. it is against the plugin interface.
+
+**fixed**
+
+#. `#74 <https://github.com/pyexcel/pyexcel-io/issues/74>`_: handle zip files
+   which contain non-UTF-8 encoded files.
+
+**added**
+
+#. `#86 <https://github.com/pyexcel/pyexcel-io/issues/86>`_: allow trailing
+   options, get_data(...keep_trailing_empty_cells=True).
 
 0.5.20 - 17.7.2019
 --------------------------------------------------------------------------------

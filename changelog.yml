@@ -2,12 +2,6 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
-  - action: added
-    details:
-    - "`#86`: allow trailing options, get_data(...keep_trailing_empty_cells=True)."
-  - action: fixed
-    details:
-    - "`#74`: handle zip files which contain non-UTF-8 encoded files."
   - action: removed
     details:
     - 'python 3.6 lower versions are no longer supported'
@@ -17,8 +11,14 @@ releases:
       please read 'Packaging with Pyinstaller' in the documentation.
     - new query set reader plugin. pyexcel<=0.6.4 has used intrusive way of getting query set
       source done. it is against the plugin interface.
+  - action: fixed
+    details:
+    - "`#74`: handle zip files which contain non-UTF-8 encoded files."
+  - action: added
+    details:
+    - "`#86`: allow trailing options, get_data(...keep_trailing_empty_cells=True)."
   version: 0.6.0
-  date: tbd
+  date: 7.10.2020
 - changes:
   - action: updated
     details:
