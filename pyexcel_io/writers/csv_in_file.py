@@ -10,18 +10,20 @@ class CsvFileWriter(IWriter):
         if file_type == constants.FILE_FORMAT_TSV:
             self._keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
         self.__index = 0
-        self.writer = None
+        self.handlers = []
 
     def create_sheet(self, name):
-        self.writer = CSVFileWriter(
+        writer = CSVFileWriter(
             self._file_alike_object,
             name,
             sheet_index=self.__index,
             **self._keywords
         )
         self.__index = self.__index + 1
-        return self.writer
+        self.handlers.append(writer)
+        return writer
 
     def close(self):
-        if self.writer:
-            self.writer.close()
+        for writer in self.handlers:
+            writer.close()
+        self.handlers = []

@@ -61,3 +61,4 @@ class FileReader(IReader):
     def close(self):
         for reader in self.handles:
             reader.close()
+        self.handles = []
