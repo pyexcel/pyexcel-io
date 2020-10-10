@@ -3,8 +3,8 @@ project: "pyexcel-io"
 name: pyexcel-io
 nick_name: io
 version: 0.6.2
-current_version: 0.6.2
-release: 0.6.2
+current_version: 0.6.3
+release: 0.6.3
 copyright_year: 2015-2020
 moban_command: false
 is_on_conda: true
