@@ -1,13 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 
 import pyexcel as p
 from pyexcel_io import get_data, save_data
+from pyexcel_io.exceptions import NoSupportingPluginFound
 
 from nose import SkipTest
-from nose.tools import eq_
+from nose.tools import eq_, raises
 
 IN_TRAVIS = "TRAVIS" in os.environ
 
@@ -42,7 +40,7 @@ def test_issue_23():
 
 
 # def test_issue_28():
-#     from pyexcel_io.plugins import readers
+#     from pyexcel_io.plugins import OLD_READERS as readers
 #     from pyexcel_io.exceptions import UpgradePlugin
 #     expected = "Please upgrade the plugin '%s' according to "
 #     expected += "plugin compactibility table."
@@ -152,6 +150,11 @@ def test_pyexcel_issue_138():
     expected = [["123_122", "123_1.", "123_1.0"]]
     eq_(data["test.csv"], expected)
     os.unlink("test.csv")
+
+
+@raises(NoSupportingPluginFound)
+def test_issue_96():
+    get_data("foo-bar-data", file_type="Idonotexist")
 
 
 def get_fixture(file_name):
