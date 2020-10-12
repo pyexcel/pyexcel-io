@@ -79,9 +79,9 @@ SETUP_COMMANDS = {}
 
 PACKAGES = find_packages(exclude=["ez_setup", "examples", "tests", "tests.*"])
 EXTRAS_REQUIRE = {
-    "xls": ['pyexcel-xls>=0.5.0'],
-    "xlsx": ['pyexcel-xlsx>=0.5.0'],
-    "ods": ['pyexcel-ods3>=0.5.0'],
+    "xls": ['pyexcel-xls>=0.6.0'],
+    "xlsx": ['pyexcel-xlsx>=0.6.0'],
+    "ods": ['pyexcel-ods3>=0.6.0'],
 }
 # You do not need to read beyond this line
 PUBLISH_COMMAND = "{0} setup.py sdist bdist_wheel upload -r pypi".format(sys.executable)
