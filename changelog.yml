@@ -2,11 +2,11 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
-  - action: updated
+  - action: fixed
     details:
     - "`#96`: regression: unknown file type shall trigger NoSupportingPluginFound"
   version: 0.6.3
-  date: tbd
+  date: 12.10.2020
 - changes:
   - action: updated
     details:
