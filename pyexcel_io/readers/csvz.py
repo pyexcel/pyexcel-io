@@ -7,8 +7,8 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-from io import BytesIO
 import zipfile
+from io import BytesIO
 
 import chardet
 from pyexcel_io import constants
