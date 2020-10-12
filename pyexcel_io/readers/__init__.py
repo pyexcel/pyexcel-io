@@ -29,4 +29,9 @@ IOPluginInfoChainV2(__name__).add_a_reader(
     file_types=["csvz", "tsvz"],
     locations=["file", "memory"],
     stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="csvz.ContentReader",
+    file_types=["csvz", "tsvz"],
+    locations=["content"],
+    stream_type="binary",
 )

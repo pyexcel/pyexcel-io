@@ -8,6 +8,7 @@
     :license: New BSD License, see LICENSE for more details
 """
 import zipfile
+from io import BytesIO
 
 import chardet
 from pyexcel_io import constants
@@ -46,6 +47,12 @@ class FileReader(IReader):
         sheet = StringIO(content.decode(encoding_guess["encoding"]))
 
         return CSVinMemoryReader(NamedContent(name, sheet), **self.keywords)
+
+
+class ContentReader(FileReader):
+    def __init__(self, file_content, file_type, **keywords):
+        io = BytesIO(file_content)
+        super().__init__(io, file_type, **keywords)
 
 
 def _get_sheet_name(filename):

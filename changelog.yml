@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - "`#96`: regression: unknown file type shall trigger NoSupportingPluginFound"
+  version: 0.6.3
+  date: tbd
+- changes:
+  - action: updated
+    details:
     - "`#94`: keep backward compatibility for pyexcel-xls 0.4.1"
   version: 0.6.2
   date: 7.10.2020

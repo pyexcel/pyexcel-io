@@ -1,5 +1,3 @@
-from pyexcel_io import exceptions
-from pyexcel_io.book import _convert_content_to_stream
 from pyexcel_io.sheet import SheetReader
 from pyexcel_io.plugins import NEW_READERS
 from pyexcel_io._compact import OrderedDict
@@ -53,23 +51,14 @@ class Reader(object):
 
     def open_content(self, file_content, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
-        try:
-            if self.reader_class is None:
-                self.reader_class = NEW_READERS.get_a_plugin(
-                    self.file_type, location="content", library=self.library
-                )
-            self.reader = self.reader_class(
-                file_content, self.file_type, **native_sheet_keywords
+        if self.reader_class is None:
+            self.reader_class = NEW_READERS.get_a_plugin(
+                self.file_type, location="content", library=self.library
             )
-            return self.reader
-        except (
-            exceptions.NoSupportingPluginFound,
-            exceptions.SupportingPluginAvailableButNotInstalled,
-        ):
-            file_stream = _convert_content_to_stream(
-                file_content, self.file_type
-            )
-            return self.open_stream(file_stream, **native_sheet_keywords)
+        self.reader = self.reader_class(
+            file_content, self.file_type, **native_sheet_keywords
+        )
+        return self.reader
 
     def open_stream(self, file_stream, **keywords):
         self.keywords, native_sheet_keywords = clean_keywords(keywords)
