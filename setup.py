@@ -32,7 +32,7 @@ except (ValueError, UnicodeError, locale.Error):
 
 NAME = "pyexcel-io"
 AUTHOR = "chfw"
-VERSION = "0.6.2"
+VERSION = "0.6.3"
 EMAIL = "info@pyexcel.org"
 LICENSE = "New BSD"
 DESCRIPTION = (
@@ -40,7 +40,7 @@ DESCRIPTION = (
     "format and to/from databases"
 )
 URL = "https://github.com/pyexcel/pyexcel-io"
-DOWNLOAD_URL = "%s/archive/0.6.2.tar.gz" % URL
+DOWNLOAD_URL = "%s/archive/0.6.3.tar.gz" % URL
 FILES = ["README.rst", "CHANGELOG.rst"]
 KEYWORDS = [
     "python",
@@ -79,14 +79,14 @@ SETUP_COMMANDS = {}
 
 PACKAGES = find_packages(exclude=["ez_setup", "examples", "tests", "tests.*"])
 EXTRAS_REQUIRE = {
-    "xls": ['pyexcel-xls>=0.5.0'],
-    "xlsx": ['pyexcel-xlsx>=0.5.0'],
-    "ods": ['pyexcel-ods3>=0.5.0'],
+    "xls": ['pyexcel-xls>=0.6.0'],
+    "xlsx": ['pyexcel-xlsx>=0.6.0'],
+    "ods": ['pyexcel-ods3>=0.6.0'],
 }
 # You do not need to read beyond this line
 PUBLISH_COMMAND = "{0} setup.py sdist bdist_wheel upload -r pypi".format(sys.executable)
-GS_COMMAND = ("gs pyexcel-io v0.6.2 " +
-              "Find 0.6.2 in changelog for more details")
+GS_COMMAND = ("gs pyexcel-io v0.6.3 " +
+              "Find 0.6.3 in changelog for more details")
 NO_GS_MESSAGE = ("Automatic github release is disabled. " +
                  "Please install gease to enable it.")
 UPLOAD_FAILED_MSG = (

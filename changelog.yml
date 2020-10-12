@@ -2,6 +2,15 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: fixed
+    details:
+    - "`#96`: regression: unknown file type shall trigger NoSupportingPluginFound"
+  - action: updated
+    details:
+    - "extra dependencies uses 0.6.0 based plugins"
+  version: 0.6.3
+  date: 12.10.2020
+- changes:
   - action: updated
     details:
     - "`#94`: keep backward compatibility for pyexcel-xls 0.4.1"

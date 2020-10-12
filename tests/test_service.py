@@ -3,6 +3,7 @@ from datetime import time, datetime, timedelta
 from pyexcel_io.service import (
     date_value,
     time_value,
+    float_value,
     boolean_value,
     ods_bool_value,
     ods_date_value,
@@ -162,3 +163,8 @@ def test_time_value():
     test_time_value = "PT23H00M01S"
     delta = time_value(test_time_value)
     eq_(delta, time(23, 0, 1))
+
+
+def test_float_value():
+    a = float_value("1.2")
+    eq_(a, 1.2)

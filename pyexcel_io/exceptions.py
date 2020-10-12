@@ -21,12 +21,6 @@ class SupportingPluginAvailableButNotInstalled(Exception):
     pass
 
 
-class UpgradePlugin(Exception):
-    """raised when a known plugin is not compatible"""
-
-    pass
-
-
 class IntegerAccuracyLossError(Exception):
     """
     When an interger is greater than 999999999999999, ods loses its accuracy.

@@ -1,6 +1,18 @@
 Change log
 ================================================================================
 
+0.6.3 - 12.10.2020
+--------------------------------------------------------------------------------
+
+**fixed**
+
+#. `#96 <https://github.com/pyexcel/pyexcel-io/issues/96>`_: regression: unknown
+   file type shall trigger NoSupportingPluginFound
+
+**updated**
+
+#. extra dependencies uses 0.6.0 based plugins
+
 0.6.2 - 7.10.2020
 --------------------------------------------------------------------------------
 

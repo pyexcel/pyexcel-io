@@ -1,13 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 
 import pyexcel as p
 from pyexcel_io import get_data, save_data
+from pyexcel_io.exceptions import NoSupportingPluginFound
 
 from nose import SkipTest
-from nose.tools import eq_
+from nose.tools import eq_, raises
 
 IN_TRAVIS = "TRAVIS" in os.environ
 
@@ -41,17 +39,6 @@ def test_issue_23():
     eq_(data["issue23.csv"], expected)
 
 
-# def test_issue_28():
-#     from pyexcel_io.plugins import readers
-#     from pyexcel_io.exceptions import UpgradePlugin
-#     expected = "Please upgrade the plugin '%s' according to "
-#     expected += "plugin compactibility table."
-#     try:
-#         readers.load_me_later('pyexcel_test')
-#     except UpgradePlugin as e:
-#         eq_(str(e), expected % 'pyexcel_test')
-
-
 def test_issue_33_34():
     import mmap
 
@@ -64,7 +51,7 @@ def test_issue_33_34():
 
 
 def test_issue_30_utf8_BOM_header():
-    content = [[u"人有悲歡離合", u"月有陰晴圓缺"]]
+    content = [["人有悲歡離合", "月有陰晴圓缺"]]
     test_file = "test-utf8-BOM.csv"
     save_data(test_file, content, encoding="utf-8-sig", lineterminator="\n")
     custom_encoded_content = get_data(test_file, encoding="utf-8-sig")
@@ -152,6 +139,11 @@ def test_pyexcel_issue_138():
     expected = [["123_122", "123_1.", "123_1.0"]]
     eq_(data["test.csv"], expected)
     os.unlink("test.csv")
+
+
+@raises(NoSupportingPluginFound)
+def test_issue_96():
+    get_data("foo-bar-data", file_type="Idonotexist")
 
 
 def get_fixture(file_name):
