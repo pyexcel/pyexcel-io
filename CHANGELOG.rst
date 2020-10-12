@@ -1,10 +1,10 @@
 Change log
 ================================================================================
 
-0.6.3 - tbd
+0.6.3 - 12.10.2020
 --------------------------------------------------------------------------------
 
-**updated**
+**fixed**
 
 #. `#96 <https://github.com/pyexcel/pyexcel-io/issues/96>`_: regression: unknown
    file type shall trigger NoSupportingPluginFound
