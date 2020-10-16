@@ -79,19 +79,20 @@ SETUP_COMMANDS = {}
 
 PACKAGES = find_packages(exclude=["ez_setup", "examples", "tests", "tests.*"])
 EXTRAS_REQUIRE = {
-    "xls": ['pyexcel-xls>=0.5.0'],
-    "xlsx": ['pyexcel-xlsx>=0.5.0'],
-    "ods": ['pyexcel-ods3>=0.5.0'],
+    "xls": ['pyexcel-xls>=0.6.0'],
+    "xlsx": ['pyexcel-xlsx>=0.6.0'],
+    "ods": ['pyexcel-ods3>=0.6.0'],
 }
 # You do not need to read beyond this line
 PUBLISH_COMMAND = "{0} setup.py sdist bdist_wheel upload -r pypi".format(sys.executable)
+HERE = os.path.abspath(os.path.dirname(__file__))
+
 GS_COMMAND = ("gs pyexcel-io v0.6.3 " +
               "Find 0.6.3 in changelog for more details")
 NO_GS_MESSAGE = ("Automatic github release is disabled. " +
                  "Please install gease to enable it.")
 UPLOAD_FAILED_MSG = (
     'Upload failed. please run "%s" yourself.' % PUBLISH_COMMAND)
-HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 class PublishCommand(Command):
@@ -136,7 +137,6 @@ class PublishCommand(Command):
 SETUP_COMMANDS.update({
     "publish": PublishCommand
 })
-
 
 def has_gease():
     """
