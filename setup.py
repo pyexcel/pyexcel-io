@@ -31,7 +31,7 @@ except (ValueError, UnicodeError, locale.Error):
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 NAME = "pyexcel-io"
-AUTHOR = "chfw"
+AUTHOR = "C.W."
 VERSION = "0.6.3"
 EMAIL = "info@pyexcel.org"
 LICENSE = "New BSD"
