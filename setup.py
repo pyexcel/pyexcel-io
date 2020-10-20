@@ -87,7 +87,7 @@ EXTRAS_REQUIRE = {
 PUBLISH_COMMAND = "{0} setup.py sdist bdist_wheel upload -r pypi".format(sys.executable)
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-GS_COMMAND = ("gs pyexcel-io v0.6.3 " +
+GS_COMMAND = ("gease pyexcel-io v0.6.3 " +
               "Find 0.6.3 in changelog for more details")
 NO_GS_MESSAGE = ("Automatic github release is disabled. " +
                  "Please install gease to enable it.")
