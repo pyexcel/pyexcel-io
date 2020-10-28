@@ -45,7 +45,14 @@ class SQLTableWriter(ISheetWriter):
                 print(new_array)
 
     def _write_row(self, array):
-        row = dict(zip(self.adapter.column_names, array))
+        new_array = array
+        if self.adapter.column_name_mapping_dict:
+            another_new_array = []
+            for index, element in enumerate(new_array):
+                if index in self.adapter.column_name_mapping_dict:
+                    another_new_array.append(element)
+            new_array = another_new_array
+        row = dict(zip(self.adapter.column_names, new_array))
         obj = None
         if self.adapter.row_initializer:
             # allow initinalizer to return None
@@ -54,11 +61,7 @@ class SQLTableWriter(ISheetWriter):
         if obj is None:
             obj = self.adapter.table()
             for name in self.adapter.column_names:
-                if self.adapter.column_name_mapping_dict is not None:
-                    key = self.adapter.column_name_mapping_dict[name]
-                else:
-                    key = name
-                setattr(obj, key, row[name])
+                setattr(obj, name, row[name])
         self.importer.session.add(obj)
         if self.__auto_commit and self.__bulk_size != float("inf"):
             self.__count += 1
