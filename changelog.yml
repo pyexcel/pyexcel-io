@@ -4,7 +4,7 @@ releases:
 - changes:
   - action: updated
     details:
-    - "`#102: skip columns from imported excel sheet."
+    - "`#102`: skip columns from imported excel sheet."
   version: 0.6.4
   date: tbd
 - changes:
