@@ -6,7 +6,8 @@ Change log
 
 **updated**
 
-#. `#102: skip columns from imported excel sheet.
+#. `#102 <https://github.com/pyexcel/pyexcel-io/issues/102>`_: skip columns from
+   imported excel sheet.
 
 0.6.3 - 12.10.2020
 --------------------------------------------------------------------------------
