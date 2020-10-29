@@ -33,13 +33,20 @@ class DjangoModelWriter(ISheetWriter):
             print(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
+            if self.__mapdict:
+                another_new_array = []
+                for index, element in enumerate(new_array):
+                    if index in self.__mapdict:
+                        another_new_array.append(element)
+                new_array = another_new_array
             model_to_be_created = new_array
             if self.__initializer is not None:
                 model_to_be_created = self.__initializer(new_array)
             if model_to_be_created:
+                row = dict(zip(self.__column_names, model_to_be_created))
                 self.__objs.append(
                     self.__model(
-                        **dict(zip(self.__column_names, model_to_be_created))
+                        **row
                     )
                 )
 

@@ -21,7 +21,7 @@ pyexcel-io - Let you focus on data, instead of file formats
    :target: https://anaconda.org/conda-forge/pyexcel-io
 
 .. image:: https://pepy.tech/badge/pyexcel-io/month
-   :target: https://pepy.tech/project/pyexcel-io/month
+   :target: https://pepy.tech/project/pyexcel-io
 
 .. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/downloads.svg
    :target: https://anaconda.org/conda-forge/pyexcel-io
