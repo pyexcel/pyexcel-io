@@ -6,7 +6,7 @@ releases:
     details:
     - "`#102`: skip columns from imported excel sheet."
   version: 0.6.4
-  date: tbd
+  date: 31.10.2020
 - changes:
   - action: fixed
     details:
