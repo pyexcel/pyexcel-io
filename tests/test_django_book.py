@@ -158,10 +158,13 @@ class TestSheet:
         writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
-        assert model.objects.objs == [
-            {"Y": 2, "X": 2, "Z": 3},
-            {"Y": 5, "X": 5, "Z": 6},
-        ]
+        eq_(
+            model.objects.objs,
+            [
+                {"Y": 2, "X": 2, "Z": 3},
+                {"Y": 5, "X": 5, "Z": 6},
+            ],
+        )
 
     def test_sheet_save_to_django_model_skip_me(self):
         model = FakeDjangoModel()
@@ -178,7 +181,7 @@ class TestSheet:
         writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
-        assert model.objects.objs == [{"Y": 2, "X": 1, "Z": 3}]
+        eq_(model.objects.objs, [{"Y": 2, "X": 1, "Z": 3}])
 
     def test_load_sheet_from_django_model(self):
         model = FakeDjangoModel()
@@ -231,6 +234,18 @@ class TestSheet:
 
     def test_mapping_dict(self):
         data2 = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
+        mapdict = {"C": "Z", "A": "X", "B": "Y"}
+        model = FakeDjangoModel()
+        adapter = DjangoModelImportAdapter(model)
+        adapter.column_names = data2[0]
+        adapter.column_name_mapping_dict = mapdict
+        writer = DjangoModelWriter(None, adapter)
+        writer.write_array(data2[1:])
+        writer.close()
+        eq_(model.objects.objs, self.result)
+
+    def test_jumping_columns(self):
+        data2 = [["D", "A", "B", "C"], [1, 1, 2, 3], [10, 4, 5, 6]]
         mapdict = {"C": "Z", "A": "X", "B": "Y"}
         model = FakeDjangoModel()
         adapter = DjangoModelImportAdapter(model)
