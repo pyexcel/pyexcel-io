@@ -38,65 +38,66 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
     def __init__(self, model):
         DjangoModelExportAdapter.__init__(self, model)
-        self.__column_names = self.InOutParameter()
-        self.__column_name_mapping_dict = self.InOutParameter()
-        self.__row_initializer = self.InOutParameter()
+        self._column_names = self.InOutParameter()
+        self._column_name_mapping_dict = self.InOutParameter()
+        self._row_initializer = self.InOutParameter()
         self._process_parameters()
 
     @property
     def row_initializer(self):
         """ contructor for a database table entry """
-        return self.__row_initializer.output
+        return self._row_initializer.output
 
     @property
     def column_names(self):
         """ the desginated database column names """
-        return self.__column_names.output
+        return self._column_names.output
 
     @property
     def column_name_mapping_dict(self):
         """ if not the same, a mapping dictionary is looked up"""
-        return self.__column_name_mapping_dict.output
+        return self._column_name_mapping_dict.output
 
     @row_initializer.setter
     def row_initializer(self, a_function):
         """ set the contructor """
-        self.__row_initializer.input = a_function
+        self._row_initializer.input = a_function
         self._process_parameters()
 
     @column_names.setter
     def column_names(self, column_names):
         """ set the column names """
-        self.__column_names.input = column_names
+        self._column_names.input = column_names
         self._process_parameters()
 
     @column_name_mapping_dict.setter
     def column_name_mapping_dict(self, mapping_dict):
         """ set the mapping dict """
-        self.__column_name_mapping_dict.input = mapping_dict
+        self._column_name_mapping_dict.input = mapping_dict
         self._process_parameters()
 
     def _process_parameters(self):
-        if self.__row_initializer.input is None:
-            self.__row_initializer.output = None
+        if self._row_initializer.input is None:
+            self._row_initializer.output = None
         else:
-            self.__row_initializer.output = self.__row_initializer.input
-        if isinstance(self.__column_name_mapping_dict.input, list):
-            self.__column_names.output = self.__column_name_mapping_dict.input
-            self.__column_name_mapping_dict.output = None
-        elif isinstance(self.__column_name_mapping_dict.input, dict):
-            if self.__column_names.input:
-                self.__column_names.output = []
+            self._row_initializer.output = self._row_initializer.input
+        if isinstance(self._column_name_mapping_dict.input, list):
+            self._column_names.output = self._column_name_mapping_dict.input
+            self._column_name_mapping_dict.output = None
+        elif isinstance(self._column_name_mapping_dict.input, dict):
+
+            if self._column_names.input:
+                self._column_names.output = []
                 indices = []
-                for index, name in enumerate(self.__column_names.input):
-                    if name in self.__column_name_mapping_dict.input:
-                        self.__column_names.output.append(
-                            self.__column_name_mapping_dict.input[name]
+                for index, name in enumerate(self._column_names.input):
+                    if name in self._column_name_mapping_dict.input:
+                        self._column_names.output.append(
+                            self._column_name_mapping_dict.input[name]
                         )
                         indices.append(index)
-                self.__column_name_mapping_dict.output = indices
-        if self.__column_names.output is None:
-            self.__column_names.output = self.__column_names.input
+                self._column_name_mapping_dict.output = indices
+        if self._column_names.output is None:
+            self._column_names.output = self._column_names.input
 
 
 class DjangoModelExporter(object):
@@ -114,15 +115,15 @@ class DjangoModelImporter(object):
     """ public interface for django model import """
 
     def __init__(self):
-        self.__adapters = {}
+        self._adapters = {}
 
     def append(self, import_adapter):
         """ store model parameter for more than one model """
-        self.__adapters[import_adapter.get_name()] = import_adapter
+        self._adapters[import_adapter.get_name()] = import_adapter
 
     def get(self, name):
         """ get a parameter out """
-        return self.__adapters.get(name, None)
+        return self._adapters.get(name, None)
 
 
 class SQLTableExportAdapter(DjangoModelExportAdapter):
