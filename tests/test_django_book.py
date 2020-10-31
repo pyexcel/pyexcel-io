@@ -158,10 +158,13 @@ class TestSheet:
         writer = DjangoModelWriter(None, adapter)
         writer.write_array(self.data[1:])
         writer.close()
-        eq_(model.objects.objs, [
-            {"Y": 2, "X": 2, "Z": 3},
-            {"Y": 5, "X": 5, "Z": 6},
-        ])
+        eq_(
+            model.objects.objs,
+            [
+                {"Y": 2, "X": 2, "Z": 3},
+                {"Y": 5, "X": 5, "Z": 6},
+            ],
+        )
 
     def test_sheet_save_to_django_model_skip_me(self):
         model = FakeDjangoModel()

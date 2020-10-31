@@ -45,11 +45,7 @@ class DjangoModelWriter(ISheetWriter):
                 model_to_be_created = self.initializer(new_array)
             if model_to_be_created:
                 row = dict(zip(self.column_names, model_to_be_created))
-                self.objs.append(
-                    self.model(
-                        **row
-                    )
-                )
+                self.objs.append(self.model(**row))
 
     # else
     # skip the row
