@@ -103,6 +103,7 @@ def check_mmap_encoding(encoding):
         memory_mapped_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         data = get_data(memory_mapped_file, file_type="csv", encoding=encoding)
         eq_(data["csv"], content)
+        memory_mapped_file.close()
 
     os.unlink(test_file)
 
