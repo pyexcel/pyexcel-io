@@ -9,7 +9,7 @@ pyexcel-io - Let you focus on data, instead of file formats
    :target: https://awesome-python.com/#specific-formats-processing
 
 .. image:: https://github.com/actions/pyexcel/pyexcel-io/workflows/.github/workflows/tests.yml/badge.svg
-   :target: http://github.com/pyexcel/pyexcel-io
+   :target: http://github.com/pyexcel/pyexcel-io/actions
 
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-io
