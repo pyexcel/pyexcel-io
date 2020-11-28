@@ -153,7 +153,7 @@ Here is an example to write a sentence of "Shui Dial Getou"[#f2] into a csv file
 
 .. code-block:: python
 
-    >>> content = [[u'人有悲歡離合', u'月有陰晴圓缺']]
+    >>> content = [['löyly', 'löyly']]
     >>> test_file = "test-utf8-BOM.csv"
 	>>> save_data(test_file, content, encoding="utf-8-sig", lineterminator="\n")
 
