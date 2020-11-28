@@ -28,7 +28,6 @@ jobs:
       - name: test
         run: |
           pip freeze
-          chcp 65001
           nosetests --verbosity=3 --with-coverage --cover-package pyexcel_io --cover-package tests tests --with-doctest --doctest-extension=.rst README.rst docs/source pyexcel_io
       - name: Upload coverage
         uses: codecov/codecov-action@v1
