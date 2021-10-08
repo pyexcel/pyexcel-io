@@ -32,7 +32,7 @@ class IOPluginInfo(PluginInfo):
 
 
 class IOPluginInfoChain(PluginInfoChain):
-    """provide custom functions to add a reader and a writer """
+    """provide custom functions to add a reader and a writer"""
 
     def add_a_reader(
         self,
@@ -40,7 +40,7 @@ class IOPluginInfoChain(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """ add pyexcle-io reader plugin info """
+        """add pyexcle-io reader plugin info"""
         a_plugin_info = IOPluginInfo(
             READER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
@@ -55,7 +55,7 @@ class IOPluginInfoChain(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """ add pyexcle-io writer plugin info """
+        """add pyexcle-io writer plugin info"""
         a_plugin_info = IOPluginInfo(
             WRITER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
@@ -66,7 +66,7 @@ class IOPluginInfoChain(PluginInfoChain):
 
 
 class IOPluginInfoChainV2(PluginInfoChain):
-    """provide custom functions to add a reader and a writer """
+    """provide custom functions to add a reader and a writer"""
 
     def add_a_reader(
         self,
@@ -75,7 +75,7 @@ class IOPluginInfoChainV2(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """ add pyexcle-io reader plugin info """
+        """add pyexcle-io reader plugin info"""
         a_plugin_info = IOPluginInfo(
             READER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
@@ -95,7 +95,7 @@ class IOPluginInfoChainV2(PluginInfoChain):
         file_types=(),
         stream_type=None,
     ):
-        """ add pyexcle-io writer plugin info """
+        """add pyexcle-io writer plugin info"""
         a_plugin_info = IOPluginInfo(
             WRITER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
@@ -124,7 +124,7 @@ class IOManager(PluginManager):
         _do_additional_registration(plugin_info)
 
     def register_a_plugin(self, cls, plugin_info):
-        """ for dynamically loaded plugin """
+        """for dynamically loaded plugin"""
         PluginManager.register_a_plugin(self, cls, plugin_info)
         _do_additional_registration(plugin_info)
 
@@ -158,7 +158,7 @@ class IOManager(PluginManager):
             )
 
     def get_all_formats(self):
-        """ return all supported formats """
+        """return all supported formats"""
         all_formats = set(
             list(self.registry.keys()) + list(self.known_plugins.keys())
         )
@@ -174,7 +174,7 @@ class NewIOManager(IOManager):
         _do_additional_registration_for_new_plugins(plugin_info)
 
     def register_a_plugin(self, cls, plugin_info):
-        """ for dynamically loaded plugin """
+        """for dynamically loaded plugin"""
         PluginManager.register_a_plugin(self, cls, plugin_info)
         _do_additional_registration_for_new_plugins(plugin_info)
 
@@ -206,7 +206,7 @@ class NewIOManager(IOManager):
             )
 
     def get_all_formats(self):
-        """ return all supported formats """
+        """return all supported formats"""
         all_formats = set(
             [x.split("-")[1] for x in self.registry.keys()]
             + list(self.known_plugins.keys())

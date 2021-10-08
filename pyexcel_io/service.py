@@ -173,6 +173,7 @@ ODS_WRITE_FORMAT_COVERSION = {
     datetime.date: "date",
     datetime.time: "time",
     datetime.timedelta: "timedelta",
+    datetime.datetime: "datetime",
     bool: "boolean",
 }
 

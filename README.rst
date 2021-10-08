@@ -8,8 +8,8 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel-mobans/master/images/awesome-badge.svg
    :target: https://awesome-python.com/#specific-formats-processing
 
-.. image:: https://travis-ci.org/pyexcel/pyexcel-io.svg?branch=master
-   :target: http://travis-ci.org/pyexcel/pyexcel-io
+.. image:: https://github.com/pyexcel/pyexcel-io/workflows/run_tests/badge.svg
+   :target: http://github.com/pyexcel/pyexcel-io/actions
 
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-io
@@ -108,9 +108,9 @@ sqlalchemy supported databases. Its supported file formats are extended to cover
 Plugin shopping guide
 ------------------------
 
-Since 2020, all pyexcel-io plugins have dropped the support for python version
-lower than 3.6. If you want to use any python verions, please use pyexcel-io
-and its plugins version lower than 0.6.0.
+Since 2020, all pyexcel-io plugins have dropped the support for python versions
+which are lower than 3.6. If you want to use any of those Python versions, please use pyexcel-io
+and its plugins versions that are lower than 0.6.0.
 
 
 Except csv files, xls, xlsx and ods files are a zip of a folder containing a lot of
@@ -205,7 +205,7 @@ Then install relevant development requirements:
 #. pip install -r tests/requirements.txt
 
 Once you have finished your changes, please provide test case(s), relevant documentation
-and update CHANGELOG.rst.
+and update changelog.yml
 
 .. note::
 
@@ -224,7 +224,7 @@ On Linux/Unix systems, please launch your tests like this::
 
     $ make
 
-On Windows systems, please issue this command::
+On Windows, please issue this command::
 
     > test.bat
 
@@ -236,7 +236,7 @@ Please run::
 
     $ make format
 
-so as to beautify your code otherwise travis-ci may fail your unit test.
+so as to beautify your code otherwise your build may fail your unit test.
 
 
 

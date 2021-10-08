@@ -74,7 +74,7 @@ class SQLTableWriter(ISheetWriter):
 
 
 class SQLBookWriter(IWriter):
-    """ write data into database tables via sqlalchemy """
+    """write data into database tables via sqlalchemy"""
 
     def __init__(self, file_content, _, auto_commit=True, **keywords):
         self.__importer = file_content

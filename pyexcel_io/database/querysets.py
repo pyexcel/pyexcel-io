@@ -15,7 +15,7 @@ from pyexcel_io.plugin_api.abstract_sheet import ISheet
 
 
 class QuerysetsReader(ISheet):
-    """ turn querysets into an array """
+    """turn querysets into an array"""
 
     def __init__(self, query_sets, column_names):
         self.name = DEFAULT_SHEET_NAME
@@ -56,7 +56,7 @@ class QuerysetsReader(ISheet):
 
 
 def get_complex_attribute(row, attribute):
-    """ recursively get an attribute """
+    """recursively get an attribute"""
     attributes = attribute.split("__")
     value = row
     try:
@@ -68,7 +68,7 @@ def get_complex_attribute(row, attribute):
 
 
 def get_simple_attribute(row, attribute):
-    """ get dotted attribute """
+    """get dotted attribute"""
     value = getattr(row, attribute)
     if isinstance(value, (datetime.date, datetime.time)):
         value = value.isoformat()
