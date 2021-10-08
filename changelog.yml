@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - "`#109`: enable ods3 to have datetime"
+  version: 0.6.5
+  date: 08.10.2021
+- changes:
+  - action: updated
+    details:
     - "`#102`: skip columns from imported excel sheet."
   version: 0.6.4
   date: 31.10.2020
