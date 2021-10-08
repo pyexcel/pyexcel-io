@@ -14,7 +14,7 @@ from pyexcel_io.writers.csv_sheet import CSVFileWriter
 
 
 class CSVZipSheetWriter(CSVFileWriter):
-    """ handle the zipfile interface """
+    """handle the zipfile interface"""
 
     def __init__(self, zipfile, sheetname, file_extension, **keywords):
         self.file_extension = file_extension

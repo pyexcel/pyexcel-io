@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 
 
 class DjangoModelWriter(ISheetWriter):
-    """ import data into a django model """
+    """import data into a django model"""
 
     def __init__(self, importer, adapter, batch_size=None, bulk_save=True):
         self.batch_size = batch_size
@@ -61,7 +61,7 @@ class DjangoModelWriter(ISheetWriter):
 
 
 class DjangoBookWriter(IWriter):
-    """ write data into django models """
+    """write data into django models"""
 
     def __init__(self, exporter, _, **keywords):
         self.importer = exporter

@@ -69,10 +69,10 @@ def is_empty_array(array):
 
 
 def swap_empty_string_for_none(array):
-    """ replace empty string fields with None """
+    """replace empty string fields with None"""
 
     def swap(value):
-        """ change empty string to None """
+        """change empty string to None"""
         if value == "":
             return None
 

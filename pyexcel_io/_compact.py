@@ -27,7 +27,7 @@ PY2 = sys.version[0] == 2
 
 
 def isstream(instance):
-    """ check if a instance is a stream """
+    """check if a instance is a stream"""
     try:
         import mmap
 

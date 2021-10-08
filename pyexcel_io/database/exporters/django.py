@@ -28,7 +28,7 @@ class DjangoModelReader(QuerysetsReader):
 
 
 class DjangoBookReader(IReader):
-    """ read django models """
+    """read django models"""
 
     def __init__(self, exporter, _, **keywords):
         self.exporter = exporter

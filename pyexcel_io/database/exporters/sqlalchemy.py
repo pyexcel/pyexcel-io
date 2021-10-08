@@ -32,7 +32,7 @@ class SQLTableReader(QuerysetsReader):
 
 
 class SQLBookReader(IReader):
-    """ read a table via sqlalchemy """
+    """read a table via sqlalchemy"""
 
     def __init__(self, exporter, _, **keywords):
         self.__exporter = exporter

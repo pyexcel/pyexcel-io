@@ -10,7 +10,7 @@
 
 
 class DjangoModelExportAdapter(object):
-    """ django export parameter holder """
+    """django export parameter holder"""
 
     def __init__(self, model, export_columns=None):
         self.model = model
@@ -18,19 +18,19 @@ class DjangoModelExportAdapter(object):
 
     @property
     def name(self):
-        """ get database table name """
+        """get database table name"""
         return self.get_name()
 
     def get_name(self):
-        """ get database table name """
+        """get database table name"""
         return self.model._meta.model_name
 
 
 class DjangoModelImportAdapter(DjangoModelExportAdapter):
-    """ parameter holder for django data import """
+    """parameter holder for django data import"""
 
     class InOutParameter(object):
-        """ local class to manipulate variable io """
+        """local class to manipulate variable io"""
 
         def __init__(self):
             self.output = None
@@ -45,34 +45,34 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
     @property
     def row_initializer(self):
-        """ contructor for a database table entry """
+        """contructor for a database table entry"""
         return self._row_initializer.output
 
     @property
     def column_names(self):
-        """ the desginated database column names """
+        """the desginated database column names"""
         return self._column_names.output
 
     @property
     def column_name_mapping_dict(self):
-        """ if not the same, a mapping dictionary is looked up"""
+        """if not the same, a mapping dictionary is looked up"""
         return self._column_name_mapping_dict.output
 
     @row_initializer.setter
     def row_initializer(self, a_function):
-        """ set the contructor """
+        """set the contructor"""
         self._row_initializer.input = a_function
         self._process_parameters()
 
     @column_names.setter
     def column_names(self, column_names):
-        """ set the column names """
+        """set the column names"""
         self._column_names.input = column_names
         self._process_parameters()
 
     @column_name_mapping_dict.setter
     def column_name_mapping_dict(self, mapping_dict):
-        """ set the mapping dict """
+        """set the mapping dict"""
         self._column_name_mapping_dict.input = mapping_dict
         self._process_parameters()
 
@@ -101,33 +101,33 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
 
 class DjangoModelExporter(object):
-    """ public interface for django model export """
+    """public interface for django model export"""
 
     def __init__(self):
         self.adapters = []
 
     def append(self, import_adapter):
-        """ store model parameter for more than one model """
+        """store model parameter for more than one model"""
         self.adapters.append(import_adapter)
 
 
 class DjangoModelImporter(object):
-    """ public interface for django model import """
+    """public interface for django model import"""
 
     def __init__(self):
         self._adapters = {}
 
     def append(self, import_adapter):
-        """ store model parameter for more than one model """
+        """store model parameter for more than one model"""
         self._adapters[import_adapter.get_name()] = import_adapter
 
     def get(self, name):
-        """ get a parameter out """
+        """get a parameter out"""
         return self._adapters.get(name, None)
 
 
 class SQLTableExportAdapter(DjangoModelExportAdapter):
-    """ parameter holder for sql table data export """
+    """parameter holder for sql table data export"""
 
     def __init__(self, model, export_columns=None):
         DjangoModelExportAdapter.__init__(self, model, export_columns)
@@ -138,7 +138,7 @@ class SQLTableExportAdapter(DjangoModelExportAdapter):
 
 
 class SQLTableImportAdapter(DjangoModelImportAdapter):
-    """ parameter holder for sqlalchemy table import """
+    """parameter holder for sqlalchemy table import"""
 
     def __init__(self, model):
         DjangoModelImportAdapter.__init__(self, model)
@@ -149,7 +149,7 @@ class SQLTableImportAdapter(DjangoModelImportAdapter):
 
 
 class SQLTableExporter(DjangoModelExporter):
-    """ public interface for sql table export """
+    """public interface for sql table export"""
 
     def __init__(self, session):
         DjangoModelExporter.__init__(self)
@@ -157,7 +157,7 @@ class SQLTableExporter(DjangoModelExporter):
 
 
 class SQLTableImporter(DjangoModelImporter):
-    """ public interface to do data import via sqlalchemy """
+    """public interface to do data import via sqlalchemy"""
 
     def __init__(self, session):
         DjangoModelImporter.__init__(self)

@@ -93,7 +93,7 @@ class CSVMemoryMapIterator(object):
 
 
 class CSVSheetReader(ISheet):
-    """ generic csv file reader"""
+    """generic csv file reader"""
 
     def __init__(
         self,
@@ -121,7 +121,7 @@ class CSVSheetReader(ISheet):
         self._keywords = keywords
 
     def get_file_handle(self):
-        """ return me unicde reader for csv """
+        """return me unicde reader for csv"""
         raise NotImplementedError("Please implement get_file_handle()")
 
     def row_iterator(self):
@@ -166,7 +166,7 @@ class CSVSheetReader(ISheet):
 
 
 class CSVFileReader(CSVSheetReader):
-    """ read csv from phyical file """
+    """read csv from phyical file"""
 
     def get_file_handle(self):
         unicode_reader = open(
@@ -176,7 +176,7 @@ class CSVFileReader(CSVSheetReader):
 
 
 class CSVinMemoryReader(CSVSheetReader):
-    """ read csv file from memory """
+    """read csv file from memory"""
 
     def get_file_handle(self):
         if isinstance(self._native_sheet.payload, compact.BytesIO):

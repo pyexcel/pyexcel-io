@@ -75,7 +75,7 @@ class CSVFileWriter(ISheetWriter):
 
 
 class CSVMemoryWriter(CSVFileWriter):
-    """ Write csv to a memory stream """
+    """Write csv to a memory stream"""
 
     def get_writer(self):
         self.file_handle = self._native_book
