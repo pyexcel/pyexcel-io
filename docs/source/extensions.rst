@@ -26,7 +26,7 @@ we can use get_data() to read yaml file out.
 
 **Implement IReader**
 
-First, let's impolement reader interface as below. Three implementations are required:
+First, let's implement reader interface:
 
 1. `content_array` attribute, is expected to be a list of `NamedContent`
 2. `read_sheet` function, read sheet content by its index.
@@ -63,6 +63,8 @@ files on physical disk. "memory" means a file stream. "content" means a string b
   :language: python
   :lines: 36-41
 
+Usually, this registration code was placed in __init__.py file at the top level of your
+extension source tree.
 
 **Test your reader**
 
