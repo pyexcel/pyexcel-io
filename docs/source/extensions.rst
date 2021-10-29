@@ -1,4 +1,4 @@
-Extend pyexcel-io Tutorial
+Extend pyexcel-io for other excel or tabular formats
 ================================================================================
 
 You are welcome to extend pyexcel-io to read and write more tabular formats.
