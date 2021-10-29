@@ -41,10 +41,10 @@ First, let's implement reader interface:
 `YourSingleSheet` makes this simple task complex in order to show case its inner
 workings. Two abstract functions require implementation:
 
-1. `row_iterator`: should return a row: either content arry or content index as long as
-                   `column_iterator` understands
+1. `row_iterator`: should return a row: either content arary or content index as long as
+                   `column_iterator` can use it to return the cell value.
 
-2. `column_iterator`: should return cell values one by one.
+2. `column_iterator`: should iterate cell value from the given row.
 
 .. literalinclude:: ../../examples/custom_yaml_reader.py
   :language: python
@@ -64,7 +64,7 @@ files on physical disk. "memory" means a file stream. "content" means a string b
   :lines: 36-41
 
 Usually, this registration code was placed in __init__.py file at the top level of your
-extension source tree.
+extension source tree. You can take a look at any pyexcel plugins for reference.
 
 **Test your reader**
 
