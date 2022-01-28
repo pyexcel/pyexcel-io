@@ -31,7 +31,7 @@ class DjangoModelWriter(ISheetWriter):
 
     def write_row(self, array):
         if is_empty_array(array):
-            print(constants.MESSAGE_EMPTY_ARRAY)
+            log.warning(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
             if self.mapdict:
