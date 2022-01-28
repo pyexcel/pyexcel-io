@@ -4,7 +4,7 @@
 
     provide service code to downstream projects
 
-    :copyright: (c) 2014-2020 by Onni Software Ltd.
+    :copyright: (c) 2014-2022 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import re
