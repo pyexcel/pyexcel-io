@@ -4,7 +4,7 @@ releases:
 - changes:
   - action: updated
     details:
-    - "`#112`: Log "Empty Row Warning" instead 'print' "
+    - "`#112`: Log Empty Row Warning instead 'print' "
   version: 0.6.6
   date: 31.1.2022
 - changes:
