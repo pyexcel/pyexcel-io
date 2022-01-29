@@ -1,4 +1,4 @@
-Extend pyexcel-io Tutorial
+Extend pyexcel-io for other excel or tabular formats
 ================================================================================
 
 You are welcome to extend pyexcel-io to read and write more tabular formats.
@@ -26,7 +26,7 @@ we can use get_data() to read yaml file out.
 
 **Implement IReader**
 
-First, let's impolement reader interface as below. Three implementations are required:
+First, let's implement reader interface:
 
 1. `content_array` attribute, is expected to be a list of `NamedContent`
 2. `read_sheet` function, read sheet content by its index.
@@ -41,10 +41,10 @@ First, let's impolement reader interface as below. Three implementations are req
 `YourSingleSheet` makes this simple task complex in order to show case its inner
 workings. Two abstract functions require implementation:
 
-1. `row_iterator`: should return a row: either content arry or content index as long as
-                   `column_iterator` understands
+1. `row_iterator`: should return a row: either content arary or content index as long as
+                   `column_iterator` can use it to return the cell value.
 
-2. `column_iterator`: should return cell values one by one.
+2. `column_iterator`: should iterate cell value from the given row.
 
 .. literalinclude:: ../../examples/custom_yaml_reader.py
   :language: python
@@ -63,6 +63,8 @@ files on physical disk. "memory" means a file stream. "content" means a string b
   :language: python
   :lines: 36-41
 
+Usually, this registration code was placed in __init__.py file at the top level of your
+extension source tree. You can take a look at any pyexcel plugins for reference.
 
 **Test your reader**
 

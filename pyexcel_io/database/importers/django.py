@@ -4,7 +4,7 @@
 
     The lower level handler for django import and export
 
-    :copyright: (c) 2014-2020 by Onni Software Ltd.
+    :copyright: (c) 2014-2022 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 import logging
@@ -31,7 +31,7 @@ class DjangoModelWriter(ISheetWriter):
 
     def write_row(self, array):
         if is_empty_array(array):
-            print(constants.MESSAGE_EMPTY_ARRAY)
+            log.warning(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
             if self.mapdict:

@@ -4,12 +4,16 @@
 
     The lower level handler for database import and export
 
-    :copyright: (c) 2014-2020 by Onni Software Ltd.
+    :copyright: (c) 2014-2022 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
+import logging
+
 import pyexcel_io.constants as constants
 from pyexcel_io.utils import is_empty_array, swap_empty_string_for_none
 from pyexcel_io.plugin_api import IWriter, ISheetWriter
+
+LOG = logging.getLogger(__name__)
 
 
 class PyexcelSQLSkipRowException(Exception):
@@ -35,14 +39,14 @@ class SQLTableWriter(ISheetWriter):
 
     def write_row(self, array):
         if is_empty_array(array):
-            print(constants.MESSAGE_EMPTY_ARRAY)
+            LOG.warning(constants.MESSAGE_EMPTY_ARRAY)
         else:
             new_array = swap_empty_string_for_none(array)
             try:
                 self._write_row(new_array)
             except PyexcelSQLSkipRowException:
-                print(constants.MESSAGE_IGNORE_ROW)
-                print(new_array)
+                LOG.info(constants.MESSAGE_IGNORE_ROW)
+                LOG.info(new_array)
 
     def _write_row(self, array):
         new_array = array
