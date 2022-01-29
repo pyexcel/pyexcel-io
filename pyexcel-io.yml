@@ -2,7 +2,7 @@ overrides: "pyexcel.yaml"
 project: "pyexcel-io"
 name: pyexcel-io
 nick_name: io
-version: 0.6.5
+version: 0.6.6
 current_version: 0.6.6
 release: 0.6.6
 copyright_year: 2015-2022
