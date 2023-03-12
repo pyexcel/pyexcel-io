@@ -1,6 +1,6 @@
 import os
 import types
-from zipfile import BadZipfile
+from zipfile import BadZipFile
 from unittest import TestCase
 
 import pyexcel_io.manager as manager
@@ -111,7 +111,7 @@ def test_load_unknown_data_from_memory():
     get_data(io, file_type="unknown")
 
 
-@raises(BadZipfile)
+@raises(BadZipFile)
 def test_load_csvz_data_from_memory():
     io = StringIO()
     get_data(io, file_type="csvz")

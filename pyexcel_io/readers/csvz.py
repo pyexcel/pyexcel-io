@@ -32,7 +32,7 @@ class FileReader(IReader):
             if file_type == constants.FILE_FORMAT_TSVZ:
                 self.keywords["dialect"] = constants.KEYWORD_TSV_DIALECT
 
-        except zipfile.BadZipfile:
+        except zipfile.BadZipFile:
             print("StringIO instance was passed by any chance?")
             raise
 
