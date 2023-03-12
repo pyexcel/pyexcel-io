@@ -14,7 +14,7 @@ from nose.tools import raises
 
 class TestCSVZ(TestCase):
     file_type = "csvz"
-    result = u"中,文,1,2,3"
+    result = "中,文,1,2,3"
 
     def writer_class(self):
         return Writer(self.file_type)
@@ -26,7 +26,7 @@ class TestCSVZ(TestCase):
         self.file = "csvz." + self.file_type
 
     def test_writing(self):
-        data = [[u"中", u"文", 1, 2, 3]]
+        data = [["中", "文", 1, 2, 3]]
         file_name = "pyexcel_sheet1." + self.file_type[0:3]
         zipbook = self.writer_class()
         zipbook.open(self.file)
@@ -40,7 +40,7 @@ class TestCSVZ(TestCase):
         zip.close()
 
     def test_reading(self):
-        data = [[u"中", u"文", 1, 2, 3]]
+        data = [["中", "文", 1, 2, 3]]
         zipbook = self.writer_class()
         zipbook.open(self.file)
         zipbook.write({None: data})
@@ -48,7 +48,7 @@ class TestCSVZ(TestCase):
         zipreader = self.reader_class()
         zipreader.open(self.file)
         data = zipreader.read_all()
-        self.assertEqual(list(data["pyexcel_sheet1"]), [[u"中", u"文", 1, 2, 3]])
+        self.assertEqual(list(data["pyexcel_sheet1"]), [["中", "文", 1, 2, 3]])
         zipreader.close()
 
     def test_reading_utf32(self):
@@ -58,7 +58,7 @@ class TestCSVZ(TestCase):
         zipreader = self.reader_class()
         zipreader.open(self.file)
         data = zipreader.read_all()
-        self.assertEqual(list(data["something"]), [[u"中", u"文", 1, 2, 3]])
+        self.assertEqual(list(data["something"]), [["中", "文", 1, 2, 3]])
         zipreader.close()
 
     def tearDown(self):
@@ -67,7 +67,7 @@ class TestCSVZ(TestCase):
 
 class TestTSVZ(TestCSVZ):
     file_type = "tsvz"
-    result = u"中\t文\t1\t2\t3"
+    result = "中\t文\t1\t2\t3"
 
 
 def test_reading_from_memory():

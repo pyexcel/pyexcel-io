@@ -85,7 +85,6 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
             self._column_names.output = self._column_name_mapping_dict.input
             self._column_name_mapping_dict.output = None
         elif isinstance(self._column_name_mapping_dict.input, dict):
-
             if self._column_names.input:
                 self._column_names.output = []
                 indices = []

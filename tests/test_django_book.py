@@ -267,10 +267,10 @@ class TestMultipleModels:
     def setUp(self):
         self.content = OrderedDict()
         self.content.update(
-            {"Sheet1": [[u"X", u"Y", u"Z"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
+            {"Sheet1": [["X", "Y", "Z"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
         )
         self.content.update(
-            {"Sheet2": [[u"A", u"B", u"C"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
+            {"Sheet2": [["A", "B", "C"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
         )
         self.result1 = [
             {"Y": 4, "X": 1, "Z": 7},

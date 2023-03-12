@@ -150,7 +150,7 @@ def test_utf16_decoding():
 
 
 def test_utf16_encoding():
-    content = [[u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"]]
+    content = [["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"]]
     test_file = "test-utf16-encoding.csv"
     writer = CSVFileWriter(
         test_file, None, encoding="utf-16", lineterminator="\n"
@@ -164,7 +164,7 @@ def test_utf16_encoding():
 
 
 def test_utf16_memory_decoding():
-    test_content = u"Äkkilähdöt,Matkakirjoituksia,Matkatoimistot"
+    test_content = "Äkkilähdöt,Matkakirjoituksia,Matkatoimistot"
     test_content = BytesIO(test_content.encode("utf-16"))
     reader = EncapsulatedSheetReader(
         CSVinMemoryReader(NamedContent("csv", test_content), encoding="utf-16")
@@ -176,7 +176,7 @@ def test_utf16_memory_decoding():
 
 
 def test_utf16_memory_encoding():
-    content = [[u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"]]
+    content = [["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"]]
     io = StringIO()
     writer = CSVMemoryWriter(
         io,
@@ -187,4 +187,4 @@ def test_utf16_memory_encoding():
     )
     writer.write_array(content)
     actual = io.getvalue()
-    eq_(actual, u"Äkkilähdöt,Matkakirjoituksia,Matkatoimistot\n")
+    eq_(actual, "Äkkilähdöt,Matkakirjoituksia,Matkatoimistot\n")
