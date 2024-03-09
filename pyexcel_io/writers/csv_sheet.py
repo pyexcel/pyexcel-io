@@ -47,7 +47,7 @@ class CSVFileWriter(ISheetWriter):
 
     def get_writer(self):
         if self._sheet_name != constants.DEFAULT_SHEET_NAME:
-            names = self._native_book.split(".")
+            names = self._native_book.rsplit(".", 1)
             file_name = "%s%s%s%s%s.%s" % (
                 names[0],
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
