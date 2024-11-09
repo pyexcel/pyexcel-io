@@ -32,7 +32,7 @@ except (ValueError, UnicodeError, locale.Error):
 
 NAME = "pyexcel-io"
 AUTHOR = "C.W."
-VERSION = "0.6.6"
+VERSION = "0.6.7"
 EMAIL = "info@pyexcel.org"
 LICENSE = "New BSD"
 DESCRIPTION = (
@@ -40,7 +40,7 @@ DESCRIPTION = (
     "format and to/from databases"
 )
 URL = "https://github.com/pyexcel/pyexcel-io"
-DOWNLOAD_URL = "%s/archive/0.6.6.tar.gz" % URL
+DOWNLOAD_URL = "%s/archive/0.6.7.tar.gz" % URL
 FILES = ["README.rst", "CONTRIBUTORS.rst", "CHANGELOG.rst"]
 KEYWORDS = [
     "python",
@@ -89,8 +89,8 @@ EXTRAS_REQUIRE = {
 PUBLISH_COMMAND = "{0} setup.py sdist bdist_wheel upload -r pypi".format(sys.executable)
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-GS_COMMAND = ("gease pyexcel-io v0.6.6 " +
-              "Find 0.6.6 in changelog for more details")
+GS_COMMAND = ("gease pyexcel-io v0.6.7 " +
+              "Find 0.6.7 in changelog for more details")
 NO_GS_MESSAGE = ("Automatic github release is disabled. " +
                  "Please install gease to enable it.")
 UPLOAD_FAILED_MSG = (
