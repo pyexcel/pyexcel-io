@@ -10,7 +10,11 @@
 import zipfile
 from io import BytesIO
 
-import chardet
+try:
+    import chardet
+except ImportError:
+    print("Please install chardet so as to use csvz")
+    raise
 from pyexcel_io import constants
 from pyexcel_io.sheet import NamedContent
 from pyexcel_io._compact import StringIO

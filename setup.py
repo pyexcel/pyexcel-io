@@ -41,7 +41,7 @@ DESCRIPTION = (
 )
 URL = "https://github.com/pyexcel/pyexcel-io"
 DOWNLOAD_URL = "%s/archive/0.6.6.tar.gz" % URL
-FILES = ["README.rst", "CHANGELOG.rst"]
+FILES = ["README.rst", "CONTRIBUTORS.rst", "CHANGELOG.rst"]
 KEYWORDS = [
     "python",
     "API",
@@ -68,6 +68,7 @@ CLASSIFIERS = [
 
     'License :: OSI Approved :: BSD License',
     'Programming Language :: Python :: Implementation :: PyPy'
+
 ]
 
 PYTHON_REQUIRES = ">=3.6"
@@ -79,6 +80,7 @@ SETUP_COMMANDS = {}
 
 PACKAGES = find_packages(exclude=["ez_setup", "examples", "tests", "tests.*"])
 EXTRAS_REQUIRE = {
+    "extra": ['chardet'],
     "xls": ['pyexcel-xls>=0.6.0'],
     "xlsx": ['pyexcel-xlsx>=0.6.0'],
     "ods": ['pyexcel-ods3>=0.6.0'],
