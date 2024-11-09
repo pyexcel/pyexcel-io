@@ -5,6 +5,7 @@ releases:
   - action: updated
     details:
     - "`#115`: Pathnames with . cause file_name error in get_writer."
+    - "`#117`: fix a typo in license."
   version: 0.6.7
   date: 09.11.2024
 - changes:
