@@ -8,6 +8,8 @@ Change log
 
 #. `#115 <https://github.com/pyexcel/pyexcel-io/issues/115>`_: Pathnames with .
    cause file_name error in get_writer.
+#. `#117 <https://github.com/pyexcel/pyexcel-io/issues/117>`_: fix a typo in
+   license.
 
 0.6.6 - 31.1.2022
 --------------------------------------------------------------------------------
