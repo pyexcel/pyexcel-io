@@ -80,6 +80,7 @@ SETUP_COMMANDS = {}
 
 PACKAGES = find_packages(exclude=["ez_setup", "examples", "tests", "tests.*"])
 EXTRAS_REQUIRE = {
+    "extra": ['chardet'],
     "xls": ['pyexcel-xls>=0.6.0'],
     "xlsx": ['pyexcel-xlsx>=0.6.0'],
     "ods": ['pyexcel-ods3>=0.6.0'],

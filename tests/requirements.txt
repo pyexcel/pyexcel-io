@@ -13,3 +13,4 @@ pyexcel
 pyexcel-xls==0.5.9
 SQLAlchemy
 pyexcel-xlsxw
+chardet
