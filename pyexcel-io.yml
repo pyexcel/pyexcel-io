@@ -9,7 +9,6 @@ copyright_year: 2015-2022
 moban_command: false
 is_on_conda: true
 dependencies:
-  - chardet
   - lml>=0.0.4
 test_dependencies:
   - pyexcel
@@ -17,6 +16,7 @@ test_dependencies:
   - SQLAlchemy
   - pyexcel-xlsxw
 extra_dependencies:
+  - chardet
   - xls:
     - pyexcel-xls>=0.6.0
   - xlsx:
