@@ -74,7 +74,6 @@ CLASSIFIERS = [
 PYTHON_REQUIRES = ">=3.6"
 
 INSTALL_REQUIRES = [
-    "chardet",
     "lml>=0.0.4",
 ]
 SETUP_COMMANDS = {}

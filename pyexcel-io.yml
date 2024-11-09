@@ -15,8 +15,10 @@ test_dependencies:
   - pyexcel-xls==0.5.9
   - SQLAlchemy
   - pyexcel-xlsxw
-extra_dependencies:
   - chardet
+extra_dependencies:
+  - extra:
+    - chardet
   - xls:
     - pyexcel-xls>=0.6.0
   - xlsx:
