@@ -4,8 +4,7 @@ import pyexcel as p
 from pyexcel_io import get_data, save_data
 from pyexcel_io.exceptions import NoSupportingPluginFound
 
-from nose import SkipTest
-from nose.tools import eq_, raises
+from .nose_tools import eq_, raises
 
 IN_TRAVIS = "TRAVIS" in os.environ
 
@@ -22,7 +21,7 @@ def test_issue_8():
 def test_issue_20():
     test_file = get_fixture("issue20.csv")
     data = get_data(test_file)
-    expected = [[u"to", u"infinity", u"and", u"beyond"]]
+    expected = [["to", "infinity", "and", "beyond"]]
     eq_(data["issue20.csv"], expected)
 
 
@@ -30,8 +29,8 @@ def test_issue_23():
     test_file = get_fixture("issue23.csv")
     data = get_data(test_file)
     expected = [
-        [8204235414504252, u"inf"],
-        [82042354145042521, u"-inf"],
+        [8204235414504252, "inf"],
+        [82042354145042521, "-inf"],
         [820423541450425216, 0],
         [820423541450425247, 1],
         [8204235414504252490, 1.1],
@@ -46,7 +45,7 @@ def test_issue_33_34():
     with open(test_file, "r+b") as f:
         memory_mapped_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         data = get_data(memory_mapped_file, file_type="csv")
-        expected = [[u"to", u"infinity", u"and", u"beyond"]]
+        expected = [["to", "infinity", "and", "beyond"]]
         eq_(data["csv"], expected)
 
 
@@ -94,8 +93,8 @@ def check_mmap_encoding(encoding):
     import mmap
 
     content = [
-        [u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"],
-        [u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"],
+        ["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"],
+        ["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"],
     ]
     test_file = "test-%s-encoding-in-mmap-file.csv" % encoding
     save_data(test_file, content, encoding=encoding)
@@ -111,8 +110,8 @@ def check_mmap_encoding(encoding):
 def test_issue_35_encoding_for_file_content():
     encoding = "utf-16"
     content = [
-        [u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"],
-        [u"Äkkilähdöt", u"Matkakirjoituksia", u"Matkatoimistot"],
+        ["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"],
+        ["Äkkilähdöt", "Matkakirjoituksia", "Matkatoimistot"],
     ]
     test_file = "test-%s-encoding-in-mmap-file.csv" % encoding
     save_data(test_file, content, encoding=encoding)
@@ -125,12 +124,9 @@ def test_issue_35_encoding_for_file_content():
 
 
 def test_issue_43():
-    # if not IN_TRAVIS:
-    #    raise SkipTest()
     p.get_book(
         url="https://github.com/pyexcel/pyexcel-xls/raw/master/tests/fixtures/file_with_an_empty_sheet.xls"
     )
-    # flake8: noqa
 
 
 def test_pyexcel_issue_138():

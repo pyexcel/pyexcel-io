@@ -1,12 +1,13 @@
 """
-    pyexcel_io.readers.csv_sheet
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.readers.csv_sheet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    csv file reader
+csv file reader
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import csv
 
 import pyexcel_io.service as service

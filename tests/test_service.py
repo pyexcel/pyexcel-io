@@ -16,7 +16,7 @@ from pyexcel_io.service import (
 )
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 
-from nose.tools import eq_, raises
+from .nose_tools import eq_, raises
 
 
 def test_date_util_parse():

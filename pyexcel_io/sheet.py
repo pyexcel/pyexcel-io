@@ -1,12 +1,13 @@
 """
-    pyexcel_io.sheet
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.sheet
+~~~~~~~~~~~~~~~~~~~
 
-    The io interface to file extensions
+The io interface to file extensions
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import pyexcel_io.constants as constants
 from pyexcel_io.utils import _index_filter
 from pyexcel_io._compact import irange

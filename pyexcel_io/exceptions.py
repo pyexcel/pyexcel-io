@@ -1,11 +1,11 @@
 """
-    pyexcel_io.exceptions
-    ~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.exceptions
+~~~~~~~~~~~~~~~~~~~~~~
 
-    all possible exceptions
+all possible exceptions
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
 
 

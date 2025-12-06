@@ -1,12 +1,13 @@
 """
-    pyexcel_io.plugins
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.plugins
+~~~~~~~~~~~~~~~~~~~
 
-    factory for getting readers and writers
+factory for getting readers and writers
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import pyexcel_io.utils as ioutils
 import pyexcel_io.manager as manager
 import pyexcel_io.constants as constants

@@ -1,10 +1,11 @@
 import os
+from unittest import TestCase
 
 import pyexcel_io.constants as constants
 from pyexcel_io import get_data, save_data
 from pyexcel_io.utils import _index_filter
 
-from nose.tools import eq_
+from .nose_tools import eq_
 
 
 def test_index_filter():
@@ -23,7 +24,7 @@ def test_index_filter():
     eq_(_index_filter(current_index, start, limit), expected)
 
 
-class TestFilter:
+class TestFilter(TestCase):
     def setUp(self):
         self.test_file = "test_filter.csv"
         sample = [

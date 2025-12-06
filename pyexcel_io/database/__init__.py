@@ -1,12 +1,13 @@
 """
-    pyexcel_io.database
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.database
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    database data importer and exporter
+database data importer and exporter
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 from pyexcel_io.plugins import IOPluginInfoChainV2
 from pyexcel_io.constants import DB_SQL, DB_DJANGO, DB_QUERYSET
 

@@ -1,12 +1,13 @@
 """
-    pyexcel_io.fileformat.csvz
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.fileformat.csvz
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level csvz file format handler.
+The lower level csvz file format handler.
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import zipfile
 from io import BytesIO
 

@@ -6,7 +6,7 @@ from pyexcel_io.book import (
 )
 from pyexcel_io._compact import BytesIO, StringIO
 
-from nose.tools import raises
+from .nose_tools import raises
 
 
 @raises(NotImplementedError)

@@ -1,12 +1,13 @@
 """
-    pyexcel_io
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io
+~~~~~~~~~~~~~~~~~~~
 
-    Uniform interface for reading/writing different excel file formats
+Uniform interface for reading/writing different excel file formats
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import logging
 
 import pyexcel_io.plugins as plugins

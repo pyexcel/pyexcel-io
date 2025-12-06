@@ -1,12 +1,13 @@
 """
-    pyexcel_io.manager
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.manager
+~~~~~~~~~~~~~~~~~~~
 
-    Control file streams
+Control file streams
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 from pyexcel_io._compact import BytesIO, StringIO
 
 MIME_TYPES = {}

@@ -1,12 +1,13 @@
 """
-    pyexcel_io.database.sql
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.database.sql
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level handler for database import and export
+The lower level handler for database import and export
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 from pyexcel_io.plugin_api import IReader
 from pyexcel_io.database.querysets import QuerysetsReader
 
