@@ -17,6 +17,7 @@ test_dependencies:
   - pyexcel-xlsxw
   - chardet
   - pytest
+  - ruamel.yaml
 extra_dependencies:
   - extra:
     - chardet
