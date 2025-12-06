@@ -13,4 +13,4 @@ SQLAlchemy
 pyexcel-xlsxw
 chardet
 pytest
-yaml
+PyYAML
