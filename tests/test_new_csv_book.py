@@ -7,7 +7,7 @@ from pyexcel_io.reader import Reader
 from pyexcel_io.writer import Writer
 from pyexcel_io._compact import OrderedDict
 
-from nose.tools import raises
+from .nose_tools import raises
 
 
 class TestCSVReaders(TestCase):

@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 from pyexcel_io import save_data
 from pyexcel_io.reader import EncapsulatedSheetReader
 from pyexcel_io._compact import OrderedDict
@@ -17,7 +19,7 @@ from pyexcel_io.database.importers.django import (
     DjangoModelWriter,
 )
 
-from nose.tools import eq_, raises
+from .nose_tools import eq_, raises
 
 
 class Package:
@@ -97,7 +99,7 @@ class FakeExceptionDjangoModel(FakeDjangoModel):
         return Package(raiseException=self.raiseException, **keywords)
 
 
-class TestException:
+class TestException(TestCase):
     def setUp(self):
         self.data = [["X", "Y", "Z"], [1, 2, 3], [4, 5, 6]]
         self.result = [{"Y": 2, "X": 1, "Z": 3}, {"Y": 5, "X": 4, "Z": 6}]
@@ -121,7 +123,7 @@ class TestException:
         writer.close()
 
 
-class TestSheet:
+class TestSheet(TestCase):
     def setUp(self):
         self.data = [["X", "Y", "Z"], [1, 2, 3], [4, 5, 6]]
         self.result = [{"Y": 2, "X": 1, "Z": 3}, {"Y": 5, "X": 4, "Z": 6}]
@@ -263,14 +265,14 @@ class TestSheet:
         eq_(list(data), [[], []])
 
 
-class TestMultipleModels:
+class TestMultipleModels(TestCase):
     def setUp(self):
         self.content = OrderedDict()
         self.content.update(
-            {"Sheet1": [[u"X", u"Y", u"Z"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
+            {"Sheet1": [["X", "Y", "Z"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
         )
         self.content.update(
-            {"Sheet2": [[u"A", u"B", u"C"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
+            {"Sheet2": [["A", "B", "C"], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}
         )
         self.result1 = [
             {"Y": 4, "X": 1, "Z": 7},
@@ -373,7 +375,7 @@ class TestMultipleModels:
         save_data(importer, to_store, file_type=DB_DJANGO)
 
 
-class TestFilter:
+class TestFilter(TestCase):
     def setUp(self):
         self.data = [["X", "Y", "Z"], [1, 2, 3], [4, 5, 6]]
         self.result = [{"Y": 2, "X": 1, "Z": 3}, {"Y": 5, "X": 4, "Z": 6}]

@@ -1,12 +1,13 @@
 """
-    pyexcel_io.writers.csv_sheet
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.writers.csv_sheet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level csv file format writer
+The lower level csv file format writer
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import csv
 
 import pyexcel_io.constants as constants

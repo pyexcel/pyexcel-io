@@ -1,11 +1,11 @@
 """
-    pyexcel_io.database.common
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.database.common
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Common classes shared among database importers and exporters
+Common classes shared among database importers and exporters
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
 
 

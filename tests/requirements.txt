@@ -1,5 +1,3 @@
-nose
-mock;python_version<"3"
 codecov
 coverage
 flake8
@@ -14,3 +12,5 @@ pyexcel-xls==0.5.9
 SQLAlchemy
 pyexcel-xlsxw
 chardet
+pytest
+PyYAML

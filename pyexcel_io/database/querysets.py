@@ -1,12 +1,13 @@
 """
-    pyexcel_io.database.querysets
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.database.querysets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level handler for querysets
+The lower level handler for querysets
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2022 by Onni Software Ltd.
+:license: New BSD License, see LICENSE for more details
 """
+
 import datetime
 from itertools import chain
 

@@ -1,8 +1,10 @@
+from unittest import TestCase
+
 from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetReader, SheetWriter, NamedContent
 from pyexcel_io.utils import is_empty_array
 
-from nose.tools import raises
+from .nose_tools import raises
 
 
 @raises(NotImplementedError)
@@ -26,7 +28,7 @@ class ArrayWriter(SheetWriter):
         self._native_sheet.payload.append(array)
 
 
-class TestSheetReader:
+class TestSheetReader(TestCase):
     @raises(Exception)
     def test_abstractness(self):
         reader = SheetReader("test")
@@ -58,7 +60,7 @@ class TestSheetReader:
         assert b.name == name
 
 
-class TestSheetWriter:
+class TestSheetWriter(TestCase):
     @raises(NotImplementedError)
     def test_abstractness(self):
         writer = SheetWriter("te", "st", "abstract")

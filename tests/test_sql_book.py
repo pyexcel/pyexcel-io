@@ -2,6 +2,7 @@ import sys
 import json
 import datetime
 import platform
+from unittest import TestCase
 
 from sqlalchemy import (
     Date,
@@ -35,7 +36,7 @@ from pyexcel_io.database.importers.sqlalchemy import (
     PyexcelSQLSkipRowException,
 )
 
-from nose.tools import eq_, raises
+from .nose_tools import eq_, raises
 
 PY3 = sys.version_info[0] == 3
 PY36 = PY3 and sys.version_info[1] == 6
@@ -100,7 +101,7 @@ class Category(Base):
 Session = sessionmaker(bind=engine)
 
 
-class TestSingleRead:
+class TestSingleRead(TestCase):
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
@@ -200,7 +201,7 @@ class TestSingleRead:
         mysession.close()
 
 
-class TestSingleWrite:
+class TestSingleWrite(TestCase):
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
@@ -408,7 +409,7 @@ class TestSingleWrite:
         mysession.close()
 
 
-class TestMultipleRead:
+class TestMultipleRead(TestCase):
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
@@ -496,7 +497,7 @@ class TestMultipleRead:
         self.session.close()
 
 
-class TestZeroRead:
+class TestZeroRead(TestCase):
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
@@ -511,7 +512,7 @@ class TestZeroRead:
         mysession.close()
 
 
-class TestNoAutoCommit:
+class TestNoAutoCommit(TestCase):
     def setUp(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
