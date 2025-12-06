@@ -124,9 +124,12 @@ def test_issue_35_encoding_for_file_content():
 
 
 def test_issue_43():
-    p.get_book(
-        url="https://github.com/pyexcel/pyexcel-xls/raw/master/tests/fixtures/file_with_an_empty_sheet.xls"
+    host = "https://github.com/"
+    url = (
+        "pyexcel/pyexcel-xls/raw/master/"
+        + "tests/fixtures/file_with_an_empty_sheet.xls"
     )
+    p.get_book(url=host + url)
 
 
 def test_pyexcel_issue_138():
