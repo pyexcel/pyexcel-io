@@ -13,3 +13,4 @@ SQLAlchemy
 pyexcel-xlsxw
 chardet
 pytest
+ruamel.yaml
