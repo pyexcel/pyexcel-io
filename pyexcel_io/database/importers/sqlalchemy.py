@@ -19,7 +19,7 @@ LOG = logging.getLogger(__name__)
 
 class PyexcelSQLSkipRowException(Exception):
     """
-    Raised this exception to skipping a row
+    Raise this exception to skip a row
     while data import
     """
 

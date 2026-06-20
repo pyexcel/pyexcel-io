@@ -103,7 +103,7 @@ def float_value(value):
 
 
 def date_value(value):
-    """convert to data value accroding ods specification"""
+    """convert to date value according ods specification"""
     ret = "invalid"
     try:
         # catch strptime exceptions only
@@ -125,7 +125,7 @@ def date_value(value):
 
 
 def time_value(value):
-    """convert to time value accroding the specification"""
+    """convert to time value according the specification"""
     import re
 
     results = re.match(r"PT(\d+)H(\d+)M(\d+)S", value)
@@ -145,7 +145,7 @@ def time_value(value):
 
 
 def boolean_value(value):
-    """get bolean value"""
+    """get boolean value"""
     if value == "true":
         ret = True
     elif value == "false":

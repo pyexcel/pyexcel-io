@@ -122,7 +122,7 @@ class CSVSheetReader(ISheet):
         self._keywords = keywords
 
     def get_file_handle(self):
-        """return me unicde reader for csv"""
+        """return me unicode reader for csv"""
         raise NotImplementedError("Please implement get_file_handle()")
 
     def row_iterator(self):
@@ -167,7 +167,7 @@ class CSVSheetReader(ISheet):
 
 
 class CSVFileReader(CSVSheetReader):
-    """read csv from phyical file"""
+    """read csv from physical file"""
 
     def get_file_handle(self):
         unicode_reader = open(

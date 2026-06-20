@@ -45,12 +45,12 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
     @property
     def row_initializer(self):
-        """contructor for a database table entry"""
+        """constructor for a database table entry"""
         return self._row_initializer.output
 
     @property
     def column_names(self):
-        """the desginated database column names"""
+        """the designated database column names"""
         return self._column_names.output
 
     @property
@@ -60,7 +60,7 @@ class DjangoModelImportAdapter(DjangoModelExportAdapter):
 
     @row_initializer.setter
     def row_initializer(self, a_function):
-        """set the contructor"""
+        """set the constructor"""
         self._row_initializer.input = a_function
         self._process_parameters()
 

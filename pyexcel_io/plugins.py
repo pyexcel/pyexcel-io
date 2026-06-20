@@ -41,7 +41,7 @@ class IOPluginInfoChain(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """add pyexcle-io reader plugin info"""
+        """add pyexcel-io reader plugin info"""
         a_plugin_info = IOPluginInfo(
             READER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
@@ -56,7 +56,7 @@ class IOPluginInfoChain(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """add pyexcle-io writer plugin info"""
+        """add pyexcel-io writer plugin info"""
         a_plugin_info = IOPluginInfo(
             WRITER_PLUGIN,
             self._get_abs_path(relative_plugin_class_path),
@@ -76,7 +76,7 @@ class IOPluginInfoChainV2(PluginInfoChain):
         file_types=None,
         stream_type=None,
     ):
-        """add pyexcle-io reader plugin info"""
+        """add pyexcel-io reader plugin info"""
         a_plugin_info = IOPluginInfo(
             READER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
@@ -96,7 +96,7 @@ class IOPluginInfoChainV2(PluginInfoChain):
         file_types=(),
         stream_type=None,
     ):
-        """add pyexcle-io writer plugin info"""
+        """add pyexcel-io writer plugin info"""
         a_plugin_info = IOPluginInfo(
             WRITER_PLUGIN_V2,
             self._get_abs_path(relative_plugin_class_path),
