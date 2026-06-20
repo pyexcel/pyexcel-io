@@ -10,7 +10,7 @@ all possible exceptions
 
 
 class NoSupportingPluginFound(Exception):
-    """raised when an known file extension is seen"""
+    """raised when an unknown file extension is seen"""
 
     pass
 
@@ -23,7 +23,7 @@ class SupportingPluginAvailableButNotInstalled(Exception):
 
 class IntegerAccuracyLossError(Exception):
     """
-    When an interger is greater than 999999999999999, ods loses its accuracy.
+    When an integer is greater than 999999999999999, ods loses its accuracy.
 
     from pyexcel import Sheet, get_sheet
     s = Sheet()
