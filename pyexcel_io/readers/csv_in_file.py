@@ -49,7 +49,9 @@ class FileReader(IReader):
             for filen in filelist:
                 result = re.match(matcher, filen)
                 if result:
-                    tmp_file_list.append((result.group(1), result.group(2), filen))
+                    tmp_file_list.append(
+                        (result.group(1), result.group(2), filen)
+                    )
             ret = []
             for lsheetname, index, filen in sorted(
                 tmp_file_list, key=lambda row: row[1]
