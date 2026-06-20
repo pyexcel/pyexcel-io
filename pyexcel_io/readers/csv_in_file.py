@@ -36,16 +36,20 @@ class FileReader(IReader):
             self.content_array = [NamedContent(file_parts[-1], file_name)]
 
         else:
-            matcher = "%s%s(.*)%s(.*)%s" % (
-                names[0],
-                constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                names[1],
+            escaped_name = re.escape(names[0])
+            escaped_sep = re.escape(constants.DEFAULT_MULTI_CSV_SEPARATOR)
+            escaped_ext = re.escape(names[1])
+            matcher = r"%s%s(.*)%s(.*)%s" % (
+                escaped_name,
+                escaped_sep,
+                escaped_sep,
+                escaped_ext,
             )
             tmp_file_list = []
             for filen in filelist:
                 result = re.match(matcher, filen)
-                tmp_file_list.append((result.group(1), result.group(2), filen))
+                if result:
+                    tmp_file_list.append((result.group(1), result.group(2), filen))
             ret = []
             for lsheetname, index, filen in sorted(
                 tmp_file_list, key=lambda row: row[1]
