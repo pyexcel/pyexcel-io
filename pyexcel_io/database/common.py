@@ -4,7 +4,7 @@ pyexcel_io.database.common
 
 Common classes shared among database importers and exporters
 
-:copyright: (c) 2014-2022 by Onni Software Ltd.
+:copyright: (c) 2014-2026 by C Wang
 :license: New BSD License, see LICENSE for more details
 """
 
