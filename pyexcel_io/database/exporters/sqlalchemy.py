@@ -4,7 +4,7 @@ pyexcel_io.database.sql
 
 The lower level handler for database import and export
 
-:copyright: (c) 2014-2022 by Onni Software Ltd.
+:copyright: (c) 2014-2026 by C Wang
 :license: New BSD License, see LICENSE for more details
 """
 

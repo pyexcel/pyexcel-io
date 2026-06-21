@@ -4,7 +4,7 @@ pyexcel_io
 
 Uniform interface for reading/writing different excel file formats
 
-:copyright: (c) 2014-2022 by Onni Software Ltd.
+:copyright: (c) 2014-2026 by C Wang
 :license: New BSD License, see LICENSE for more details
 """
 
