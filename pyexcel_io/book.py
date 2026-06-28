@@ -1,12 +1,13 @@
 """
-    pyexcel_io.book
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.book
+~~~~~~~~~~~~~~~~~~~
 
-    The io interface to file extensions
+The io interface to file extensions
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
+
 import warnings
 
 import pyexcel_io.manager as manager

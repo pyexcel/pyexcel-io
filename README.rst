@@ -5,12 +5,6 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
    :target: https://www.patreon.com/chfw
 
-.. image:: https://raw.githubusercontent.com/pyexcel/pyexcel-mobans/master/images/awesome-badge.svg
-   :target: https://awesome-python.com/#specific-formats-processing
-
-.. image:: https://github.com/pyexcel/pyexcel-io/workflows/run_tests/badge.svg
-   :target: http://github.com/pyexcel/pyexcel-io/actions
-
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-io/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-io
 
@@ -20,14 +14,12 @@ pyexcel-io - Let you focus on data, instead of file formats
 .. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/version.svg
    :target: https://anaconda.org/conda-forge/pyexcel-io
 
+
 .. image:: https://pepy.tech/badge/pyexcel-io/month
    :target: https://pepy.tech/project/pyexcel-io
 
 .. image:: https://anaconda.org/conda-forge/pyexcel-io/badges/downloads.svg
    :target: https://anaconda.org/conda-forge/pyexcel-io
-
-.. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
-   :target: https://gitter.im/pyexcel/Lobby
 
 .. image:: https://img.shields.io/static/v1?label=continuous%20templating&message=%E6%A8%A1%E7%89%88%E6%9B%B4%E6%96%B0&color=blue&style=flat-square
     :target: https://moban.readthedocs.io/en/latest/#at-scale-continous-templating-for-open-source-projects
@@ -40,19 +32,11 @@ pyexcel-io - Let you focus on data, instead of file formats
 Support the project
 ================================================================================
 
-If your company has embedded pyexcel and its components into a revenue generating
-product, please support me on github, `patreon <https://www.patreon.com/bePatron?u=5537627>`_
-or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
-the project and develop it further.
-
-If you are an individual, you are welcome to support me too and for however long
-you feel like. As my backer, you will receive
-`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
-
-And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
-
-With your financial support, I will be able to invest
-a little bit more time in coding, documentation and writing interesting posts.
+If your company uses pyexcel and its components in a revenue-generating product,
+please consider supporting the project on GitHub or
+`Patreon <https://www.patreon.com/bePatron?u=5537627>`_. Your financial
+support will enable me to dedicate more time to coding, improving documentation,
+and creating engaging content.
 
 
 Known constraints
@@ -204,21 +188,23 @@ Then install relevant development requirements:
 #. pip install -r requirements.txt
 #. pip install -r tests/requirements.txt
 
-Once you have finished your changes, please provide test case(s), relevant documentation
-and update changelog.yml
+Once you have finished your changes, please provide test case(s), relevant documentation.
 
 .. note::
 
     As to rnd_requirements.txt, usually, it is created when a dependent
-    library is not released. Once the dependecy is installed
+    library is not released. Once the dependency is installed
     (will be released), the future
     version of the dependency in the requirements.txt will be valid.
 
 
 How to test your contribution
-------------------------------
+--------------------------------------------------------------------------------
 
-Although `nose` and `doctest` are both used in code testing, it is adviable that unit tests are put in tests. `doctest` is incorporated only to make sure the code examples in documentation remain valid across different development releases.
+Although `nose` and `doctest` are both used in code testing, it is advisable
+that unit tests are put in tests. `doctest` is incorporated only to make sure
+the code examples in documentation remain valid across different development
+releases.
 
 On Linux/Unix systems, please launch your tests like this::
 
@@ -238,6 +224,10 @@ Please run::
 
 so as to beautify your code otherwise your build may fail your unit test.
 
+Before you raise pull request
+--------------------------------------------------------------------------------
+
+Please edit 'changelog.yml' and record your changes
 
 
 

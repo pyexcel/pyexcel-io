@@ -1,9 +1,11 @@
+from unittest import TestCase
+
 from pyexcel_io.plugin_api import ISheet, IReader, IWriter, ISheetWriter
 
-from nose.tools import raises
+from .nose_tools import raises
 
 
-class TestISheet:
+class TestISheet(TestCase):
     def setUp(self):
         self.isheet = ISheet()
 
@@ -16,7 +18,7 @@ class TestISheet:
         self.isheet.column_iterator(1)
 
 
-class TestISheetWriter:
+class TestISheetWriter(TestCase):
     def setUp(self):
         self.isheet_writer = ISheetWriter()
 
@@ -29,7 +31,7 @@ class TestISheetWriter:
         self.isheet_writer.close()
 
 
-class TestIReader:
+class TestIReader(TestCase):
     def setUp(self):
         self.ireader = IReader()
 
@@ -42,7 +44,7 @@ class TestIReader:
         self.ireader.close()
 
 
-class TestIWriter:
+class TestIWriter(TestCase):
     def setUp(self):
         self.iwriter = IWriter()
 

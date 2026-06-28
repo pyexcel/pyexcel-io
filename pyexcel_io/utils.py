@@ -1,12 +1,13 @@
 """
-    pyexcel_io.utils
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.utils
+~~~~~~~~~~~~~~~~~~~
 
-    utility functions
+utility functions
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
+
 import pyexcel_io.constants as constants
 
 XLS_PLUGIN = "pyexcel-xls"

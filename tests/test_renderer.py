@@ -1,11 +1,12 @@
 import os
+from unittest import TestCase
 
 from pyexcel_io import get_data, save_data
 
-from nose.tools import eq_
+from .nose_tools import eq_
 
 
-class TestRenderer:
+class TestRenderer(TestCase):
     def setUp(self):
         self.test_file = "test_filter.csv"
         sample = [[1, 21, 31], [2, 22, 32]]

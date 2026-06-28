@@ -32,8 +32,8 @@ Instead of educating the users about the specific excel format a data processing
 application supports, the library takes up the challenge and promises to support
 all known excel formats.
 
-All great work have done by individual library developers. This library unites
-only the data access API. With that said, **pyexcel-io** also bring something
+All great work has been done by individual library developers. This library unites
+only the data access API. With that said, **pyexcel-io** also brings something
 new on the table: :ref:`"csvz" and "tsvz"<csvz>` format, new format names
 as of 2014. They are invented and supported by `pyexcel-io`_.
 
@@ -145,9 +145,9 @@ You need to append get_array(..., library='pyexcel-odsr').
 .. [#f1] zipped csv file
 .. [#f2] zipped tsv file
 
-After that, you can start get and save data in the loaded format. There
+After that, you can start to get and save data in the loaded format. There
 are two plugins for the same file format, e.g. pyexcel-ods3 and pyexcel-ods.
-If you want to choose one, please try pip uninstall the un-wanted one. And if
+If you want to choose one, please try pip uninstall the unwanted one. And if
 you want to have both installed but wanted to use one of them for a function
 call(or file type) and the other for another function call(or file type), you can
 pass on "library" option to get_data and save_data, e.g.

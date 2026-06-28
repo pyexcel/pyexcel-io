@@ -9,7 +9,7 @@ from pyexcel_io import get_data, iget_data, save_data
 from pyexcel_io.io import load_data, get_writer
 from pyexcel_io._compact import BytesIO, StringIO, OrderedDict, is_string
 
-from nose.tools import eq_, raises
+from .nose_tools import eq_, raises
 
 
 @raises(IOError)

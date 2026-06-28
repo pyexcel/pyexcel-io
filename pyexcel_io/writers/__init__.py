@@ -1,12 +1,13 @@
 """
-    pyexcel_io.writers
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.writers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    file writers
+file writers
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
+
 from pyexcel_io.plugins import IOPluginInfoChainV2
 
 IOPluginInfoChainV2(__name__).add_a_writer(

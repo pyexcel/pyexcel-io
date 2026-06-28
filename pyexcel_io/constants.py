@@ -1,12 +1,13 @@
 """
-    pyexcel_io.constants
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io.constants
+~~~~~~~~~~~~~~~~~~~
 
-    Constants appeared in pyexcel
+Constants appeared in pyexcel
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License
 """
+
 # flake8: noqa
 DEFAULT_NAME = "pyexcel"
 DEFAULT_SHEET_NAME = "%s_sheet1" % DEFAULT_NAME

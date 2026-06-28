@@ -2,10 +2,10 @@ overrides: "pyexcel.yaml"
 project: "pyexcel-io"
 name: pyexcel-io
 nick_name: io
-version: 0.6.7
-current_version: 0.6.7
-release: 0.6.7
-copyright_year: 2015-2022
+version: 0.6.8
+current_version: 0.6.8
+release: 0.6.8
+copyright_year: 2015-2026
 moban_command: false
 is_on_conda: true
 dependencies:
@@ -16,6 +16,8 @@ test_dependencies:
   - SQLAlchemy
   - pyexcel-xlsxw
   - chardet
+  - pytest
+  - PyYAML
 extra_dependencies:
   - extra:
     - chardet
@@ -42,3 +44,4 @@ sphinx_extensions:
 description: A python library to read and write structured data in csv, zipped csv format and to/from databases
 python_requires: ">=3.6"
 min_python_version: "3.6"
+use_pytest: true

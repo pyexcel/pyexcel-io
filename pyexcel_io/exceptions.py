@@ -1,16 +1,16 @@
 """
-    pyexcel_io.exceptions
-    ~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.exceptions
+~~~~~~~~~~~~~~~~~~~~~~
 
-    all possible exceptions
+all possible exceptions
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
 
 
 class NoSupportingPluginFound(Exception):
-    """raised when an known file extension is seen"""
+    """raised when an unknown file extension is seen"""
 
     pass
 
@@ -23,7 +23,7 @@ class SupportingPluginAvailableButNotInstalled(Exception):
 
 class IntegerAccuracyLossError(Exception):
     """
-    When an interger is greater than 999999999999999, ods loses its accuracy.
+    When an integer is greater than 999999999999999, ods loses its accuracy.
 
     from pyexcel import Sheet, get_sheet
     s = Sheet()

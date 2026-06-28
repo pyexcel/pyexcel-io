@@ -1,12 +1,13 @@
 """
-    pyexcel_io.database.django
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pyexcel_io.database.django
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The lower level handler for django import and export
+The lower level handler for django import and export
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
+
 from pyexcel_io.plugin_api import IReader
 from pyexcel_io.database.querysets import QuerysetsReader
 

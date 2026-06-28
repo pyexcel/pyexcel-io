@@ -1,12 +1,13 @@
 """
-    pyexcel_io._compact
-    ~~~~~~~~~~~~~~~~~~~
+pyexcel_io._compact
+~~~~~~~~~~~~~~~~~~~
 
-    Compatibles
+Compatibles
 
-    :copyright: (c) 2014-2022 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for more details
+:copyright: (c) 2014-2026 by C Wang
+:license: New BSD License, see LICENSE for more details
 """
+
 import sys
 import logging
 from io import BytesIO, StringIO  # noqa: F401
