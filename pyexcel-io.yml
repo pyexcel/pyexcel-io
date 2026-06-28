@@ -4,7 +4,7 @@ name: pyexcel-io
 nick_name: io
 version: 0.6.8
 current_version: 0.6.8
-release: 0.6.7
+release: 0.6.8
 copyright_year: 2015-2026
 moban_command: false
 is_on_conda: true
