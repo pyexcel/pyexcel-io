@@ -37,10 +37,10 @@ class FileReader(IReader):
 
         else:
             matcher = "%s%s(.*)%s(.*)%s" % (
-                names[0],
+                re.escape(names[0]),
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
                 constants.DEFAULT_MULTI_CSV_SEPARATOR,
-                names[1],
+                re.escape(names[1]),
             )
             tmp_file_list = []
             for filen in filelist:
