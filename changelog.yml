@@ -4,6 +4,13 @@ releases:
 - changes:
   - action: updated
     details:
+    - "`#56`: fix regex error when loading multi-file CSV from a directory with special\
+      \ characters (e.g. '++') in its name."
+  version: 0.6.8
+  date: 28.06.2026
+- changes:
+  - action: updated
+    details:
     - "`#115`: Pathnames with . cause file_name error in get_writer."
     - "`#117`: fix a typo in license."
   version: 0.6.7
