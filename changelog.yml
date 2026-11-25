@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - Treat non-finite floats as non-integral so ODS readers preserve them without conversion errors.
+  version: 0.6.9
+  date: tbd
+- changes:
+  - action: updated
+    details:
     - "`#56`: fix regex error when loading multi-file CSV from a directory with special\
       \ characters (e.g. '++') in its name."
   version: 0.6.8
