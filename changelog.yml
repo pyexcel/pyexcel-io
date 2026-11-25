@@ -2,6 +2,12 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: fixed
+    details:
+    - Apply the ODS integer precision limit to negative values as well as positive values.
+  version: 0.6.9
+  date: tbd
+- changes:
   - action: updated
     details:
     - "`#56`: fix regex error when loading multi-file CSV from a directory with special\
