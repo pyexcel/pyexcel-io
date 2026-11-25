@@ -125,19 +125,24 @@ def date_value(value):
 
 
 def time_value(value):
-    """convert to time value according the specification"""
+    """Convert ODS time values, keeping fractions to microsecond precision."""
     import re
 
-    results = re.match(r"PT(\d+)H(\d+)M(\d+)S", value)
-    if results and len(results.groups()) == 3:
+    results = re.match(r"PT(\d+)H(\d+)M(\d+)(?:\.(\d+))?S", value)
+    if results:
         hour = int(results.group(1))
         minute = int(results.group(2))
         second = int(results.group(3))
+        fraction = results.group(4) or ""
+        microsecond = int(fraction.ljust(6, "0")[:6])
         if hour < 24:
-            ret = datetime.time(hour, minute, second)
+            ret = datetime.time(hour, minute, second, microsecond)
         else:
             ret = datetime.timedelta(
-                hours=hour, minutes=minute, seconds=second
+                hours=hour,
+                minutes=minute,
+                seconds=second,
+                microseconds=microsecond,
             )
     else:
         ret = None
@@ -204,6 +209,8 @@ def ods_date_value(value):
 
 
 def ods_time_value(value):
+    if value.microsecond:
+        return value.strftime("PT%HH%MM%S.%fS")
     return value.strftime("PT%HH%MM%SS")
 
 
@@ -221,6 +228,13 @@ def ods_timedelta_value(cell):
     hours = cell.days * 24 + cell.seconds // 3600
     minutes = (cell.seconds // 60) % 60
     seconds = cell.seconds % 60
+    if cell.microseconds:
+        return "PT%02dH%02dM%02d.%06dS" % (
+            hours,
+            minutes,
+            seconds,
+            cell.microseconds,
+        )
     return "PT%02dH%02dM%02dS" % (hours, minutes, seconds)
 
 
