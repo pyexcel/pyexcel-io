@@ -51,10 +51,8 @@ def detect_float_value(
         # e.g. 014325
         return None
 
-    if pep_0515_off:
-        pattern = "([0-9]+_)+[0-9]+.[0-9]*$"
-        if re.match(pattern, cell_text):
-            return None
+    if pep_0515_off and "_" in cell_text:
+        return None
 
     try:
         if ignore_nan_text:
@@ -78,10 +76,8 @@ def detect_int_value(cell_text, pep_0515_off=True):
     if cell_text.startswith("0") and len(cell_text) > 1:
         return None
 
-    if pep_0515_off:
-        pattern = "([0-9]+_)+[0-9]+$"
-        if re.match(pattern, cell_text):
-            return None
+    if pep_0515_off and "_" in cell_text:
+        return None
 
     try:
         return int(cell_text)
