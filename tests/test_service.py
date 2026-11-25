@@ -1,5 +1,6 @@
 from datetime import time, datetime, timedelta
 
+import pytest
 from pyexcel_io.service import (
     date_value,
     time_value,
@@ -14,6 +15,7 @@ from pyexcel_io.service import (
     detect_float_value,
     ods_timedelta_value,
 )
+from pyexcel_io.constants import MAX_INTEGER
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 
 from .nose_tools import eq_, raises
@@ -109,6 +111,17 @@ def test_detect_float_value_on_custom_nan_text2():
 @raises(IntegerAccuracyLossError)
 def test_big_int_value():
     ods_float_value(1000000000000000)
+
+
+@pytest.mark.parametrize("value", [-(10**15), -(2**53 + 1), -(10**30)])
+def test_big_negative_int_value(value):
+    with pytest.raises(IntegerAccuracyLossError):
+        ods_float_value(value)
+
+
+@pytest.mark.parametrize("value", [-MAX_INTEGER, -1, 0, 1, MAX_INTEGER])
+def test_ods_integer_precision_boundaries(value):
+    assert ods_float_value(value) == value
 
 
 @raises(IntegerAccuracyLossError)

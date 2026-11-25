@@ -194,7 +194,7 @@ def throw_exception(value):
 
 
 def ods_float_value(value):
-    if value > constants.MAX_INTEGER:
+    if abs(value) > constants.MAX_INTEGER:
         raise exceptions.IntegerAccuracyLossError("%s is too big" % value)
     return value
 
