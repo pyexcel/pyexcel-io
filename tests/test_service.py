@@ -1,5 +1,6 @@
 from datetime import time, datetime, timedelta
 
+import pytest
 from pyexcel_io.service import (
     date_value,
     time_value,
@@ -163,6 +164,46 @@ def test_time_value():
     test_time_value = "PT23H00M01S"
     delta = time_value(test_time_value)
     eq_(delta, time(23, 0, 1))
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("PT01H02M03.5S", time(1, 2, 3, 500000)),
+        ("PT01H02M03.000001S", time(1, 2, 3, 1)),
+        ("PT23H59M59.999999S", time(23, 59, 59, 999999)),
+        ("PT01H02M03.123456789S", time(1, 2, 3, 123456)),
+        ("PT00H00M00.0S", time(0)),
+        ("PT24H00M00.000001S", timedelta(days=1, microseconds=1)),
+        (
+            "PT720H00M01.123456S",
+            timedelta(days=30, seconds=1, microseconds=123456),
+        ),
+    ],
+)
+def test_time_value_fractional_seconds(text, expected):
+    assert time_value(text) == expected
+
+
+@pytest.mark.parametrize("microseconds", [1, 500000, 999999])
+def test_ods_time_value_preserves_microseconds(microseconds):
+    value = time(1, 2, 3, microseconds)
+    encoded = ods_time_value(value)
+    assert encoded == "PT01H02M03.%06dS" % microseconds
+    assert time_value(encoded) == value
+
+
+def test_ods_datetime_time_preserves_microseconds():
+    value = datetime(2020, 10, 6, 1, 2, 3, 123456)
+    assert time_value(ods_time_value(value)) == value.time()
+
+
+@pytest.mark.parametrize("microseconds", [1, 500000, 999999])
+def test_ods_timedelta_value_preserves_microseconds(microseconds):
+    value = timedelta(days=30, seconds=1, microseconds=microseconds)
+    encoded = ods_timedelta_value(value)
+    assert encoded == "PT720H00M01.%06dS" % microseconds
+    assert time_value(encoded) == value
 
 
 def test_float_value():

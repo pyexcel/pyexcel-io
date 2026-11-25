@@ -4,6 +4,12 @@ releases:
 - changes:
   - action: updated
     details:
+    - Preserve fractional seconds when reading and writing ODS time values.
+  version: 0.6.9
+  date: tbd
+- changes:
+  - action: updated
+    details:
     - "`#56`: fix regex error when loading multi-file CSV from a directory with special\
       \ characters (e.g. '++') in its name."
   version: 0.6.8
