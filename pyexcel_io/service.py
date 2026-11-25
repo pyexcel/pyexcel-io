@@ -17,7 +17,10 @@ from pyexcel_io import constants, exceptions
 
 def has_no_digits_in_float(value):
     """check if a float value had zero value in digits"""
-    return value == math.floor(value)
+    try:
+        return value == math.floor(value)
+    except (ValueError, OverflowError):
+        return False
 
 
 def detect_date_value(cell_text):
