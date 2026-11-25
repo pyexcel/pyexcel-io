@@ -2,6 +2,12 @@ name: pyexcel-io
 organisation: pyexcel
 releases:
 - changes:
+  - action: fixed
+    details:
+    - Honor pep_0515_off for signed numbers and underscores in fractional and exponent parts.
+  version: 0.6.9
+  date: tbd
+- changes:
   - action: updated
     details:
     - "`#56`: fix regex error when loading multi-file CSV from a directory with special\

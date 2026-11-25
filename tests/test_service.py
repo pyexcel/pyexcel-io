@@ -1,5 +1,8 @@
+from io import StringIO
 from datetime import time, datetime, timedelta
 
+import pytest
+from pyexcel_io import get_data
 from pyexcel_io.service import (
     date_value,
     time_value,
@@ -89,6 +92,28 @@ def test_suppression_of_pep_0515_float():
     eq_(result, None)
     result = detect_float_value("123_123.1")
     eq_(result, None)
+
+
+@pytest.mark.parametrize("text", ["-1_000", "+1_000", " 1_000 "])
+def test_suppression_of_signed_pep_0515_int(text):
+    assert detect_int_value(text) is None
+    assert detect_int_value(text, pep_0515_off=False) == int(text)
+
+
+@pytest.mark.parametrize(
+    "text", ["-1_000.5", "+1_000.5", "1.2_5", "1e1_0", "1_000.5_0"]
+)
+def test_suppression_of_all_pep_0515_float_parts(text):
+    assert detect_float_value(text) is None
+    assert detect_float_value(text, pep_0515_off=False) == float(text)
+
+
+def test_csv_numeric_underscore_option():
+    content = "-1_000,1.2_5,1e1_0\n"
+    data = get_data(StringIO(content), file_type="csv")
+    assert list(data.values()) == [[["-1_000", "1.2_5", "1e1_0"]]]
+    data = get_data(StringIO(content), file_type="csv", pep_0515_off=False)
+    assert list(data.values()) == [[[-1000, 1.25, 1e10]]]
 
 
 def test_detect_float_value_on_nan():

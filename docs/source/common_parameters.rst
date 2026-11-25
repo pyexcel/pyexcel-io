@@ -43,3 +43,7 @@ This is related to `PEP 0515 <https://www.python.org/dev/peps/pep-0515/>`_, wher
 not consistent along with other python versions. PEP 0515 by default is suppressed.
 And this flag allows you to turn it on in python 3.6.
 
+With the default ``pep_0515_off=True``, numeric text containing underscores is
+preserved as text, including signed numbers and underscores in fractional or
+exponent parts. Set ``pep_0515_off=False`` to enable their numeric conversion.
+
